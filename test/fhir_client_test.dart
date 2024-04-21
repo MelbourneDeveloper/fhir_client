@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fhir_client/models/bundle.dart';
 import 'package:fhir_client/models/error.dart' as err;
-import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/result.dart';
 import 'package:test/test.dart';
 
@@ -52,8 +52,7 @@ void main() {
       //curl -X GET "http://hapi.fhir.org/baseR4/Organization/2640211" -H "Content-Type: application/json"
       final json = await File('test/responses/readorg.json').readAsString();
 
-      final result =
-          Resource.fromJson(jsonDecode(json) as Map<String, dynamic>);
+      final result = Bundle.fromJson(jsonDecode(json) as Map<String, dynamic>);
 
       expect(result.id, '2640211');
       expect(result.identifier!.first.type!.text, 'SNO');
