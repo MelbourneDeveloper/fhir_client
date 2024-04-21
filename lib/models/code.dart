@@ -2,18 +2,15 @@
 
 import 'package:fhir_client/models/coding.dart';
 
-class Type {
-  final String? text;
+class Code {
   final List<Coding>? coding;
 
-  Type({
-    this.text,
+  Code({
     this.coding,
   });
 
-  factory Type.fromJson(Map<String, dynamic> json) {
-    return Type(
-      text: json['text'] != null ? json['text'] as String? : null,
+  factory Code.fromJson(Map<String, dynamic> json) {
+    return Code(
       coding: (json['coding'] as List<dynamic>?)
           ?.map((e) => Coding.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -22,7 +19,6 @@ class Type {
 
   Map<String, dynamic> toJson() {
     return {
-      'text': text,
       'coding': coding?.map((e) => e.toJson()).toList(),
     };
   }

@@ -22,6 +22,27 @@ void main() {
       expect(entries.first.resource!.identifier!.first.type!.text, 'SNO');
     });
 
+    test('Deserialize PractitionerRole search result', () async {
+      //curl -X GET "http://hapi.fhir.org/baseR4/PractitionerRole?_count=10" -H "Content-Type: application/json"
+      final json = await File('test/responses/practicionerrolesearch.json')
+          .readAsString();
+
+      final result = Result.fromJson(jsonDecode(json) as Map<String, dynamic>);
+
+      final entries = result.entry!.toList();
+
+      expect(entries.length, 10);
+      expect(entries.first.resource!.resourceType, 'PractitionerRole');
+      expect(
+        entries.first.resource!.id,
+        '000-a24198ce-1b4b-4364-9dd4-03b3c5b5bd41-PractitionerRole',
+      );
+      expect(
+        entries.first.resource!.extension!.first.url,
+        'http://pdx.bcbs.com/providerdataexchange/StructureDefinition/providerdisplay',
+      );
+    });
+
     test('Deserialize org read result', () async {
       //curl -X GET "http://hapi.fhir.org/baseR4/Organization/2640211" -H "Content-Type: application/json"
       final json = await File('test/responses/readorg.json').readAsString();

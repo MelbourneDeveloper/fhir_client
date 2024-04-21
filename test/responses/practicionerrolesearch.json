@@ -1,0 +1,1083 @@
+{
+    "resourceType": "Bundle",
+    "id": "1c001925-db4c-48c5-8902-dd9c8205bdfe",
+    "meta": {
+        "lastUpdated": "2024-04-21T03:39:16.030+00:00"
+    },
+    "type": "searchset",
+    "link": [
+        {
+            "relation": "self",
+            "url": "https://hapi.fhir.org/baseR4/PractitionerRole?_count=10"
+        },
+        {
+            "relation": "next",
+            "url": "https://hapi.fhir.org/baseR4?_getpages=1c001925-db4c-48c5-8902-dd9c8205bdfe&_getpagesoffset=10&_count=10&_pretty=true&_bundletype=searchset"
+        }
+    ],
+    "entry": [
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/PractitionerRole/000-a24198ce-1b4b-4364-9dd4-03b3c5b5bd41-PractitionerRole",
+            "resource": {
+                "resourceType": "PractitionerRole",
+                "id": "000-a24198ce-1b4b-4364-9dd4-03b3c5b5bd41-PractitionerRole",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2021-04-29T18:33:17.828+00:00",
+                    "source": "#gRRXFELGsAqCXP17",
+                    "profile": [
+                        "http://pdx.bcbs.com/providerdataexchange/StructureDefinition/bcbs-pdx-practitionerrole-plan-submission"
+                    ]
+                },
+                "extension": [
+                    {
+                        "url": "http://pdx.bcbs.com/providerdataexchange/StructureDefinition/providerdisplay",
+                        "extension": [
+                            {
+                                "url": "displayIndicatorProvider",
+                                "valueBoolean": false
+                            }
+                        ]
+                    },
+                    {
+                        "url": "http://pdx.bcbs.com/providerdataexchange/StructureDefinition/provcontract",
+                        "valueBoolean": false
+                    },
+                    {
+                        "url": "http://pdx.bcbs.com/providerdataexchange/StructureDefinition/licenseereference",
+                        "valueReference": {
+                            "reference": "Organization/000-688c4559-9ba8-4947-80f2-5bfc5e432feb-Licensee"
+                        }
+                    },
+                    {
+                        "url": "http://pdx.bcbs.com/providerdataexchange/StructureDefinition/newpatients",
+                        "extension": [
+                            {
+                                "url": "acceptingPatients",
+                                "valueCodeableConcept": {
+                                    "coding": [
+                                        {
+                                            "system": "http://pdx.bcbs.com/providerdataexchange/CodeSystem/AcceptingPatientsCS",
+                                            "code": "yes",
+                                            "display": "Accepting"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "url": "http://pdx.bcbs.com/providerdataexchange/StructureDefinition/provterm",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "http://pdx.bcbs.com/providerdataexchange/CodeSystem/BCBSProviderTerminationReasonCS",
+                                    "code": "02",
+                                    "display": "Changing provider number"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "url": "http://pdx.bcbs.com/providerdataexchange/StructureDefinition/valuebased",
+                        "extension": [
+                            {
+                                "url": "valueBasedProgramIdentifier",
+                                "valueIdentifier": {
+                                    "value": "4560001"
+                                }
+                            },
+                            {
+                                "url": "providerAcceptsMemberSelectAttributionIndicator",
+                                "valueBoolean": true
+                            }
+                        ]
+                    },
+                    {
+                        "url": "http://pdx.bcbs.com/providerdataexchange/StructureDefinition/managedcare",
+                        "extension": [
+                            {
+                                "url": "pcpIndicatorCode",
+                                "valueCodeableConcept": {
+                                    "coding": [
+                                        {
+                                            "system": "http://pdx.bcbs.com/providerdataexchange/CodeSystem/BCBSPCPIndicatorCS",
+                                            "code": "P",
+                                            "display": "Primary care physician (PCP)"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "url": "pcpSelectabilityCode",
+                                "valueCodeableConcept": {
+                                    "coding": [
+                                        {
+                                            "system": "http://pdx.bcbs.com/providerdataexchange/CodeSystem/BCBSPCPSelectabilityCS",
+                                            "code": "1",
+                                            "display": "Selectable as an individual only"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "url": "pcpEffectivePeriod",
+                                "valuePeriod": {
+                                    "start": "2020-01-01"
+                                }
+                            },
+                            {
+                                "url": "providerReimbursementCode",
+                                "valueCodeableConcept": {
+                                    "coding": [
+                                        {
+                                            "system": "http://pdx.bcbs.com/providerdataexchange/CodeSystem/BCBSProviderReimbursementCS",
+                                            "code": "01",
+                                            "display": "Fully capitated"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "url": "http://pdx.bcbs.com/providerdataexchange/StructureDefinition/networkreference",
+                        "valueReference": {
+                            "reference": "Organization/000-05e5e625-b968-44bb-be57-b598d37487b4-Network"
+                        }
+                    }
+                ],
+                "identifier": [
+                    {
+                        "type": {
+                            "coding": [
+                                {
+                                    "system": "http://pdx.bcbs.com/providerdataexchange/CodeSystem/BCBSIdentifierTypeCS",
+                                    "code": "PEI",
+                                    "display": "Provider Entity Identifier"
+                                }
+                            ]
+                        },
+                        "value": "E00900"
+                    },
+                    {
+                        "id": "00102348971000-000-00B0-11-00",
+                        "value": "000-738803d1-213f-48b4-92c0-26ddeec6a8b1-ProviderLocation"
+                    },
+                    {
+                        "id": "00102348971000-000-00B0-22-00",
+                        "value": "000-738803d1-213f-48b4-92c0-26ddeec6a8b2-ProviderLocation"
+                    },
+                    {
+                        "id": "00102348971000-000-00B0-41-00",
+                        "value": "000-738803d1-213f-48b4-92c0-26ddeec6a8b3-ProviderLocation"
+                    }
+                ],
+                "period": {
+                    "start": "2020-01-01",
+                    "end": "2020-06-30"
+                },
+                "practitioner": {
+                    "reference": "Practitioner/000-733fa68f-c709-4c12-9445-23b4add83c99-Practitioner"
+                },
+                "code": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://pdx.bcbs.com/providerdataexchange/CodeSystem/BCBSProviderTypeCS",
+                                "code": "A1",
+                                "display": "M.D."
+                            }
+                        ]
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "http://pdx.bcbs.com/providerdataexchange/CodeSystem/BCBSProviderEntityTypeCS",
+                                "code": "1",
+                                "display": "Individual"
+                            }
+                        ]
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208000000X",
+                                "display": "Pediatrics"
+                            }
+                        ]
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "207R00000X",
+                                "display": "Internal Medicine"
+                            }
+                        ]
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "207RA0000X",
+                                "display": "Adolescent Medicine"
+                            }
+                        ]
+                    }
+                ],
+                "location": [
+                    {
+                        "reference": "Location/000-738803d1-213f-48b4-92c0-26ddeec6a8b1-ProviderLocation"
+                    },
+                    {
+                        "reference": "Location/000-738803d1-213f-48b4-92c0-26ddeec6a8b2-ProviderLocation"
+                    },
+                    {
+                        "reference": "Location/000-738803d1-213f-48b4-92c0-26ddeec6a8c3-ProviderLocation"
+                    }
+                ],
+                "availableTime": [
+                    {
+                        "daysOfWeek": [
+                            "mon"
+                        ],
+                        "availableStartTime": "10:00:00",
+                        "availableEndTime": "16:00:00"
+                    },
+                    {
+                        "daysOfWeek": [
+                            "tue"
+                        ],
+                        "availableStartTime": "10:00:00",
+                        "availableEndTime": "16:00:00"
+                    },
+                    {
+                        "daysOfWeek": [
+                            "wed"
+                        ],
+                        "availableStartTime": "10:00:00",
+                        "availableEndTime": "16:00:00"
+                    },
+                    {
+                        "daysOfWeek": [
+                            "thu"
+                        ],
+                        "availableStartTime": "10:00:00",
+                        "availableEndTime": "16:00:00"
+                    },
+                    {
+                        "daysOfWeek": [
+                            "fri"
+                        ],
+                        "availableStartTime": "10:00:00",
+                        "availableEndTime": "14:00:00"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/PractitionerRole/000bace8-9700-4f26-817e-791b64c647ee",
+            "resource": {
+                "resourceType": "PractitionerRole",
+                "id": "000bace8-9700-4f26-817e-791b64c647ee",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-03-24T22:30:22.762+00:00",
+                    "source": "#aDXB97IFEudwVZiA",
+                    "profile": [
+                        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitionerrole"
+                    ],
+                    "tag": [
+                        {
+                            "system": "https://smarthealthit.org/tags",
+                            "code": "Covid19 synthetic population from Synthea"
+                        }
+                    ]
+                },
+                "practitioner": {
+                    "reference": "Practitioner/0000016f-a1db-e77f-0000-000000009ed4",
+                    "display": "Dr. Calvin845 Moen819"
+                },
+                "organization": {
+                    "reference": "Organization/fcf35f09-a2eb-324f-9ec6-40cdeadc9322",
+                    "display": "PCP30281"
+                },
+                "code": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208D00000X",
+                                "display": "General Practice"
+                            }
+                        ],
+                        "text": "General Practice"
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208D00000X",
+                                "display": "General Practice"
+                            }
+                        ],
+                        "text": "General Practice"
+                    }
+                ],
+                "location": [
+                    {
+                        "reference": "Location/7b4e4146-7042-4216-bd3f-799d09a288eb",
+                        "display": "PCP30281"
+                    }
+                ],
+                "telecom": [
+                    {
+                        "system": "phone",
+                        "value": "818-241-2441"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/PractitionerRole/0024fd4c-dd19-44a5-b59c-3fde8092b6fd",
+            "resource": {
+                "resourceType": "PractitionerRole",
+                "id": "0024fd4c-dd19-44a5-b59c-3fde8092b6fd",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-03-24T20:16:25.283+00:00",
+                    "source": "#7qSZDCVPE9ECvUOk",
+                    "profile": [
+                        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitionerrole"
+                    ],
+                    "tag": [
+                        {
+                            "system": "https://smarthealthit.org/tags",
+                            "code": "Covid19 synthetic population from Synthea"
+                        }
+                    ]
+                },
+                "practitioner": {
+                    "reference": "Practitioner/0000016f-a1db-e77f-0000-00000003aebc",
+                    "display": "Dr. Corrina72 McDermott739"
+                },
+                "organization": {
+                    "reference": "Organization/78aa2935-c70b-32db-8583-ad8b8d8033e3",
+                    "display": "AFFILIATED PATHOLOGISTS MEDICAL GROUP, INC."
+                },
+                "code": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208D00000X",
+                                "display": "General Practice"
+                            }
+                        ],
+                        "text": "General Practice"
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208D00000X",
+                                "display": "General Practice"
+                            }
+                        ],
+                        "text": "General Practice"
+                    }
+                ],
+                "location": [
+                    {
+                        "reference": "Location/56a8c6fb-1a7f-42c0-8a53-beaf891577b5",
+                        "display": "AFFILIATED PATHOLOGISTS MEDICAL GROUP, INC."
+                    }
+                ],
+                "telecom": [
+                    {
+                        "system": "phone",
+                        "value": "310-225-3244"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/PractitionerRole/0033c30f-9107-4396-ad7d-f0e9cc04d453",
+            "resource": {
+                "resourceType": "PractitionerRole",
+                "id": "0033c30f-9107-4396-ad7d-f0e9cc04d453",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-03-24T18:27:58.428+00:00",
+                    "source": "#hCInXntzbkHTVlNd",
+                    "profile": [
+                        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitionerrole"
+                    ],
+                    "tag": [
+                        {
+                            "system": "https://smarthealthit.org/tags",
+                            "code": "Covid19 synthetic population from Synthea"
+                        }
+                    ]
+                },
+                "practitioner": {
+                    "reference": "Practitioner/0000016f-a1db-e77f-0000-0000000002d0",
+                    "display": "Dr. Lynwood354 Daniel959"
+                },
+                "organization": {
+                    "reference": "Organization/7dbe8a71-ceef-3e3e-b99e-fc3d1b5921a1",
+                    "display": "SOUTHERN CALIFORNIA HOSPITAL AT HOLLYWOOD"
+                },
+                "code": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208D00000X",
+                                "display": "General Practice"
+                            }
+                        ],
+                        "text": "General Practice"
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208D00000X",
+                                "display": "General Practice"
+                            }
+                        ],
+                        "text": "General Practice"
+                    }
+                ],
+                "location": [
+                    {
+                        "reference": "Location/5592d583-a22c-48c3-8c8e-a206d13ee5c2",
+                        "display": "SOUTHERN CALIFORNIA HOSPITAL AT HOLLYWOOD"
+                    }
+                ],
+                "telecom": [
+                    {
+                        "system": "phone",
+                        "value": "3234622271"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/PractitionerRole/0041c31d-f54d-425b-a85b-3654e7805202",
+            "resource": {
+                "resourceType": "PractitionerRole",
+                "id": "0041c31d-f54d-425b-a85b-3654e7805202",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-03-24T23:43:38.526+00:00",
+                    "source": "#MdqOKEyXrWzOSJpO",
+                    "profile": [
+                        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitionerrole"
+                    ],
+                    "tag": [
+                        {
+                            "system": "https://smarthealthit.org/tags",
+                            "code": "Covid19 synthetic population from Synthea"
+                        }
+                    ]
+                },
+                "practitioner": {
+                    "reference": "Practitioner/00000171-0929-2892-0000-0000000175d4",
+                    "display": "Dr. Joaquín233 Verduzco998"
+                },
+                "organization": {
+                    "reference": "Organization/bd1091d4-a697-373c-a16a-b2c9d5159b49",
+                    "display": "PCP220767"
+                },
+                "code": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208D00000X",
+                                "display": "General Practice"
+                            }
+                        ],
+                        "text": "General Practice"
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208D00000X",
+                                "display": "General Practice"
+                            }
+                        ],
+                        "text": "General Practice"
+                    }
+                ],
+                "location": [
+                    {
+                        "reference": "Location/f1e45634-c9e5-45cc-811b-3755088f3471",
+                        "display": "PCP220767"
+                    }
+                ],
+                "telecom": [
+                    {
+                        "system": "phone",
+                        "value": "(555) 555-5555"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/PractitionerRole/004777AARONATTEND1",
+            "resource": {
+                "resourceType": "PractitionerRole",
+                "id": "004777AARONATTEND1",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-08-23T07:23:17.546+00:00",
+                    "source": "#fAXPhgA7mBpl7rJS"
+                },
+                "identifier": [
+                    {
+                        "value": "00477763"
+                    }
+                ],
+                "practitioner": {
+                    "reference": "Practitioner/004777AARONATTEND"
+                },
+                "organization": {
+                    "reference": "Organization/37758"
+                },
+                "code": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://hl7.org/fhir/practitioner-role",
+                                "code": "doctor",
+                                "display": "Doctor"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/PractitionerRole/0056e32f-6b61-4fbb-99c3-12ba6f358a5f",
+            "resource": {
+                "resourceType": "PractitionerRole",
+                "id": "0056e32f-6b61-4fbb-99c3-12ba6f358a5f",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-03-24T19:26:12.047+00:00",
+                    "source": "#stcj6iJTzwPeFlV2",
+                    "profile": [
+                        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitionerrole"
+                    ],
+                    "tag": [
+                        {
+                            "system": "https://smarthealthit.org/tags",
+                            "code": "Covid19 synthetic population from Synthea"
+                        }
+                    ]
+                },
+                "practitioner": {
+                    "reference": "Practitioner/0000016f-a1db-e77f-0000-00000002ab02",
+                    "display": "Dr. Dion244 Grimes165"
+                },
+                "organization": {
+                    "reference": "Organization/48739f3b-fcb0-31b1-8d61-5ee58ba59279",
+                    "display": "PCP151501"
+                },
+                "code": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208D00000X",
+                                "display": "General Practice"
+                            }
+                        ],
+                        "text": "General Practice"
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208D00000X",
+                                "display": "General Practice"
+                            }
+                        ],
+                        "text": "General Practice"
+                    }
+                ],
+                "location": [
+                    {
+                        "reference": "Location/649eb952-9185-4450-bcf7-e2f4675f1028",
+                        "display": "PCP151501"
+                    }
+                ],
+                "telecom": [
+                    {
+                        "system": "phone",
+                        "value": "(555) 555-5555"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/PractitionerRole/005b8d62-39b8-4244-bfe7-1f63ce99c6f8",
+            "resource": {
+                "resourceType": "PractitionerRole",
+                "id": "005b8d62-39b8-4244-bfe7-1f63ce99c6f8",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-03-24T20:12:39.455+00:00",
+                    "source": "#HGnVVGgG7ztWqVPJ",
+                    "profile": [
+                        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitionerrole"
+                    ],
+                    "tag": [
+                        {
+                            "system": "https://smarthealthit.org/tags",
+                            "code": "Covid19 synthetic population from Synthea"
+                        }
+                    ]
+                },
+                "practitioner": {
+                    "reference": "Practitioner/00000171-0929-2892-0000-00000000b9b4",
+                    "display": "Dr. Kaitlin600 Goodwin327"
+                },
+                "organization": {
+                    "reference": "Organization/2632f137-f929-37e3-9481-3b21daee8edc",
+                    "display": "PCP113085"
+                },
+                "code": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208D00000X",
+                                "display": "General Practice"
+                            }
+                        ],
+                        "text": "General Practice"
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208D00000X",
+                                "display": "General Practice"
+                            }
+                        ],
+                        "text": "General Practice"
+                    }
+                ],
+                "location": [
+                    {
+                        "reference": "Location/2937cf07-b554-4214-a297-b7b1cece2fd4",
+                        "display": "PCP113085"
+                    }
+                ],
+                "telecom": [
+                    {
+                        "system": "phone",
+                        "value": "(555) 555-5555"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/PractitionerRole/007ea01c-eefc-454f-9a8f-e6bd309cb942",
+            "resource": {
+                "resourceType": "PractitionerRole",
+                "id": "007ea01c-eefc-454f-9a8f-e6bd309cb942",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-03-25T00:05:00.831+00:00",
+                    "source": "#kFHnvx0pPWT1k5oy",
+                    "profile": [
+                        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitionerrole"
+                    ],
+                    "tag": [
+                        {
+                            "system": "https://smarthealthit.org/tags",
+                            "code": "Covid19 synthetic population from Synthea"
+                        }
+                    ]
+                },
+                "practitioner": {
+                    "reference": "Practitioner/0000016f-a1db-e77f-0000-000000000442",
+                    "display": "Dr. Dorian295 Hegmann834"
+                },
+                "organization": {
+                    "reference": "Organization/d1ae4816-4832-3c80-bc2c-04b0f7e2551a",
+                    "display": "PROVIDENCE SAINT JOSEPH MEDICAL CTR"
+                },
+                "code": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208D00000X",
+                                "display": "General Practice"
+                            }
+                        ],
+                        "text": "General Practice"
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208D00000X",
+                                "display": "General Practice"
+                            }
+                        ],
+                        "text": "General Practice"
+                    }
+                ],
+                "location": [
+                    {
+                        "reference": "Location/6c012892-5680-4481-a0ce-fd08b8aa5079",
+                        "display": "PROVIDENCE SAINT JOSEPH MEDICAL CTR"
+                    }
+                ],
+                "telecom": [
+                    {
+                        "system": "phone",
+                        "value": "8188435111"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/PractitionerRole/009-aabbccdd-pr001-BPDPractitionerRole01-PractitionerRole",
+            "resource": {
+                "resourceType": "PractitionerRole",
+                "id": "009-aabbccdd-pr001-BPDPractitionerRole01-PractitionerRole",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2022-03-24T17:17:36.617+00:00",
+                    "source": "#009",
+                    "profile": [
+                        "http://bpd.bcbs.com/StructureDefinition/bpd-practitionerrole-plan-submission"
+                    ]
+                },
+                "extension": [
+                    {
+                        "url": "http://bpd.bcbs.com/StructureDefinition/providerdisplay",
+                        "extension": [
+                            {
+                                "url": "displayIndicatorProvider",
+                                "valueBoolean": true
+                            }
+                        ]
+                    },
+                    {
+                        "url": "http://bpd.bcbs.com/StructureDefinition/provcontract",
+                        "valueBoolean": true
+                    },
+                    {
+                        "url": "http://bpd.bcbs.com/StructureDefinition/newpatients",
+                        "extension": [
+                            {
+                                "url": "acceptingPatients",
+                                "valueCodeableConcept": {
+                                    "coding": [
+                                        {
+                                            "system": "http://bpd.bcbs.com/CodeSystem/AcceptingPatientsCS",
+                                            "code": "yes",
+                                            "display": "Accepting"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "url": "http://bpd.bcbs.com/StructureDefinition/provterm",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "http://bpd.bcbs.com/CodeSystem/BCBSProviderTerminationReasonCS",
+                                    "code": "02",
+                                    "display": "Changing provider number"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "url": "http://bpd.bcbs.com/StructureDefinition/valuebased",
+                        "extension": [
+                            {
+                                "url": "valueBasedProgramIdentifier",
+                                "valueIdentifier": {
+                                    "value": "4560001"
+                                }
+                            },
+                            {
+                                "url": "providerAcceptsMemberSelectAttributionIndicator",
+                                "valueBoolean": true
+                            }
+                        ]
+                    },
+                    {
+                        "url": "http://bpd.bcbs.com/StructureDefinition/managedcare",
+                        "extension": [
+                            {
+                                "url": "pcpIndicatorCode",
+                                "valueCodeableConcept": {
+                                    "coding": [
+                                        {
+                                            "system": "http://bpd.bcbs.com/CodeSystem/BCBSPCPIndicatorCS",
+                                            "code": "P",
+                                            "display": "Primary care physician (PCP)"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "url": "pcpSelectabilityCode",
+                                "valueCodeableConcept": {
+                                    "coding": [
+                                        {
+                                            "system": "http://bpd.bcbs.com/CodeSystem/BCBSPCPSelectabilityCS",
+                                            "code": "1",
+                                            "display": "Selectable as an individual only"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "url": "pcpEffectivePeriod",
+                                "valuePeriod": {
+                                    "start": "2020-01-01"
+                                }
+                            },
+                            {
+                                "url": "providerReimbursementCode",
+                                "valueCodeableConcept": {
+                                    "coding": [
+                                        {
+                                            "system": "http://bpd.bcbs.com/CodeSystem/BCBSProviderReimbursementCS",
+                                            "code": "01",
+                                            "display": "Fully capitated"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "url": "http://bpd.bcbs.com/StructureDefinition/provaffiliation",
+                        "extension": [
+                            {
+                                "url": "providerAffiliationType",
+                                "valueCodeableConcept": {
+                                    "coding": [
+                                        {
+                                            "system": "http://bpd.bcbs.com/CodeSystem/BCBSProviderAffiliationTypeCS",
+                                            "code": "ADMITPRIV",
+                                            "display": "Hospital Admitting Privileges"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "url": "providerAffiliationReference",
+                                "valueReference": {
+                                    "reference": "Organization/009-aabbc-a004-BPDOrganizationProvider04-ProviderOrganiz"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "url": "http://bpd.bcbs.com/StructureDefinition/provaffiliation",
+                        "extension": [
+                            {
+                                "url": "providerAffiliationType",
+                                "valueCodeableConcept": {
+                                    "coding": [
+                                        {
+                                            "system": "http://bpd.bcbs.com/CodeSystem/BCBSProviderAffiliationTypeCS",
+                                            "code": "PROVGRP",
+                                            "display": "Provider Group"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "identifier": [
+                    {
+                        "type": {
+                            "coding": [
+                                {
+                                    "system": "http://bpd.bcbs.com/CodeSystem/BCBSIdentifierTypeCS",
+                                    "code": "PEI",
+                                    "display": "Provider Entity Identifier"
+                                }
+                            ]
+                        },
+                        "value": "E00900"
+                    }
+                ],
+                "period": {
+                    "start": "2020-01-01",
+                    "end": "2020-06-30"
+                },
+                "practitioner": {
+                    "reference": "Practitioner/009-aabbccdd-e1f1-P001-BPDPractitioner01-Practitioner"
+                },
+                "organization": {
+                    "reference": "Organization/009-aabbc-a005-BPDOrganizationProvider05-ProviderOrganiz"
+                },
+                "code": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://bpd.bcbs.com/CodeSystem/BCBSProviderTypeCS",
+                                "code": "A1",
+                                "display": "M.D."
+                            }
+                        ]
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "http://bpd.bcbs.com/CodeSystem/BCBSProviderEntityTypeCS",
+                                "code": "1",
+                                "display": "Individual"
+                            }
+                        ]
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "208000000X",
+                                "display": "Pediatrics"
+                            }
+                        ]
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "207R00000X",
+                                "display": "Internal Medicine"
+                            }
+                        ]
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "http://nucc.org/provider-taxonomy",
+                                "code": "207RA0000X",
+                                "display": "Adolescent Medicine"
+                            }
+                        ]
+                    }
+                ],
+                "location": [
+                    {
+                        "reference": "Location/009-aabbccdde-L001-BPDLocationProvider01-ProviderLocation"
+                    }
+                ],
+                "healthcareService": [
+                    {
+                        "reference": "HealthcareService/009-aabbccdd-h001-BPDHealthcareService01-HealthCareService"
+                    }
+                ],
+                "availableTime": [
+                    {
+                        "daysOfWeek": [
+                            "mon"
+                        ],
+                        "availableStartTime": "10:00:00",
+                        "availableEndTime": "16:00:00"
+                    },
+                    {
+                        "daysOfWeek": [
+                            "tue"
+                        ],
+                        "availableStartTime": "10:00:00",
+                        "availableEndTime": "16:00:00"
+                    },
+                    {
+                        "daysOfWeek": [
+                            "wed"
+                        ],
+                        "availableStartTime": "10:00:00",
+                        "availableEndTime": "16:00:00"
+                    },
+                    {
+                        "daysOfWeek": [
+                            "thu"
+                        ],
+                        "availableStartTime": "10:00:00",
+                        "availableEndTime": "16:00:00"
+                    },
+                    {
+                        "daysOfWeek": [
+                            "fri"
+                        ],
+                        "availableStartTime": "10:00:00",
+                        "availableEndTime": "14:00:00"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        }
+    ]
+}

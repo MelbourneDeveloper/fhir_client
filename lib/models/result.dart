@@ -4,6 +4,7 @@ import 'package:fhir_client/models/entry.dart';
 import 'package:fhir_client/models/link.dart';
 import 'package:fhir_client/models/meta.dart';
 
+/// Root type for searches
 class Result {
   final String? resourceType;
   final String? id;

@@ -1,5 +1,9 @@
 // ignore_for_file: sort_constructors_first, prefer_expression_function_bodies
 
+import 'package:fhir_client/models/issue.dart';
+import 'package:fhir_client/models/text.dart';
+
+/// Root type for errors
 class Error {
   final String? resourceType;
   final Text? text;
@@ -29,59 +33,6 @@ class Error {
       'resourceType': resourceType,
       'text': text?.toJson(),
       'issue': issue?.map((e) => e.toJson()).toList(),
-    };
-  }
-}
-
-class Text {
-  final String? status;
-  final String? div;
-
-  Text({
-    this.status,
-    this.div,
-  });
-
-  factory Text.fromJson(Map<String, dynamic> json) {
-    return Text(
-      status: json['status'] != null ? json['status'] as String? : null,
-      div: json['div'] != null ? json['div'] as String? : null,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'status': status,
-      'div': div,
-    };
-  }
-}
-
-class Issue {
-  final String? severity;
-  final String? code;
-  final String? diagnostics;
-
-  Issue({
-    this.severity,
-    this.code,
-    this.diagnostics,
-  });
-
-  factory Issue.fromJson(Map<String, dynamic> json) {
-    return Issue(
-      severity: json['severity'] != null ? json['severity'] as String? : null,
-      code: json['code'] != null ? json['code'] as String? : null,
-      diagnostics:
-          json['diagnostics'] != null ? json['diagnostics'] as String? : null,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'severity': severity,
-      'code': code,
-      'diagnostics': diagnostics,
     };
   }
 }
