@@ -31,7 +31,9 @@ sealed class Resource {
   factory Resource.fromJson(
     Map<String, dynamic> map,
   ) =>
+      //TODO: Change this to a map for performance
       switch (map['resourceType']) {
+        ('Bundle') => Bundle.fromJson(map),
         ('PractitionerRole') => PractitionerRole.fromJson(map),
         ('Organization') => Organization.fromJson(map),
         ('OperationOutcome') => OperationOutcome.fromJson(map),

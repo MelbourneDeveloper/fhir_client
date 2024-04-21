@@ -12,7 +12,8 @@ void main() {
       //curl -X GET "http://hapi.fhir.org/baseR4/Organization?type=clinic&_count=10" -H "Content-Type: application/json"
       final json = await File('test/responses/orgsearch.json').readAsString();
 
-      final result = Bundle.fromJson(jsonDecode(json) as Map<String, dynamic>);
+      final result =
+          Resource.fromJson(jsonDecode(json) as Map<String, dynamic>) as Bundle;
 
       final entries = result.entry!.toList();
 
