@@ -41,6 +41,11 @@ void main() {
         entries.first.resource!.extension!.first.url,
         'http://pdx.bcbs.com/providerdataexchange/StructureDefinition/providerdisplay',
       );
+
+      expect(
+        entries[2].resource!.code!.first.coding!.first.system,
+        'http://nucc.org/provider-taxonomy',
+      );
     });
 
     test('Deserialize org read result', () async {
