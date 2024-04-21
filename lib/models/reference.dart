@@ -1,14 +1,14 @@
 // ignore_for_file: sort_constructors_first, prefer_expression_function_bodies
 
-class Practitioner {
+class Reference {
   final String? reference;
 
-  Practitioner({
+  Reference({
     this.reference,
   });
 
-  factory Practitioner.fromJson(Map<String, dynamic> json) {
-    return Practitioner(
+  factory Reference.fromJson(Map<String, dynamic> json) {
+    return Reference(
       reference:
           json['reference'] != null ? json['reference'] as String? : null,
     );
