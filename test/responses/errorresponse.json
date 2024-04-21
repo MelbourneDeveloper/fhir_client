@@ -1,0 +1,14 @@
+{
+    "resourceType": "OperationOutcome",
+    "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><h1>Operation Outcome</h1><table border=\"0\"><tr><td style=\"font-weight: bold;\">ERROR</td><td>[]</td><td>HAPI-0524: Unknown search parameter &quot;organization&quot; for resource type &quot;Practitioner&quot;. Valid search parameters for this search are: [_content, _id, _lastUpdated, _profile, _security, _source, _tag, _text, active, address, address-city, address-country, address-postalcode, address-state, address-use, communication, email, family, gender, given, identifier, name, phone, phonetic, telecom]</td></tr></table></div>"
+    },
+    "issue": [
+        {
+            "severity": "error",
+            "code": "processing",
+            "diagnostics": "HAPI-0524: Unknown search parameter \"organization\" for resource type \"Practitioner\". Valid search parameters for this search are: [_content, _id, _lastUpdated, _profile, _security, _source, _tag, _text, active, address, address-city, address-country, address-postalcode, address-state, address-use, communication, email, family, gender, given, identifier, name, phone, phonetic, telecom]"
+        }
+    ]
+}
