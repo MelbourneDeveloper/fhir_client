@@ -6,6 +6,7 @@ import 'package:fhir_client/models/code.dart';
 import 'package:fhir_client/models/entry.dart';
 import 'package:fhir_client/models/extension.dart';
 import 'package:fhir_client/models/identifier.dart';
+import 'package:fhir_client/models/issue.dart';
 import 'package:fhir_client/models/link.dart';
 import 'package:fhir_client/models/location.dart';
 import 'package:fhir_client/models/meta.dart';
@@ -13,14 +14,15 @@ import 'package:fhir_client/models/period.dart';
 import 'package:fhir_client/models/reference.dart';
 import 'package:fhir_client/models/specialty.dart';
 import 'package:fhir_client/models/telecom.dart';
+import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/type.dart' as t;
 
 sealed class Resource {
-  final String id;
-  final String resourceType;
+  final String? id;
+  final String? resourceType;
   final Meta? meta;
 
-  Resource(
+  Resource._internal(
     this.id,
     this.resourceType,
     this.meta,
@@ -32,10 +34,47 @@ sealed class Resource {
       switch (map['resourceType']) {
         ('PractitionerRole') => PractitionerRole.fromJson(map),
         ('Organization') => Organization.fromJson(map),
+        ('OperationOutcome') => OperationOutcome.fromJson(map),
         (_) => throw UnimplementedError(
             'Hey you! This resource is not implemented! Please head over to https://github.com/MelbourneDeveloper/fhir_client and write a PR to add this resource.',
           ),
       };
+}
+
+class OperationOutcome extends Resource {
+  final Text? text;
+  final List<Issue>? issue;
+
+  OperationOutcome({
+    required String? resourceType,
+    this.text,
+    this.issue,
+  }) : super._internal(
+          null,
+          resourceType,
+          null,
+        );
+
+  factory OperationOutcome.fromJson(Map<String, dynamic> json) {
+    return OperationOutcome(
+      resourceType:
+          json['resourceType'] != null ? json['resourceType'] as String? : null,
+      text: json['text'] != null
+          ? Text.fromJson(json['text'] as Map<String, dynamic>)
+          : null,
+      issue: (json['issue'] as List<dynamic>?)
+          ?.map((e) => Issue.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'resourceType': resourceType,
+      'text': text?.toJson(),
+      'issue': issue?.map((e) => e.toJson()).toList(),
+    };
+  }
 }
 
 final class Organization extends Resource {
@@ -62,7 +101,7 @@ final class Organization extends Resource {
     this.active,
     this.telecom,
     this.address,
-  }) : super(
+  }) : super._internal(
           id,
           resourceType,
           meta,
@@ -143,7 +182,7 @@ final class PractitionerRole extends Resource {
     this.specialty,
     this.location,
     this.availableTime,
-  }) : super(
+  }) : super._internal(
           id,
           resourceType,
           meta,
@@ -227,7 +266,7 @@ class Bundle extends Resource {
     this.location,
     this.link,
     this.entry,
-  }) : super(
+  }) : super._internal(
           id,
           resourceType,
           meta,

@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:fhir_client/models/error.dart' as err;
+import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/resource.dart';
-
+import 'package:http/http.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -115,13 +115,25 @@ void main() {
       expect(result.identifier!.first.type!.text, 'SNO');
     });
 
+    test('GET read Organization', () async {
+      const baseUri = 'http://hapi.fhir.org/';
+      const path = 'baseR4/Organization/2640211';
+      final json = await Client().getResource(baseUri, path);
+
+      final result = Resource.fromJson(jsonDecode(json) as Map<String, dynamic>)
+          as Organization;
+
+      expect(result.id, '2640211');
+      expect(result.identifier!.first.type!.text, 'SNO');
+    });
+
     test('Deserialize error result', () async {
       //curl -X GET "http://hapi.fhir.org/baseR4/Practitioner?organization=Organization/2640211&_count=10" -H "Content-Type: application/json"
       final json =
           await File('test/responses/errorresponse.json').readAsString();
 
-      final result =
-          err.Error.fromJson(jsonDecode(json) as Map<String, dynamic>);
+      final result = Resource.fromJson(jsonDecode(json) as Map<String, dynamic>)
+          as OperationOutcome;
 
       expect(result.issue!.first.severity, 'error');
     });
