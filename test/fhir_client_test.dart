@@ -118,13 +118,25 @@ void main() {
     test('GET read Organization', () async {
       const baseUri = 'http://hapi.fhir.org/';
       const path = 'baseR4/Organization/2640211';
-      final json = await Client().getResource(baseUri, path);
-
-      final result = Resource.fromJson(jsonDecode(json) as Map<String, dynamic>)
-          as Organization;
+      final result = await Client().getResource(baseUri, path) as Organization;
 
       expect(result.id, '2640211');
       expect(result.identifier!.first.type!.text, 'SNO');
+    });
+
+    test('GET read Organization - Error', () async {
+      const baseUri = 'http://hapi.fhir.org/';
+      const path = 'baseR4/Organizationz/2640211';
+      final result =
+          await Client().getResource(baseUri, path) as OperationOutcome;
+
+      expect(
+        result.issue!.first.diagnostics!.contains(
+          // ignore: lines_longer_than_80_chars
+          "HAPI-0302: Unknown resource type 'Organizationz' - Server knows how to handle: [Account, ActivityDefinition, AdverseEvent, Aller",
+        ),
+        true,
+      );
     });
 
     test('Deserialize error result', () async {

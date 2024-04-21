@@ -46,19 +46,16 @@ class OperationOutcome extends Resource {
   final List<Issue>? issue;
 
   OperationOutcome({
-    required String? resourceType,
     this.text,
     this.issue,
   }) : super._internal(
           null,
-          resourceType,
+          'OperationOutcome',
           null,
         );
 
   factory OperationOutcome.fromJson(Map<String, dynamic> json) {
     return OperationOutcome(
-      resourceType:
-          json['resourceType'] != null ? json['resourceType'] as String? : null,
       text: json['text'] != null
           ? Text.fromJson(json['text'] as Map<String, dynamic>)
           : null,
@@ -89,7 +86,6 @@ final class Organization extends Resource {
   final List<Address>? address;
 
   Organization({
-    required String resourceType,
     required String id,
     required Meta? meta,
     this.identifier,
@@ -103,13 +99,12 @@ final class Organization extends Resource {
     this.address,
   }) : super._internal(
           id,
-          resourceType,
+          'Organization',
           meta,
         );
 
   factory Organization.fromJson(Map<String, dynamic> json) {
     return Organization(
-      resourceType: json['resourceType'] as String,
       id: json['id'] as String,
       meta: json['meta'] != null
           ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
@@ -170,7 +165,6 @@ final class PractitionerRole extends Resource {
 
   PractitionerRole({
     required String id,
-    required String resourceType,
     required Meta? meta,
     this.extension,
     this.identifier,
@@ -184,13 +178,12 @@ final class PractitionerRole extends Resource {
     this.availableTime,
   }) : super._internal(
           id,
-          resourceType,
+          'PractitionerRole',
           meta,
         );
 
   factory PractitionerRole.fromJson(Map<String, dynamic> json) {
     return PractitionerRole(
-      resourceType: json['resourceType'] as String,
       id: json['id'] as String,
       extension: (json['extension'] as List<dynamic>?)
           ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
@@ -254,8 +247,7 @@ class Bundle extends Resource {
   final List<Entry>? entry;
 
   Bundle({
-    required String id,
-    required String resourceType,
+    required String? id,
     required Meta? meta,
     this.extension,
     this.identifier,
@@ -268,13 +260,12 @@ class Bundle extends Resource {
     this.entry,
   }) : super._internal(
           id,
-          resourceType,
+          'Bundle',
           meta,
         );
 
   factory Bundle.fromJson(Map<String, dynamic> json) {
     return Bundle(
-      resourceType: json['resourceType'] as String,
       id: json['id'] as String,
       meta: json['meta'] != null
           ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
