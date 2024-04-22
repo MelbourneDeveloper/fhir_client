@@ -153,6 +153,61 @@ void main() {
           result.entry!.map((e) => e.resource! as Practitioner).toList();
 
       expect(practitioners.length, 1);
+      expect(practitioners.first.id, '0000016f-a1db-e77f-0000-000000009ed4');
+
+      final practitioner = practitioners.first;
+
+      // Test individual properties of the practitioner
+      expect(practitioner.id, '0000016f-a1db-e77f-0000-000000009ed4');
+      expect(practitioner.meta!.versionId, '1');
+      expect(
+        practitioner.meta!.lastUpdated,
+        '2020-03-24T17:59:12.935+00:00',
+      );
+      expect(
+        practitioner.meta!.profile!.first,
+        'http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner',
+      );
+      expect(
+        practitioner.meta!.tag!.first.system,
+        'https://smarthealthit.org/tags',
+      );
+      expect(
+        practitioner.meta!.tag!.first.code,
+        'Covid19 synthetic population from Synthea',
+      );
+
+      expect(
+        practitioner.identifier!.first.system,
+        'http://hl7.org/fhir/sid/us-npi',
+      );
+      expect(practitioner.identifier!.first.value, '40660');
+
+      expect(practitioner.active, true);
+
+      expect(practitioner.name!.first.family, 'Moen819');
+      expect(practitioner.name!.first.given!.first, 'Calvin845');
+      expect(practitioner.name!.first.prefix!.first, 'Dr.');
+
+      expect(practitioner.telecom!.first.system, 'email');
+      expect(
+        practitioner.telecom!.first.value,
+        'Calvin845.Moen819@example.com',
+      );
+      expect(practitioner.telecom!.first.use, 'work');
+      expect(
+        practitioner.telecom!.first.extension!.first.url,
+        'http://hl7.org/fhir/us/core/StructureDefinition/us-core-direct',
+      );
+      expect(practitioner.telecom!.first.extension!.first.valueBoolean, true);
+
+      expect(practitioner.address!.first.line!.first, '427 W COLORADO ST');
+      expect(practitioner.address!.first.city, 'GLENDALE');
+      expect(practitioner.address!.first.state, 'CA');
+      expect(practitioner.address!.first.postalCode, '91204-3046');
+      expect(practitioner.address!.first.country, 'US');
+
+      expect(practitioner.gender, 'male');
     });
 
     test('GET search Practitioner by Org', () async {
