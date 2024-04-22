@@ -1,0 +1,84 @@
+{
+    "resourceType": "Bundle",
+    "id": "8d02bedb-4ac0-470d-be7c-8395c852655b",
+    "meta": {
+        "lastUpdated": "2024-04-22T06:04:53.661+00:00"
+    },
+    "type": "searchset",
+    "total": 1,
+    "link": [
+        {
+            "relation": "self",
+            "url": "https://hapi.fhir.org/baseR4/Practitioner?_has%3APractitionerRole%3Apractitioner%3Aorganization=Organization%2Ffcf35f09-a2eb-324f-9ec6-40cdeadc9322"
+        }
+    ],
+    "entry": [
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Practitioner/0000016f-a1db-e77f-0000-000000009ed4",
+            "resource": {
+                "resourceType": "Practitioner",
+                "id": "0000016f-a1db-e77f-0000-000000009ed4",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-03-24T17:59:12.935+00:00",
+                    "source": "#gUndnzOWCBQDX2qV",
+                    "profile": [
+                        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner"
+                    ],
+                    "tag": [
+                        {
+                            "system": "https://smarthealthit.org/tags",
+                            "code": "Covid19 synthetic population from Synthea"
+                        }
+                    ]
+                },
+                "identifier": [
+                    {
+                        "system": "http://hl7.org/fhir/sid/us-npi",
+                        "value": "40660"
+                    }
+                ],
+                "active": true,
+                "name": [
+                    {
+                        "family": "Moen819",
+                        "given": [
+                            "Calvin845"
+                        ],
+                        "prefix": [
+                            "Dr."
+                        ]
+                    }
+                ],
+                "telecom": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-direct",
+                                "valueBoolean": true
+                            }
+                        ],
+                        "system": "email",
+                        "value": "Calvin845.Moen819@example.com",
+                        "use": "work"
+                    }
+                ],
+                "address": [
+                    {
+                        "line": [
+                            "427 W COLORADO ST"
+                        ],
+                        "city": "GLENDALE",
+                        "state": "CA",
+                        "postalCode": "91204-3046",
+                        "country": "US"
+                    }
+                ],
+                "gender": "male"
+            },
+            "search": {
+                "mode": "match"
+            }
+        }
+    ]
+}

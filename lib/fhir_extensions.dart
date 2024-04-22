@@ -6,8 +6,11 @@ import 'package:http/http.dart';
 extension FhirExtensions on Client {
   Future<Resource> getResource(String baseUri, String path) async {
     try {
+      final uri = '$baseUri$path';
+      // ignore: avoid_print
+      print(uri);
       final response = await this.get(
-        Uri.parse('$baseUri$path'),
+        Uri.parse(uri),
         headers: {'Content-Type': 'application/json'},
       );
 

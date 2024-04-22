@@ -10,6 +10,7 @@ import 'package:fhir_client/models/issue.dart';
 import 'package:fhir_client/models/link.dart';
 import 'package:fhir_client/models/location.dart';
 import 'package:fhir_client/models/meta.dart';
+import 'package:fhir_client/models/name.dart';
 import 'package:fhir_client/models/period.dart';
 import 'package:fhir_client/models/reference.dart';
 import 'package:fhir_client/models/specialty.dart';
@@ -34,6 +35,7 @@ sealed class Resource {
       //TODO: Change this to a map for performance
       switch (map['resourceType']) {
         ('Bundle') => Bundle.fromJson(map),
+        ('Practitioner') => Practitioner.fromJson(map),
         ('PractitionerRole') => PractitionerRole.fromJson(map),
         ('Organization') => Organization.fromJson(map),
         ('OperationOutcome') => OperationOutcome.fromJson(map),
@@ -149,6 +151,89 @@ final class Organization extends Resource {
       'active': active,
       'telecom': telecom?.map((e) => e.toJson()).toList(),
       'address': address?.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+
+final class Practitioner extends Resource {
+  final List<t.Type>? type;
+  final List<Name>? name;
+  final int? total;
+  final List<Link>? link;
+  final List<Entry>? entry;
+  final List<Identifier>? identifier;
+  final bool? active;
+  final List<Telecom>? telecom;
+  final List<Address>? address;
+  final String? gender;
+
+  Practitioner({
+    required String id,
+    required Meta? meta,
+    this.identifier,
+    this.type,
+    this.name,
+    this.total,
+    this.link,
+    this.entry,
+    this.active,
+    this.telecom,
+    this.address,
+    this.gender,
+  }) : super._internal(
+          id,
+          'Practitioner',
+          meta,
+        );
+
+  factory Practitioner.fromJson(Map<String, dynamic> json) {
+    return Practitioner(
+      id: json['id'] as String,
+      meta: json['meta'] != null
+          ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+          : null,
+      identifier: (json['identifier'] as List<dynamic>?)
+          ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      type: (json['type'] as List<dynamic>?)
+          ?.map((e) => t.Type.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      name: (json['name'] as List<dynamic>?)
+          ?.map((e) => Name.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      total: json['total'] != null ? json['total'] as int? : null,
+      link: (json['link'] as List<dynamic>?)
+          ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      entry: (json['entry'] as List<dynamic>?)
+          ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      active: json['active'] as bool?,
+      telecom: (json['telecom'] as List<dynamic>?)
+          ?.map((e) => Telecom.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      address: (json['address'] as List<dynamic>?)
+          ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      gender: json['gender'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'resourceType': resourceType,
+      'id': id,
+      'meta': meta?.toJson(),
+      'identifier': identifier?.map((e) => e.toJson()).toList(),
+      'type': type?.cast<dynamic>().toList(),
+      'name': name?.map((e) => e.toJson()).toList(),
+      'total': total,
+      'link': link?.map((e) => e.toJson()).toList(),
+      'entry': entry?.map((e) => e.toJson()).toList(),
+      'active': active,
+      'telecom': telecom?.map((e) => e.toJson()).toList(),
+      'address': address?.map((e) => e.toJson()).toList(),
+      'gender': gender,
     };
   }
 }

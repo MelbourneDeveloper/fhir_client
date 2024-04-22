@@ -140,8 +140,35 @@ void main() {
       );
     });
 
+    test('Deserialize Practitioner by Org search result', () async {
+      //curl -X GET "http://hapi.fhir.org/baseR4/Practitioner?_has:PractitionerRole:practitioner:organization=Organization/2640211&_count=10" -H "Content-Type: application/json"
+
+      final json =
+          await File('test/responses/practiotionerbyorg.json').readAsString();
+
+      final result =
+          Resource.fromJson(jsonDecode(json) as Map<String, dynamic>) as Bundle;
+
+      final practitioners =
+          result.entry!.map((e) => e.resource! as Practitioner).toList();
+
+      expect(practitioners.length, 1);
+    });
+
+    test('GET search Practitioner by Org', () async {
+      const baseUri = 'http://hapi.fhir.org/';
+      const path =
+          'baseR4/Practitioner?_has:PractitionerRole:practitioner:organization=Organization/fcf35f09-a2eb-324f-9ec6-40cdeadc9322&_count=10';
+      final bundle = await Client().getResource(baseUri, path) as Bundle;
+      final practitioners =
+          bundle.entry!.map((e) => e.resource! as Practitioner).toList();
+
+      expect(practitioners.length, 1);
+      expect(practitioners.first.id, '0000016f-a1db-e77f-0000-000000009ed4');
+    });
+
     test('Deserialize error result', () async {
-      //curl -X GET "http://hapi.fhir.org/baseR4/Practitioner?organization=Organization/2640211&_count=10" -H "Content-Type: application/json"
+      //curl -X GET "http://hapi.fhir.org/baseR4/Practitioner?_has:PractitionerRole:practitioner:organization=Organization/fcf35f09-a2eb-324f-9ec6-40cdeadc9322&_count=10" -H "Content-Type: application/json"
       final json =
           await File('test/responses/errorresponse.json').readAsString();
 
