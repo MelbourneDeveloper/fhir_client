@@ -109,11 +109,15 @@ void main() {
       //curl -X GET "http://hapi.fhir.org/baseR4/Organization/2640211" -H "Content-Type: application/json"
       final json = await File('test/responses/readorg.json').readAsString();
 
-      final result =
+      final org =
           Organization.fromJson(jsonDecode(json) as Map<String, dynamic>);
 
-      expect(result.id, '2640211');
-      expect(result.identifier!.first.type!.text, 'SNO');
+      expect(org.id, '2640211');
+      expect(org.identifier!.first.type!.text, 'SNO');
+
+      final map = org.toJson();
+
+      expect(map['id'], '2640211');
     });
 
     test('Deserialize Practitioner by Org search result', () async {
