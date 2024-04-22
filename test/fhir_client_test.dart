@@ -196,6 +196,24 @@ void main() {
 
       expect(result.issue!.first.severity, 'error');
     });
+
+    test('Deserialize Schedule search result', () async {
+      //curl -X GET "http://hapi.fhir.org/baseR4/Schedule?_count=10"
+
+      final json =
+          await File('test/responses/schedulcessearch.json').readAsString();
+
+      final result =
+          Resource.fromJson(jsonDecode(json) as Map<String, dynamic>) as Bundle;
+
+      final schedules =
+          result.entry!.map((e) => e.resource! as Schedule).toList();
+
+      expect(schedules.length, 10);
+      expect(schedules.first.id, '055fa740-99e1-4b42-a081-2e4030a2aa7a');
+
+      // final schedule = schedules.first;
+    });
   });
 
   group('Actual Call Tests', () {

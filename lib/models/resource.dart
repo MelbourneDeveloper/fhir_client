@@ -1,5 +1,6 @@
 // ignore_for_file: sort_constructors_first, prefer_expression_function_bodies
 
+import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/address.dart';
 import 'package:fhir_client/models/available_time.dart';
 import 'package:fhir_client/models/code.dart';
@@ -12,7 +13,9 @@ import 'package:fhir_client/models/location.dart';
 import 'package:fhir_client/models/meta.dart';
 import 'package:fhir_client/models/name.dart';
 import 'package:fhir_client/models/period.dart';
+import 'package:fhir_client/models/planning_horizon.dart';
 import 'package:fhir_client/models/reference.dart';
+import 'package:fhir_client/models/service_type.dart';
 import 'package:fhir_client/models/specialty.dart';
 import 'package:fhir_client/models/telecom.dart';
 import 'package:fhir_client/models/text.dart';
@@ -39,10 +42,88 @@ sealed class Resource {
         ('PractitionerRole') => PractitionerRole.fromJson(map),
         ('Organization') => Organization.fromJson(map),
         ('OperationOutcome') => OperationOutcome.fromJson(map),
+        ('Schedule') => Schedule.fromJson(map),
         (_) => throw UnimplementedError(
             'Hey you! This resource is not implemented! Please head over to https://github.com/MelbourneDeveloper/fhir_client and write a PR to add this resource.',
           ),
       };
+}
+
+class Bundle extends Resource {
+  final List<Extension>? extension;
+  final List<Identifier>? identifier;
+  final bool? active;
+  final String? type;
+  final String? name;
+  final List<Code>? code;
+  final List<Location>? location;
+  final List<Link>? link;
+  final List<Entry>? entry;
+
+  Bundle({
+    required String? id,
+    required Meta? meta,
+    this.extension,
+    this.identifier,
+    this.active,
+    this.type,
+    this.name,
+    this.code,
+    this.location,
+    this.link,
+    this.entry,
+  }) : super._internal(
+          id,
+          'Bundle',
+          meta,
+        );
+
+  factory Bundle.fromJson(Map<String, dynamic> json) {
+    return Bundle(
+      id: json['id'] as String,
+      meta: json['meta'] != null
+          ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+          : null,
+      extension: (json['extension'] as List<dynamic>?)
+          ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      identifier: (json['identifier'] as List<dynamic>?)
+          ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      active: json['active'] != null ? json['active'] as bool? : null,
+      type: json['type'] as String?,
+      name: json['name'] != null ? json['name'] as String? : null,
+      code: (json['code'] as List<dynamic>?)
+          ?.map((e) => Code.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      location: (json['location'] as List<dynamic>?)
+          ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      link: (json['link'] as List<dynamic>?)
+          ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      entry: (json['entry'] as List<dynamic>?)
+          ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'resourceType': resourceType,
+      'id': id,
+      'meta': meta?.toJson(),
+      'extension': extension?.map((e) => e.toJson()).toList(),
+      'identifier': identifier?.map((e) => e.toJson()).toList(),
+      'active': active,
+      'type': type,
+      'name': name,
+      'code': code?.map((e) => e.toJson()).toList(),
+      'location': location?.map((e) => e.toJson()).toList(),
+      'link': link?.map((e) => e.toJson()).toList(),
+      'entry': entry?.map((e) => e.toJson()).toList(),
+    };
+  }
 }
 
 class OperationOutcome extends Resource {
@@ -322,79 +403,57 @@ final class PractitionerRole extends Resource {
   }
 }
 
-class Bundle extends Resource {
-  final List<Extension>? extension;
-  final List<Identifier>? identifier;
-  final bool? active;
-  final String? type;
-  final String? name;
-  final List<Code>? code;
-  final List<Location>? location;
-  final List<Link>? link;
-  final List<Entry>? entry;
-
-  Bundle({
-    required String? id,
-    required Meta? meta,
-    this.extension,
+class Schedule extends Resource {
+  Schedule({
+    String? id,
+    Meta? meta,
     this.identifier,
-    this.active,
-    this.type,
-    this.name,
-    this.code,
-    this.location,
-    this.link,
-    this.entry,
+    this.serviceType,
+    this.actor,
+    this.planningHorizon,
+    this.comment,
   }) : super._internal(
           id,
-          'Bundle',
+          'Schedule',
           meta,
         );
 
-  factory Bundle.fromJson(Map<String, dynamic> json) {
-    return Bundle(
-      id: json['id'] as String,
-      meta: json['meta'] != null
-          ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
-          : null,
-      extension: (json['extension'] as List<dynamic>?)
-          ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      identifier: (json['identifier'] as List<dynamic>?)
-          ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      active: json['active'] != null ? json['active'] as bool? : null,
-      type: json['type'] as String?,
-      name: json['name'] != null ? json['name'] as String? : null,
-      code: (json['code'] as List<dynamic>?)
-          ?.map((e) => Code.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      location: (json['location'] as List<dynamic>?)
-          ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      link: (json['link'] as List<dynamic>?)
-          ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      entry: (json['entry'] as List<dynamic>?)
-          ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-  }
+  factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
+        id: json['id'] != null ? json['id'] as String? : null,
+        meta: json['meta'] != null
+            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+            : null,
+        identifier: (json['identifier'] as List<dynamic>?)
+            ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        serviceType: (json['serviceType'] as List<dynamic>?)
+            ?.map((e) => ServiceType.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        actor: (json['actor'] as List<dynamic>?)
+            ?.map((e) => Actor.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        planningHorizon: json['planningHorizon'] != null
+            ? PlanningHorizon.fromJson(
+                json['planningHorizon'] as Map<String, dynamic>,
+              )
+            : null,
+        comment: json['comment'] != null ? json['comment'] as String? : null,
+      );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'resourceType': resourceType,
-      'id': id,
-      'meta': meta?.toJson(),
-      'extension': extension?.map((e) => e.toJson()).toList(),
-      'identifier': identifier?.map((e) => e.toJson()).toList(),
-      'active': active,
-      'type': type,
-      'name': name,
-      'code': code?.map((e) => e.toJson()).toList(),
-      'location': location?.map((e) => e.toJson()).toList(),
-      'link': link?.map((e) => e.toJson()).toList(),
-      'entry': entry?.map((e) => e.toJson()).toList(),
-    };
-  }
+  final List<Identifier>? identifier;
+  final List<ServiceType>? serviceType;
+  final List<Actor>? actor;
+  final PlanningHorizon? planningHorizon;
+  final String? comment;
+
+  Map<String, dynamic> toJson() => {
+        'resourceType': resourceType,
+        'id': id,
+        'meta': meta?.toJson(),
+        'identifier': identifier?.map((e) => e.toJson()).toList(),
+        'serviceType': serviceType?.map((e) => e.toJson()).toList(),
+        'actor': actor?.map((e) => e.toJson()).toList(),
+        'planningHorizon': planningHorizon?.toJson(),
+        'comment': comment,
+      };
 }

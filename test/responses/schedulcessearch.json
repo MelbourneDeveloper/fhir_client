@@ -1,0 +1,632 @@
+{
+    "resourceType": "Bundle",
+    "id": "7495d1d1-d13a-49d0-a871-e0220472469f",
+    "meta": {
+        "lastUpdated": "2024-04-22T08:42:20.947+00:00"
+    },
+    "type": "searchset",
+    "link": [
+        {
+            "relation": "self",
+            "url": "https://hapi.fhir.org/baseR4/Schedule?_count=10"
+        },
+        {
+            "relation": "next",
+            "url": "https://hapi.fhir.org/baseR4?_getpages=7495d1d1-d13a-49d0-a871-e0220472469f&_getpagesoffset=10&_count=10&_pretty=true&_bundletype=searchset"
+        }
+    ],
+    "entry": [
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Schedule/055fa740-99e1-4b42-a081-2e4030a2aa7a",
+            "resource": {
+                "resourceType": "Schedule",
+                "id": "055fa740-99e1-4b42-a081-2e4030a2aa7a",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-03-16T08:55:02.086+00:00",
+                    "source": "#i7oIbEqW6Hwn5bQj"
+                },
+                "identifier": [
+                    {
+                        "system": "SCH_RowId",
+                        "value": "124||1||3"
+                    }
+                ],
+                "serviceType": [
+                    {
+                        "coding": [
+                            {
+                                "system": "SCH_ServiceTypeCode",
+                                "code": "124||1||3||4",
+                                "display": "Platinum MCU - Female"
+                            }
+                        ],
+                        "text": "Platinum MCU - Female"
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "SCH_ServiceTypeCode",
+                                "code": "124||1||3||5",
+                                "display": "Platinum MCU - Male"
+                            }
+                        ],
+                        "text": "Platinum MCU - Male"
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "SCH_ServiceTypeCode",
+                                "code": "124||1||3||6",
+                                "display": "Kids 1 - 12 bulan MCU"
+                            }
+                        ],
+                        "text": "Kids 1 - 12 bulan MCU"
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "SCH_ServiceTypeCode",
+                                "code": "124||1||3||7",
+                                "display": "Kids >1 - 5 tahun MCU"
+                            }
+                        ],
+                        "text": "Kids >1 - 5 tahun MCU"
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "SCH_ServiceTypeCode",
+                                "code": "124||1||3||8",
+                                "display": "Kids >5 - 12 tahun MCU"
+                            }
+                        ],
+                        "text": "Kids >5 - 12 tahun MCU"
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "SCH_ServiceTypeCode",
+                                "code": "124||1||3||9",
+                                "display": "Kids >12 - 18 tahun MCU"
+                            }
+                        ],
+                        "text": "Kids >12 - 18 tahun MCU"
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "SCH_ServiceTypeCode",
+                                "code": "124||1||3||10",
+                                "display": "Appointment"
+                            }
+                        ],
+                        "text": "Appointment"
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "SCH_ServiceTypeCode",
+                                "code": "124||1||3||11",
+                                "display": "Walk In"
+                            }
+                        ],
+                        "text": "Walk In"
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "SCH_ServiceTypeCode",
+                                "code": "124||1||3||12",
+                                "display": "Referral"
+                            }
+                        ],
+                        "text": "Referral"
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "SCH_ServiceTypeCode",
+                                "code": "124||1||3||13",
+                                "display": "Konsul dari IGD"
+                            }
+                        ],
+                        "text": "Konsul dari IGD"
+                    },
+                    {
+                        "coding": [
+                            {
+                                "system": "SCH_ServiceTypeCode",
+                                "code": "124||1||3||14",
+                                "display": "Konsul dari Rawat Inap"
+                            }
+                        ],
+                        "text": "Konsul dari Rawat Inap"
+                    }
+                ],
+                "actor": [
+                    {
+                        "reference": "Practitioner/d0cb9d38-dcbf-4372-9c78-dedd5fbf129a",
+                        "display": "ENT Doctor"
+                    },
+                    {
+                        "reference": "Location/e5872278-d62b-4c1a-9ff1-f4eb37d708c6",
+                        "display": "ENT Clinic (3rd fl)"
+                    }
+                ],
+                "planningHorizon": {
+                    "start": "2019-11-28T08:00:00",
+                    "end": "2021-05-31T12:00:00"
+                },
+                "comment": "Tuesday"
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Schedule/0e3309f0-b207-4a06-b3cd-f4d51d7feb76",
+            "resource": {
+                "resourceType": "Schedule",
+                "id": "0e3309f0-b207-4a06-b3cd-f4d51d7feb76",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2024-01-03T15:47:51.028+00:00",
+                    "source": "#hSTFZzsVr0tzXd5d"
+                },
+                "identifier": [
+                    {
+                        "use": "usual",
+                        "system": "http://example.org/scheduleid",
+                        "value": "45"
+                    }
+                ],
+                "active": true,
+                "serviceCategory": [
+                    {
+                        "coding": [
+                            {
+                                "code": "17",
+                                "display": "General Practice"
+                            }
+                        ]
+                    }
+                ],
+                "serviceType": [
+                    {
+                        "coding": [
+                            {
+                                "code": "124",
+                                "display": "General Practice"
+                            }
+                        ]
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "code": "394802001",
+                                "display": "General medicine"
+                            }
+                        ]
+                    }
+                ],
+                "actor": [
+                    {
+                        "reference": "Location/bded1b2f-bdd5-424b-8725-4c6f3d525e07",
+                        "display": "Norte"
+                    },
+                    {
+                        "reference": "HealthcareService/70ab9bd6-ff24-4bfb-902f-86a5f47a2866",
+                        "display": "Medicina General"
+                    }
+                ],
+                "planningHorizon": {
+                    "start": "2023-12-01T00:00:00Z",
+                    "end": "2023-12-31T23:59:59Z"
+                },
+                "comment": "Los SLOTS asociados a esta agenda, deberan estar asociados a Medicina General zona NORTE"
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Schedule/10364991",
+            "resource": {
+                "resourceType": "Schedule",
+                "id": "10364991",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-04-25T04:51:04.055+00:00",
+                    "source": "#MufQlyjKqejTuaHY"
+                },
+                "actor": [
+                    {
+                        "reference": "Practitioner/a1"
+                    }
+                ],
+                "planningHorizon": {
+                    "start": "2013-12-25T09:15:00Z",
+                    "end": "2013-12-25T09:30:00Z"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Schedule/10364992",
+            "resource": {
+                "resourceType": "Schedule",
+                "id": "10364992",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-04-25T04:51:04.055+00:00",
+                    "source": "#MufQlyjKqejTuaHY"
+                },
+                "actor": [
+                    {
+                        "reference": "Practitioner/a1"
+                    }
+                ],
+                "planningHorizon": {
+                    "start": "2013-12-25T09:15:00Z",
+                    "end": "2013-12-25T09:30:00Z"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Schedule/10434937",
+            "resource": {
+                "resourceType": "Schedule",
+                "id": "10434937",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-04-25T22:31:31.633+00:00",
+                    "source": "#PLuLsrA5qKMRXHVt"
+                },
+                "active": true,
+                "serviceCategory": [
+                    {
+                        "coding": [
+                            {
+                                "code": "17",
+                                "display": "General Practice"
+                            }
+                        ]
+                    }
+                ],
+                "serviceType": [
+                    {
+                        "coding": [
+                            {
+                                "code": "57",
+                                "display": "Immunization"
+                            }
+                        ]
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "code": "408480009",
+                                "display": "Clinical immunology"
+                            }
+                        ]
+                    }
+                ],
+                "actor": [
+                    {
+                        "reference": "Practitioner/7006819"
+                    },
+                    {
+                        "reference": "Location/7006666"
+                    }
+                ],
+                "planningHorizon": {
+                    "start": "2023-04-25T19:00:00Z",
+                    "end": "2023-04-25T19:45:00Z"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Schedule/10434938",
+            "resource": {
+                "resourceType": "Schedule",
+                "id": "10434938",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-04-25T22:31:32.383+00:00",
+                    "source": "#R5xI7k90I5uYOdjO"
+                },
+                "active": true,
+                "serviceCategory": [
+                    {
+                        "coding": [
+                            {
+                                "code": "17",
+                                "display": "General Practice"
+                            }
+                        ]
+                    }
+                ],
+                "serviceType": [
+                    {
+                        "coding": [
+                            {
+                                "code": "57",
+                                "display": "Immunization"
+                            }
+                        ]
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "code": "408480009",
+                                "display": "Clinical immunology"
+                            }
+                        ]
+                    }
+                ],
+                "actor": [
+                    {
+                        "reference": "Practitioner/7006819"
+                    },
+                    {
+                        "reference": "Location/7006666"
+                    }
+                ],
+                "planningHorizon": {
+                    "start": "2023-04-25T20:00:00Z",
+                    "end": "2023-04-25T20:45:00Z"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Schedule/10434939",
+            "resource": {
+                "resourceType": "Schedule",
+                "id": "10434939",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-04-25T22:31:33.044+00:00",
+                    "source": "#lnjwEoC2WF6w3ybq"
+                },
+                "active": true,
+                "serviceCategory": [
+                    {
+                        "coding": [
+                            {
+                                "code": "17",
+                                "display": "General Practice"
+                            }
+                        ]
+                    }
+                ],
+                "serviceType": [
+                    {
+                        "coding": [
+                            {
+                                "code": "57",
+                                "display": "Immunization"
+                            }
+                        ]
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "code": "408480009",
+                                "display": "Clinical immunology"
+                            }
+                        ]
+                    }
+                ],
+                "actor": [
+                    {
+                        "reference": "Practitioner/7006819"
+                    },
+                    {
+                        "reference": "Location/7006666"
+                    }
+                ],
+                "planningHorizon": {
+                    "start": "2023-04-25T21:00:00Z",
+                    "end": "2023-04-25T21:45:00Z"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Schedule/10434940",
+            "resource": {
+                "resourceType": "Schedule",
+                "id": "10434940",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-04-25T22:31:33.707+00:00",
+                    "source": "#TiC2goAfGfTML28R"
+                },
+                "active": true,
+                "serviceCategory": [
+                    {
+                        "coding": [
+                            {
+                                "code": "17",
+                                "display": "General Practice"
+                            }
+                        ]
+                    }
+                ],
+                "serviceType": [
+                    {
+                        "coding": [
+                            {
+                                "code": "57",
+                                "display": "Immunization"
+                            }
+                        ]
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "code": "408480009",
+                                "display": "Clinical immunology"
+                            }
+                        ]
+                    }
+                ],
+                "actor": [
+                    {
+                        "reference": "Practitioner/7006819"
+                    },
+                    {
+                        "reference": "Location/7006666"
+                    }
+                ],
+                "planningHorizon": {
+                    "start": "2023-04-25T22:00:00Z",
+                    "end": "2023-04-25T22:45:00Z"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Schedule/10434941",
+            "resource": {
+                "resourceType": "Schedule",
+                "id": "10434941",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-04-25T22:31:34.346+00:00",
+                    "source": "#EQaVtzk46w5n5gL0"
+                },
+                "active": true,
+                "serviceCategory": [
+                    {
+                        "coding": [
+                            {
+                                "code": "17",
+                                "display": "General Practice"
+                            }
+                        ]
+                    }
+                ],
+                "serviceType": [
+                    {
+                        "coding": [
+                            {
+                                "code": "57",
+                                "display": "Immunization"
+                            }
+                        ]
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "code": "408480009",
+                                "display": "Clinical immunology"
+                            }
+                        ]
+                    }
+                ],
+                "actor": [
+                    {
+                        "reference": "Practitioner/7006819"
+                    },
+                    {
+                        "reference": "Location/7006666"
+                    }
+                ],
+                "planningHorizon": {
+                    "start": "2023-04-25T23:00:00Z",
+                    "end": "2023-04-25T23:45:00Z"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Schedule/10434942",
+            "resource": {
+                "resourceType": "Schedule",
+                "id": "10434942",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-04-25T22:33:01.996+00:00",
+                    "source": "#jEK9xJaQWyjIOWXH"
+                },
+                "active": true,
+                "serviceCategory": [
+                    {
+                        "coding": [
+                            {
+                                "code": "17",
+                                "display": "General Practice"
+                            }
+                        ]
+                    }
+                ],
+                "serviceType": [
+                    {
+                        "coding": [
+                            {
+                                "code": "57",
+                                "display": "Immunization"
+                            }
+                        ]
+                    }
+                ],
+                "specialty": [
+                    {
+                        "coding": [
+                            {
+                                "code": "408480009",
+                                "display": "Clinical immunology"
+                            }
+                        ]
+                    }
+                ],
+                "actor": [
+                    {
+                        "reference": "Practitioner/7006819"
+                    },
+                    {
+                        "reference": "Location/7006666"
+                    }
+                ],
+                "planningHorizon": {
+                    "start": "2023-04-25T19:00:00Z",
+                    "end": "2023-04-25T19:45:00Z"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        }
+    ]
+}
