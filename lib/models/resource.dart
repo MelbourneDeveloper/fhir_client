@@ -14,6 +14,7 @@ import 'package:fhir_client/models/link.dart';
 import 'package:fhir_client/models/location.dart';
 import 'package:fhir_client/models/meta.dart';
 import 'package:fhir_client/models/name.dart';
+import 'package:fhir_client/models/participant.dart';
 import 'package:fhir_client/models/period.dart';
 import 'package:fhir_client/models/planning_horizon.dart';
 import 'package:fhir_client/models/reference.dart';
@@ -44,9 +45,51 @@ sealed class Resource {
         ('Organization') => Organization.fromJson(map),
         ('OperationOutcome') => OperationOutcome.fromJson(map),
         ('Schedule') => Schedule.fromJson(map),
+        ('Appointment') => Appointment.fromJson(map),
         (_) => throw UnimplementedError(
             'Hey you! This resource is not implemented! Please head over to https://github.com/MelbourneDeveloper/fhir_client and write a PR to add this resource.',
           ),
+      };
+}
+
+class Appointment extends Resource {
+  Appointment({
+    String? id,
+    Meta? meta,
+    this.status,
+    this.serviceCategory,
+    this.participant,
+  }) : super._internal(
+          id,
+          'Appointment',
+          meta,
+        );
+
+  factory Appointment.fromJson(Map<String, dynamic> json) => Appointment(
+        id: json['id'] != null ? json['id'] as String? : null,
+        meta: json['meta'] != null
+            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+            : null,
+        status: json['status'] != null ? json['status'] as String? : null,
+        serviceCategory: (json['serviceCategory'] as List<dynamic>?)
+            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        participant: (json['participant'] as List<dynamic>?)
+            ?.map((e) => Participant.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+
+  final String? status;
+  final List<CodeableConcept>? serviceCategory;
+  final List<Participant>? participant;
+
+  Map<String, dynamic> toJson() => {
+        'resourceType': resourceType,
+        'id': id,
+        'meta': meta?.toJson(),
+        'status': status,
+        'serviceCategory': serviceCategory?.map((e) => e.toJson()).toList(),
+        'participant': participant?.map((e) => e.toJson()).toList(),
       };
 }
 

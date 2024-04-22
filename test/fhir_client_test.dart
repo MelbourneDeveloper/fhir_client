@@ -277,6 +277,37 @@ void main() {
           'Los SLOTS asociados a esta agenda, '
           'deberan estar asociados a Medicina General zona NORTE');
     });
+
+    test('Deserialize Appointment search result', () async {
+      //curl -X GET "https://hapi.fhir.org/baseR4/Appointment?_count=10"
+
+      final json =
+          await File('test/responses/appointmentsearch.json').readAsString();
+
+      final result =
+          Resource.fromJson(jsonDecode(json) as Map<String, dynamic>) as Bundle;
+
+      final appointments =
+          result.entry!.map((e) => e.resource! as Appointment).toList();
+
+      expect(appointments.first.id, '00f740554d7b1c5a');
+
+      // Get the 3rd appointment
+      final appointment = appointments[2];
+
+      // Assert resource type
+      expect(appointment.resourceType, 'Appointment');
+
+      // Assert ID
+      expect(appointment.id, '05fda0d9-7d96-4869-bccd-8976ed9f35d8');
+
+      // Assert meta
+      expect(appointment.meta!.versionId, '1');
+      expect(appointment.meta!.lastUpdated, '2023-08-04T08:59:32.432+00:00');
+
+      // Assert search mode
+      expect(result.entry![2].search!.mode, 'match');
+    });
   });
 
   group('Actual Call Tests', () {

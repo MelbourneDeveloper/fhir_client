@@ -1,0 +1,290 @@
+{
+    "resourceType": "Bundle",
+    "id": "4e7f67da-eaae-4b64-8493-e7ec76bd0036",
+    "meta": {
+        "lastUpdated": "2024-04-22T10:23:51.720+00:00"
+    },
+    "type": "searchset",
+    "link": [
+        {
+            "relation": "self",
+            "url": "https://hapi.fhir.org/baseR4/Appointment?_count=10"
+        },
+        {
+            "relation": "next",
+            "url": "https://hapi.fhir.org/baseR4?_getpages=4e7f67da-eaae-4b64-8493-e7ec76bd0036&_getpagesoffset=10&_count=10&_pretty=true&_bundletype=searchset"
+        }
+    ],
+    "entry": [
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Appointment/00f740554d7b1c5a",
+            "resource": {
+                "resourceType": "Appointment",
+                "id": "00f740554d7b1c5a",
+                "meta": {
+                    "versionId": "2",
+                    "lastUpdated": "2024-04-12T05:17:04.514+00:00",
+                    "source": "#TImA9IWB4KBrvQ8q"
+                },
+                "status": "proposed",
+                "serviceCategory": [
+                    {
+                        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam rutrum, sapien sed ornare pretium, ante sapien lobortis urna, et laoreet lorem velit at arcu. Quisque in est ornare, pharetra mi eget, fringilla augue. Cras vitae nibh eget enim dictum sollicitudin. Cras bibendum tristique lacus. Vivamus fermentum a ex molestie aliquet. In hac habitasse platea dictumst. Praesent vestibulum, velit sed ullamcorper placerat, est tellus rutrum ex, in sodales libero nibh non leo. Aenean sagittis pulvinar feugiat. Sed in sapien dolor. Nam magna eros, pulvinar vitae vehicula in, fermentum ac tellus. Fusce leo eros, accumsan in blandit eu, tincidunt eget velit. Phasellus blandit purus ligula, in rhoncus ligula scelerisque vitae. Vestibulum et sodales diam, vitae maximus orci. Morbi ut laoreet nisl. Morbi eu elit ut ex molestie placerat. Donec pharetra augue est, ac hendrerit libero viverra ut. Sed malesuada augue sed condimentum viverra. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec eget egestas nulla, quis volutpat nisi. Aliquam feugiat consequat justo, quis tempor tellus molestie eget. Cras arcu lacus, tincidunt eget orci vitae, tincidunt hendrerit magna. Proin tincidunt nec odio et hendrerit. Cras volutpat, nisi ut condimentum tincidunt, dui nisi dictum eros, quis egestas turpis mi et velit. Ut at nisl quis diam egestas viverra. Quisque tempor nunc ut neque varius auctor. Praesent convallis varius est, quis hendrerit magna rhoncus et. Sed at libero nec nisl blandit pulvinar. Sed aliquet diam et dui sollicitudin, eu tincidunt ligula pharetra. Duis vitae ornare nunc. Duis sit amet dictum risus, eget ultrices dui. Etiam rhoncus porta orci, vel gravida ipsum efficitur at. Nullam commodo porttitor sagittis. Aenean at fringilla sem. O"
+                    }
+                ],
+                "participant": [
+                    {
+                        "actor": {
+                            "reference": "Patient/40a7788611946f04"
+                        },
+                        "status": "tentative"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Appointment/059200e9f1d3e606",
+            "resource": {
+                "resourceType": "Appointment",
+                "id": "059200e9f1d3e606",
+                "meta": {
+                    "versionId": "3",
+                    "lastUpdated": "2024-04-12T12:45:27.526+00:00",
+                    "source": "#9sVUPM4xIfqFKix8"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Appointment/05fda0d9-7d96-4869-bccd-8976ed9f35d8",
+            "resource": {
+                "resourceType": "Appointment",
+                "id": "05fda0d9-7d96-4869-bccd-8976ed9f35d8",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-08-04T08:59:32.432+00:00",
+                    "source": "#dfKIJsl2SIPlHsGP"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Appointment/06a86ef2-fd0a-42cb-b2a6-e1076670bc3b",
+            "resource": {
+                "resourceType": "Appointment",
+                "id": "06a86ef2-fd0a-42cb-b2a6-e1076670bc3b",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-08-09T10:03:49.013+00:00",
+                    "source": "#oPep9lgXaQ4EIHYC"
+                },
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/Appointment#Appointment.center",
+                        "valueCoding": {
+                            "code": "FRU",
+                            "display": "FRU"
+                        }
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/Appointment#Appointment.date",
+                        "valueDate": "2023-08-19"
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/Appointment#Appointment.vanID",
+                        "valueString": "61"
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/Appointment#Appointment.parkingPlaceID",
+                        "valueString": "10"
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/Appointment#Appointment.providerServiceMapId",
+                        "valueString": "13"
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/Appointment#Appointment.createdBy",
+                        "valueString": "ankina"
+                    }
+                ],
+                "serviceCategory": [
+                    {
+                        "coding": [
+                            {
+                                "code": "1097 Naco Helpline",
+                                "display": "1097 Naco Helpline"
+                            }
+                        ],
+                        "text": "1097 Naco Helpline"
+                    },
+                    {
+                        "coding": [
+                            {
+                                "code": "ICTC Centre",
+                                "display": "ICTC Centre"
+                            }
+                        ],
+                        "text": "ICTC Centre"
+                    }
+                ],
+                "description": "dsgfds"
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Appointment/07b726df-aa16-471d-ac8d-a69c10f73ee8",
+            "resource": {
+                "resourceType": "Appointment",
+                "id": "07b726df-aa16-471d-ac8d-a69c10f73ee8",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-08-11T06:49:45.246+00:00",
+                    "source": "#9IY6VwYj9vHFMaM9"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Appointment/07be9980b3fe8b1f",
+            "resource": {
+                "resourceType": "Appointment",
+                "id": "07be9980b3fe8b1f",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-10-17T15:59:26.712+00:00",
+                    "source": "#pFojW5L3zSdk1D6m"
+                },
+                "status": "proposed",
+                "serviceCategory": [
+                    {
+                        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam rutrum, sapien sed ornare pretium, ante sapien lobortis urna, et laoreet lorem velit at arcu. Quisque in est ornare, pharetra mi eget, fringilla augue. Cras vitae nibh eget enim dictum sollicitudin. Cras bibendum tristique lacus. Vivamus fermentum a ex molestie aliquet. In hac habitasse platea dictumst. Praesent vestibulum, velit sed ullamcorper placerat, est tellus rutrum ex, in sodales libero nibh non leo. Aenean sagittis pulvinar feugiat. Sed in sapien dolor. Nam magna eros, pulvinar vitae vehicula in, fermentum ac tellus. Fusce leo eros, accumsan in blandit eu, tincidunt eget velit. Phasellus blandit purus ligula, in rhoncus ligula scelerisque vitae. Vestibulum et sodales diam, vitae maximus orci. Morbi ut laoreet nisl. Morbi eu elit ut ex molestie placerat. Donec pharetra augue est, ac hendrerit libero viverra ut. Sed malesuada augue sed condimentum viverra. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec eget egestas nulla, quis volutpat nisi. Aliquam feugiat consequat justo, quis tempor tellus molestie eget. Cras arcu lacus, tincidunt eget orci vitae, tincidunt hendrerit magna. Proin tincidunt nec odio et hendrerit. Cras volutpat, nisi ut condimentum tincidunt, dui nisi dictum eros, quis egestas turpis mi et velit. Ut at nisl quis diam egestas viverra. Quisque tempor nunc ut neque varius auctor. Praesent convallis varius est, quis hendrerit magna rhoncus et. Sed at libero nec nisl blandit pulvinar. Sed aliquet diam et dui sollicitudin, eu tincidunt ligula pharetra. Duis vitae ornare nunc. Duis sit amet dictum risus, eget ultrices dui. Etiam rhoncus porta orci, vel gravida ipsum efficitur at. Nullam commodo porttitor sagittis. Aenean at fringilla sem. O"
+                    }
+                ],
+                "participant": [
+                    {
+                        "actor": {
+                            "reference": "Patient/40a7788611946f04"
+                        },
+                        "status": "accepted"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Appointment/08a73014cdc37e67",
+            "resource": {
+                "resourceType": "Appointment",
+                "id": "08a73014cdc37e67",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-10-17T15:59:27.636+00:00",
+                    "source": "#pFojW5L3zSdk1D6m"
+                },
+                "status": "proposed",
+                "serviceCategory": [
+                    {
+                        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam rutrum, sapien sed ornare pretium, ante sapien lobortis urna, et laoreet lorem velit at arcu. Quisque in est ornare, pharetra mi eget, fringilla augue. Cras vitae nibh eget enim dictum sollicitudin. Cras bibendum tristique lacus. Vivamus fermentum a ex molestie aliquet. In hac habitasse platea dictumst. Praesent vestibulum, velit sed ullamcorper placerat, est tellus rutrum ex, in sodales libero nibh non leo. Aenean sagittis pulvinar feugiat. Sed in sapien dolor. Nam magna eros, pulvinar vitae vehicula in, fermentum ac tellus. Fusce leo eros, accumsan in blandit eu, tincidunt eget velit. Phasellus blandit purus ligula, in rhoncus ligula scelerisque vitae. Vestibulum et sodales diam, vitae maximus orci. Morbi ut laoreet nisl. Morbi eu elit ut ex molestie placerat. Donec pharetra augue est, ac hendrerit libero viverra ut. Sed malesuada augue sed condimentum viverra. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec eget egestas nulla, quis volutpat nisi. Aliquam feugiat consequat justo, quis tempor tellus molestie eget. Cras arcu lacus, tincidunt eget orci vitae, tincidunt hendrerit magna. Proin tincidunt nec odio et hendrerit. Cras volutpat, nisi ut condimentum tincidunt, dui nisi dictum eros, quis egestas turpis mi et velit. Ut at nisl quis diam egestas viverra. Quisque tempor nunc ut neque varius auctor. Praesent convallis varius est, quis hendrerit magna rhoncus et. Sed at libero nec nisl blandit pulvinar. Sed aliquet diam et dui sollicitudin, eu tincidunt ligula pharetra. Duis vitae ornare nunc. Duis sit amet dictum risus, eget ultrices dui. Etiam rhoncus porta orci, vel gravida ipsum efficitur at. Nullam commodo porttitor sagittis. Aenean at fringilla sem. O"
+                    }
+                ],
+                "participant": [
+                    {
+                        "actor": {
+                            "reference": "Patient/40a7788611946f04"
+                        },
+                        "status": "accepted"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Appointment/09275deaf09f3bb2",
+            "resource": {
+                "resourceType": "Appointment",
+                "id": "09275deaf09f3bb2",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-10-17T15:59:23.164+00:00",
+                    "source": "#pFojW5L3zSdk1D6m"
+                },
+                "status": "proposed",
+                "serviceCategory": [
+                    {
+                        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam rutrum, sapien sed ornare pretium, ante sapien lobortis urna, et laoreet lorem velit at arcu. Quisque in est ornare, pharetra mi eget, fringilla augue. Cras vitae nibh eget enim dictum sollicitudin. Cras bibendum tristique lacus. Vivamus fermentum a ex molestie aliquet. In hac habitasse platea dictumst. Praesent vestibulum, velit sed ullamcorper placerat, est tellus rutrum ex, in sodales libero nibh non leo. Aenean sagittis pulvinar feugiat. Sed in sapien dolor. Nam magna eros, pulvinar vitae vehicula in, fermentum ac tellus. Fusce leo eros, accumsan in blandit eu, tincidunt eget velit. Phasellus blandit purus ligula, in rhoncus ligula scelerisque vitae. Vestibulum et sodales diam, vitae maximus orci. Morbi ut laoreet nisl. Morbi eu elit ut ex molestie placerat. Donec pharetra augue est, ac hendrerit libero viverra ut. Sed malesuada augue sed condimentum viverra. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec eget egestas nulla, quis volutpat nisi. Aliquam feugiat consequat justo, quis tempor tellus molestie eget. Cras arcu lacus, tincidunt eget orci vitae, tincidunt hendrerit magna. Proin tincidunt nec odio et hendrerit. Cras volutpat, nisi ut condimentum tincidunt, dui nisi dictum eros, quis egestas turpis mi et velit. Ut at nisl quis diam egestas viverra. Quisque tempor nunc ut neque varius auctor. Praesent convallis varius est, quis hendrerit magna rhoncus et. Sed at libero nec nisl blandit pulvinar. Sed aliquet diam et dui sollicitudin, eu tincidunt ligula pharetra. Duis vitae ornare nunc. Duis sit amet dictum risus, eget ultrices dui. Etiam rhoncus porta orci, vel gravida ipsum efficitur at. Nullam commodo porttitor sagittis. Aenean at fringilla sem. O"
+                    }
+                ],
+                "participant": [
+                    {
+                        "actor": {
+                            "reference": "Patient/40a7788611946f04"
+                        },
+                        "status": "accepted"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Appointment/0a2590aadf2eee3b",
+            "resource": {
+                "resourceType": "Appointment",
+                "id": "0a2590aadf2eee3b",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-10-17T15:59:27.524+00:00",
+                    "source": "#pFojW5L3zSdk1D6m"
+                },
+                "status": "proposed",
+                "serviceCategory": [
+                    {
+                        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam rutrum, sapien sed ornare pretium, ante sapien lobortis urna, et laoreet lorem velit at arcu. Quisque in est ornare, pharetra mi eget, fringilla augue. Cras vitae nibh eget enim dictum sollicitudin. Cras bibendum tristique lacus. Vivamus fermentum a ex molestie aliquet. In hac habitasse platea dictumst. Praesent vestibulum, velit sed ullamcorper placerat, est tellus rutrum ex, in sodales libero nibh non leo. Aenean sagittis pulvinar feugiat. Sed in sapien dolor. Nam magna eros, pulvinar vitae vehicula in, fermentum ac tellus. Fusce leo eros, accumsan in blandit eu, tincidunt eget velit. Phasellus blandit purus ligula, in rhoncus ligula scelerisque vitae. Vestibulum et sodales diam, vitae maximus orci. Morbi ut laoreet nisl. Morbi eu elit ut ex molestie placerat. Donec pharetra augue est, ac hendrerit libero viverra ut. Sed malesuada augue sed condimentum viverra. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec eget egestas nulla, quis volutpat nisi. Aliquam feugiat consequat justo, quis tempor tellus molestie eget. Cras arcu lacus, tincidunt eget orci vitae, tincidunt hendrerit magna. Proin tincidunt nec odio et hendrerit. Cras volutpat, nisi ut condimentum tincidunt, dui nisi dictum eros, quis egestas turpis mi et velit. Ut at nisl quis diam egestas viverra. Quisque tempor nunc ut neque varius auctor. Praesent convallis varius est, quis hendrerit magna rhoncus et. Sed at libero nec nisl blandit pulvinar. Sed aliquet diam et dui sollicitudin, eu tincidunt ligula pharetra. Duis vitae ornare nunc. Duis sit amet dictum risus, eget ultrices dui. Etiam rhoncus porta orci, vel gravida ipsum efficitur at. Nullam commodo porttitor sagittis. Aenean at fringilla sem. O"
+                    }
+                ],
+                "participant": [
+                    {
+                        "actor": {
+                            "reference": "Patient/40a7788611946f04"
+                        },
+                        "status": "accepted"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Appointment/0a391b16-653c-4281-9a55-ff14d1ac94bf",
+            "resource": {
+                "resourceType": "Appointment",
+                "id": "0a391b16-653c-4281-9a55-ff14d1ac94bf",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-08-04T09:17:41.161+00:00",
+                    "source": "#aHnjLUHjpUOkfx4P"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        }
+    ]
+}
