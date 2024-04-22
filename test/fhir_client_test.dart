@@ -212,7 +212,66 @@ void main() {
       expect(schedules.length, 10);
       expect(schedules.first.id, '055fa740-99e1-4b42-a081-2e4030a2aa7a');
 
-      // final schedule = schedules.first;
+      final schedule = schedules[1];
+
+      // Assert resource type
+      expect(schedule.resourceType, 'Schedule');
+
+      // Assert ID
+      expect(schedule.id, '0e3309f0-b207-4a06-b3cd-f4d51d7feb76');
+
+      // Assert identifier
+      expect(schedule.identifier!.length, 1);
+      expect(schedule.identifier![0].use, 'usual');
+      expect(schedule.identifier![0].system, 'http://example.org/scheduleid');
+      expect(schedule.identifier![0].value, '45');
+
+      // Assert active status
+      expect(schedule.active, true);
+
+      // Assert service category
+      expect(schedule.serviceCategory!.length, 1);
+      expect(schedule.serviceCategory![0].coding!.length, 1);
+      expect(schedule.serviceCategory![0].coding![0].code, '17');
+      expect(
+        schedule.serviceCategory![0].coding![0].display,
+        'General Practice',
+      );
+
+      // Assert service type
+      expect(schedule.serviceType!.length, 1);
+      expect(schedule.serviceType![0].coding!.length, 1);
+      expect(schedule.serviceType![0].coding![0].code, '124');
+      expect(schedule.serviceType![0].coding![0].display, 'General Practice');
+
+      // Assert specialty
+      expect(schedule.specialty!.length, 1);
+      expect(schedule.specialty![0].coding!.length, 1);
+      expect(schedule.specialty![0].coding![0].code, '394802001');
+      expect(schedule.specialty![0].coding![0].display, 'General medicine');
+
+// Assert actors
+      expect(schedule.actor!.length, 2);
+      expect(
+        schedule.actor![0].reference,
+        'Location/bded1b2f-bdd5-424b-8725-4c6f3d525e07',
+      );
+      expect(schedule.actor![0].display, 'Norte');
+      expect(
+        schedule.actor![1].reference,
+        'HealthcareService/70ab9bd6-ff24-4bfb-902f-86a5f47a2866',
+      );
+      expect(schedule.actor![1].display, 'Medicina General');
+
+      // Assert planning horizon
+      expect(schedule.planningHorizon!.start, '2023-12-01T00:00:00Z');
+      expect(schedule.planningHorizon!.end, '2023-12-31T23:59:59Z');
+
+      // Assert comment
+      expect(
+          schedule.comment,
+          'Los SLOTS asociados a esta agenda, '
+          'deberan estar asociados a Medicina General zona NORTE');
     });
   });
 

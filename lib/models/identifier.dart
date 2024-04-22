@@ -6,11 +6,13 @@ class Identifier {
   final Type? type;
   final String? system;
   final String? value;
+  final String? use;
 
   Identifier({
     this.type,
     this.system,
     this.value,
+    this.use,
   });
 
   factory Identifier.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Identifier {
           : null,
       system: json['system'] != null ? json['system'] as String? : null,
       value: json['value'] != null ? json['value'] as String? : null,
+      use: json['use'] as String?,
     );
   }
 
@@ -28,6 +31,7 @@ class Identifier {
       'type': type?.toJson(),
       'system': system,
       'value': value,
+      'use': use,
     };
   }
 }

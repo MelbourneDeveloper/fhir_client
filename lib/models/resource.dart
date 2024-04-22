@@ -4,6 +4,8 @@ import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/address.dart';
 import 'package:fhir_client/models/available_time.dart';
 import 'package:fhir_client/models/code.dart';
+import 'package:fhir_client/models/codeable_concept.dart';
+import 'package:fhir_client/models/codeable_reference.dart';
 import 'package:fhir_client/models/entry.dart';
 import 'package:fhir_client/models/extension.dart';
 import 'package:fhir_client/models/identifier.dart';
@@ -15,7 +17,6 @@ import 'package:fhir_client/models/name.dart';
 import 'package:fhir_client/models/period.dart';
 import 'package:fhir_client/models/planning_horizon.dart';
 import 'package:fhir_client/models/reference.dart';
-import 'package:fhir_client/models/service_type.dart';
 import 'package:fhir_client/models/specialty.dart';
 import 'package:fhir_client/models/telecom.dart';
 import 'package:fhir_client/models/text.dart';
@@ -407,8 +408,11 @@ class Schedule extends Resource {
   Schedule({
     String? id,
     Meta? meta,
+    this.active,
     this.identifier,
     this.serviceType,
+    this.serviceCategory,
+    this.specialty,
     this.actor,
     this.planningHorizon,
     this.comment,
@@ -423,11 +427,18 @@ class Schedule extends Resource {
         meta: json['meta'] != null
             ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
             : null,
+        active: json['active'] as bool?,
         identifier: (json['identifier'] as List<dynamic>?)
             ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
             .toList(),
         serviceType: (json['serviceType'] as List<dynamic>?)
-            ?.map((e) => ServiceType.fromJson(e as Map<String, dynamic>))
+            ?.map((e) => CodeableReference.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        serviceCategory: (json['serviceCategory'] as List<dynamic>?)
+            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        specialty: (json['specialty'] as List<dynamic>?)
+            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
             .toList(),
         actor: (json['actor'] as List<dynamic>?)
             ?.map((e) => Actor.fromJson(e as Map<String, dynamic>))
@@ -441,10 +452,13 @@ class Schedule extends Resource {
       );
 
   final List<Identifier>? identifier;
-  final List<ServiceType>? serviceType;
+  final List<CodeableReference>? serviceType;
+  final List<CodeableConcept>? serviceCategory;
+  final List<CodeableConcept>? specialty;
   final List<Actor>? actor;
   final PlanningHorizon? planningHorizon;
   final String? comment;
+  final bool? active;
 
   Map<String, dynamic> toJson() => {
         'resourceType': resourceType,
@@ -452,8 +466,11 @@ class Schedule extends Resource {
         'meta': meta?.toJson(),
         'identifier': identifier?.map((e) => e.toJson()).toList(),
         'serviceType': serviceType?.map((e) => e.toJson()).toList(),
+        'serviceCategory': serviceType?.map((e) => e.toJson()).toList(),
+        'specialty': specialty?.map((e) => e.toJson()).toList(),
         'actor': actor?.map((e) => e.toJson()).toList(),
         'planningHorizon': planningHorizon?.toJson(),
         'comment': comment,
+        'active': active,
       };
 }

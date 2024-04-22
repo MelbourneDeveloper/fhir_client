@@ -14,12 +14,8 @@ class Name {
   factory Name.fromJson(Map<String, dynamic> json) {
     return Name(
       family: json['family'] != null ? json['family'] as String? : null,
-      given: (json['given'] as List<dynamic>?)
-          ?.cast<String>()
-          .toList(),
-      prefix: (json['prefix'] as List<dynamic>?)
-          ?.cast<String>()
-          .toList(),
+      given: (json['given'] as List<dynamic>?)?.cast<String>().toList(),
+      prefix: (json['prefix'] as List<dynamic>?)?.cast<String>().toList(),
     );
   }
 

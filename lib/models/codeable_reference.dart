@@ -1,12 +1,13 @@
 import 'package:fhir_client/models/coding.dart';
 
-class ServiceType {
-  ServiceType({
+class CodeableReference {
+  CodeableReference({
     this.coding,
     this.text,
   });
 
-  factory ServiceType.fromJson(Map<String, dynamic> json) => ServiceType(
+  factory CodeableReference.fromJson(Map<String, dynamic> json) =>
+      CodeableReference(
         coding: (json['coding'] as List<dynamic>?)
             ?.map((e) => Coding.fromJson(e as Map<String, dynamic>))
             .toList(),
