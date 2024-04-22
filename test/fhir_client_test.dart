@@ -7,7 +7,7 @@ import 'package:http/http.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Deserialization', () {
+  group('Deserialization Tests', () {
     test('Deserialize org search result', () async {
       //curl -X GET "http://hapi.fhir.org/baseR4/Organization?type=clinic&_count=10" -H "Content-Type: application/json"
       final json = await File('test/responses/orgsearch.json').readAsString();
@@ -116,30 +116,6 @@ void main() {
       expect(result.identifier!.first.type!.text, 'SNO');
     });
 
-    test('GET read Organization', () async {
-      const baseUri = 'http://hapi.fhir.org/';
-      const path = 'baseR4/Organization/2640211';
-      final result = await Client().getResource(baseUri, path) as Organization;
-
-      expect(result.id, '2640211');
-      expect(result.identifier!.first.type!.text, 'SNO');
-    });
-
-    test('GET read Organization - Error', () async {
-      const baseUri = 'http://hapi.fhir.org/';
-      const path = 'baseR4/Organizationz/2640211';
-      final result =
-          await Client().getResource(baseUri, path) as OperationOutcome;
-
-      expect(
-        result.issue!.first.diagnostics!.contains(
-          // ignore: lines_longer_than_80_chars
-          "HAPI-0302: Unknown resource type 'Organizationz' - Server knows how to handle: [Account, ActivityDefinition, AdverseEvent, Aller",
-        ),
-        true,
-      );
-    });
-
     test('Deserialize Practitioner by Org search result', () async {
       //curl -X GET "http://hapi.fhir.org/baseR4/Practitioner?_has:PractitionerRole:practitioner:organization=Organization/2640211&_count=10" -H "Content-Type: application/json"
 
@@ -210,6 +186,43 @@ void main() {
       expect(practitioner.gender, 'male');
     });
 
+    test('Deserialize error result', () async {
+      //curl -X GET "http://hapi.fhir.org/baseR4/Practitioner?_has:PractitionerRole:practitioner:organization=Organization/fcf35f09-a2eb-324f-9ec6-40cdeadc9322&_count=10" -H "Content-Type: application/json"
+      final json =
+          await File('test/responses/errorresponse.json').readAsString();
+
+      final result = Resource.fromJson(jsonDecode(json) as Map<String, dynamic>)
+          as OperationOutcome;
+
+      expect(result.issue!.first.severity, 'error');
+    });
+  });
+
+  group('Actual Call Tests', () {
+    test('GET read Organization', () async {
+      const baseUri = 'http://hapi.fhir.org/';
+      const path = 'baseR4/Organization/2640211';
+      final result = await Client().getResource(baseUri, path) as Organization;
+
+      expect(result.id, '2640211');
+      expect(result.identifier!.first.type!.text, 'SNO');
+    });
+
+    test('GET read Organization - Error', () async {
+      const baseUri = 'http://hapi.fhir.org/';
+      const path = 'baseR4/Organizationz/2640211';
+      final result =
+          await Client().getResource(baseUri, path) as OperationOutcome;
+
+      expect(
+        result.issue!.first.diagnostics!.contains(
+          // ignore: lines_longer_than_80_chars
+          "HAPI-0302: Unknown resource type 'Organizationz' - Server knows how to handle: [Account, ActivityDefinition, AdverseEvent, Aller",
+        ),
+        true,
+      );
+    });
+
     test('GET search Practitioner by Org', () async {
       const baseUri = 'http://hapi.fhir.org/';
       const path =
@@ -220,17 +233,6 @@ void main() {
 
       expect(practitioners.length, 1);
       expect(practitioners.first.id, '0000016f-a1db-e77f-0000-000000009ed4');
-    });
-
-    test('Deserialize error result', () async {
-      //curl -X GET "http://hapi.fhir.org/baseR4/Practitioner?_has:PractitionerRole:practitioner:organization=Organization/fcf35f09-a2eb-324f-9ec6-40cdeadc9322&_count=10" -H "Content-Type: application/json"
-      final json =
-          await File('test/responses/errorresponse.json').readAsString();
-
-      final result = Resource.fromJson(jsonDecode(json) as Map<String, dynamic>)
-          as OperationOutcome;
-
-      expect(result.issue!.first.severity, 'error');
     });
   });
 }
