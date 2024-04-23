@@ -33,7 +33,7 @@ print(
 
 ## What is a FHIR Server?
 
-A [FHIR server](https://build.fhir.org/http.html) is a server that implements the FHIR standard as HTTP REST. It is a server that can store and retrieve FHIR resources. There are several open-source and commercial implementations of the server, and there are [freely available test servers](https://confluence.hl7.org/display/FHIR/Public+Test+Servers). This tests and examples in this repo use the [HAPI test server](https://hapifhir.io/). 
+A [FHIR server](https://build.fhir.org/http.html) is a server that implements the FHIR standard as HTTP REST. It is a server that can store and retrieve FHIR resources. There are several open-source and commercial implementations of the server, and there are [freely available test servers](https://confluence.hl7.org/display/FHIR/Public+Test+Servers). The tests and examples in this repo use the [HAPI test server](https://hapifhir.io/). 
 
 ## Is it on-prem? Or Cloud?
 
@@ -76,6 +76,61 @@ Just install the `http` package and this one in the usual way. The library adds 
     },
   );
 ```
+
+## Testing and Mocking
+
+The library is designed to be easy to test. You can use the [`MockClient`](https://pub.dev/documentation/http/latest/http.testing/MockClient-class.html) class from the `http` package to mock the client. This is how you can mock the client, and you can find [this code](https://github.com/MelbourneDeveloper/fhir_client/blob/e72f37284b1bced7c82f9bef3f079581e4e7b61c/test/fhir_client_test.dart#L361) in the tests. Replace the file path with the path to a JSON file representing the response. This also works in widget tests. 
+
+```dart
+MockClient _mockClient(String filePath) => MockClient(
+      (r) => Future.value(
+        Response(
+          File(filePath).readAsStringSync(),
+          200,
+        ),
+      ),
+    );
+```
+
+Here is an example of using the client extensions with a mocked client.
+
+```dart
+group('getResource API Call Tests', () {
+  /// A test function that can be called with a mocked client
+  /// or a real one
+  Future<void> readOrganization(Client client) async {
+    const path = 'baseR4/Organization/2640211';
+
+    final result =
+        await client.getResource<Organization>(baseUri, path) as Organization;
+
+    expect(result.id, '2640211');
+    expect(result.identifier!.first.type!.text, 'SNO');
+  }
+  // ...
+});
+```
+### Step By Step Guide
+
+1. Use curl to get the JSON response from your FHIR server. For example:
+
+```bash
+curl -X GET "http://hapi.fhir.org/baseR4/Organization/2640211" -H "Content-Type: application/json"
+```
+
+2. Save the JSON response to a file. For example [this file](test/responses/readorg.json). 
+
+3. Create a `MockClient` in your test using the function above, and pass in the filename.
+
+4. Create a test that calls the extensions with the `MockClient` and the path to the file. For example:
+
+```dart
+final client = _mockClient('test/responses/readorg.json');
+
+final result = await client.getResource<Organization>(baseUri, path) as Organization;
+```
+
+For widget tests, just inject the `MockClient` at the base of your app instead of the standard `http` `Client`. You will be able to dynamically load JSON files based on the request URI path in the mock function.
 
 ## Which Resources Are Supported?
 
