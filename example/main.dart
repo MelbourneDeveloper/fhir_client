@@ -28,7 +28,6 @@ Future<void> main() async {
     },
   );
 
-  //Search schedules and limit by count
   final searchPractitionersResult =
       await client.searchPractitionerRoles(baseUri, count: 10);
 

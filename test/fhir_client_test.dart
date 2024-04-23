@@ -353,6 +353,19 @@ void main() {
   });
 
   group('Actual Extension Calls', () {
+    test('searchPractitionerRoles Success', () async {
+      final result = await Client()
+          .searchPractitionerRoles('http://hapi.fhir.org/', count: 10);
+
+      final bundleEntries = result as BundleEntries<PractitionerRole>;
+
+      expect(bundleEntries.length, 10);
+      expect(
+        bundleEntries.entries.first.id,
+        '000-a24198ce-1b4b-4364-9dd4-03b3c5b5bd41-PractitionerRole',
+      );
+    });
+
     test('searchSchedules Success', () async {
       final result =
           await Client().searchSchedules('http://hapi.fhir.org/', count: 10);

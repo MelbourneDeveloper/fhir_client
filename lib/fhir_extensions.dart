@@ -3,6 +3,7 @@ import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/text.dart';
 import 'package:http/http.dart';
 
+/// Extension methods for the http package [Client] class
 extension FhirExtensions on Client {
   /// Low level call to get a resource from the FHIR server with raw URL path
   /// Note: it is recommended to use the higher level calls like search etc.
@@ -52,6 +53,7 @@ extension FhirExtensions on Client {
         count: count,
       );
 
+  /// Search for [PractitionerRole]s
   Future<Result<PractitionerRole>> searchPractitionerRoles(
     String baseUri, {
     String version = 'baseR4',
@@ -64,7 +66,8 @@ extension FhirExtensions on Client {
         count: count,
       );
 
-  /// Search for resources of type [T]
+  /// Search for resources of type [T]. Prefer the other functions starting with
+  /// `search` for specific resources.
   Future<Result<T>> search<T>(
     String baseUri, {
     required String resourceName,

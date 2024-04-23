@@ -1,6 +1,6 @@
 name: fhir_client
-description: Dart/Flutter library for consuming FHIR server APIs 
-version: 0.0.2-alpha
+description: Dart/Flutter library for consuming FHIR server APIs. Simple, stateless http extensions that make it easy to consume FHIR
+version: 0.0.3-alpha
 repository: https://github.com/MelbourneDeveloper/fhir_client
 
 environment:
