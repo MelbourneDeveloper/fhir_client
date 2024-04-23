@@ -4,6 +4,8 @@ import 'package:fhir_client/models/text.dart';
 import 'package:http/http.dart';
 
 extension FhirExtensions on Client {
+  /// Low level call to get a resource from the FHIR server with raw URL path
+  /// Note: it is recommended to use the higher level calls like search etc.
   Future<Resource> getResource<T>(String baseUri, String path) async {
     try {
       final uri = '$baseUri$path';
@@ -37,28 +39,55 @@ extension FhirExtensions on Client {
     }
   }
 
+  /// Search for [Schedule]s
   Future<Result<Schedule>> searchSchedules(
     String baseUri, {
     String version = 'baseR4',
     int? count,
   }) async =>
-      switch (await getResource<Schedule>(
+      search(
         baseUri,
-        '$version/Schedule?${count != null ? '_count=$count' : ''}',
+        resourceName: 'Schedule',
+        version: version,
+        count: count,
+      );
+
+  Future<Result<PractitionerRole>> searchPractitionerRoles(
+    String baseUri, {
+    String version = 'baseR4',
+    int? count,
+  }) async =>
+      search(
+        baseUri,
+        resourceName: 'PractitionerRole',
+        version: version,
+        count: count,
+      );
+
+  /// Search for resources of type [T]
+  Future<Result<T>> search<T>(
+    String baseUri, {
+    required String resourceName,
+    String version = 'baseR4',
+    int? count,
+  }) async =>
+      switch (await getResource<T>(
+        baseUri,
+        '$version/$resourceName?${count != null ? '_count=$count' : ''}',
       )) {
         //Error
-        (final OperationOutcome<Schedule> o) => o,
+        (final OperationOutcome<T> o) => o,
         (final Bundle b)
-            //Check all items are schedules
+            //Check all items are the correct type
             when b.entry != null &&
-                !b.entry!.any((entry) => entry.resource is! Schedule) =>
-          BundleEntries<Schedule>(
+                !b.entry!.any((entry) => entry.resource is! T) =>
+          BundleEntries<T>(
             b.entry
                     ?.map(
                       (entry) =>
                           //This is not very nice but we already checked
                           //for null and type above
-                          entry.resource! as Schedule,
+                          entry.resource! as T,
                     )
                     .toList() ??
                 [],
@@ -68,7 +97,7 @@ extension FhirExtensions on Client {
         (final Resource r) => OperationOutcome(
             text: Text(
               status: 'Unexpected Result',
-              div: 'Expected a list of Schedules, but '
+              div: 'Expected a list of ${resourceName}s, but '
                   'got a ${r.resourceType}',
             ),
           ),

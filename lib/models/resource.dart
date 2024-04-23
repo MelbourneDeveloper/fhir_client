@@ -3,7 +3,6 @@
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/address.dart';
 import 'package:fhir_client/models/available_time.dart';
-import 'package:fhir_client/models/code.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/codeable_reference.dart';
 import 'package:fhir_client/models/entry.dart';
@@ -116,7 +115,7 @@ class Bundle extends Resource {
   final bool? active;
   final String? type;
   final String? name;
-  final List<Code>? code;
+  final List<CodeableConcept>? code;
   final List<Location>? location;
   final List<Link>? link;
   final List<Entry>? entry;
@@ -155,7 +154,7 @@ class Bundle extends Resource {
       type: json['type'] as String?,
       name: json['name'] != null ? json['name'] as String? : null,
       code: (json['code'] as List<dynamic>?)
-          ?.map((e) => Code.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
           .toList(),
       location: (json['location'] as List<dynamic>?)
           ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
@@ -387,7 +386,7 @@ final class PractitionerRole extends Resource {
   final String? name;
   final Period? period;
   final Reference? practitioner;
-  final List<Code>? code;
+  final List<CodeableConcept>? code;
   final List<Specialty>? specialty;
   final List<Location>? location;
   final List<AvailableTime>? availableTime;
@@ -429,7 +428,7 @@ final class PractitionerRole extends Resource {
           ? Reference.fromJson(json['practitioner'] as Map<String, dynamic>)
           : null,
       code: (json['code'] as List<dynamic>?)
-          ?.map((e) => Code.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
           .toList(),
       specialty: (json['specialty'] as List<dynamic>?)
           ?.map((e) => Specialty.fromJson(e as Map<String, dynamic>))

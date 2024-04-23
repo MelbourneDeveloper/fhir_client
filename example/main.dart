@@ -1,25 +1,54 @@
+// ignore_for_file: avoid_print
+
 import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:http/http.dart';
 
-//The base API URI
+//The base HAPI API URI
 const baseUri = 'http://hapi.fhir.org/';
 
 Future<void> main() async {
   //Use any old HTTP Client and you can mock this
   final client = Client();
 
-  //The path, including the version and query parameters
-  //Note: this library will add some helpers to make this more organized
-  final result = await client.searchSchedules(baseUri, count: 10);
+  //Search schedules and limit by count
+  final searchSchedulesResult =
+      await client.searchSchedules(baseUri, count: 10);
 
-  //Switch in the resource type to format a display
-  // ignore: avoid_print
+  //Display the result
+  print('Schedules:');
   print(
-    switch (result) {
+    // The result can only be BundleEntries<Schedule> or
+    // OperationOutcome<Schedule> so this switch expression is exhaustive
+    switch (searchSchedulesResult) {
       (final BundleEntries<Schedule> schedules) =>
         schedules.entries.map(formatSchedule),
       (final OperationOutcome<Schedule> oo) =>
+        'Error: ${oo.text!.status}\n${oo.text?.div}',
+    },
+  );
+
+  //Search schedules and limit by count
+  final searchPractitionersResult =
+      await client.searchPractitionerRoles(baseUri, count: 10);
+
+  print('PractitionerRoles:');
+  print(
+    switch (searchPractitionersResult) {
+      (final BundleEntries<PractitionerRole> be) => be.entries
+          .map(
+            (pr) => 'Id: ${pr.id}\nCodes:\n${pr.code?.map(
+                  (cc) => cc.coding
+                      ?.map(
+                        (coding) => ' - '
+                            '${coding.code} System: ${coding.system} '
+                            '${coding.display}',
+                      )
+                      .join('\n'),
+                ).join('\n')}',
+          )
+          .join('\n\n'),
+      (final OperationOutcome<PractitionerRole> oo) =>
         'Error: ${oo.text!.status}\n${oo.text?.div}',
     },
   );
