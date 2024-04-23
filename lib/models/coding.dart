@@ -1,7 +1,7 @@
 // ignore_for_file: sort_constructors_first, prefer_expression_function_bodies
 
 class Coding {
-  final String? system;
+  final Uri? system;
   final String? code;
   final String? display;
 
@@ -13,7 +13,7 @@ class Coding {
 
   factory Coding.fromJson(Map<String, dynamic> json) {
     return Coding(
-      system: json['system'] != null ? json['system'] as String? : null,
+      system: Uri.tryParse(json['system'] as String? ?? ''),
       code: json['code'] != null ? json['code'] as String? : null,
       display: json['display'] != null ? json['display'] as String? : null,
     );
@@ -21,7 +21,7 @@ class Coding {
 
   Map<String, dynamic> toJson() {
     return {
-      'system': system,
+      'system': system.toString(),
       'code': code,
       'display': display,
     };

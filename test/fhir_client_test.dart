@@ -26,7 +26,7 @@ void main() {
       expect(org.identifier!.first.type!.text, 'SNO');
       expect(
         org.type!.first.coding!.first.system,
-        'http://miup.jp/bangladesh/organization-type',
+        Uri.parse('http://miup.jp/bangladesh/organization-type'),
       );
 
       expect(org.resourceType, 'Organization');
@@ -46,13 +46,13 @@ void main() {
       expect(org.type!.length, 2);
       expect(
         org.type!.first.coding!.first.system,
-        'http://miup.jp/bangladesh/organization-type',
+        Uri.parse('http://miup.jp/bangladesh/organization-type'),
       );
       expect(org.type!.first.coding!.first.code, 'clinic');
       expect(org.type!.first.coding!.first.display, 'clinic');
       expect(
         org.type!.last.coding!.first.system,
-        'http://terminology.hl7.org/CodeSystem/organization-type',
+        Uri.parse('http://terminology.hl7.org/CodeSystem/organization-type'),
       );
       expect(org.type!.last.coding!.first.code, 'prov');
       expect(org.type!.last.coding!.first.display, 'Healthcare Provider');
@@ -105,7 +105,7 @@ void main() {
 
       expect(
         pr2.code!.first.coding!.first.system,
-        'http://nucc.org/provider-taxonomy',
+        Uri.parse('http://nucc.org/provider-taxonomy'),
       );
     });
 
