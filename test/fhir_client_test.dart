@@ -360,16 +360,7 @@ void main() {
 
     test(
       'GET read Organization Mocked',
-      () async => readOrganization(
-        MockClient(
-          (r) => Future.value(
-            Response(
-              File('test/responses/readorg.json').readAsStringSync(),
-              200,
-            ),
-          ),
-        ),
-      ),
+      () async => readOrganization(_mockClient('test/responses/readorg.json')),
     );
 
     test(
@@ -456,3 +447,12 @@ void main() {
     skip: true,
   );
 }
+
+MockClient _mockClient(String filePath) => MockClient(
+      (r) => Future.value(
+        Response(
+          File(filePath).readAsStringSync(),
+          200,
+        ),
+      ),
+    );
