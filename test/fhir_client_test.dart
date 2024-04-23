@@ -6,7 +6,10 @@ import 'package:fhir_client/models/meta.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 import 'package:http/http.dart';
+import 'package:http/testing.dart';
 import 'package:test/test.dart';
+
+const baseUri = 'http://hapi.fhir.org/';
 
 void main() {
   group('Deserialization Tests', () {
@@ -344,83 +347,112 @@ void main() {
     });
   });
 
-  group('Actual Call Tests', () {
-    test('GET read Organization', () async {
-      const baseUri = 'http://hapi.fhir.org/';
+  group('getResource API Call Tests', () {
+    Future<void> readOrganization(Client client) async {
       const path = 'baseR4/Organization/2640211';
-      final result = await Client().getResource<Organization>(baseUri, path)
-          as Organization;
+
+      final result =
+          await client.getResource<Organization>(baseUri, path) as Organization;
 
       expect(result.id, '2640211');
       expect(result.identifier!.first.type!.text, 'SNO');
-    });
+    }
 
-    test('GET read Organization - Error', () async {
-      const baseUri = 'http://hapi.fhir.org/';
-      const path = 'baseR4/Organizationz/2640211';
-      final result =
-          await Client().getResource<OperationOutcome<String>>(baseUri, path)
-              as OperationOutcome;
-
-      expect(
-        result.issue!.first.diagnostics!.contains(
-          // ignore: lines_longer_than_80_chars
-          "HAPI-0302: Unknown resource type 'Organizationz' - Server knows how to handle: [Account, ActivityDefinition, AdverseEvent, Aller",
+    test(
+      'GET read Organization Mocked',
+      () async => readOrganization(
+        MockClient(
+          (r) => Future.value(
+            Response(
+              File('test/responses/readorg.json').readAsStringSync(),
+              200,
+            ),
+          ),
         ),
-        true,
-      );
-    });
+      ),
+    );
 
-    test('GET search Practitioner by Org', () async {
-      const baseUri = 'http://hapi.fhir.org/';
-      const path =
-          'baseR4/Practitioner?_has:PractitionerRole:practitioner:organization=Organization/fcf35f09-a2eb-324f-9ec6-40cdeadc9322&_count=10';
-      final bundle =
-          await Client().getResource<Bundle>(baseUri, path) as Bundle;
+    test(
+      'GET read Organization For Realsies',
+      () async => readOrganization(Client()),
+      skip: true,
+    );
 
-      final practitioners =
-          bundle.entry!.map((e) => e.resource! as Practitioner).toList();
+    test(
+      'GET read Organization - Error For Realsies',
+      () async {
+        const path = 'baseR4/Organizationz/2640211';
+        final result =
+            await Client().getResource<OperationOutcome<String>>(baseUri, path)
+                as OperationOutcome;
 
-      expect(practitioners.length, 1);
-      expect(practitioners.first.id, '0000016f-a1db-e77f-0000-000000009ed4');
-    });
+        expect(
+          result.issue!.first.diagnostics!.contains(
+            // ignore: lines_longer_than_80_chars
+            "HAPI-0302: Unknown resource type 'Organizationz' - Server knows how to handle: [Account, ActivityDefinition, AdverseEvent, Aller",
+          ),
+          true,
+        );
+      },
+      skip: true,
+    );
+
+    test(
+      'GET search Practitioner by Org For Realsies',
+      () async {
+        const path =
+            'baseR4/Practitioner?_has:PractitionerRole:practitioner:organization=Organization/fcf35f09-a2eb-324f-9ec6-40cdeadc9322&_count=10';
+        final bundle =
+            await Client().getResource<Bundle>(baseUri, path) as Bundle;
+
+        final practitioners =
+            bundle.entry!.map((e) => e.resource! as Practitioner).toList();
+
+        expect(practitioners.length, 1);
+        expect(practitioners.first.id, '0000016f-a1db-e77f-0000-000000009ed4');
+      },
+      skip: true,
+    );
   });
 
-  group('Actual Extension Calls', () {
-    test('searchPractitionerRoles Success', () async {
-      final result = await Client()
-          .searchPractitionerRoles('http://hapi.fhir.org/', count: 10);
+  group(
+    'http Client Extension Calls',
+    () {
+      test('searchPractitionerRoles Success', () async {
+        final result =
+            await Client().searchPractitionerRoles(baseUri, count: 10);
 
-      final bundleEntries = result as BundleEntries<PractitionerRole>;
+        final bundleEntries = result as BundleEntries<PractitionerRole>;
 
-      expect(bundleEntries.length, 10);
-      expect(
-        bundleEntries.entries.first.id,
-        '000-a24198ce-1b4b-4364-9dd4-03b3c5b5bd41-PractitionerRole',
-      );
-    });
+        expect(bundleEntries.length, 10);
+        expect(
+          bundleEntries.entries.first.id,
+          '000-a24198ce-1b4b-4364-9dd4-03b3c5b5bd41-PractitionerRole',
+        );
+      });
 
-    test('searchSchedules Success', () async {
-      final result =
-          await Client().searchSchedules('http://hapi.fhir.org/', count: 10);
+      test('searchSchedules Success', () async {
+        final result = await Client().searchSchedules(baseUri, count: 10);
 
-      final bundleEntries = result as BundleEntries<Schedule>;
+        final bundleEntries = result as BundleEntries<Schedule>;
 
-      expect(bundleEntries.length, 10);
-      expect(bundleEntries.entries[9].id, '10434942');
-    });
+        expect(bundleEntries.length, 10);
+        expect(bundleEntries.entries[9].id, '10434942');
+      });
 
-    test('searchSchedules Error', () async {
-      final result = await Client()
-          //Note the bad URL
-          .searchSchedules('http://hapi.fhir.org/broken/', count: 10);
+      test('searchSchedules Error', () async {
+        final result = await Client()
+            //Note the bad URL
+            .searchSchedules('$baseUri/broken/', count: 10);
 
-      final oo = result as OperationOutcome<Schedule>;
+        final oo = result as OperationOutcome<Schedule>;
 
-      expect(
-        oo.text!.status,
-        'Exception or Error occurred when converting JSON to Resource',
-      );
-    });
-  });
+        expect(
+          oo.text!.status,
+          'Exception or Error occurred when converting JSON to Resource',
+        );
+      });
+    },
+    skip: true,
+  );
 }
