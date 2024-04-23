@@ -6,14 +6,15 @@ class PlanningHorizon {
 
   factory PlanningHorizon.fromJson(Map<String, dynamic> json) =>
       PlanningHorizon(
-        start: json['start'] != null ? json['start'] as String? : null,
-        end: json['end'] != null ? json['end'] as String? : null,
+        start: DateTime.tryParse(json['start'] as String? ?? ''),
+        end: DateTime.tryParse(json['end'] as String? ?? ''),
       );
-  final String? start;
-  final String? end;
+      
+  final DateTime? start;
+  final DateTime? end;
 
   Map<String, dynamic> toJson() => {
-        'start': start,
-        'end': end,
+        'start': start.toString(),
+        'end': end.toString(),
       };
 }

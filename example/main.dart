@@ -54,13 +54,12 @@ Future<void> main() async {
 }
 
 String formatSchedule(Schedule schedule) {
-  final start = DateTime.parse(schedule.planningHorizon!.start!);
-  final end = DateTime.parse(schedule.planningHorizon!.end!);
-
   final buffer = StringBuffer()
     ..writeln('Schedule ID: ${schedule.id}')
-    ..writeln('Slot Start: ${start.toIso8601String()}')
-    ..writeln('Slot End: ${end.toIso8601String()}');
+    ..writeln(
+      'Slot Start: ${schedule.planningHorizon!.start!.toIso8601String()}',
+    )
+    ..writeln('Slot End: ${schedule.planningHorizon!.end!.toIso8601String()}');
 
   if (schedule.serviceType != null) {
     buffer.writeln('Service Types:');

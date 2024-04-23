@@ -223,6 +223,18 @@ void main() {
       expect(schedules.length, 10);
       expect(schedules.first.id, '055fa740-99e1-4b42-a081-2e4030a2aa7a');
 
+      expect(
+        schedules.first.planningHorizon!.start,
+        //Note: this is local time, which is kinda strange
+        DateTime(2019, 11, 28, 8),
+      );
+
+      expect(
+        schedules.first.planningHorizon!.end,
+        //Note: this is local time, which is kinda strange
+        DateTime(2021, 5, 31, 12),
+      );
+
       final schedule = schedules[1];
 
       // Assert resource type
@@ -275,8 +287,11 @@ void main() {
       expect(schedule.actor![1].display, 'Medicina General');
 
       // Assert planning horizon
-      expect(schedule.planningHorizon!.start, '2023-12-01T00:00:00Z');
-      expect(schedule.planningHorizon!.end, '2023-12-31T23:59:59Z');
+      expect(schedule.planningHorizon!.start, DateTime.utc(2023, 12));
+      expect(
+        schedule.planningHorizon!.end,
+        DateTime.utc(2023, 12, 31, 23, 59, 59),
+      );
 
       // Assert comment
       expect(
