@@ -21,6 +21,7 @@ import 'package:fhir_client/models/specialty.dart';
 import 'package:fhir_client/models/telecom.dart';
 import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/type.dart' as t;
+import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 
 /// Either a successful [Resource] result or an [OperationOutcome] (error)
 sealed class Result<T> {}
@@ -306,11 +307,12 @@ final class Practitioner extends Resource {
   final bool? active;
   final List<Telecom>? telecom;
   final List<Address>? address;
-  final String? gender;
+  final AdministrativeGender gender;
 
   Practitioner({
     required String id,
     required Meta? meta,
+    required this.gender,
     this.identifier,
     this.type,
     this.name,
@@ -320,7 +322,6 @@ final class Practitioner extends Resource {
     this.active,
     this.telecom,
     this.address,
-    this.gender,
   }) : super._internal(
           id,
           'Practitioner',
@@ -356,7 +357,8 @@ final class Practitioner extends Resource {
       address: (json['address'] as List<dynamic>?)
           ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
           .toList(),
-      gender: json['gender'] as String?,
+      gender:
+          AdministrativeGender.fromCode(json['gender'] as String? ?? 'unknown'),
     );
   }
 
@@ -374,7 +376,7 @@ final class Practitioner extends Resource {
       'active': active,
       'telecom': telecom?.map((e) => e.toJson()).toList(),
       'address': address?.map((e) => e.toJson()).toList(),
-      'gender': gender,
+      'gender': gender.code,
     };
   }
 }

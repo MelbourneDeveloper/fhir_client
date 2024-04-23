@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/resource.dart';
+import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 import 'package:http/http.dart';
 import 'package:test/test.dart';
 
@@ -187,7 +188,12 @@ void main() {
       expect(practitioner.address!.first.postalCode, '91204-3046');
       expect(practitioner.address!.first.country, 'US');
 
-      expect(practitioner.gender, 'male');
+      expect(practitioner.gender, AdministrativeGender.male);
+
+      final map = practitioner.toJson();
+      final clonedPractitioner = Practitioner.fromJson(map);
+
+      expect(clonedPractitioner.gender, AdministrativeGender.male);
     });
 
     test('Deserialize error result', () async {
