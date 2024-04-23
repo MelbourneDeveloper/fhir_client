@@ -130,6 +130,8 @@ final client = _mockClient('test/responses/readorg.json');
 final result = await client.getResource<Organization>(baseUri, path) as Organization;
 ```
 
+5. Make your assertions
+
 For widget tests, just inject the `MockClient` at the base of your app instead of the standard `http` `Client`. You will be able to dynamically load JSON files based on the request URI path in the mock function.
 
 ## Which Resources Are Supported?
