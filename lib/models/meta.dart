@@ -3,7 +3,7 @@
 import 'package:fhir_client/models/tag.dart';
 
 class Meta {
-  final String? lastUpdated;
+  final DateTime? lastUpdated;
   final String? versionId;
   final String? source;
   final List<String>? profile;
@@ -19,7 +19,7 @@ class Meta {
 
   factory Meta.fromJson(Map<String, dynamic> json) {
     return Meta(
-      lastUpdated: json['lastUpdated'] as String?,
+      lastUpdated: DateTime.tryParse(json['lastUpdated'] as String? ?? ''),
       versionId: json['versionId'] as String?,
       source: json['source'] as String?,
       profile: (json['profile'] as List<dynamic>?)?.cast<String>().toList(),
@@ -31,7 +31,7 @@ class Meta {
 
   Map<String, dynamic> toJson() {
     return {
-      'lastUpdated': lastUpdated,
+      'lastUpdated': lastUpdated.toString(),
       'versionId': versionId,
       'source': source,
       'profile': profile?.cast<String>().toList(),

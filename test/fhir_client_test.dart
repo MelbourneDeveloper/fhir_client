@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:fhir_client/fhir_extensions.dart';
+import 'package:fhir_client/models/meta.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 import 'package:http/http.dart';
@@ -32,7 +33,7 @@ void main() {
       expect(org.id, '2640211');
 
       expect(org.meta!.versionId, '1');
-      expect(org.meta!.lastUpdated, '2021-10-13T07:52:35.268+00:00');
+      expect(org.meta!.lastUpdated, DateTime.utc(2021, 10, 13, 7, 52, 35, 268));
       expect(org.meta!.source, '#VAvOSFPlfBChwJZ4');
 
       expect(org.identifier!.length, 1);
@@ -143,7 +144,7 @@ void main() {
       expect(practitioner.meta!.versionId, '1');
       expect(
         practitioner.meta!.lastUpdated,
-        '2020-03-24T17:59:12.935+00:00',
+        DateTime.utc(2020, 03, 24, 17, 59, 12, 935),
       );
       expect(
         practitioner.meta!.profile!.first,
@@ -309,10 +310,18 @@ void main() {
 
       // Assert meta
       expect(appointment.meta!.versionId, '1');
-      expect(appointment.meta!.lastUpdated, '2023-08-04T08:59:32.432+00:00');
+      final expectedLastUpdated = DateTime.utc(2023, 08, 04, 8, 59, 32, 432);
+      expect(
+        appointment.meta!.lastUpdated,
+        expectedLastUpdated,
+      );
 
       // Assert search mode
       expect(result.entry![2].search!.mode, 'match');
+
+      final map = appointment.meta!.toJson();
+      final meta = Meta.fromJson(map);
+      expect(meta.lastUpdated, expectedLastUpdated);
     });
   });
 
