@@ -2,7 +2,7 @@
 
 class Link {
   final String? relation;
-  final String? url;
+  final Uri? url;
 
   Link({
     this.relation,
@@ -12,14 +12,14 @@ class Link {
   factory Link.fromJson(Map<String, dynamic> json) {
     return Link(
       relation: json['relation'] != null ? json['relation'] as String? : null,
-      url: json['url'] != null ? json['url'] as String? : null,
+      url: Uri.tryParse(json['url'] as String? ?? ''),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'relation': relation,
-      'url': url,
+      'url': url.toString(),
     };
   }
 }

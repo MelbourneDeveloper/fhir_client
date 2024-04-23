@@ -97,7 +97,9 @@ void main() {
 
       expect(
         pr.extension!.first.url,
-        'http://pdx.bcbs.com/providerdataexchange/StructureDefinition/providerdisplay',
+        Uri.parse(
+          'http://pdx.bcbs.com/providerdataexchange/StructureDefinition/providerdisplay',
+        ),
       );
       final pr2 = entries[2].resource! as PractitionerRole;
 
@@ -179,7 +181,9 @@ void main() {
       expect(practitioner.telecom!.first.use, 'work');
       expect(
         practitioner.telecom!.first.extension!.first.url,
-        'http://hl7.org/fhir/us/core/StructureDefinition/us-core-direct',
+        Uri.parse(
+          'http://hl7.org/fhir/us/core/StructureDefinition/us-core-direct',
+        ),
       );
       expect(practitioner.telecom!.first.extension!.first.valueBoolean, true);
 

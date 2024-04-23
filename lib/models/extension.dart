@@ -1,7 +1,7 @@
 // ignore_for_file: sort_constructors_first, prefer_expression_function_bodies
 
 class Extension {
-  final String? url;
+  final Uri? url;
   final List<Extension>? extension;
   final bool? valueBoolean;
 
@@ -13,7 +13,7 @@ class Extension {
 
   factory Extension.fromJson(Map<String, dynamic> json) {
     return Extension(
-      url: json['url'] != null ? json['url'] as String? : null,
+      url: Uri.tryParse(json['url'] as String? ?? ''),
       extension: (json['extension'] as List<dynamic>?)
           ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -24,7 +24,7 @@ class Extension {
 
   Map<String, dynamic> toJson() {
     return {
-      'url': url,
+      'url': url.toString(),
       'extension': extension?.map((e) => e.toJson()).toList(),
       'valueBoolean': valueBoolean,
     };
