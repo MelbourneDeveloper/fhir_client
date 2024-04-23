@@ -47,6 +47,16 @@ All the major cloud providers have a FHIR server offering:
 
 Privacy and security are paramount in healthcare, so you should choose a provider that is compliant with the [Health Insurance Portability and Accountability Act (HIPAA)](https://www.hhs.gov/hipaa/index.html) and the [General Data Protection Regulation (GDPR)](https://gdpr.eu/). All the major providers offer compliance so there's no need to spend time and effort implementing your own health compliance. 
 
+## A Note on Modern Health Systems
+
+Health systems around the world are fragmented and aging. Many hospitals and doctors still use paper records. The systems that are digital are often old and not interoperable. This is changing rapidly. The FHIR standard is the future of health systems, and health outcomes depend on the interoperability of health records.
+
+If you're working on an aging system that doesn't implement FHIR, you need to consider upgrading to a system that does, or at least implementing a FHIR server that can act as a bridge between your system and other health systems. 
+
+Governments all over the world are mandating FHIR for record keeping and moving to FHIR is a safe bet. This is [what they US government has to say](https://www.hhs.gov/about/news/2023/03/27/new-federal-health-strategy-sights-heathier-innovative-equitable-health-care-experience.html):
+
+> Health IT is integral to how health care is delivered, how health is managed, and how the health of populations and communities is tracked. Thanks in part to the development of common standards, such as the United States Core Data for Interoperability (USCDI) and Health Level Seven International® (HL7®) Fast Healthcare Interoperability Resources® (FHIR®), health information has become more accessible and useful. 
+
 ## Getting Started
 
 Just install the `http` package and this one in the usual way. The library adds a bunch of extension methods to the `Client` class and that's it. For example, this example searches for PractitionerRole resources. Notice that using pattern matching with the [`switch` expression](https://www.christianfindlay.com/blog/dart-switch-expressions) is a great way to handle the two possible outcomes of the search because it supports pattern matching.
