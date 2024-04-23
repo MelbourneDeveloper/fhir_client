@@ -23,6 +23,23 @@ import 'package:fhir_client/models/telecom.dart';
 import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/type.dart' as t;
 
+/// Either a successful [Resource] result or an [OperationOutcome] (error)
+sealed class Result<T> {}
+
+/// A [Bundle] of [Resource]s with a strong type
+final class BundleEntries<T> implements Result<T> {
+  /// The entries in the bundle
+  final List<T> entries;
+
+  /// The bundle itself
+  final Bundle bundle;
+
+  int get length => entries.length;
+
+  BundleEntries(this.entries, this.bundle);
+}
+
+/// Any of the FHIR resources
 sealed class Resource {
   final String? id;
   final String? resourceType;
@@ -43,7 +60,7 @@ sealed class Resource {
         ('Practitioner') => Practitioner.fromJson(map),
         ('PractitionerRole') => PractitionerRole.fromJson(map),
         ('Organization') => Organization.fromJson(map),
-        ('OperationOutcome') => OperationOutcome.fromJson(map),
+        ('OperationOutcome') => OperationOutcome<String>.fromJson(map),
         ('Schedule') => Schedule.fromJson(map),
         ('Appointment') => Appointment.fromJson(map),
         (_) => throw UnimplementedError(
@@ -170,7 +187,7 @@ class Bundle extends Resource {
   }
 }
 
-class OperationOutcome extends Resource {
+class OperationOutcome<T> extends Resource implements Result<T> {
   final Text? text;
   final List<Issue>? issue;
 

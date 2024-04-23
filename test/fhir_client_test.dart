@@ -314,7 +314,8 @@ void main() {
     test('GET read Organization', () async {
       const baseUri = 'http://hapi.fhir.org/';
       const path = 'baseR4/Organization/2640211';
-      final result = await Client().getResource(baseUri, path) as Organization;
+      final result = await Client().getResource<Organization>(baseUri, path)
+          as Organization;
 
       expect(result.id, '2640211');
       expect(result.identifier!.first.type!.text, 'SNO');
@@ -324,7 +325,8 @@ void main() {
       const baseUri = 'http://hapi.fhir.org/';
       const path = 'baseR4/Organizationz/2640211';
       final result =
-          await Client().getResource(baseUri, path) as OperationOutcome;
+          await Client().getResource<OperationOutcome<String>>(baseUri, path)
+              as OperationOutcome;
 
       expect(
         result.issue!.first.diagnostics!.contains(
@@ -339,12 +341,39 @@ void main() {
       const baseUri = 'http://hapi.fhir.org/';
       const path =
           'baseR4/Practitioner?_has:PractitionerRole:practitioner:organization=Organization/fcf35f09-a2eb-324f-9ec6-40cdeadc9322&_count=10';
-      final bundle = await Client().getResource(baseUri, path) as Bundle;
+      final bundle =
+          await Client().getResource<Bundle>(baseUri, path) as Bundle;
+
       final practitioners =
           bundle.entry!.map((e) => e.resource! as Practitioner).toList();
 
       expect(practitioners.length, 1);
       expect(practitioners.first.id, '0000016f-a1db-e77f-0000-000000009ed4');
+    });
+  });
+
+  group('Actual Extension Calls', () {
+    test('searchSchedules Success', () async {
+      final result =
+          await Client().searchSchedules('http://hapi.fhir.org/', count: 10);
+
+      final bundleEntries = result as BundleEntries<Schedule>;
+
+      expect(bundleEntries.length, 10);
+      expect(bundleEntries.entries[9].id, '10434942');
+    });
+
+    test('searchSchedules Error', () async {
+      final result = await Client()
+          //Note the bad URL
+          .searchSchedules('http://hapi.fhir.org/broken/', count: 10);
+
+      final oo = result as OperationOutcome<Schedule>;
+
+      expect(
+        oo.text!.status,
+        'Exception or Error occurred when converting JSON to Resource',
+      );
     });
   });
 }
