@@ -51,6 +51,23 @@ extension FhirExtensions on Client {
               )
               .join('&');
 
+  /// Search for [Appointment]s
+  Future<Result<Appointment>> searchAppointments(
+    String baseUri, {
+    String version = 'baseR4',
+    int? count,
+    String? status,
+  }) async =>
+      search(
+        baseUri,
+        resourceName: 'Appointment',
+        version: version,
+        queryString: _queryString([
+          if (count != null) MapEntry('_count', count.toString()),
+          if (status != null) MapEntry('status', status),
+        ]),
+      );
+
   /// Search for [Schedule]s
   Future<Result<Schedule>> searchSchedules(
     String baseUri, {

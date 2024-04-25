@@ -431,22 +431,21 @@ void main() {
         expect(bundleEntries.entries[9].id, '10434942');
       });
 
-      test('searchSchedules By Service Type', () async {
-        //curl -X GET "https://hapi.fhir.org/baseR4/Schedule?service-type=124"
+      test('searchAppointments By Status', () async {
+        //curl -X GET "https://hapi.fhir.org/baseR4/Appointment?_count=10&status=booked" -H "Accept: application/fhir+json"
 
-        final result = await Client().searchSchedules(
+        final result = await Client().searchAppointments(
           baseUri,
           count: 10,
-          //GP
-          serviceType: '124',
+          status: 'booked',
         );
 
-        final bundleEntries = result as BundleEntries<Schedule>;
+        final bundleEntries = result as BundleEntries<Appointment>;
 
-        expect(bundleEntries.length, 6);
+        expect(bundleEntries.length, 10);
         expect(
           bundleEntries.entries.first.id,
-          '1610242',
+          '1829',
         );
       });
 
