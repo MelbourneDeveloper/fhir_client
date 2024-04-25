@@ -423,7 +423,6 @@ void main() {
 
   group('http Client Extension Calls - Mocked', () {
     test('Slot Search', () async {
-
       final bundleEntries = await _mockSearch<Slot>(
         (c) async => await c.searchSlots(
           baseUri,
@@ -508,15 +507,7 @@ Future<BundleEntries<T>> _mockSearch<T>(
   Future<BundleEntries<T>> Function(MockClient client) getBundeEntries,
 ) async =>
     getBundeEntries(
-      MockClient(
-        (r) => Future.value(
-          Response(
-            File('test/responses/${T.toString().toLowerCase()}search.json')
-                .readAsStringSync(),
-            200,
-          ),
-        ),
-      ),
+      _mockClient('test/responses/${T.toString().toLowerCase()}search.json'),
     );
 
 MockClient _mockClient(String filePath) => MockClient(
