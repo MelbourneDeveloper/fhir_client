@@ -422,22 +422,15 @@ void main() {
   });
 
   group('http Client Extension Calls - Mocked', () {
-    test('', () async {
-      final client = MockClient(
-        (r) => Future.value(
-          Response(
-            File('test/responses/slotsearch.json').readAsStringSync(),
-            200,
-          ),
-        ),
-      );
-      final result = await client.searchSlots(
-        baseUri,
-        count: 10,
-        status: 'free',
-      );
+    test('Slot Search', () async {
 
-      final bundleEntries = result as BundleEntries<Slot>;
+      final bundleEntries = await _mockSearch<Slot>(
+        (c) async => await c.searchSlots(
+          baseUri,
+          count: 10,
+          status: 'free',
+        ) as BundleEntries<Slot>,
+      );
 
       expect(bundleEntries.length, 10);
       expect(
@@ -510,6 +503,21 @@ void main() {
     skip: true,
   );
 }
+
+Future<BundleEntries<T>> _mockSearch<T>(
+  Future<BundleEntries<T>> Function(MockClient client) getBundeEntries,
+) async =>
+    getBundeEntries(
+      MockClient(
+        (r) => Future.value(
+          Response(
+            File('test/responses/${T.toString().toLowerCase()}search.json')
+                .readAsStringSync(),
+            200,
+          ),
+        ),
+      ),
+    );
 
 MockClient _mockClient(String filePath) => MockClient(
       (r) => Future.value(
