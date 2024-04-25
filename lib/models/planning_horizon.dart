@@ -9,7 +9,7 @@ class PlanningHorizon {
         start: DateTime.tryParse(json['start'] as String? ?? ''),
         end: DateTime.tryParse(json['end'] as String? ?? ''),
       );
-      
+
   final DateTime? start;
   final DateTime? end;
 

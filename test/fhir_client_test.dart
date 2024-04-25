@@ -447,7 +447,7 @@ void main() {
 
       final slot = bundleEntries.entries[2];
 
-      // Assert all fields (Thanks to Anthropic Claude 3)
+// Assert all fields (Thanks to Anthropic Claude 3)
 
       expect(slot.resourceType, 'Slot');
       expect(slot.meta?.versionId, '2');
