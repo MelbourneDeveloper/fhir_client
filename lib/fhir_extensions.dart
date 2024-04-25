@@ -40,17 +40,32 @@ extension FhirExtensions on Client {
     }
   }
 
+  String? _queryString(List<MapEntry<String, String>>? parameters) =>
+      parameters == null || parameters.isEmpty
+          ? null
+          : parameters
+              .map(
+                (entry) =>
+                    //TODO: Url encode these
+                    '${entry.key}=${entry.value}',
+              )
+              .join('&');
+
   /// Search for [Schedule]s
   Future<Result<Schedule>> searchSchedules(
     String baseUri, {
     String version = 'baseR4',
     int? count,
+    String? serviceType,
   }) async =>
       search(
         baseUri,
         resourceName: 'Schedule',
         version: version,
-        count: count,
+        queryString: _queryString([
+          if (count != null) MapEntry('_count', count.toString()),
+          if (serviceType != null) MapEntry('service-type', serviceType),
+        ]),
       );
 
   /// Search for [PractitionerRole]s
@@ -63,7 +78,9 @@ extension FhirExtensions on Client {
         baseUri,
         resourceName: 'PractitionerRole',
         version: version,
-        count: count,
+        queryString: _queryString([
+          if (count != null) MapEntry('_count', count.toString()),
+        ]),
       );
 
   /// Search for resources of type [T]. Prefer the other functions starting with
@@ -72,11 +89,11 @@ extension FhirExtensions on Client {
     String baseUri, {
     required String resourceName,
     String version = 'baseR4',
-    int? count,
+    String? queryString,
   }) async =>
       switch (await getResource<T>(
         baseUri,
-        '$version/$resourceName?${count != null ? '_count=$count' : ''}',
+        '$version/$resourceName${queryString != null ? '?$queryString' : ''}',
       )) {
         //Error
         (final OperationOutcome<T> o) => o,

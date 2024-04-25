@@ -431,6 +431,25 @@ void main() {
         expect(bundleEntries.entries[9].id, '10434942');
       });
 
+      test('searchSchedules By Service Type', () async {
+        //curl -X GET "https://hapi.fhir.org/baseR4/Schedule?service-type=124"
+
+        final result = await Client().searchSchedules(
+          baseUri,
+          count: 10,
+          //GP
+          serviceType: '124',
+        );
+
+        final bundleEntries = result as BundleEntries<Schedule>;
+
+        expect(bundleEntries.length, 6);
+        expect(
+          bundleEntries.entries.first.id,
+          '1610242',
+        );
+      });
+
       test('searchSchedules Error', () async {
         final result = await Client()
             //Note the bad URL
