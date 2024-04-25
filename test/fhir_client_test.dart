@@ -407,8 +407,30 @@ void main() {
   });
 
   group(
-    'http Client Extension Calls',
+    'http Client Extension Calls (All For Real)',
     () {
+      test('searchAppointments By Status', () async {
+        //curl -X GET "https://hapi.fhir.org/baseR4/Appointment?_count=10&status=booked" -H "Accept: application/fhir+json"
+
+        final result = await Client().searchAppointments(
+          baseUri,
+          count: 10,
+          status: 'booked',
+        );
+
+        final bundleEntries = result as BundleEntries<Appointment>;
+
+        expect(bundleEntries.length, 10);
+        expect(
+          bundleEntries.entries.first.id,
+          '1829',
+        );
+        expect(
+          bundleEntries.entries.first.status,
+          'booked',
+        );
+      });
+
       test('searchPractitionerRoles Success', () async {
         final result =
             await Client().searchPractitionerRoles(baseUri, count: 10);
@@ -431,24 +453,6 @@ void main() {
         expect(bundleEntries.entries[9].id, '10434942');
       });
 
-      test('searchAppointments By Status', () async {
-        //curl -X GET "https://hapi.fhir.org/baseR4/Appointment?_count=10&status=booked" -H "Accept: application/fhir+json"
-
-        final result = await Client().searchAppointments(
-          baseUri,
-          count: 10,
-          status: 'booked',
-        );
-
-        final bundleEntries = result as BundleEntries<Appointment>;
-
-        expect(bundleEntries.length, 10);
-        expect(
-          bundleEntries.entries.first.id,
-          '1829',
-        );
-      });
-
       test('searchSchedules Error', () async {
         final result = await Client()
             //Note the bad URL
@@ -461,6 +465,8 @@ void main() {
           'Exception or Error occurred when converting JSON to Resource',
         );
       });
+
+      //curl -X GET "https://hapi.fhir.org/baseR4/Slot?status=free&_count=10" -H "Accept: application/fhir+json"
     },
     skip: true,
   );
