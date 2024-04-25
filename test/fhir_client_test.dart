@@ -432,9 +432,74 @@ void main() {
       );
 
       expect(bundleEntries.length, 10);
+
       expect(
-        bundleEntries.entries.first.id,
+        bundleEntries.bundle.entry![2].fullUrl,
+        'https://hapi.fhir.org/baseR4/Slot/52223',
+      );
+
+      final first = bundleEntries.entries.first;
+
+      expect(
+        first.id,
         '41697',
+      );
+
+      final slot = bundleEntries.entries[2];
+
+      // Assert all fields (Thanks to Anthropic Claude 3)
+
+      expect(slot.resourceType, 'Slot');
+      expect(slot.meta?.versionId, '2');
+
+      expect(
+        slot.meta?.lastUpdated,
+        DateTime.utc(2022, 10, 5, 23, 41, 27, 908),
+      );
+
+      expect(slot.meta?.source, '#Tvh7DyVNf71GZIci');
+      expect(slot.identifier?.first.system, 'urn:system');
+      expect(slot.identifier?.first.value, 'slot-0001');
+      expect(
+        slot.serviceCategory?.first.coding?.first.system,
+        Uri.parse('http://terminology.hl7.org/CodeSystem/service-category'),
+      );
+      expect(slot.serviceCategory?.first.coding?.first.code, '17');
+      expect(
+        slot.serviceCategory?.first.coding?.first.display,
+        'General Practice',
+      );
+      expect(
+        slot.serviceType?.first.coding?.first.system,
+        Uri.parse('http://terminology.hl7.org/CodeSystem/service-type'),
+      );
+      expect(slot.serviceType?.first.coding?.first.code, '57');
+      expect(slot.serviceType?.first.coding?.first.display, 'Immunization');
+      expect(
+        slot.specialty?.first.coding?.first.system,
+        Uri.parse('http://snomed.info/sct'),
+      );
+      expect(slot.specialty?.first.coding?.first.code, '408480009');
+      expect(
+        slot.specialty?.first.coding?.first.display,
+        'Clinical immunology',
+      );
+      expect(
+        slot.appointmentType?.coding?.first.system,
+        Uri.parse('http://hl7.org/fhir/v2/0276'),
+      );
+      expect(slot.appointmentType?.coding?.first.code, 'WALKIN');
+      expect(
+        slot.appointmentType?.coding?.first.display,
+        'A previously unscheduled walk-in visit',
+      );
+      expect(slot.status, 'free');
+      expect(slot.start, '2019-10-30T15:00:00-07:00');
+      expect(slot.end, '2019-10-30T16:00:00-07:00');
+      expect(
+        slot.comment,
+        'Assessments should be performed before requesting appointments '
+        'in this slot.',
       );
     });
   });
