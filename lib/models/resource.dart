@@ -17,7 +17,6 @@ import 'package:fhir_client/models/participant.dart';
 import 'package:fhir_client/models/period.dart';
 import 'package:fhir_client/models/planning_horizon.dart';
 import 'package:fhir_client/models/reference.dart';
-import 'package:fhir_client/models/specialty.dart';
 import 'package:fhir_client/models/telecom.dart';
 import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/type.dart' as t;
@@ -56,13 +55,14 @@ sealed class Resource {
   ) =>
       //TODO: Change this to a map for performance
       switch (map['resourceType']) {
+        ('Appointment') => Appointment.fromJson(map),
         ('Bundle') => Bundle.fromJson(map),
-        ('Practitioner') => Practitioner.fromJson(map),
-        ('PractitionerRole') => PractitionerRole.fromJson(map),
         ('Organization') => Organization.fromJson(map),
         ('OperationOutcome') => OperationOutcome<String>.fromJson(map),
+        ('Practitioner') => Practitioner.fromJson(map),
+        ('PractitionerRole') => PractitionerRole.fromJson(map),
         ('Schedule') => Schedule.fromJson(map),
-        ('Appointment') => Appointment.fromJson(map),
+        ('Slot') => Slot.fromJson(map),
         (_) => throw UnimplementedError(
             'Hey you! This resource is not implemented! Please head over to https://github.com/MelbourneDeveloper/fhir_client and write a PR to add this resource.',
           ),
@@ -389,7 +389,7 @@ final class PractitionerRole extends Resource {
   final Period? period;
   final Reference? practitioner;
   final List<CodeableConcept>? code;
-  final List<Specialty>? specialty;
+  final List<CodeableConcept>? specialty;
   final List<Location>? location;
   final List<AvailableTime>? availableTime;
 
@@ -433,7 +433,7 @@ final class PractitionerRole extends Resource {
           ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
           .toList(),
       specialty: (json['specialty'] as List<dynamic>?)
-          ?.map((e) => Specialty.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
           .toList(),
       location: (json['location'] as List<dynamic>?)
           ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
@@ -463,6 +463,79 @@ final class PractitionerRole extends Resource {
       'availableTime': availableTime?.map((e) => e.toJson()).toList(),
     };
   }
+}
+
+class Slot extends Resource {
+  Slot({
+    String? id,
+    Meta? meta,
+    this.identifier,
+    this.serviceCategory,
+    this.serviceType,
+    this.specialty,
+    this.appointmentType,
+    this.status,
+    this.start,
+    this.end,
+    this.comment,
+  }) : super._internal(
+          id,
+          'Slot',
+          meta,
+        );
+
+  factory Slot.fromJson(Map<String, dynamic> json) => Slot(
+        id: json['id'] != null ? json['id'] as String? : null,
+        meta: json['meta'] != null
+            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+            : null,
+        identifier: (json['identifier'] as List<dynamic>?)
+            ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        serviceCategory: (json['serviceCategory'] as List<dynamic>?)
+            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        serviceType: (json['serviceType'] as List<dynamic>?)
+            ?.map((e) => CodeableReference.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        specialty: (json['specialty'] as List<dynamic>?)
+            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        appointmentType: json['appointmentType'] != null
+            ? CodeableConcept.fromJson(
+                json['appointmentType'] as Map<String, dynamic>,
+              )
+            : null,
+        status: json['status'] != null ? json['status'] as String? : null,
+        start: json['start'] != null ? json['start'] as String? : null,
+        end: json['end'] != null ? json['end'] as String? : null,
+        comment: json['comment'] != null ? json['comment'] as String? : null,
+      );
+
+  final List<Identifier>? identifier;
+  final List<CodeableConcept>? serviceCategory;
+  final List<CodeableReference>? serviceType;
+  final List<CodeableConcept>? specialty;
+  final CodeableConcept? appointmentType;
+  final String? status;
+  final String? start;
+  final String? end;
+  final String? comment;
+
+  Map<String, dynamic> toJson() => {
+        'resourceType': resourceType,
+        'id': id,
+        'meta': meta?.toJson(),
+        'identifier': identifier?.map((e) => e.toJson()).toList(),
+        'serviceCategory': serviceCategory?.map((e) => e.toJson()).toList(),
+        'serviceType': serviceType?.map((e) => e.toJson()).toList(),
+        'specialty': specialty?.map((e) => e.toJson()).toList(),
+        'appointmentType': appointmentType?.toJson(),
+        'status': status,
+        'start': start,
+        'end': end,
+        'comment': comment,
+      };
 }
 
 class Schedule extends Resource {

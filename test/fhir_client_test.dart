@@ -13,7 +13,72 @@ const baseUri = 'http://hapi.fhir.org/';
 
 void main() {
   group('Deserialization Tests', () {
-    test('Deserialize org search result', () async {
+    test('Appointment Search', () async {
+      //curl -X GET "https://hapi.fhir.org/baseR4/Appointment?_count=10"
+
+      final json =
+          await File('test/responses/appointmentsearch.json').readAsString();
+
+      final result =
+          Resource.fromJson(jsonDecode(json) as Map<String, dynamic>) as Bundle;
+
+      final appointments =
+          result.entry!.map((e) => e.resource! as Appointment).toList();
+
+      expect(appointments.first.id, '00f740554d7b1c5a');
+
+      // Get the 3rd appointment
+      final appointment = appointments[2];
+
+      // Assert resource type
+      expect(appointment.resourceType, 'Appointment');
+
+      // Assert ID
+      expect(appointment.id, '05fda0d9-7d96-4869-bccd-8976ed9f35d8');
+
+      // Assert meta
+      expect(appointment.meta!.versionId, '1');
+      final expectedLastUpdated = DateTime.utc(2023, 08, 04, 8, 59, 32, 432);
+      expect(
+        appointment.meta!.lastUpdated,
+        expectedLastUpdated,
+      );
+
+      // Assert search mode
+      expect(result.entry![2].search!.mode, 'match');
+
+      final map = appointment.meta!.toJson();
+      final meta = Meta.fromJson(map);
+      expect(meta.lastUpdated, expectedLastUpdated);
+    });
+
+    test('OperationOutcome', () async {
+      //curl -X GET "http://hapi.fhir.org/baseR4/Practitioner?_has:PractitionerRole:practitioner:organization=Organization/fcf35f09-a2eb-324f-9ec6-40cdeadc9322&_count=10" -H "Content-Type: application/json"
+      final json =
+          await File('test/responses/errorresponse.json').readAsString();
+
+      final result = Resource.fromJson(jsonDecode(json) as Map<String, dynamic>)
+          as OperationOutcome;
+
+      expect(result.issue!.first.severity, 'error');
+    });
+
+    test('Organization Read', () async {
+      //curl -X GET "http://hapi.fhir.org/baseR4/Organization/2640211" -H "Content-Type: application/json"
+      final json = await File('test/responses/readorg.json').readAsString();
+
+      final org =
+          Organization.fromJson(jsonDecode(json) as Map<String, dynamic>);
+
+      expect(org.id, '2640211');
+      expect(org.identifier!.first.type!.text, 'SNO');
+
+      final map = org.toJson();
+
+      expect(map['id'], '2640211');
+    });
+
+    test('Organization Search result', () async {
       //curl -X GET "http://hapi.fhir.org/baseR4/Organization?type=clinic&_count=10" -H "Content-Type: application/json"
       final json = await File('test/responses/orgsearch.json').readAsString();
 
@@ -80,54 +145,7 @@ void main() {
       expect(org.address!.first.country, 'BANGLADESH');
     });
 
-    test('Deserialize PractitionerRole search result', () async {
-      //curl -X GET "http://hapi.fhir.org/baseR4/PractitionerRole?_count=10" -H "Content-Type: application/json"
-      final json = await File('test/responses/practicionerrolesearch.json')
-          .readAsString();
-
-      final result = Bundle.fromJson(jsonDecode(json) as Map<String, dynamic>);
-
-      final entries = result.entry!.toList();
-
-      expect(entries.length, 10);
-      expect(entries.first.resource!.resourceType, 'PractitionerRole');
-      expect(
-        entries.first.resource!.id,
-        '000-a24198ce-1b4b-4364-9dd4-03b3c5b5bd41-PractitionerRole',
-      );
-
-      final pr = entries.first.resource! as PractitionerRole;
-
-      expect(
-        pr.extension!.first.url,
-        Uri.parse(
-          'http://pdx.bcbs.com/providerdataexchange/StructureDefinition/providerdisplay',
-        ),
-      );
-      final pr2 = entries[2].resource! as PractitionerRole;
-
-      expect(
-        pr2.code!.first.coding!.first.system,
-        Uri.parse('http://nucc.org/provider-taxonomy'),
-      );
-    });
-
-    test('Deserialize org read result', () async {
-      //curl -X GET "http://hapi.fhir.org/baseR4/Organization/2640211" -H "Content-Type: application/json"
-      final json = await File('test/responses/readorg.json').readAsString();
-
-      final org =
-          Organization.fromJson(jsonDecode(json) as Map<String, dynamic>);
-
-      expect(org.id, '2640211');
-      expect(org.identifier!.first.type!.text, 'SNO');
-
-      final map = org.toJson();
-
-      expect(map['id'], '2640211');
-    });
-
-    test('Deserialize Practitioner by Org search result', () async {
+    test('Practitioner Search result', () async {
       //curl -X GET "http://hapi.fhir.org/baseR4/Practitioner?_has:PractitionerRole:practitioner:organization=Organization/2640211&_count=10" -H "Content-Type: application/json"
 
       final json =
@@ -204,18 +222,39 @@ void main() {
       expect(clonedPractitioner.gender, AdministrativeGender.male);
     });
 
-    test('Deserialize error result', () async {
-      //curl -X GET "http://hapi.fhir.org/baseR4/Practitioner?_has:PractitionerRole:practitioner:organization=Organization/fcf35f09-a2eb-324f-9ec6-40cdeadc9322&_count=10" -H "Content-Type: application/json"
-      final json =
-          await File('test/responses/errorresponse.json').readAsString();
+    test('PractitionerRole Search', () async {
+      //curl -X GET "http://hapi.fhir.org/baseR4/PractitionerRole?_count=10" -H "Content-Type: application/json"
+      final json = await File('test/responses/practicionerrolesearch.json')
+          .readAsString();
 
-      final result = Resource.fromJson(jsonDecode(json) as Map<String, dynamic>)
-          as OperationOutcome;
+      final result = Bundle.fromJson(jsonDecode(json) as Map<String, dynamic>);
 
-      expect(result.issue!.first.severity, 'error');
+      final entries = result.entry!.toList();
+
+      expect(entries.length, 10);
+      expect(entries.first.resource!.resourceType, 'PractitionerRole');
+      expect(
+        entries.first.resource!.id,
+        '000-a24198ce-1b4b-4364-9dd4-03b3c5b5bd41-PractitionerRole',
+      );
+
+      final pr = entries.first.resource! as PractitionerRole;
+
+      expect(
+        pr.extension!.first.url,
+        Uri.parse(
+          'http://pdx.bcbs.com/providerdataexchange/StructureDefinition/providerdisplay',
+        ),
+      );
+      final pr2 = entries[2].resource! as PractitionerRole;
+
+      expect(
+        pr2.code!.first.coding!.first.system,
+        Uri.parse('http://nucc.org/provider-taxonomy'),
+      );
     });
 
-    test('Deserialize Schedule search result', () async {
+    test('Schedule Search', () async {
       //curl -X GET "http://hapi.fhir.org/baseR4/Schedule?_count=10"
 
       final json =
@@ -307,43 +346,19 @@ void main() {
           'deberan estar asociados a Medicina General zona NORTE');
     });
 
-    test('Deserialize Appointment search result', () async {
-      //curl -X GET "https://hapi.fhir.org/baseR4/Appointment?_count=10"
+    /// curl -X GET "https://hapi.fhir.org/baseR4/Slot?status=free&_count=10" -H "Accept: application/fhir+json"
+    test('Slot Search', () async {
+      final result = Resource.fromJson(
+        jsonDecode(
+          await File('test/responses/schedulcessearch.json').readAsString(),
+        ) as Map<String, dynamic>,
+      ) as Bundle;
 
-      final json =
-          await File('test/responses/appointmentsearch.json').readAsString();
+      final schedules =
+          result.entry!.map((e) => e.resource! as Schedule).toList();
 
-      final result =
-          Resource.fromJson(jsonDecode(json) as Map<String, dynamic>) as Bundle;
-
-      final appointments =
-          result.entry!.map((e) => e.resource! as Appointment).toList();
-
-      expect(appointments.first.id, '00f740554d7b1c5a');
-
-      // Get the 3rd appointment
-      final appointment = appointments[2];
-
-      // Assert resource type
-      expect(appointment.resourceType, 'Appointment');
-
-      // Assert ID
-      expect(appointment.id, '05fda0d9-7d96-4869-bccd-8976ed9f35d8');
-
-      // Assert meta
-      expect(appointment.meta!.versionId, '1');
-      final expectedLastUpdated = DateTime.utc(2023, 08, 04, 8, 59, 32, 432);
-      expect(
-        appointment.meta!.lastUpdated,
-        expectedLastUpdated,
-      );
-
-      // Assert search mode
-      expect(result.entry![2].search!.mode, 'match');
-
-      final map = appointment.meta!.toJson();
-      final meta = Meta.fromJson(map);
-      expect(meta.lastUpdated, expectedLastUpdated);
+      expect(schedules.length, 10);
+      expect(schedules.first.id, '055fa740-99e1-4b42-a081-2e4030a2aa7a');
     });
   });
 
@@ -406,8 +421,34 @@ void main() {
     );
   });
 
+  group('http Client Extension Calls - Mocked', () {
+    test('', () async {
+      final client = MockClient(
+        (r) => Future.value(
+          Response(
+            File('test/responses/slotsearch.json').readAsStringSync(),
+            200,
+          ),
+        ),
+      );
+      final result = await client.searchSlots(
+        baseUri,
+        count: 10,
+        status: 'free',
+      );
+
+      final bundleEntries = result as BundleEntries<Slot>;
+
+      expect(bundleEntries.length, 10);
+      expect(
+        bundleEntries.entries.first.id,
+        '41697',
+      );
+    });
+  });
+
   group(
-    'http Client Extension Calls (All For Real)',
+    'http Client Extension Calls - For Real',
     () {
       test('searchAppointments By Status', () async {
         //curl -X GET "https://hapi.fhir.org/baseR4/Appointment?_count=10&status=booked" -H "Accept: application/fhir+json"
@@ -465,8 +506,6 @@ void main() {
           'Exception or Error occurred when converting JSON to Resource',
         );
       });
-
-      //curl -X GET "https://hapi.fhir.org/baseR4/Slot?status=free&_count=10" -H "Accept: application/fhir+json"
     },
     skip: true,
   );

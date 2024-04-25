@@ -68,6 +68,21 @@ extension FhirExtensions on Client {
         ]),
       );
 
+  /// Search for [PractitionerRole]s
+  Future<Result<PractitionerRole>> searchPractitionerRoles(
+    String baseUri, {
+    String version = 'baseR4',
+    int? count,
+  }) async =>
+      search(
+        baseUri,
+        resourceName: 'PractitionerRole',
+        version: version,
+        queryString: _queryString([
+          if (count != null) MapEntry('_count', count.toString()),
+        ]),
+      );
+
   /// Search for [Schedule]s
   Future<Result<Schedule>> searchSchedules(
     String baseUri, {
@@ -85,18 +100,20 @@ extension FhirExtensions on Client {
         ]),
       );
 
-  /// Search for [PractitionerRole]s
-  Future<Result<PractitionerRole>> searchPractitionerRoles(
+  /// Search for [Slot]s
+  Future<Result<Slot>> searchSlots(
     String baseUri, {
     String version = 'baseR4',
     int? count,
+    String? status,
   }) async =>
       search(
         baseUri,
-        resourceName: 'PractitionerRole',
+        resourceName: 'Slot',
         version: version,
         queryString: _queryString([
           if (count != null) MapEntry('_count', count.toString()),
+          if (status != null) MapEntry('status', status),
         ]),
       );
 
