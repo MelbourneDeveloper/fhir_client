@@ -447,6 +447,8 @@ void main() {
 
       final slot = bundleEntries.entries[2];
 
+      expect(slot.id, '52223');
+
 // Assert all fields (Thanks to Anthropic Claude 3)
 
       expect(slot.resourceType, 'Slot');
@@ -494,8 +496,10 @@ void main() {
         'A previously unscheduled walk-in visit',
       );
       expect(slot.status, 'free');
-      expect(slot.start, '2019-10-30T15:00:00-07:00');
-      expect(slot.end, '2019-10-30T16:00:00-07:00');
+      //TODO: investigate these...
+      //Why is the datetime like this? 
+      expect(slot.start, DateTime.parse('2019-10-30T15:00:00-07:00'));
+      expect(slot.end, DateTime.parse('2019-10-30T16:00:00-07:00'));
       expect(
         slot.comment,
         'Assessments should be performed before requesting appointments '

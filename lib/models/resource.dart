@@ -507,8 +507,8 @@ class Slot extends Resource {
               )
             : null,
         status: json['status'] != null ? json['status'] as String? : null,
-        start: json['start'] != null ? json['start'] as String? : null,
-        end: json['end'] != null ? json['end'] as String? : null,
+        start: DateTime.tryParse(json['start'] as String? ?? ''),
+        end: DateTime.tryParse(json['end'] as String? ?? ''),
         comment: json['comment'] != null ? json['comment'] as String? : null,
       );
 
@@ -518,8 +518,8 @@ class Slot extends Resource {
   final List<CodeableConcept>? specialty;
   final CodeableConcept? appointmentType;
   final String? status;
-  final String? start;
-  final String? end;
+  final DateTime? start;
+  final DateTime? end;
   final String? comment;
 
   Map<String, dynamic> toJson() => {
@@ -532,8 +532,8 @@ class Slot extends Resource {
         'specialty': specialty?.map((e) => e.toJson()).toList(),
         'appointmentType': appointmentType?.toJson(),
         'status': status,
-        'start': start,
-        'end': end,
+        'start': start.toString(),
+        'end': end.toString(),
         'comment': comment,
       };
 }
