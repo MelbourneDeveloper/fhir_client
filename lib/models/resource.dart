@@ -1,5 +1,3 @@
-// ignore_for_file: sort_constructors_first, prefer_expression_function_bodies
-
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/address.dart';
 import 'package:fhir_client/models/available_time.dart';
@@ -28,6 +26,8 @@ sealed class Result<T> {}
 
 /// A [Bundle] of [Resource]s with a strong type
 final class BundleEntries<T> implements Result<T> {
+  BundleEntries(this.entries, this.bundle);
+
   /// The entries in the bundle
   final List<T> entries;
 
@@ -35,15 +35,10 @@ final class BundleEntries<T> implements Result<T> {
   final Bundle bundle;
 
   int get length => entries.length;
-
-  BundleEntries(this.entries, this.bundle);
 }
 
 /// Any of the FHIR resources
 sealed class Resource {
-  final String? id;
-  final Meta? meta;
-
   Resource._internal(
     this.id,
     this.meta,
@@ -64,11 +59,11 @@ sealed class Resource {
         (ResourceType.schedule) => Schedule.fromJson(map),
         (ResourceType.slot) => Slot.fromJson(map),
       };
+  final String? id;
+  final Meta? meta;
 }
 
 class Appointment extends Resource {
-  static const ResourceType resourceType = ResourceType.appointment;
-
   Appointment({
     String? id,
     Meta? meta,
@@ -93,6 +88,7 @@ class Appointment extends Resource {
             ?.map((e) => Participant.fromJson(e as Map<String, dynamic>))
             .toList(),
       );
+  static const ResourceType resourceType = ResourceType.appointment;
 
   final String? status;
   final List<CodeableConcept>? serviceCategory;
@@ -109,18 +105,6 @@ class Appointment extends Resource {
 }
 
 class Bundle extends Resource {
-  static const ResourceType resourceType = ResourceType.bundle;
-
-  final List<Extension>? extension;
-  final List<Identifier>? identifier;
-  final bool? active;
-  final String? type;
-  final String? name;
-  final List<CodeableConcept>? code;
-  final List<Location>? location;
-  final List<Link>? link;
-  final List<Entry>? entry;
-
   Bundle({
     required String? id,
     required Meta? meta,
@@ -138,60 +122,62 @@ class Bundle extends Resource {
           meta,
         );
 
-  factory Bundle.fromJson(Map<String, dynamic> json) {
-    return Bundle(
-      id: json['id'] as String,
-      meta: json['meta'] != null
-          ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
-          : null,
-      extension: (json['extension'] as List<dynamic>?)
-          ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      identifier: (json['identifier'] as List<dynamic>?)
-          ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      active: json['active'] != null ? json['active'] as bool? : null,
-      type: json['type'] as String?,
-      name: json['name'] != null ? json['name'] as String? : null,
-      code: (json['code'] as List<dynamic>?)
-          ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      location: (json['location'] as List<dynamic>?)
-          ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      link: (json['link'] as List<dynamic>?)
-          ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      entry: (json['entry'] as List<dynamic>?)
-          ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-  }
+  factory Bundle.fromJson(Map<String, dynamic> json) => Bundle(
+        id: json['id'] as String,
+        meta: json['meta'] != null
+            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+            : null,
+        extension: (json['extension'] as List<dynamic>?)
+            ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        identifier: (json['identifier'] as List<dynamic>?)
+            ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        active: json['active'] != null ? json['active'] as bool? : null,
+        type: json['type'] as String?,
+        name: json['name'] != null ? json['name'] as String? : null,
+        code: (json['code'] as List<dynamic>?)
+            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        location: (json['location'] as List<dynamic>?)
+            ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        link: (json['link'] as List<dynamic>?)
+            ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        entry: (json['entry'] as List<dynamic>?)
+            ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+  static const ResourceType resourceType = ResourceType.bundle;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'resourceType': resourceType,
-      'id': id,
-      'meta': meta?.toJson(),
-      'extension': extension?.map((e) => e.toJson()).toList(),
-      'identifier': identifier?.map((e) => e.toJson()).toList(),
-      'active': active,
-      'type': type,
-      'name': name,
-      'code': code?.map((e) => e.toJson()).toList(),
-      'location': location?.map((e) => e.toJson()).toList(),
-      'link': link?.map((e) => e.toJson()).toList(),
-      'entry': entry?.map((e) => e.toJson()).toList(),
-    };
-  }
+  final List<Extension>? extension;
+  final List<Identifier>? identifier;
+  final bool? active;
+  final String? type;
+  final String? name;
+  final List<CodeableConcept>? code;
+  final List<Location>? location;
+  final List<Link>? link;
+  final List<Entry>? entry;
+
+  Map<String, dynamic> toJson() => {
+        'resourceType': resourceType,
+        'id': id,
+        'meta': meta?.toJson(),
+        'extension': extension?.map((e) => e.toJson()).toList(),
+        'identifier': identifier?.map((e) => e.toJson()).toList(),
+        'active': active,
+        'type': type,
+        'name': name,
+        'code': code?.map((e) => e.toJson()).toList(),
+        'location': location?.map((e) => e.toJson()).toList(),
+        'link': link?.map((e) => e.toJson()).toList(),
+        'entry': entry?.map((e) => e.toJson()).toList(),
+      };
 }
 
 class OperationOutcome<T> extends Resource implements Result<T> {
-  static const ResourceType resourceType = ResourceType.operationOutcome;
-
-  final Text? text;
-  final List<Issue>? issue;
-
   OperationOutcome({
     this.text,
     this.issue,
@@ -200,39 +186,28 @@ class OperationOutcome<T> extends Resource implements Result<T> {
           null,
         );
 
-  factory OperationOutcome.fromJson(Map<String, dynamic> json) {
-    return OperationOutcome(
-      text: json['text'] != null
-          ? Text.fromJson(json['text'] as Map<String, dynamic>)
-          : null,
-      issue: (json['issue'] as List<dynamic>?)
-          ?.map((e) => Issue.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-  }
+  factory OperationOutcome.fromJson(Map<String, dynamic> json) =>
+      OperationOutcome(
+        text: json['text'] != null
+            ? Text.fromJson(json['text'] as Map<String, dynamic>)
+            : null,
+        issue: (json['issue'] as List<dynamic>?)
+            ?.map((e) => Issue.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+  static const ResourceType resourceType = ResourceType.operationOutcome;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'resourceType': resourceType,
-      'text': text?.toJson(),
-      'issue': issue?.map((e) => e.toJson()).toList(),
-    };
-  }
+  final Text? text;
+  final List<Issue>? issue;
+
+  Map<String, dynamic> toJson() => {
+        'resourceType': resourceType,
+        'text': text?.toJson(),
+        'issue': issue?.map((e) => e.toJson()).toList(),
+      };
 }
 
 final class Organization extends Resource {
-  static const ResourceType resourceType = ResourceType.organization;
-
-  final List<t.Type>? type;
-  final String? name;
-  final int? total;
-  final List<Link>? link;
-  final List<Entry>? entry;
-  final List<Identifier>? identifier;
-  final bool? active;
-  final List<Telecom>? telecom;
-  final List<Address>? address;
-
   Organization({
     required String id,
     required Meta? meta,
@@ -250,65 +225,62 @@ final class Organization extends Resource {
           meta,
         );
 
-  factory Organization.fromJson(Map<String, dynamic> json) {
-    return Organization(
-      id: json['id'] as String,
-      meta: json['meta'] != null
-          ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
-          : null,
-      identifier: (json['identifier'] as List<dynamic>?)
-          ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      type: (json['type'] as List<dynamic>?)
-          ?.map((e) => t.Type.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      name: json['name'] != null ? json['name'] as String? : null,
-      total: json['total'] != null ? json['total'] as int? : null,
-      link: (json['link'] as List<dynamic>?)
-          ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      entry: (json['entry'] as List<dynamic>?)
-          ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      active: json['active'] as bool?,
-      telecom: (json['telecom'] as List<dynamic>?)
-          ?.map((e) => Telecom.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      address: (json['address'] as List<dynamic>?)
-          ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-  }
+  factory Organization.fromJson(Map<String, dynamic> json) => Organization(
+        id: json['id'] as String,
+        meta: json['meta'] != null
+            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+            : null,
+        identifier: (json['identifier'] as List<dynamic>?)
+            ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        type: (json['type'] as List<dynamic>?)
+            ?.map((e) => t.Type.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        name: json['name'] != null ? json['name'] as String? : null,
+        total: json['total'] != null ? json['total'] as int? : null,
+        link: (json['link'] as List<dynamic>?)
+            ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        entry: (json['entry'] as List<dynamic>?)
+            ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        active: json['active'] as bool?,
+        telecom: (json['telecom'] as List<dynamic>?)
+            ?.map((e) => Telecom.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        address: (json['address'] as List<dynamic>?)
+            ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+  static const ResourceType resourceType = ResourceType.organization;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'resourceType': resourceType,
-      'id': id,
-      'meta': meta?.toJson(),
-      'identifier': identifier?.map((e) => e.toJson()).toList(),
-      'type': type?.cast<dynamic>().toList(),
-      'name': name,
-      'total': total,
-      'link': link?.map((e) => e.toJson()).toList(),
-      'entry': entry?.map((e) => e.toJson()).toList(),
-      'active': active,
-      'telecom': telecom?.map((e) => e.toJson()).toList(),
-      'address': address?.map((e) => e.toJson()).toList(),
-    };
-  }
+  final List<t.Type>? type;
+  final String? name;
+  final int? total;
+  final List<Link>? link;
+  final List<Entry>? entry;
+  final List<Identifier>? identifier;
+  final bool? active;
+  final List<Telecom>? telecom;
+  final List<Address>? address;
+
+  Map<String, dynamic> toJson() => {
+        'resourceType': resourceType,
+        'id': id,
+        'meta': meta?.toJson(),
+        'identifier': identifier?.map((e) => e.toJson()).toList(),
+        'type': type?.cast<dynamic>().toList(),
+        'name': name,
+        'total': total,
+        'link': link?.map((e) => e.toJson()).toList(),
+        'entry': entry?.map((e) => e.toJson()).toList(),
+        'active': active,
+        'telecom': telecom?.map((e) => e.toJson()).toList(),
+        'address': address?.map((e) => e.toJson()).toList(),
+      };
 }
 
 class Patient extends Resource {
-  static const ResourceType resourceType = ResourceType.patient;
-
-  final List<Identifier>? identifier;
-  final bool? active;
-  final List<Name>? name;
-  final List<Telecom>? telecom;
-  final AdministrativeGender? gender;
-  final DateTime? birthDate;
-  final List<Address>? address;
-
   Patient({
     String? id,
     Meta? meta,
@@ -321,64 +293,56 @@ class Patient extends Resource {
     this.address,
   }) : super._internal(id, meta);
 
-  factory Patient.fromJson(Map<String, dynamic> json) {
-    return Patient(
-      id: json['id'] as String?,
-      meta: json['meta'] != null
-          ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
-          : null,
-      identifier: (json['identifier'] as List<dynamic>?)
-          ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      active: json['active'] as bool?,
-      name: (json['name'] as List<dynamic>?)
-          ?.map((e) => Name.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      telecom: (json['telecom'] as List<dynamic>?)
-          ?.map((e) => Telecom.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      gender: json['gender'] != null
-          ? AdministrativeGender.fromCode(json['gender'] as String)
-          : null,
-      birthDate: json['birthDate'] != null
-          ? DateTime.parse(json['birthDate'] as String)
-          : null,
-      address: (json['address'] as List<dynamic>?)
-          ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-  }
+  factory Patient.fromJson(Map<String, dynamic> json) => Patient(
+        id: json['id'] as String?,
+        meta: json['meta'] != null
+            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+            : null,
+        identifier: (json['identifier'] as List<dynamic>?)
+            ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        active: json['active'] as bool?,
+        name: (json['name'] as List<dynamic>?)
+            ?.map((e) => Name.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        telecom: (json['telecom'] as List<dynamic>?)
+            ?.map((e) => Telecom.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        gender: json['gender'] != null
+            ? AdministrativeGender.fromCode(json['gender'] as String)
+            : null,
+        birthDate: json['birthDate'] != null
+            ? DateTime.parse(json['birthDate'] as String)
+            : null,
+        address: (json['address'] as List<dynamic>?)
+            ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+  static const ResourceType resourceType = ResourceType.patient;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'resourceType': resourceType.code,
-      'id': id,
-      'meta': meta?.toJson(),
-      'identifier': identifier?.map((e) => e.toJson()).toList(),
-      'active': active,
-      'name': name?.map((e) => e.toJson()).toList(),
-      'telecom': telecom?.map((e) => e.toJson()).toList(),
-      'gender': gender?.code,
-      'birthDate': birthDate?.toIso8601String(),
-      'address': address?.map((e) => e.toJson()).toList(),
-    };
-  }
+  final List<Identifier>? identifier;
+  final bool? active;
+  final List<Name>? name;
+  final List<Telecom>? telecom;
+  final AdministrativeGender? gender;
+  final DateTime? birthDate;
+  final List<Address>? address;
+
+  Map<String, dynamic> toJson() => {
+        'resourceType': resourceType.code,
+        'id': id,
+        'meta': meta?.toJson(),
+        'identifier': identifier?.map((e) => e.toJson()).toList(),
+        'active': active,
+        'name': name?.map((e) => e.toJson()).toList(),
+        'telecom': telecom?.map((e) => e.toJson()).toList(),
+        'gender': gender?.code,
+        'birthDate': birthDate?.toIso8601String(),
+        'address': address?.map((e) => e.toJson()).toList(),
+      };
 }
 
 final class Practitioner extends Resource {
-  static const ResourceType resourceType = ResourceType.practitioner;
-
-  final List<t.Type>? type;
-  final List<Name>? name;
-  final int? total;
-  final List<Link>? link;
-  final List<Entry>? entry;
-  final List<Identifier>? identifier;
-  final bool? active;
-  final List<Telecom>? telecom;
-  final List<Address>? address;
-  final AdministrativeGender gender;
-
   Practitioner({
     required String id,
     required Meta? meta,
@@ -397,73 +361,70 @@ final class Practitioner extends Resource {
           meta,
         );
 
-  factory Practitioner.fromJson(Map<String, dynamic> json) {
-    return Practitioner(
-      id: json['id'] as String,
-      meta: json['meta'] != null
-          ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
-          : null,
-      identifier: (json['identifier'] as List<dynamic>?)
-          ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      type: (json['type'] as List<dynamic>?)
-          ?.map((e) => t.Type.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      name: (json['name'] as List<dynamic>?)
-          ?.map((e) => Name.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      total: json['total'] != null ? json['total'] as int? : null,
-      link: (json['link'] as List<dynamic>?)
-          ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      entry: (json['entry'] as List<dynamic>?)
-          ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      active: json['active'] as bool?,
-      telecom: (json['telecom'] as List<dynamic>?)
-          ?.map((e) => Telecom.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      address: (json['address'] as List<dynamic>?)
-          ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      gender:
-          AdministrativeGender.fromCode(json['gender'] as String? ?? 'unknown'),
-    );
-  }
+  factory Practitioner.fromJson(Map<String, dynamic> json) => Practitioner(
+        id: json['id'] as String,
+        meta: json['meta'] != null
+            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+            : null,
+        identifier: (json['identifier'] as List<dynamic>?)
+            ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        type: (json['type'] as List<dynamic>?)
+            ?.map((e) => t.Type.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        name: (json['name'] as List<dynamic>?)
+            ?.map((e) => Name.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        total: json['total'] != null ? json['total'] as int? : null,
+        link: (json['link'] as List<dynamic>?)
+            ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        entry: (json['entry'] as List<dynamic>?)
+            ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        active: json['active'] as bool?,
+        telecom: (json['telecom'] as List<dynamic>?)
+            ?.map((e) => Telecom.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        address: (json['address'] as List<dynamic>?)
+            ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        gender: AdministrativeGender.fromCode(
+          json['gender'] as String? ?? 'unknown',
+        ),
+      );
+      
+  static const ResourceType resourceType = ResourceType.practitioner;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'resourceType': resourceType,
-      'id': id,
-      'meta': meta?.toJson(),
-      'identifier': identifier?.map((e) => e.toJson()).toList(),
-      'type': type?.cast<dynamic>().toList(),
-      'name': name?.map((e) => e.toJson()).toList(),
-      'total': total,
-      'link': link?.map((e) => e.toJson()).toList(),
-      'entry': entry?.map((e) => e.toJson()).toList(),
-      'active': active,
-      'telecom': telecom?.map((e) => e.toJson()).toList(),
-      'address': address?.map((e) => e.toJson()).toList(),
-      'gender': gender.code,
-    };
-  }
+  final List<t.Type>? type;
+  final List<Name>? name;
+  final int? total;
+  final List<Link>? link;
+  final List<Entry>? entry;
+  final List<Identifier>? identifier;
+  final bool? active;
+  final List<Telecom>? telecom;
+  final List<Address>? address;
+  final AdministrativeGender gender;
+
+  Map<String, dynamic> toJson() => {
+        'resourceType': resourceType,
+        'id': id,
+        'meta': meta?.toJson(),
+        'identifier': identifier?.map((e) => e.toJson()).toList(),
+        'type': type?.cast<dynamic>().toList(),
+        'name': name?.map((e) => e.toJson()).toList(),
+        'total': total,
+        'link': link?.map((e) => e.toJson()).toList(),
+        'entry': entry?.map((e) => e.toJson()).toList(),
+        'active': active,
+        'telecom': telecom?.map((e) => e.toJson()).toList(),
+        'address': address?.map((e) => e.toJson()).toList(),
+        'gender': gender.code,
+      };
 }
 
 final class PractitionerRole extends Resource {
-  static const ResourceType resourceType = ResourceType.practitionerRole;
-
-  final List<Extension>? extension;
-  final List<Identifier>? identifier;
-  final bool? active;
-  final String? name;
-  final Period? period;
-  final Reference? practitioner;
-  final List<CodeableConcept>? code;
-  final List<CodeableConcept>? specialty;
-  final List<Location>? location;
-  final List<AvailableTime>? availableTime;
-
   PractitionerRole({
     required String id,
     required Meta? meta,
@@ -482,62 +443,69 @@ final class PractitionerRole extends Resource {
           meta,
         );
 
-  factory PractitionerRole.fromJson(Map<String, dynamic> json) {
-    return PractitionerRole(
-      id: json['id'] as String,
-      extension: (json['extension'] as List<dynamic>?)
-          ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      identifier: (json['identifier'] as List<dynamic>?)
-          ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      active: json['active'] != null ? json['active'] as bool? : null,
-      name: json['name'] != null ? json['name'] as String? : null,
-      period: json['period'] != null
-          ? Period.fromJson(json['period'] as Map<String, dynamic>)
-          : null,
-      practitioner: json['practitioner'] != null
-          ? Reference.fromJson(json['practitioner'] as Map<String, dynamic>)
-          : null,
-      code: (json['code'] as List<dynamic>?)
-          ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      specialty: (json['specialty'] as List<dynamic>?)
-          ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      location: (json['location'] as List<dynamic>?)
-          ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      availableTime: (json['availableTime'] as List<dynamic>?)
-          ?.map((e) => AvailableTime.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      meta: json['meta'] != null
-          ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
-          : null,
-    );
-  }
+  factory PractitionerRole.fromJson(Map<String, dynamic> json) =>
+      PractitionerRole(
+        id: json['id'] as String,
+        extension: (json['extension'] as List<dynamic>?)
+            ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        identifier: (json['identifier'] as List<dynamic>?)
+            ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        active: json['active'] != null ? json['active'] as bool? : null,
+        name: json['name'] != null ? json['name'] as String? : null,
+        period: json['period'] != null
+            ? Period.fromJson(json['period'] as Map<String, dynamic>)
+            : null,
+        practitioner: json['practitioner'] != null
+            ? Reference.fromJson(json['practitioner'] as Map<String, dynamic>)
+            : null,
+        code: (json['code'] as List<dynamic>?)
+            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        specialty: (json['specialty'] as List<dynamic>?)
+            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        location: (json['location'] as List<dynamic>?)
+            ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        availableTime: (json['availableTime'] as List<dynamic>?)
+            ?.map((e) => AvailableTime.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        meta: json['meta'] != null
+            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+            : null,
+      );
+  static const ResourceType resourceType = ResourceType.practitionerRole;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'resourceType': resourceType,
-      'id': id,
-      'extension': extension?.map((e) => e.toJson()).toList(),
-      'identifier': identifier?.map((e) => e.toJson()).toList(),
-      'active': active,
-      'name': name,
-      'period': period?.toJson(),
-      'practitioner': practitioner?.toJson(),
-      'code': code?.map((e) => e.toJson()).toList(),
-      'specialty': specialty?.map((e) => e.toJson()).toList(),
-      'location': location?.map((e) => e.toJson()).toList(),
-      'availableTime': availableTime?.map((e) => e.toJson()).toList(),
-    };
-  }
+  final List<Extension>? extension;
+  final List<Identifier>? identifier;
+  final bool? active;
+  final String? name;
+  final Period? period;
+  final Reference? practitioner;
+  final List<CodeableConcept>? code;
+  final List<CodeableConcept>? specialty;
+  final List<Location>? location;
+  final List<AvailableTime>? availableTime;
+
+  Map<String, dynamic> toJson() => {
+        'resourceType': resourceType,
+        'id': id,
+        'extension': extension?.map((e) => e.toJson()).toList(),
+        'identifier': identifier?.map((e) => e.toJson()).toList(),
+        'active': active,
+        'name': name,
+        'period': period?.toJson(),
+        'practitioner': practitioner?.toJson(),
+        'code': code?.map((e) => e.toJson()).toList(),
+        'specialty': specialty?.map((e) => e.toJson()).toList(),
+        'location': location?.map((e) => e.toJson()).toList(),
+        'availableTime': availableTime?.map((e) => e.toJson()).toList(),
+      };
 }
 
 class Slot extends Resource {
-  static const ResourceType resourceType = ResourceType.slot;
-
   Slot({
     String? id,
     Meta? meta,
@@ -582,6 +550,7 @@ class Slot extends Resource {
         end: DateTime.tryParse(json['end'] as String? ?? ''),
         comment: json['comment'] != null ? json['comment'] as String? : null,
       );
+  static const ResourceType resourceType = ResourceType.slot;
 
   final List<Identifier>? identifier;
   final List<CodeableConcept>? serviceCategory;
@@ -610,8 +579,6 @@ class Slot extends Resource {
 }
 
 class Schedule extends Resource {
-  static const ResourceType resourceType = ResourceType.schedule;
-
   Schedule({
     String? id,
     Meta? meta,
@@ -656,6 +623,7 @@ class Schedule extends Resource {
             : null,
         comment: json['comment'] != null ? json['comment'] as String? : null,
       );
+  static const ResourceType resourceType = ResourceType.schedule;
 
   final List<Identifier>? identifier;
   final List<CodeableReference>? serviceType;
