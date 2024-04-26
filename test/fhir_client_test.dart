@@ -524,6 +524,63 @@ void main() {
       final patient = bundleEntries.entries[1];
 
       expect(patient.id, '8728374');
+
+      expect(first.id, '8728293');
+      expect(first.meta!.versionId, '1');
+      expect(
+        first.meta!.lastUpdated,
+        DateTime.parse('2023-03-21T10:42:21.276+00:00'),
+      );
+      expect(first.meta!.source, '#atCUOwuOCtijIb20');
+
+      //HAPI has a list of texts, but these don't seem to be in the
+      //FHIR spect
+      // expect(first.text!.status, 'generated');
+      // expect(first.text!.div,
+      //     '<div xmlns="http://www.w3.org/1999/xhtml">Ruben Manzaneque</div>');
+
+      expect(first.identifier!.length, 1);
+      expect(
+        first.identifier!.first.system,
+        'http://clinfhir.com/fhir/NamingSystem/identifier',
+      );
+      expect(first.identifier!.first.value, '0987654321');
+      expect(first.name!.length, 1);
+      // expect(first.name!.first.use, 'official');
+      // expect(first.name!.first.text, 'Ruben Manzaneque');
+      expect(first.name!.first.family, 'Manzaneque');
+      expect(first.name!.first.given!.length, 1);
+      expect(first.name!.first.given!.first, 'Ruben');
+      expect(first.gender, AdministrativeGender.male);
+      expect(first.birthDate, DateTime.parse('1992-10-12'));
+
+
+      expect(patient.id, '8728374');
+      expect(patient.meta!.versionId, '1');
+      expect(
+        patient.meta!.lastUpdated,
+        DateTime.parse('2023-03-21T10:42:27.116+00:00'),
+      );
+      expect(patient.meta!.source, '#sPvtkIxUA0WunOfK');
+      // expect(patient.text!.status, 'generated');
+      // expect(
+      //   patient.text!.div,
+      //   '<div xmlns="http://www.w3.org/1999/xhtml">Lucas Morris</div>',
+      // );
+      expect(patient.identifier!.length, 1);
+      expect(
+        patient.identifier!.first.system,
+        'http://clinfhir.com/fhir/NamingSystem/identifier',
+      );
+      expect(patient.identifier!.first.value, '4241697');
+      expect(patient.name!.length, 1);
+      // expect(patient.name!.first.use, 'official');
+      // expect(patient.name!.first.text, 'Lucas Morris');
+      expect(patient.name!.first.family, 'Morris');
+      expect(patient.name!.first.given!.length, 1);
+      expect(patient.name!.first.given!.first, 'Lucas');
+      expect(patient.gender, AdministrativeGender.male);
+      expect(patient.birthDate, DateTime.parse('1985-01-23'));
     });
   });
 
