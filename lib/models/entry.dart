@@ -4,7 +4,7 @@ import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/search.dart';
 
 class Entry {
-  final String? fullUrl;
+  final Uri? fullUrl;
   final Resource? resource;
   final Search? search;
 
@@ -16,7 +16,7 @@ class Entry {
 
   factory Entry.fromJson(Map<String, dynamic> json) {
     return Entry(
-      fullUrl: json['fullUrl'] != null ? json['fullUrl'] as String? : null,
+      fullUrl: Uri.tryParse(json['fullUrl'] as String? ?? ''),
       resource: json['resource'] != null
           ? Resource.fromJson(json['resource'] as Map<String, dynamic>)
           : null,
@@ -28,7 +28,7 @@ class Entry {
 
   Map<String, dynamic> toJson() {
     return {
-      'fullUrl': fullUrl,
+      'fullUrl': fullUrl.toString(),
       'resource': resource,
       'search': search?.toJson(),
     };

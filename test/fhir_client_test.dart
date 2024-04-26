@@ -428,7 +428,7 @@ void main() {
 
       expect(
         bundleEntries.bundle.entry![2].fullUrl,
-        'https://hapi.fhir.org/baseR4/Slot/52223',
+        Uri.parse('https://hapi.fhir.org/baseR4/Slot/52223'),
       );
 
       final first = bundleEntries.entries.first;
@@ -511,7 +511,7 @@ void main() {
 
       expect(
         bundleEntries.bundle.entry!.first.fullUrl,
-        'https://hapi.fhir.org/baseR4/Patient/8728293',
+        Uri.parse('https://hapi.fhir.org/baseR4/Patient/8728293'),
       );
 
       final first = bundleEntries.entries.first;
