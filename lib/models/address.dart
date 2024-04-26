@@ -1,5 +1,4 @@
-// ignore_for_file: lines_longer_than_80_chars
-
+// ignore: lines_longer_than_80_chars
 /// An address expressed using postal conventions (as opposed to GPS or other location definition formats). This datatype may be used to convey addresses for use in delivering mail as well as for visiting locations which might not be valid for mail delivery. There are a variety of postal address formats defined around the world.
 /// https://hl7.org/fhir/datatypes.html#Address
 class Address {
@@ -35,6 +34,7 @@ class Address {
   /// postal | physical | both
   final String? type;
 
+  // ignore: lines_longer_than_80_chars
   /// Street name, number, direction & P.O. Box etc. This repeating element order: The order in which lines should appear in an address label
   final List<String>? line;
 

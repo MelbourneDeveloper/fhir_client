@@ -15,7 +15,7 @@ class AdmitSource {
             ? Reference.fromJson(json['admitter'] as Map<String, dynamic>)
             : null,
       );
-      
+
   final CodeableConcept? coding;
   final Reference? admitter;
 
