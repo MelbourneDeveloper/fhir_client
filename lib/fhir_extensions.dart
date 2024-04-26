@@ -152,7 +152,7 @@ extension FhirExtensions on Client {
             text: Text(
               status: 'Unexpected Result',
               div: 'Expected a list of ${resourceName}s, but '
-                  'got a ${r.resourceType}',
+                  'got a ${r.runtimeType}',
             ),
           ),
       };

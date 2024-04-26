@@ -21,6 +21,7 @@ import 'package:fhir_client/models/telecom.dart';
 import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/type.dart' as t;
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
+import 'package:fhir_client/models/value_sets/resource_type.dart';
 
 /// Either a successful [Resource] result or an [OperationOutcome] (error)
 sealed class Result<T> {}
@@ -41,35 +42,32 @@ final class BundleEntries<T> implements Result<T> {
 /// Any of the FHIR resources
 sealed class Resource {
   final String? id;
-  final String? resourceType;
   final Meta? meta;
 
   Resource._internal(
     this.id,
-    this.resourceType,
     this.meta,
   );
 
   factory Resource.fromJson(
     Map<String, dynamic> map,
   ) =>
-      //TODO: Change this to a map for performance
-      switch (map['resourceType']) {
-        ('Appointment') => Appointment.fromJson(map),
-        ('Bundle') => Bundle.fromJson(map),
-        ('Organization') => Organization.fromJson(map),
-        ('OperationOutcome') => OperationOutcome<String>.fromJson(map),
-        ('Practitioner') => Practitioner.fromJson(map),
-        ('PractitionerRole') => PractitionerRole.fromJson(map),
-        ('Schedule') => Schedule.fromJson(map),
-        ('Slot') => Slot.fromJson(map),
-        (_) => throw UnimplementedError(
-            'Hey you! This resource is not implemented! Please head over to https://github.com/MelbourneDeveloper/fhir_client and write a PR to add this resource.',
-          ),
+      switch (ResourceType.fromCode(map['resourceType'] as String? ?? '')) {
+        (ResourceType.appointment) => Appointment.fromJson(map),
+        (ResourceType.bundle) => Bundle.fromJson(map),
+        (ResourceType.organization) => Organization.fromJson(map),
+        (ResourceType.operationOutcome) =>
+          OperationOutcome<String>.fromJson(map),
+        (ResourceType.practitioner) => Practitioner.fromJson(map),
+        (ResourceType.practitionerRole) => PractitionerRole.fromJson(map),
+        (ResourceType.schedule) => Schedule.fromJson(map),
+        (ResourceType.slot) => Slot.fromJson(map),
       };
 }
 
 class Appointment extends Resource {
+  static const ResourceType resourceType = ResourceType.appointment;
+
   Appointment({
     String? id,
     Meta? meta,
@@ -78,7 +76,6 @@ class Appointment extends Resource {
     this.participant,
   }) : super._internal(
           id,
-          'Appointment',
           meta,
         );
 
@@ -111,6 +108,8 @@ class Appointment extends Resource {
 }
 
 class Bundle extends Resource {
+  static const ResourceType resourceType = ResourceType.bundle;
+
   final List<Extension>? extension;
   final List<Identifier>? identifier;
   final bool? active;
@@ -135,7 +134,6 @@ class Bundle extends Resource {
     this.entry,
   }) : super._internal(
           id,
-          'Bundle',
           meta,
         );
 
@@ -188,6 +186,8 @@ class Bundle extends Resource {
 }
 
 class OperationOutcome<T> extends Resource implements Result<T> {
+  static const ResourceType resourceType = ResourceType.operationOutcome;
+
   final Text? text;
   final List<Issue>? issue;
 
@@ -196,7 +196,6 @@ class OperationOutcome<T> extends Resource implements Result<T> {
     this.issue,
   }) : super._internal(
           null,
-          'OperationOutcome',
           null,
         );
 
@@ -221,6 +220,8 @@ class OperationOutcome<T> extends Resource implements Result<T> {
 }
 
 final class Organization extends Resource {
+  static const ResourceType resourceType = ResourceType.organization;
+
   final List<t.Type>? type;
   final String? name;
   final int? total;
@@ -245,7 +246,6 @@ final class Organization extends Resource {
     this.address,
   }) : super._internal(
           id,
-          'Organization',
           meta,
         );
 
@@ -298,6 +298,8 @@ final class Organization extends Resource {
 }
 
 final class Practitioner extends Resource {
+  static const ResourceType resourceType = ResourceType.practitioner;
+
   final List<t.Type>? type;
   final List<Name>? name;
   final int? total;
@@ -324,7 +326,6 @@ final class Practitioner extends Resource {
     this.address,
   }) : super._internal(
           id,
-          'Practitioner',
           meta,
         );
 
@@ -382,6 +383,8 @@ final class Practitioner extends Resource {
 }
 
 final class PractitionerRole extends Resource {
+  static const ResourceType resourceType = ResourceType.practitionerRole;
+
   final List<Extension>? extension;
   final List<Identifier>? identifier;
   final bool? active;
@@ -408,7 +411,6 @@ final class PractitionerRole extends Resource {
     this.availableTime,
   }) : super._internal(
           id,
-          'PractitionerRole',
           meta,
         );
 
@@ -466,6 +468,8 @@ final class PractitionerRole extends Resource {
 }
 
 class Slot extends Resource {
+  static const ResourceType resourceType = ResourceType.slot;
+
   Slot({
     String? id,
     Meta? meta,
@@ -480,7 +484,6 @@ class Slot extends Resource {
     this.comment,
   }) : super._internal(
           id,
-          'Slot',
           meta,
         );
 
@@ -539,6 +542,8 @@ class Slot extends Resource {
 }
 
 class Schedule extends Resource {
+  static const ResourceType resourceType = ResourceType.schedule;
+
   Schedule({
     String? id,
     Meta? meta,
@@ -552,7 +557,6 @@ class Schedule extends Resource {
     this.comment,
   }) : super._internal(
           id,
-          'Schedule',
           meta,
         );
 

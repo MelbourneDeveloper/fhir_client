@@ -30,9 +30,6 @@ void main() {
       // Get the 3rd appointment
       final appointment = appointments[2];
 
-      // Assert resource type
-      expect(appointment.resourceType, 'Appointment');
-
       // Assert ID
       expect(appointment.id, '05fda0d9-7d96-4869-bccd-8976ed9f35d8');
 
@@ -97,7 +94,6 @@ void main() {
         Uri.parse('http://miup.jp/bangladesh/organization-type'),
       );
 
-      expect(org.resourceType, 'Organization');
       expect(org.id, '2640211');
 
       expect(org.meta!.versionId, '1');
@@ -232,7 +228,7 @@ void main() {
       final entries = result.entry!.toList();
 
       expect(entries.length, 10);
-      expect(entries.first.resource!.resourceType, 'PractitionerRole');
+
       expect(
         entries.first.resource!.id,
         '000-a24198ce-1b4b-4364-9dd4-03b3c5b5bd41-PractitionerRole',
@@ -282,9 +278,6 @@ void main() {
       );
 
       final schedule = schedules[1];
-
-      // Assert resource type
-      expect(schedule.resourceType, 'Schedule');
 
       // Assert ID
       expect(schedule.id, '0e3309f0-b207-4a06-b3cd-f4d51d7feb76');
@@ -451,7 +444,6 @@ void main() {
 
 // Assert all fields (Thanks to Anthropic Claude 3)
 
-      expect(slot.resourceType, 'Slot');
       expect(slot.meta?.versionId, '2');
 
       expect(
@@ -497,7 +489,7 @@ void main() {
       );
       expect(slot.status, 'free');
       //TODO: investigate these...
-      //Why is the datetime like this? 
+      //Why is the datetime like this?
       expect(slot.start, DateTime.parse('2019-10-30T15:00:00-07:00'));
       expect(slot.end, DateTime.parse('2019-10-30T16:00:00-07:00'));
       expect(

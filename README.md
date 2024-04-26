@@ -144,6 +144,27 @@ final result = await client.getResource<Organization>(baseUri, path) as Organiza
 
 For widget tests, just inject the `MockClient` at the base of your app instead of the standard `http` `Client`. You will be able to dynamically load JSON files based on the request URI path in the mock function.
 
+## Add A Resource Type (Contributing)
+
+I welcome PRs for this repo and you only need to go through a few steps to add a resource type. I'd like to automatically generate the code once Dart gains full macros, but for the time being, I generate the classes with my [JSON to DTO](https://melbournedeveloper.github.io/json_to_dto/#/) tool.
+
+1. Grab some example JSON of the resource. You can see examples in the `test/responses` folder.
+2. Paste the JSON into the [JSON to DTO](https://melbournedeveloper.github.io/json_to_dto/#/) tool and click "Generate"
+
+![JSON](doco/generate.png)
+
+3. It will generate a bunch of Dart classes. The main one you are looking for will either be named `Resource`, or `Root`, but the others may also be necessary.
+
+![Dart](doco/generate2.png)
+
+4. Paste the main class in to the file [`resource.dart`](lib/models/resource.dart). The important resources are all in this file because they all inherit from the `Resource` class. The important because it's part of the ADT mechanism. There is no current way to separate these in separate files.
+
+5. Fix up the compilation/static code analysis issues. You should be able to do quick fixes on these, but you might need to manually massage some of the code.
+
+6. Add the resource to the `ResourceType` to the [`ResourceType`](lib/models/value_sets/resource_type.dart) and the `Resource.fromJson` factory.
+
+7. MOST IMPORTANTLY: Add tests to the [`fhir_client_test.dart`](test/fhir_client_test.dart) file. You can see examples of these tests in the file. You need to cover all the fields. You can use an LLM like ChatGPT or Claude to generate these tests for you.
+
 ## Which Resources Are Supported?
 
 Take a look at [this file](lib/models/resource.dart). You can see the resources that are currently implemented. The aim is to implement all of them in the long run. It's easy to implement them, so feel free to contribute by submitting a PR. Please make sure you cover the code with tests. There are some good existing [tests here](test/fhir_client_test.dart).
