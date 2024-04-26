@@ -7,6 +7,10 @@ enum ResourceType implements Comparable<ResourceType> {
     code: 'Bundle',
     display: 'Bundle',
   ),
+  encounter(
+    code: 'Encounter',
+    display: 'Encounter',
+  ),
   organization(
     code: 'Organization',
     display: 'Organization',
@@ -47,6 +51,7 @@ enum ResourceType implements Comparable<ResourceType> {
   static ResourceType fromCode(String code) => switch (code) {
         ('Appointment') => appointment,
         ('Bundle') => bundle,
+        ('Encounter') => encounter,
         ('Organization') => organization,
         ('OperationOutcome') => operationOutcome,
         ('Patient') => patient,
@@ -55,7 +60,7 @@ enum ResourceType implements Comparable<ResourceType> {
         ('Schedule') => schedule,
         ('Slot') => slot,
         (_) => throw UnimplementedError(
-            'Hey you! This resource is not implemented! Please head over to https://github.com/MelbourneDeveloper/fhir_client and write a PR to add this resource.',
+            'Hey you! The resource $code is not implemented! Please head over to https://github.com/MelbourneDeveloper/fhir_client and write a PR to add this resource.',
           ),
       };
 

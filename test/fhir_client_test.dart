@@ -419,6 +419,29 @@ void main() {
   });
 
   group('http Client Extension Calls - Mocked', () {
+    test('Encounter Search', () async {
+      final bundleEntries = await _mockSearch<Encounter>(
+        (c) async => await c.searchEncounters(
+          baseUri,
+          count: 10,
+        ) as BundleEntries<Encounter>,
+      );
+
+      expect(bundleEntries.length, 2);
+
+      expect(
+        bundleEntries.bundle.entry!.first.fullUrl,
+        Uri.parse('https://hapi.fhir.org/baseR4/Encounter/8728249'),
+      );
+
+      final first = bundleEntries.entries.first;
+
+      expect(
+        first.id,
+        '8728249',
+      );
+    });
+
     test('Slot Search', () async {
       final bundleEntries = await _mockSearch<Slot>(
         (c) async => await c.searchSlots(
@@ -588,7 +611,7 @@ void main() {
       final map = first.toJson();
       expect(map['id'], '8728293');
       expect(map['resourceType'], 'Patient');
-      
+
       // ignore_for_block: avoid_dynamic_calls
       expect(map['meta']['versionId'], '1');
       expect(

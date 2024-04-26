@@ -1,5 +1,6 @@
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/address.dart';
+import 'package:fhir_client/models/admit_source.dart';
 import 'package:fhir_client/models/available_time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/codeable_reference.dart';
@@ -50,6 +51,7 @@ sealed class Resource {
       switch (ResourceType.fromCode(map['resourceType'] as String? ?? '')) {
         (ResourceType.appointment) => Appointment.fromJson(map),
         (ResourceType.bundle) => Bundle.fromJson(map),
+        (ResourceType.encounter) => Encounter.fromJson(map),
         (ResourceType.organization) => Organization.fromJson(map),
         (ResourceType.operationOutcome) =>
           OperationOutcome<String>.fromJson(map),
@@ -174,6 +176,160 @@ class Bundle extends Resource {
         'location': location?.map((e) => e.toJson()).toList(),
         'link': link?.map((e) => e.toJson()).toList(),
         'entry': entry?.map((e) => e.toJson()).toList(),
+      };
+}
+
+class Encounter extends Resource {
+  Encounter({
+    String? id,
+    Meta? meta,
+    this.identifier,
+    this.status,
+    this.classCode,
+    this.type,
+    this.serviceType,
+    this.priority,
+    this.subject,
+    this.participant,
+    this.period,
+    this.length,
+    this.reasonCode,
+    this.hospitalization,
+    this.location,
+  }) : super._internal(id, meta);
+
+  factory Encounter.fromJson(Map<String, dynamic> json) => Encounter(
+        id: json['id'] as String?,
+        meta: json['meta'] != null
+            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+            : null,
+        identifier: (json['identifier'] as List<dynamic>?)
+            ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        status: json['status'] as String?,
+        classCode: json['class'] != null
+            ? CodeableConcept.fromJson(json['class'] as Map<String, dynamic>)
+            : null,
+        type: (json['type'] as List<dynamic>?)
+            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        serviceType: json['serviceType'] != null
+            ? CodeableConcept.fromJson(
+                json['serviceType'] as Map<String, dynamic>,
+              )
+            : null,
+        priority: json['priority'] != null
+            ? CodeableConcept.fromJson(json['priority'] as Map<String, dynamic>)
+            : null,
+        subject: json['subject'] != null
+            ? Reference.fromJson(json['subject'] as Map<String, dynamic>)
+            : null,
+        participant: (json['participant'] as List<dynamic>?)
+            ?.map((e) => Participant.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        period: json['period'] != null
+            ? Period.fromJson(json['period'] as Map<String, dynamic>)
+            : null,
+        length: json['length'] != null
+            ? Duration(
+                milliseconds: (json['length'] as int) * 1000,
+              )
+            : null,
+        reasonCode: (json['reasonCode'] as List<dynamic>?)
+            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        hospitalization: json['hospitalization'] != null
+            ? Hospitalization.fromJson(
+                json['hospitalization'] as Map<String, dynamic>,
+              )
+            : null,
+        location: (json['location'] as List<dynamic>?)
+            ?.map((e) => Reference.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+  static const ResourceType resourceType = ResourceType.encounter;
+
+  final List<Identifier>? identifier;
+  final String? status;
+
+  /// Classification of patient encounter context - e.g. Inpatient, outpatient.
+  /// Note: actual FHIR field is Class
+  final CodeableConcept? classCode;
+
+  final List<CodeableConcept>? type;
+  final CodeableConcept? serviceType;
+  final CodeableConcept? priority;
+  final Reference? subject;
+  final List<Participant>? participant;
+  final Period? period;
+  final Duration? length;
+  final List<CodeableConcept>? reasonCode;
+  final Hospitalization? hospitalization;
+  final List<Reference>? location;
+
+  Map<String, dynamic> toJson() => {
+        'resourceType': resourceType.code,
+        'id': id,
+        'meta': meta?.toJson(),
+        'identifier': identifier?.map((e) => e.toJson()).toList(),
+        'status': status,
+        'class': classCode?.toJson(),
+        'type': type?.map((e) => e.toJson()).toList(),
+        'serviceType': serviceType?.toJson(),
+        'priority': priority?.toJson(),
+        'subject': subject?.toJson(),
+        'participant': participant?.map((e) => e.toJson()).toList(),
+        'period': period?.toJson(),
+        'length': length?.inMilliseconds != null
+            ? length!.inMilliseconds ~/ 1000
+            : null,
+        'reasonCode': reasonCode?.map((e) => e.toJson()).toList(),
+        'hospitalization': hospitalization?.toJson(),
+        'location': location?.map((e) => e.toJson()).toList(),
+      };
+}
+
+class Hospitalization {
+  Hospitalization({
+    this.admitSource,
+    this.period,
+    this.specialCourtesy,
+    this.destination,
+    this.preAdmissionIdentifier,
+  });
+  factory Hospitalization.fromJson(Map<String, dynamic> json) =>
+      Hospitalization(
+        admitSource: json['admitSource'] != null
+            ? AdmitSource.fromJson(json['admitSource'] as Map<String, dynamic>)
+            : null,
+        period: json['period'] != null
+            ? Period.fromJson(json['period'] as Map<String, dynamic>)
+            : null,
+        specialCourtesy: (json['specialCourtesy'] as List<dynamic>?)
+            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        destination: (json['destination'] as List<dynamic>?)
+            ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        preAdmissionIdentifier:
+            (json['preAdmissionIdentifier'] as List<dynamic>?)
+                ?.map((e) => Reference.fromJson(e as Map<String, dynamic>))
+                .toList(),
+      );
+
+  final AdmitSource? admitSource;
+  final Period? period;
+  final List<CodeableConcept>? specialCourtesy;
+  final List<Location>? destination;
+  final List<Reference>? preAdmissionIdentifier;
+
+  Map<String, dynamic> toJson() => {
+        'admitSource': admitSource?.toJson(),
+        'period': period?.toJson(),
+        'specialCourtesy': specialCourtesy?.map((e) => e.toJson()).toList(),
+        'destination': destination?.map((e) => e.toJson()).toList(),
+        'preAdmissionIdentifier':
+            preAdmissionIdentifier?.map((e) => e.toJson()).toList(),
       };
 }
 
@@ -393,7 +549,7 @@ final class Practitioner extends Resource {
           json['gender'] as String? ?? 'unknown',
         ),
       );
-      
+
   static const ResourceType resourceType = ResourceType.practitioner;
 
   final List<t.Type>? type;

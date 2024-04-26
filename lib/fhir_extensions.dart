@@ -69,6 +69,21 @@ extension FhirExtensions on Client {
         ]),
       );
 
+  /// Search for [Encounter]s
+  Future<Result<Encounter>> searchEncounters(
+    String baseUri, {
+    String version = 'baseR4',
+    int? count,
+  }) async =>
+      search(
+        baseUri,
+        resourceType: ResourceType.encounter,
+        version: version,
+        queryString: _queryString([
+          if (count != null) MapEntry('_count', count.toString()),
+        ]),
+      );
+
   /// Search for [Patient]s
   Future<Result<Patient>> searchPatients(
     String baseUri, {
