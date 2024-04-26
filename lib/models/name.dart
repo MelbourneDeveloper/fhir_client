@@ -2,11 +2,14 @@
 
 class Name {
   final String? family;
+  //TODO: enum
+  final String? use;
   final List<String>? given;
   final List<String>? prefix;
 
   Name({
     this.family,
+    this.use,
     this.given,
     this.prefix,
   });
@@ -14,6 +17,7 @@ class Name {
   factory Name.fromJson(Map<String, dynamic> json) {
     return Name(
       family: json['family'] != null ? json['family'] as String? : null,
+      use: json['use'] as String?,
       given: (json['given'] as List<dynamic>?)?.cast<String>().toList(),
       prefix: (json['prefix'] as List<dynamic>?)?.cast<String>().toList(),
     );
@@ -22,6 +26,7 @@ class Name {
   Map<String, dynamic> toJson() {
     return {
       'family': family,
+      'use': use,
       'given': given?.cast<dynamic>().toList(),
       'prefix': prefix?.cast<dynamic>().toList(),
     };

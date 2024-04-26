@@ -1,3 +1,7 @@
+//This makes for good shortcuts in assertions. Consider
+//moving these assertions to a separate file
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -546,14 +550,13 @@ void main() {
       );
       expect(first.identifier!.first.value, '0987654321');
       expect(first.name!.length, 1);
-      // expect(first.name!.first.use, 'official');
+      expect(first.name!.first.use, 'official');
       // expect(first.name!.first.text, 'Ruben Manzaneque');
       expect(first.name!.first.family, 'Manzaneque');
       expect(first.name!.first.given!.length, 1);
       expect(first.name!.first.given!.first, 'Ruben');
       expect(first.gender, AdministrativeGender.male);
       expect(first.birthDate, DateTime.parse('1992-10-12'));
-
 
       expect(patient.id, '8728374');
       expect(patient.meta!.versionId, '1');
@@ -581,6 +584,38 @@ void main() {
       expect(patient.name!.first.given!.first, 'Lucas');
       expect(patient.gender, AdministrativeGender.male);
       expect(patient.birthDate, DateTime.parse('1985-01-23'));
+
+      final map = first.toJson();
+      expect(map['id'], '8728293');
+      expect(map['resourceType'], 'Patient');
+      
+      // ignore_for_block: avoid_dynamic_calls
+      expect(map['meta']['versionId'], '1');
+      expect(
+        map['meta']['lastUpdated'],
+        DateTime.utc(2023, 3, 21, 10, 42, 21, 276).toString(),
+      );
+      expect(map['meta']['source'], '#atCUOwuOCtijIb20');
+      // expect(map['text']['status'], 'generated');
+      // expect(
+      //   map['text']['div'],
+      //   '<div xmlns="http://www.w3.org/1999/xhtml">Ruben Manzaneque</div>',
+      // );
+      expect(map['identifier'].length, 1);
+      expect(
+        map['identifier'][0]['system'],
+        'http://clinfhir.com/fhir/NamingSystem/identifier',
+      );
+      expect(map['identifier'][0]['value'], '0987654321');
+      expect(map['name'].length, 1);
+      expect(map['name'][0]['use'], 'official');
+      // expect(map['name'][0]['text'], 'Ruben Manzaneque');
+      expect(map['name'][0]['family'], 'Manzaneque');
+      expect(map['name'][0]['given'].length, 1);
+      expect(map['name'][0]['given'][0], 'Ruben');
+      // end of block to ignore rules
+      expect(map['gender'], 'male');
+      expect(map['birthDate'], '1992-10-12T00:00:00.000');
     });
   });
 

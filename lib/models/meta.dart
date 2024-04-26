@@ -32,7 +32,7 @@ class Meta {
   Map<String, dynamic> toJson() {
     return {
       'lastUpdated': lastUpdated.toString(),
-      'versionId': versionId,
+      'versionId': versionId.toString(),
       'source': source,
       'profile': profile?.cast<String>().toList(),
       'tag': tag?.map((e) => e.toJson()).toList(),
