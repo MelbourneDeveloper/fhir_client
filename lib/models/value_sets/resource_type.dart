@@ -15,6 +15,10 @@ enum ResourceType implements Comparable<ResourceType> {
     code: 'OperationOutcome',
     display: 'Operation Outcome',
   ),
+  patient(
+    code: 'Patient',
+    display: 'Patient',
+  ),
   practitioner(
     code: 'Practitioner',
     display: 'Practitioner',
@@ -45,6 +49,7 @@ enum ResourceType implements Comparable<ResourceType> {
         ('Bundle') => bundle,
         ('Organization') => organization,
         ('OperationOutcome') => operationOutcome,
+        ('Patient') => patient,
         ('Practitioner') => practitioner,
         ('PractitionerRole') => practitionerRole,
         ('Schedule') => schedule,

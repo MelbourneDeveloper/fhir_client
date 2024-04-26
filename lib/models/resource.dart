@@ -58,6 +58,7 @@ sealed class Resource {
         (ResourceType.organization) => Organization.fromJson(map),
         (ResourceType.operationOutcome) =>
           OperationOutcome<String>.fromJson(map),
+        (ResourceType.patient) => Patient.fromJson(map),
         (ResourceType.practitioner) => Practitioner.fromJson(map),
         (ResourceType.practitionerRole) => PractitionerRole.fromJson(map),
         (ResourceType.schedule) => Schedule.fromJson(map),
@@ -292,6 +293,73 @@ final class Organization extends Resource {
       'entry': entry?.map((e) => e.toJson()).toList(),
       'active': active,
       'telecom': telecom?.map((e) => e.toJson()).toList(),
+      'address': address?.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+
+class Patient extends Resource {
+  static const ResourceType resourceType = ResourceType.patient;
+
+  final List<Identifier>? identifier;
+  final bool? active;
+  final List<Name>? name;
+  final List<Telecom>? telecom;
+  final AdministrativeGender? gender;
+  final DateTime? birthDate;
+  final List<Address>? address;
+
+  Patient({
+    String? id,
+    Meta? meta,
+    this.identifier,
+    this.active,
+    this.name,
+    this.telecom,
+    this.gender,
+    this.birthDate,
+    this.address,
+  }) : super._internal(id, meta);
+
+  factory Patient.fromJson(Map<String, dynamic> json) {
+    return Patient(
+      id: json['id'] as String?,
+      meta: json['meta'] != null
+          ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+          : null,
+      identifier: (json['identifier'] as List<dynamic>?)
+          ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      active: json['active'] as bool?,
+      name: (json['name'] as List<dynamic>?)
+          ?.map((e) => Name.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      telecom: (json['telecom'] as List<dynamic>?)
+          ?.map((e) => Telecom.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      gender: json['gender'] != null
+          ? AdministrativeGender.fromCode(json['gender'] as String)
+          : null,
+      birthDate: json['birthDate'] != null
+          ? DateTime.parse(json['birthDate'] as String)
+          : null,
+      address: (json['address'] as List<dynamic>?)
+          ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'resourceType': resourceType.code,
+      'id': id,
+      'meta': meta?.toJson(),
+      'identifier': identifier?.map((e) => e.toJson()).toList(),
+      'active': active,
+      'name': name?.map((e) => e.toJson()).toList(),
+      'telecom': telecom?.map((e) => e.toJson()).toList(),
+      'gender': gender?.code,
+      'birthDate': birthDate?.toIso8601String(),
       'address': address?.map((e) => e.toJson()).toList(),
     };
   }

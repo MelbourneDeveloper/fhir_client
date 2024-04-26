@@ -498,6 +498,33 @@ void main() {
         'in this slot.',
       );
     });
+
+    test('Patient Search', () async {
+      final bundleEntries = await _mockSearch<Patient>(
+        (c) async => await c.searchPatients(
+          baseUri,
+          count: 2,
+        ) as BundleEntries<Patient>,
+      );
+
+      expect(bundleEntries.length, 2);
+
+      expect(
+        bundleEntries.bundle.entry!.first.fullUrl,
+        'https://hapi.fhir.org/baseR4/Patient/8728293',
+      );
+
+      final first = bundleEntries.entries.first;
+
+      expect(
+        first.id,
+        '8728293',
+      );
+
+      final patient = bundleEntries.entries[1];
+
+      expect(patient.id, '8728374');
+    });
   });
 
   group(

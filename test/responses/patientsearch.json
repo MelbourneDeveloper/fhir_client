@@ -1,0 +1,94 @@
+{
+    "resourceType": "Bundle",
+    "id": "1d51d8f5-b145-4fff-9fc8-eec7ea60f115",
+    "meta": {
+        "lastUpdated": "2024-04-26T21:24:31.767+00:00"
+    },
+    "type": "searchset",
+    "link": [
+        {
+            "relation": "self",
+            "url": "https://hapi.fhir.org/baseR4/Patient?_count=2"
+        },
+        {
+            "relation": "next",
+            "url": "https://hapi.fhir.org/baseR4?_getpages=1d51d8f5-b145-4fff-9fc8-eec7ea60f115&_getpagesoffset=2&_count=2&_pretty=true&_bundletype=searchset"
+        }
+    ],
+    "entry": [
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Patient/8728293",
+            "resource": {
+                "resourceType": "Patient",
+                "id": "8728293",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-03-21T10:42:21.276+00:00",
+                    "source": "#atCUOwuOCtijIb20"
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Ruben Manzaneque</div>"
+                },
+                "identifier": [
+                    {
+                        "system": "http://clinfhir.com/fhir/NamingSystem/identifier",
+                        "value": "0987654321"
+                    }
+                ],
+                "name": [
+                    {
+                        "use": "official",
+                        "text": "Ruben Manzaneque",
+                        "family": "Manzaneque",
+                        "given": [
+                            "Ruben"
+                        ]
+                    }
+                ],
+                "gender": "male",
+                "birthDate": "1992-10-12"
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Patient/8728374",
+            "resource": {
+                "resourceType": "Patient",
+                "id": "8728374",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-03-21T10:42:27.116+00:00",
+                    "source": "#sPvtkIxUA0WunOfK"
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Lucas Morris</div>"
+                },
+                "identifier": [
+                    {
+                        "system": "http://clinfhir.com/fhir/NamingSystem/identifier",
+                        "value": "4241697"
+                    }
+                ],
+                "name": [
+                    {
+                        "use": "official",
+                        "text": "Lucas Morris",
+                        "family": "Morris",
+                        "given": [
+                            "Lucas"
+                        ]
+                    }
+                ],
+                "gender": "male",
+                "birthDate": "1985-01-23"
+            },
+            "search": {
+                "mode": "match"
+            }
+        }
+    ]
+}

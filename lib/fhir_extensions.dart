@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/text.dart';
+import 'package:fhir_client/models/value_sets/resource_type.dart';
 import 'package:http/http.dart';
 
 /// Extension methods for the http package [Client] class
@@ -60,11 +61,26 @@ extension FhirExtensions on Client {
   }) async =>
       search(
         baseUri,
-        resourceName: 'Appointment',
+        resourceType: ResourceType.appointment,
         version: version,
         queryString: _queryString([
           if (count != null) MapEntry('_count', count.toString()),
           if (status != null) MapEntry('status', status),
+        ]),
+      );
+
+  /// Search for [Patient]s
+  Future<Result<Patient>> searchPatients(
+    String baseUri, {
+    String version = 'baseR4',
+    int? count,
+  }) async =>
+      search(
+        baseUri,
+        resourceType: Patient.resourceType,
+        version: version,
+        queryString: _queryString([
+          if (count != null) MapEntry('_count', count.toString()),
         ]),
       );
 
@@ -76,7 +92,7 @@ extension FhirExtensions on Client {
   }) async =>
       search(
         baseUri,
-        resourceName: 'PractitionerRole',
+        resourceType: ResourceType.practitionerRole,
         version: version,
         queryString: _queryString([
           if (count != null) MapEntry('_count', count.toString()),
@@ -92,7 +108,7 @@ extension FhirExtensions on Client {
   }) async =>
       search(
         baseUri,
-        resourceName: 'Schedule',
+        resourceType: ResourceType.schedule,
         version: version,
         queryString: _queryString([
           if (count != null) MapEntry('_count', count.toString()),
@@ -109,7 +125,7 @@ extension FhirExtensions on Client {
   }) async =>
       search(
         baseUri,
-        resourceName: 'Slot',
+        resourceType: ResourceType.slot,
         version: version,
         queryString: _queryString([
           if (count != null) MapEntry('_count', count.toString()),
@@ -121,13 +137,13 @@ extension FhirExtensions on Client {
   /// `search` for specific resources.
   Future<Result<T>> search<T>(
     String baseUri, {
-    required String resourceName,
+    required ResourceType resourceType,
     String version = 'baseR4',
     String? queryString,
   }) async =>
       switch (await getResource<T>(
         baseUri,
-        '$version/$resourceName${queryString != null ? '?$queryString' : ''}',
+        '$version/${resourceType.code}${queryString != null ? '?$queryString' : ''}',
       )) {
         //Error
         (final OperationOutcome<T> o) => o,
@@ -151,7 +167,7 @@ extension FhirExtensions on Client {
         (final Resource r) => OperationOutcome(
             text: Text(
               status: 'Unexpected Result',
-              div: 'Expected a list of ${resourceName}s, but '
+              div: 'Expected a list of ${resourceType.code}s, but '
                   'got a ${r.runtimeType}',
             ),
           ),
