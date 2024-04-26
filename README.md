@@ -148,6 +148,8 @@ For widget tests, just inject the `MockClient` at the base of your app instead o
 
 I welcome PRs for this repo and you only need to go through a few steps to add a resource type. I'd like to automatically generate the code once Dart gains full macros, but for the time being, I generate the classes with my [JSON to DTO](https://melbournedeveloper.github.io/json_to_dto/#/) tool.
 
+### Code Generation Approach
+
 1. Grab some example JSON of the resource. You can see examples in the `test/responses` folder.
 2. Paste the JSON into the [JSON to DTO](https://melbournedeveloper.github.io/json_to_dto/#/) tool and click "Generate"
 
@@ -164,6 +166,18 @@ I welcome PRs for this repo and you only need to go through a few steps to add a
 6. Add the resource to the `ResourceType` to the [`ResourceType`](lib/models/value_sets/resource_type.dart) and the `Resource.fromJson` factory.
 
 7. MOST IMPORTANTLY: Add tests to the [`fhir_client_test.dart`](test/fhir_client_test.dart) file. You can see examples of these tests in the file. You need to cover all the fields. You can use an LLM like ChatGPT or Claude to generate these tests for you.
+
+### AI (Claude3 / ChatGPT)
+
+1. Just feed Claude [this file](lib/models/resource.dart) and ask for the FHIR resource. It will generate the class, and you need to connect the other dots.
+
+2. Use curl to generate the test JSON. For example:
+
+> curl -X GET "http://hapi.fhir.org/baseR4/Encounter?_count=2" -H "Content-Type: application/json"
+
+3. Create the search extension or other extensions in [this file](lib/fhir_extensions.dart). 
+
+4. Write tests to verify that the code is reading all the JSON fields into the classes, and that in reverse. Get Claude to write this for you. It's easy. Just feed Clause the JSON file.
 
 ## Which Resources Are Supported?
 

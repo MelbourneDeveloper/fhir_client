@@ -9,3 +9,9 @@
 - Develop the Result<T> ADT
 - Build some functions that return the Result<T> ADT and give examples of how to use them
 - Add readme
+
+## 0.0.4-alpha
+- Add a heap of resources such as Patient, Practitioner, Encounter
+- Code cleanup
+- More tests
+- Enums, Uri and CodeableConcept fields
