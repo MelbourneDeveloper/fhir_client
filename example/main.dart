@@ -50,24 +50,16 @@ Future<void> main() async {
   print('PractitionerRoles:');
   print(
     switch (searchPractitionersResult) {
-      (final BundleEntries<PractitionerRole> be) => be.entries
-          .map(
-            (pr) => 'Id: ${pr.id}\nCodes:\n${pr.code?.map(
-                  (cc) => cc.coding
-                      ?.map(
-                        (coding) => ' - '
-                            '${coding.code} System: ${coding.system} '
-                            '${coding.display}',
-                      )
-                      .join('\n'),
-                ).join('\n')}',
-          )
-          .join('\n\n'),
+      (final BundleEntries<PractitionerRole> be) =>
+        be.entries.map(_formatPractitionerRole).join('\n\n'),
       (final OperationOutcome<PractitionerRole> oo) =>
         'Error: ${oo.text!.status}\n${oo.text?.div}',
     },
   );
 }
+
+String _formatPractitionerRole(PractitionerRole pr) =>
+    'Id: ${pr.id}\nCodes:\n${_formatCodingListList(pr.code)}';
 
 String _formatSlot(Slot slot) => 'Id: ${slot.id}\n'
     'Appointment Type: ${_formatCodingList(slot.appointmentType)}\n'
@@ -90,26 +82,11 @@ String _formatSchedule(Schedule schedule) {
     ..writeln(
       'Slot Start: ${schedule.planningHorizon!.start!.toIso8601String()}',
     )
-    ..writeln('Slot End: ${schedule.planningHorizon!.end!.toIso8601String()}');
-
-  if (schedule.serviceType != null) {
-    buffer.writeln('Service Types:');
-    for (final type in schedule.serviceType!) {
-      buffer.writeln(
-        ' - ${type.coding?.map((e) => '${e.code}: ${e.display}').join('\n')}',
-      );
-    }
-  }
-
-  if (schedule.serviceCategory != null) {
-    buffer.writeln('Service Categories:');
-    for (final category in schedule.serviceCategory!) {
-      buffer.writeln(
-        ' - '
-        '${category.coding?.map((e) => '${e.code}: ${e.display}').join('\n')}',
-      );
-    }
-  }
+    ..writeln('Slot End: ${schedule.planningHorizon!.end!.toIso8601String()}')
+    ..writeln('Service Types:')
+    ..write(_formatCodingListList(schedule.serviceType))
+    ..writeln('Service Categories:')
+    ..write(_formatCodingListList(schedule.serviceCategory));
 
   if (schedule.actor != null) {
     buffer.writeln('Actors:');
