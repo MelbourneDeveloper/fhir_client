@@ -1,6 +1,7 @@
 import 'package:fhir_client/models/coding.dart';
+import 'package:fhir_client/models/coding_list.dart';
 
-class CodeableReference {
+class CodeableReference implements CodingList  {
   CodeableReference({
     this.coding,
     this.text,
@@ -13,7 +14,10 @@ class CodeableReference {
             .toList(),
         text: json['text'] != null ? json['text'] as String? : null,
       );
+  @override
   final List<Coding>? coding;
+  
+  @override
   final String? text;
 
   Map<String, dynamic> toJson() => {
