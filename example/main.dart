@@ -18,54 +18,22 @@ Future<void> main() async {
     status: 'free',
   );
 
-  print('Slots:');
-  print(
-    // The result can only be BundleEntries<Slot> or
-    // OperationOutcome<Slot> so this switch expression is exhaustive
-    switch (slotsResult) {
-      (final BundleEntries<Slot> slots) =>
-        slots.entries.map(_formatSlot).join('\n'),
-      (final OperationOutcome<Slot> oo) =>
-        'Error: ${oo.text!.status}\n${oo.text?.div}',
-    },
-  );
+  print('Slots:\n\n${slotsResult.formatResult(_formatSlot)}');
 
   //Search schedules and limit by count
   final searchSchedulesResult =
       await client.searchSchedules(baseUri, count: 10);
 
-  print('Schedules:');
-  print(
-    switch (searchSchedulesResult) {
-      (final BundleEntries<Schedule> schedules) =>
-        schedules.entries.map(_formatSchedule).join('\n'),
-      (final OperationOutcome<Schedule> oo) =>
-        'Error: ${oo.text!.status}\n${oo.text?.div}',
-    },
-  );
+  print('Schedules:\n\n${searchSchedulesResult.formatResult(_formatSchedule)}');
 
   final searchPractitionersResult =
       await client.searchPractitionerRoles(baseUri, count: 10);
 
-  print('PractitionerRoles:');
   print(
-    switch (searchPractitionersResult) {
-      (final BundleEntries<PractitionerRole> be) =>
-        be.entries.map(_formatPractitionerRole).join('\n\n'),
-      (final OperationOutcome<PractitionerRole> oo) =>
-        'Error: ${oo.text!.status}\n${oo.text?.div}',
-    },
+    'PractitionerRoles:\n\n'
+    '${searchPractitionersResult.formatResult(_formatPractitionerRole)}',
   );
 }
-
-String _formatPractitionerRole(PractitionerRole pr) =>
-    'Id: ${pr.id}\nCodes:\n${_formatCodingListList(pr.code)}';
-
-String _formatSlot(Slot slot) => 'Id: ${slot.id}\n'
-    'Appointment Type: ${_formatCodingList(slot.appointmentType)}\n'
-    'Service Category: ${_formatCodingListList(slot.serviceCategory)}\n'
-    'Service Type: ${_formatCodingListList(slot.serviceType)}\n'
-    'Start ${slot.start} End: ${slot.end}\nComment: ${slot.comment}\n';
 
 String _formatCodingListList(List<CodingList>? list) =>
     list?.map(_formatCodingList).join('/n') ?? '';
@@ -75,6 +43,15 @@ String _formatCodingList(CodingList? cc) =>
         ?.map((coding) => '${coding.code} - ${coding.display}')
         .join(', ') ??
     '';
+
+String _formatPractitionerRole(PractitionerRole pr) =>
+    'Id: ${pr.id}\nCodes:\n${_formatCodingListList(pr.code)}\n';
+
+String _formatSlot(Slot slot) => 'Id: ${slot.id}\n'
+    'Appointment Type: ${_formatCodingList(slot.appointmentType)}\n'
+    'Service Category: ${_formatCodingListList(slot.serviceCategory)}\n'
+    'Service Type: ${_formatCodingListList(slot.serviceType)}\n'
+    'Start ${slot.start} End: ${slot.end}\nComment: ${slot.comment}\n';
 
 String _formatSchedule(Schedule schedule) {
   final buffer = StringBuffer()
@@ -95,6 +72,22 @@ String _formatSchedule(Schedule schedule) {
     }
   }
 
-  buffer.writeln();
   return buffer.toString();
+}
+
+/// Extensions for formatting results in this context
+///
+/// Note: that the resoures don't have toString implementations.
+/// They might be added in future, but formatting strings is
+/// usually context sensitive, so there's not much point pre-empting
+/// the format for the context.
+extension ResultExtensions<T> on Result<T> {
+  String formatResult(String Function(T) format) => switch (this) {
+        // The result can only be BundleEntries<T> or
+        // OperationOutcome<T> so this switch expression is exhaustive
+        (final BundleEntries<T> schedules) =>
+          schedules.entries.map(format).join('\n'),
+        (final OperationOutcome<T> oo) =>
+          'Error: ${oo.text!.status}\n${oo.text?.div}',
+      };
 }
