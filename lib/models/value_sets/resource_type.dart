@@ -1,7 +1,7 @@
 enum ResourceType implements Comparable<ResourceType> {
   appointment(
     code: 'Appointment',
-    display: 'appointment',
+    display: 'Appointment',
   ),
   bundle(
     code: 'Bundle',
