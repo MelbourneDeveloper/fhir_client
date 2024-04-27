@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:fhir_client/fhir_extensions.dart';
+import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/coding_list.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:http/http.dart';
@@ -66,27 +67,20 @@ String _formatSlot(Slot slot) => 'Id: ${slot.id}\n'
     'Service Type: ${_formatCodingListList(slot.serviceType)}\n'
     'Start ${slot.start} End: ${slot.end}\nComment: ${slot.comment}\n';
 
-String _formatSchedule(Schedule schedule) {
-  final buffer = StringBuffer()
-    ..writeln('Schedule ID: ${schedule.id}')
-    ..writeln(
-      'Slot Start: ${schedule.planningHorizon!.start!.toIso8601String()}',
-    )
-    ..writeln('Slot End: ${schedule.planningHorizon!.end!.toIso8601String()}')
-    ..writeln('Service Types:')
-    ..write(_formatCodingListList(schedule.serviceType))
-    ..writeln('Service Categories:')
-    ..write(_formatCodingListList(schedule.serviceCategory));
+String _formatActor(List<Actor>? actors) => actors != null
+    ? 'Actors:\n${actors.map(
+          (actor) => ' - '
+              '${actor.reference}: ${actor.display ?? 'N/A'}',
+        ).join('\n')}'
+    : '';
 
-  if (schedule.actor != null) {
-    buffer.writeln('Actors:');
-    for (final actor in schedule.actor!) {
-      buffer.writeln(' - ${actor.reference}: ${actor.display ?? 'N/A'}');
-    }
-  }
-
-  return buffer.toString();
-}
+String _formatSchedule(Schedule schedule) =>
+    'Schedule ID: ${schedule.id}\nSlot Start: '
+    '${schedule.planningHorizon!.start!.toIso8601String()}\nSlot End: '
+    '${schedule.planningHorizon!.end!.toIso8601String()}\n'
+    'Service Types:\n${_formatCodingListList(schedule.serviceType)}\n'
+    'Service Categories:\n${_formatCodingListList(schedule.serviceCategory)}\n'
+    '${_formatActor(schedule.actor)}';
 
 /// Extensions for formatting results in this context
 ///
