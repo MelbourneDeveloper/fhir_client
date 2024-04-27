@@ -12,27 +12,40 @@ Future<void> main() async {
   //Use any old HTTP Client and you can mock this
   final client = Client();
 
-  final slotsResult = await client.searchSlots(
-    baseUri,
-    count: 10,
-    status: 'free',
-  );
+  //Call the 3 search functions in parallel. This is safe because the
+  //calls won't throw an Exception/Error. If there is an error, the result
+  //will be an OperationOutcome, and you can handle that with the switch
+  //expression
+  final results = await Future.wait([
+    client.searchSlots(
+      baseUri,
+      count: 10,
+      status: 'free',
+    ),
+    client.searchSchedules(baseUri, count: 10),
+    client.searchPractitionerRoles(baseUri, count: 10),
+  ]);
 
-  print('Slots:\n\n${slotsResult.formatResult(_formatSlot)}');
+  final formattedResult = results
+      .map(
+        (result) => switch (result) {
+          (final BundleEntries<Schedule> schedules) =>
+            'Schedules:\n\n${schedules.formatResult(_formatSchedule)}',
+          (final BundleEntries<Slot> slots) =>
+            'Slots:\n\n${slots.formatResult(_formatSlot)}',
+          (final BundleEntries<PractitionerRole> roles) =>
+            'PractitionerRoles:\n\n'
+                '${roles.formatResult(_formatPractitionerRole)}',
+          BundleEntries<Resource>() => "This case shouldn't happen, but the "
+              "compiler doesn't know this.",
+          // ignore: strict_raw_type
+          (final OperationOutcome oo) =>
+            'Error: ${oo.text!.status}\n${oo.text?.div}',
+        },
+      )
+      .join('\n');
 
-  //Search schedules and limit by count
-  final searchSchedulesResult =
-      await client.searchSchedules(baseUri, count: 10);
-
-  print('Schedules:\n\n${searchSchedulesResult.formatResult(_formatSchedule)}');
-
-  final searchPractitionersResult =
-      await client.searchPractitionerRoles(baseUri, count: 10);
-
-  print(
-    'PractitionerRoles:\n\n'
-    '${searchPractitionersResult.formatResult(_formatPractitionerRole)}',
-  );
+  print(formattedResult);
 }
 
 String _formatCodingListList(List<CodingList>? list) =>
@@ -81,13 +94,7 @@ String _formatSchedule(Schedule schedule) {
 /// They might be added in future, but formatting strings is
 /// usually context sensitive, so there's not much point pre-empting
 /// the format for the context.
-extension ResultExtensions<T> on Result<T> {
-  String formatResult(String Function(T) format) => switch (this) {
-        // The result can only be BundleEntries<T> or
-        // OperationOutcome<T> so this switch expression is exhaustive
-        (final BundleEntries<T> schedules) =>
-          schedules.entries.map(format).join('\n'),
-        (final OperationOutcome<T> oo) =>
-          'Error: ${oo.text!.status}\n${oo.text?.div}',
-      };
+extension ResultExtensions<T> on BundleEntries<T> {
+  String formatResult(String Function(T) format) =>
+      entries.map(format).join('\n');
 }
