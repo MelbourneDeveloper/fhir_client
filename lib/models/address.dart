@@ -38,7 +38,6 @@ class Address {
   /// postal | physical | both
   final String? type;
 
-  // ignore: lines_longer_than_80_chars
   /// Street name, number, direction & P.O. Box etc. This repeating element order: The order in which lines should appear in an address label
   final FixedList<String>? line;
 

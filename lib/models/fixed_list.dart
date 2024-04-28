@@ -21,6 +21,21 @@ class FixedList<E> extends ListBase<E> {
   @override
   int get length => _innerList.length;
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FixedList<E> &&
+          length == other.length &&
+          _innerList.fold(
+            true,
+            (acc, val) => acc && val == other[_innerList.indexOf(val)],
+          ));
+          
+  @override
+  int get hashCode => _innerList.fold(
+        0,
+        (previousValue, element) => previousValue ^ element.hashCode,
+      );
   //---------------------------------------------------------------------
 
   //---------------------------------------------------------------------
@@ -136,7 +151,6 @@ class FixedList<E> extends ListBase<E> {
 }
 
 extension IterableExtensions<T> on Iterable<T> {
-
   /// Converts an [Iterable] to a [FixedList]
   FixedList<T> toFixedList() => FixedList<T>(this);
 

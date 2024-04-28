@@ -1,10 +1,12 @@
 /// Participant involved in the resource.
 class Actor {
+  /// Creates an [Actor] instance
   Actor({
     this.reference,
     this.display,
   });
 
+  /// Creates an [Actor] instance from JSON data
   factory Actor.fromJson(Map<String, dynamic> json) => Actor(
         reference:
             json['reference'] != null ? json['reference'] as String? : null,
@@ -17,6 +19,7 @@ class Actor {
   /// The display name of the participant.
   final String? display;
 
+  /// Converts an [Actor] instance to JSON data
   Map<String, dynamic> toJson() => {
         'reference': reference,
         'display': display,

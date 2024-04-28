@@ -4,8 +4,11 @@ import 'package:fhir_client/models/reference.dart';
 
 /// A  text note which also  contains information about who made the statement and when.
 class Annotation {
+
+  /// Creates an [Annotation] instance
   Annotation({this.authorReference, this.authorString, this.time, this.text});
 
+  /// Creates an [Annotation] instance from JSON data
   factory Annotation.fromJson(Map<String, dynamic> json) => Annotation(
         authorReference: json['authorReference'] != null
             ? Reference.fromJson(
@@ -31,6 +34,7 @@ class Annotation {
   /// The text of the annotation in markdown format.
   final String? text;
 
+  /// Converts an [Annotation] instance to JSON data
   Map<String, dynamic> toJson() => {
         'authorReference': authorReference?.toJson(),
         'authorString': authorString,
