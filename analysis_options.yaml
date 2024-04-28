@@ -3,6 +3,7 @@ include: package:austerity/analysis_options.yaml
 
 analyzer:
   errors:
+    avoid_equals_and_hash_code_on_mutable_classes: ignore
     unused_element: error
     unused_local_variable: error
     unused_field: error

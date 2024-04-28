@@ -32,7 +32,7 @@ class Address {
         country: json['country'] != null ? json['country'] as String? : null,
       );
 
-  ///	home | work | temp | old | billing - purpose of this address
+  /// home | work | temp | old | billing - purpose of this address
   final String? use;
 
   /// postal | physical | both
@@ -68,4 +68,30 @@ class Address {
         'postalCode': postalCode,
         'country': country,
       };
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Address &&
+        other.use == use &&
+        other.type == type &&
+        other.line == line &&
+        other.city == city &&
+        other.district == district &&
+        other.state == state &&
+        other.postalCode == postalCode &&
+        other.country == country;
+  }
+
+  @override
+  int get hashCode =>
+      use.hashCode ^
+      type.hashCode ^
+      line.hashCode ^
+      city.hashCode ^
+      district.hashCode ^
+      state.hashCode ^
+      postalCode.hashCode ^
+      country.hashCode;
 }
