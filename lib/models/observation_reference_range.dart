@@ -1,7 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
-import 'package:fhir_client/models/fixed_list.dart';
 import 'package:fhir_client/models/quantity.dart';
 import 'package:fhir_client/models/range.dart';
 

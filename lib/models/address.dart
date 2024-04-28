@@ -1,6 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-import 'package:fhir_client/models/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
 
 /// An address expressed using postal conventions (as opposed to GPS or other location definition formats). This datatype may be used to convey addresses for use in delivering mail as well as for visiting locations which might not be valid for mail delivery. There are a variety of postal address formats defined around the world.
 /// https://hl7.org/fhir/datatypes.html#Address

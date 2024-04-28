@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:fhir_client/models/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';

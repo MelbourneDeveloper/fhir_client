@@ -1,4 +1,4 @@
-import 'package:fhir_client/models/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/tag.dart';
 
 class Meta {

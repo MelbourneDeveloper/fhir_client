@@ -5,7 +5,8 @@ import 'dart:js_util';
 import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/available_time.dart';
-import 'package:fhir_client/models/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
@@ -43,15 +44,23 @@ void main() {
     );
 
     test('AvailableTime equality and hash code', () {
+
+      //TODO More Time parsing and testing
+
+      final nineAM = Time.tryParse('09:00')!;
+      expect(nineAM.hour, 9);
+      expect(nineAM.minute, 0);
+      expect(nineAM.second, 0);
       // Test case 1: Equal objects
+
       final availableTime1 = AvailableTime(
         daysOfWeek: FixedList<String>(['Monday', 'Tuesday']),
-        availableStartTime: '09:00',
+        availableStartTime: nineAM,
         availableEndTime: '17:00',
       );
       final availableTime2 = AvailableTime(
         daysOfWeek: FixedList<String>(['Monday', 'Tuesday']),
-        availableStartTime: '09:00',
+        availableStartTime: Time.tryParse('09:00'),
         availableEndTime: '17:00',
       );
       expect(availableTime1, equals(availableTime2));
@@ -60,7 +69,7 @@ void main() {
       // Test case 2: Unequal objects (different daysOfWeek)
       final availableTime3 = AvailableTime(
         daysOfWeek: FixedList<String>(['Wednesday', 'Thursday']),
-        availableStartTime: '09:00',
+        availableStartTime: Time.tryParse('09:00'),
         availableEndTime: '17:00',
       );
       expect(availableTime1, isNot(equals(availableTime3)));
@@ -69,7 +78,7 @@ void main() {
       // Test case 3: Unequal objects (different availableStartTime)
       final availableTime4 = AvailableTime(
         daysOfWeek: FixedList<String>(['Monday', 'Tuesday']),
-        availableStartTime: '10:00',
+        availableStartTime: Time.tryParse('10:00'),
         availableEndTime: '17:00',
       );
       expect(availableTime1, isNot(equals(availableTime4)));
@@ -78,7 +87,7 @@ void main() {
       // Test case 4: Unequal objects (different availableEndTime)
       final availableTime5 = AvailableTime(
         daysOfWeek: FixedList<String>(['Monday', 'Tuesday']),
-        availableStartTime: '09:00',
+        availableStartTime: Time.tryParse('09:00'),
         availableEndTime: '18:00',
       );
       expect(availableTime1, isNot(equals(availableTime5)));
@@ -99,8 +108,8 @@ void main() {
     });
 
     test('No exceptions', () async {
-      final result = await
-          MockClient((r) async => throw Exception('Simulated exception'))
+      final result =
+          await MockClient((r) async => throw Exception('Simulated exception'))
               .getResource<Patient>(
         'https://example.com',
         '/baseR4/Patient',

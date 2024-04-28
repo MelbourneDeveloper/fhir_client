@@ -1,4 +1,5 @@
-import 'package:fhir_client/models/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/time.dart';
 
 /// Represents the time during which the resource is available.
 class AvailableTime {
@@ -14,9 +15,8 @@ class AvailableTime {
         daysOfWeek: (json['daysOfWeek'] as List<dynamic>?)
             ?.cast<String>()
             .toFixedList(),
-        availableStartTime: json['availableStartTime'] != null
-            ? json['availableStartTime'] as String?
-            : null,
+        availableStartTime:
+            Time.tryParse(json['availableStartTime'] as String? ?? ''),
         availableEndTime: json['availableEndTime'] != null
             ? json['availableEndTime'] as String?
             : null,
@@ -26,7 +26,7 @@ class AvailableTime {
   final FixedList<String>? daysOfWeek;
 
   /// The start time of availability.
-  final String? availableStartTime;
+  final Time? availableStartTime;
 
   /// The end time of availability.
   final String? availableEndTime;
@@ -34,7 +34,7 @@ class AvailableTime {
   /// Converts this [AvailableTime] instance to a JSON map.
   Map<String, dynamic> toJson() => {
         'daysOfWeek': daysOfWeek?.cast<dynamic>().toList(),
-        'availableStartTime': availableStartTime,
+        'availableStartTime': availableStartTime.toString(),
         'availableEndTime': availableEndTime,
       };
 

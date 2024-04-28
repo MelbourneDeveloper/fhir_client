@@ -1,14 +1,14 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
-import 'package:fhir_client/models/fixed_list.dart';
 import 'package:fhir_client/models/observation_reference_range.dart';
 import 'package:fhir_client/models/period.dart';
 import 'package:fhir_client/models/quantity.dart';
 import 'package:fhir_client/models/range.dart';
 import 'package:fhir_client/models/ratio.dart';
 import 'package:fhir_client/models/sampled_data.dart';
-import 'package:fhir_client/models/time.dart';
 
 /// Some observations have multiple component observations.
 /// These component observations are expressed as separate code value pairs that share the same attributes.
@@ -59,9 +59,7 @@ class ObservationComponent {
                 json['valueSampledData'] as Map<String, dynamic>,
               )
             : null,
-        valueTime: json['valueTime'] != null
-            ? Time.fromJson(json['valueTime'] as Map<String, dynamic>)
-            : null,
+        valueTime: Time.tryParse(json['valueTime'] as String? ?? ''),
         valueDateTime: json['valueDateTime'] != null
             ? DateTime.parse(json['valueDateTime'] as String)
             : null,
@@ -151,7 +149,7 @@ class ObservationComponent {
         'valueRange': valueRange?.toJson(),
         'valueRatio': valueRatio?.toJson(),
         'valueSampledData': valueSampledData?.toJson(),
-        'valueTime': valueTime?.toJson(),
+        'valueTime': valueTime.toString(),
         'valueDateTime': valueDateTime?.toIso8601String(),
         'valuePeriod': valuePeriod?.toJson(),
         'dataAbsentReason': dataAbsentReason?.toJson(),

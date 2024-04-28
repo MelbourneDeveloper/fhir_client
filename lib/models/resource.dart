@@ -3,11 +3,12 @@ import 'package:fhir_client/models/address.dart';
 import 'package:fhir_client/models/admit_source.dart';
 import 'package:fhir_client/models/annotation.dart';
 import 'package:fhir_client/models/available_time.dart';
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/codeable_reference.dart';
 import 'package:fhir_client/models/entry.dart';
 import 'package:fhir_client/models/extension.dart';
-import 'package:fhir_client/models/fixed_list.dart';
 import 'package:fhir_client/models/identifier.dart';
 import 'package:fhir_client/models/issue.dart';
 import 'package:fhir_client/models/link.dart';
@@ -26,7 +27,6 @@ import 'package:fhir_client/models/reference.dart';
 import 'package:fhir_client/models/sampled_data.dart';
 import 'package:fhir_client/models/telecom.dart';
 import 'package:fhir_client/models/text.dart';
-import 'package:fhir_client/models/time.dart';
 import 'package:fhir_client/models/timing.dart';
 import 'package:fhir_client/models/type.dart' as t;
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
@@ -453,9 +453,7 @@ class Observation extends Resource {
                 json['valueSampledData'] as Map<String, dynamic>,
               )
             : null,
-        valueTime: json['valueTime'] != null
-            ? Time.fromJson(json['valueTime'] as Map<String, dynamic>)
-            : null,
+        valueTime: Time.tryParse(json['valueTime'] as String? ?? ''),
         valueDateTime: json['valueDateTime'] != null
             ? DateTime.parse(json['valueDateTime'] as String)
             : null,
@@ -573,7 +571,7 @@ class Observation extends Resource {
         'valueRange': valueRange?.toJson(),
         'valueRatio': valueRatio?.toJson(),
         'valueSampledData': valueSampledData?.toJson(),
-        'valueTime': valueTime?.toJson(),
+        'valueTime': valueTime.toString(),
         'valueDateTime': valueDateTime?.toIso8601String(),
         'valuePeriod': valuePeriod?.toJson(),
         'dataAbsentReason': dataAbsentReason?.toJson(),

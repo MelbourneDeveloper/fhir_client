@@ -1,9 +1,9 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-import 'package:fhir_client/models/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/period.dart';
 import 'package:fhir_client/models/range.dart';
-import 'package:fhir_client/models/time.dart';
 
 /// A set of rules that describe when the event should occur.
 class Repeat {
@@ -51,7 +51,7 @@ class Repeat {
             ?.map((e) => e as String?)
             .toFixedList(),
         timeOfDay: (json['timeOfDay'] as List<dynamic>?)
-            ?.map((e) => Time.fromJson(e as Map<String, dynamic>))
+            ?.map((e) => Time.tryParse(e as String)!)
             .toFixedList(),
         when: (json['when'] as List<dynamic>?)
             ?.map((e) => e as String?)
@@ -126,7 +126,7 @@ class Repeat {
         'periodMax': periodMax,
         'periodUnit': periodUnit,
         'dayOfWeek': dayOfWeek,
-        'timeOfDay': timeOfDay?.map((e) => e.toJson()).toFixedList(),
+        'timeOfDay': timeOfDay?.map((e) => e.toString()).toFixedList(),
         'when': when,
         'offset': offset,
       };

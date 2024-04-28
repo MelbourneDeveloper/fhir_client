@@ -1,6 +1,6 @@
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/coding.dart';
 import 'package:fhir_client/models/coding_list.dart';
-import 'package:fhir_client/models/fixed_list.dart';
 
 class CodeableReference implements CodingList {
   CodeableReference({

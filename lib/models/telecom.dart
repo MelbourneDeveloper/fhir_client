@@ -1,5 +1,5 @@
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/extension.dart';
-import 'package:fhir_client/models/fixed_list.dart';
 
 class Telecom {
   Telecom({
