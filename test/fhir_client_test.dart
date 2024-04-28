@@ -708,6 +708,13 @@ void main() {
     },
     skip: true,
   );
+
+  group('Testing the units', () {
+    test('orderBy', () {
+      //Order your lists like this
+      expect([3, 1, 2].orderBy(), containsAllInOrder([1, 2, 3]));
+    });
+  });
 }
 
 Future<BundleEntries<T>> _mockSearch<T>(

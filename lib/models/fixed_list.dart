@@ -2,7 +2,7 @@ import 'dart:collection';
 import 'dart:math';
 
 const String cantModifyErrorMessage =
-    'This collection is fixed. You cannot modify it';
+    'This collection is immutable. You cannot modify it';
 
 ///An immutable [List].  See the package fixed_collections
 ///https://pub.dev/packages/fixed_collections
@@ -20,6 +20,7 @@ class FixedList<E> extends ListBase<E> {
 
   @override
   int get length => _innerList.length;
+
   //---------------------------------------------------------------------
 
   //---------------------------------------------------------------------
@@ -135,5 +136,11 @@ class FixedList<E> extends ListBase<E> {
 }
 
 extension IterableExtensions<T> on Iterable<T> {
+
+  /// Converts an [Iterable] to a [FixedList]
   FixedList<T> toFixedList() => FixedList<T>(this);
+
+  /// Sorts the list in but it's immutable
+  FixedList<T> orderBy([int Function(T a, T b)? compare]) =>
+      (toList()..sort(compare)).toFixedList();
 }
