@@ -14,7 +14,7 @@ class Quantity {
   factory Quantity.fromJson(Map<String, dynamic> json) => Quantity(
         value: json['value'] as num?,
         unit: json['unit'] as String?,
-        system: json['system'] as String?,
+        system: Uri.parse(json['system'] as String? ?? ''),
         code: json['code'] as String?,
       );
 
@@ -25,7 +25,7 @@ class Quantity {
   final String? unit;
 
   /// The identification of the system that provides the coded form of the unit.
-  final String? system;
+  final Uri? system;
 
   /// A computer processable form of the unit in some unit representation system.
   final String? code;
@@ -33,7 +33,7 @@ class Quantity {
   Map<String, dynamic> toJson() => {
         'value': value,
         'unit': unit,
-        'system': system,
+        'system': system.toString(),
         'code': code,
       };
 }

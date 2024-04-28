@@ -2,6 +2,10 @@
 //moving these assertions to a separate file
 // ignore_for_file: avoid_dynamic_calls
 
+// Note: the best tests here are the ones in
+// http Client Extension Calls - Mocked
+// If you're going to add a resource, best to add a test there
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -495,7 +499,10 @@ void main() {
       expect(first.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
       expect(first.valueQuantity?.value, 179.30389202058845);
       expect(first.valueQuantity?.unit, 'cm');
-      expect(first.valueQuantity?.system, 'http://unitsofmeasure.org');
+      expect(
+        first.valueQuantity?.system,
+        Uri.parse('http://unitsofmeasure.org'),
+      );
       expect(first.valueQuantity?.code, 'cm');
 
       final map = first.toJson();
@@ -534,8 +541,159 @@ void main() {
       expect(firstObs.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
       expect(firstObs.valueQuantity?.value, 179.30389202058845);
       expect(firstObs.valueQuantity?.unit, 'cm');
-      expect(firstObs.valueQuantity?.system, 'http://unitsofmeasure.org');
+      expect(
+        firstObs.valueQuantity?.system,
+        Uri.parse('http://unitsofmeasure.org'),
+      );
       expect(firstObs.valueQuantity?.code, 'cm');
+
+      final entry = bundleEntries.entries[4];
+      expect(entry.id, '9391495');
+      expect(entry.meta?.versionId, '1');
+      expect(
+        entry.meta?.lastUpdated,
+        DateTime.parse('2023-04-10T10:33:32.673+00:00'),
+      );
+      expect(entry.meta?.source, '#nw7ecyTCXojBLbEq');
+      expect(entry.status, 'final');
+      expect(entry.category?.length, 1);
+      expect(entry.category?.first.coding?.length, 1);
+      expect(
+        entry.category?.first.coding?.first.system,
+        Uri.parse('http://terminology.hl7.org/CodeSystem/observation-category'),
+      );
+      expect(entry.category?.first.coding?.first.code, 'vital-signs');
+      expect(entry.category?.first.coding?.first.display, 'vital-signs');
+      expect(entry.code?.coding?.length, 1);
+      expect(entry.code?.coding?.first.system, Uri.parse('http://loinc.org'));
+      expect(entry.code?.coding?.first.code, '55284-4');
+      expect(entry.code?.coding?.first.display, 'Blood Pressure');
+      expect(entry.code?.text, 'Blood Pressure');
+      expect(entry.subject?.reference, 'Patient/9391475');
+      expect(entry.encounter?.reference, 'Encounter/9391490');
+      expect(
+        entry.effectiveDateTime,
+        DateTime.parse('2011-04-18T15:44:18-04:00'),
+      );
+      expect(entry.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
+      expect(entry.component?.length, 2);
+
+      final diastolicComponent = entry.component?.firstWhere(
+        (component) => component.code?.coding?.first.code == '8462-4',
+      );
+      expect(
+        diastolicComponent?.code?.coding?.first.system,
+        Uri.parse('http://loinc.org'),
+      );
+      expect(diastolicComponent?.code?.coding?.first.code, '8462-4');
+      expect(
+        diastolicComponent?.code?.coding?.first.display,
+        'Diastolic Blood Pressure',
+      );
+      expect(diastolicComponent?.code?.text, 'Diastolic Blood Pressure');
+      expect(diastolicComponent?.valueQuantity?.value, 73.88239013577947);
+      expect(diastolicComponent?.valueQuantity?.unit, 'mm[Hg]');
+      expect(
+        diastolicComponent?.valueQuantity?.system,
+        Uri.parse('http://unitsofmeasure.org'),
+      );
+      expect(diastolicComponent?.valueQuantity?.code, 'mm[Hg]');
+
+      final systolicComponent = entry.component?.firstWhere(
+        (component) => component.code?.coding?.first.code == '8480-6',
+      );
+      expect(
+        systolicComponent?.code?.coding?.first.system,
+        Uri.parse('http://loinc.org'),
+      );
+      expect(systolicComponent?.code?.coding?.first.code, '8480-6');
+      expect(
+        systolicComponent?.code?.coding?.first.display,
+        'Systolic Blood Pressure',
+      );
+      expect(systolicComponent?.code?.text, 'Systolic Blood Pressure');
+      expect(systolicComponent?.valueQuantity?.value, 130.9017025584741);
+      expect(systolicComponent?.valueQuantity?.unit, 'mm[Hg]');
+      expect(
+        systolicComponent?.valueQuantity?.system,
+        Uri.parse('http://unitsofmeasure.org'),
+      );
+      expect(systolicComponent?.valueQuantity?.code, 'mm[Hg]');
+
+      final entryMap = entry.toJson();
+      final entry2 = Observation.fromJson(entryMap);
+
+      expect(entry2.id, '9391495');
+      expect(entry2.meta?.versionId, '1');
+      expect(
+        entry2.meta?.lastUpdated,
+        DateTime.parse('2023-04-10T10:33:32.673+00:00'),
+      );
+      expect(entry2.meta?.source, '#nw7ecyTCXojBLbEq');
+      expect(entry2.status, 'final');
+      expect(entry2.category?.length, 1);
+      expect(entry2.category?.first.coding?.length, 1);
+      expect(
+        entry2.category?.first.coding?.first.system,
+        Uri.parse('http://terminology.hl7.org/CodeSystem/observation-category'),
+      );
+      expect(entry2.category?.first.coding?.first.code, 'vital-signs');
+      expect(entry2.category?.first.coding?.first.display, 'vital-signs');
+      expect(entry2.code?.coding?.length, 1);
+      expect(entry2.code?.coding?.first.system, Uri.parse('http://loinc.org'));
+      expect(entry2.code?.coding?.first.code, '55284-4');
+      expect(entry2.code?.coding?.first.display, 'Blood Pressure');
+      expect(entry2.code?.text, 'Blood Pressure');
+      expect(entry2.subject?.reference, 'Patient/9391475');
+      expect(entry2.encounter?.reference, 'Encounter/9391490');
+      expect(
+        entry2.effectiveDateTime,
+        DateTime.parse('2011-04-18T15:44:18-04:00'),
+      );
+      expect(entry2.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
+      expect(entry2.component?.length, 2);
+
+      final diastolicComponent2 = entry2.component?.firstWhere(
+        (component) => component.code?.coding?.first.code == '8462-4',
+      );
+      expect(
+        diastolicComponent2?.code?.coding?.first.system,
+        Uri.parse('http://loinc.org'),
+      );
+      expect(diastolicComponent2?.code?.coding?.first.code, '8462-4');
+      expect(
+        diastolicComponent2?.code?.coding?.first.display,
+        'Diastolic Blood Pressure',
+      );
+      expect(diastolicComponent2?.code?.text, 'Diastolic Blood Pressure');
+      expect(diastolicComponent2?.valueQuantity?.value, 73.88239013577947);
+      expect(diastolicComponent2?.valueQuantity?.unit, 'mm[Hg]');
+      expect(
+        diastolicComponent2?.valueQuantity?.system,
+        Uri.parse('http://unitsofmeasure.org'),
+      );
+      expect(diastolicComponent2?.valueQuantity?.code, 'mm[Hg]');
+
+      final systolicComponent2 = entry2.component?.firstWhere(
+        (component) => component.code?.coding?.first.code == '8480-6',
+      );
+      expect(
+        systolicComponent2?.code?.coding?.first.system,
+        Uri.parse('http://loinc.org'),
+      );
+      expect(systolicComponent2?.code?.coding?.first.code, '8480-6');
+      expect(
+        systolicComponent2?.code?.coding?.first.display,
+        'Systolic Blood Pressure',
+      );
+      expect(systolicComponent2?.code?.text, 'Systolic Blood Pressure');
+      expect(systolicComponent2?.valueQuantity?.value, 130.9017025584741);
+      expect(systolicComponent2?.valueQuantity?.unit, 'mm[Hg]');
+      expect(
+        systolicComponent2?.valueQuantity?.system,
+        Uri.parse('http://unitsofmeasure.org'),
+      );
+      expect(systolicComponent2?.valueQuantity?.code, 'mm[Hg]');
     });
 
     test('Slot Search', () async {
