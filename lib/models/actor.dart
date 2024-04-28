@@ -26,14 +26,12 @@ class Actor {
       };
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is Actor &&
-        other.reference == reference &&
-        other.display == display;
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Actor &&
+          other.reference == reference &&
+          other.display == display);
 
   @override
-  int get hashCode => reference.hashCode ^ display.hashCode;
+  int get hashCode => Object.hash(reference, display);
 }

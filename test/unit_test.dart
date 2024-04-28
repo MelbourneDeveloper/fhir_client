@@ -2,9 +2,12 @@
 
 import 'dart:js_util';
 
+import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/available_time.dart';
 import 'package:fhir_client/models/fixed_list.dart';
+import 'package:fhir_client/models/resource.dart';
+import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -93,6 +96,25 @@ void main() {
     test('orderBy', () {
       //Order your lists like this
       expect([3, 1, 2].orderBy(), containsAllInOrder([1, 2, 3]));
+    });
+
+    test('No exceptions', () async {
+      final result = await
+          MockClient((r) async => throw Exception('Simulated exception'))
+              .getResource<Patient>(
+        'https://example.com',
+        '/baseR4/Patient',
+      );
+
+      expect(result, isA<OperationOutcome<Patient>>());
+      expect(
+        (result as OperationOutcome).text!.status,
+        'Exception or Error occurred when contacting the FHIR server',
+      );
+      expect(
+        result.text!.div,
+        'Exception: Simulated exception',
+      );
     });
   });
 }

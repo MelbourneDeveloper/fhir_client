@@ -32,14 +32,12 @@ class AdmitSource {
       };
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is AdmitSource &&
-        other.coding == coding &&
-        other.admitter == admitter;
-  }
+  bool operator ==(Object other) =>
+      (identical(this, other)) ||
+      other is AdmitSource &&
+          other.coding == coding &&
+          other.admitter == admitter;
 
   @override
-  int get hashCode => coding.hashCode ^ admitter.hashCode;
+  int get hashCode => Object.hash(coding, admitter);
 }
