@@ -1,4 +1,7 @@
-// ignore: lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars
+
+import 'package:fhir_client/models/fixed_list.dart';
+
 /// An address expressed using postal conventions (as opposed to GPS or other location definition formats). This datatype may be used to convey addresses for use in delivering mail as well as for visiting locations which might not be valid for mail delivery. There are a variety of postal address formats defined around the world.
 /// https://hl7.org/fhir/datatypes.html#Address
 class Address {
@@ -18,8 +21,9 @@ class Address {
   factory Address.fromJson(Map<String, dynamic> json) => Address(
         use: json['use'] != null ? json['use'] as String? : null,
         type: json['type'] != null ? json['type'] as String? : null,
-        line:
-            (json['line'] as List<dynamic>?)?.map((e) => e as String).toList(),
+        line: (json['line'] as List<dynamic>?)
+            ?.map((e) => e as String)
+            .toFixedList(),
         city: json['city'] != null ? json['city'] as String? : null,
         district: json['district'] != null ? json['district'] as String? : null,
         state: json['state'] != null ? json['state'] as String? : null,
@@ -36,7 +40,7 @@ class Address {
 
   // ignore: lines_longer_than_80_chars
   /// Street name, number, direction & P.O. Box etc. This repeating element order: The order in which lines should appear in an address label
-  final List<String>? line;
+  final FixedList<String>? line;
 
   /// Name of city, town etc.
   final String? city;

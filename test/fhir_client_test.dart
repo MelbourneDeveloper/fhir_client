@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:fhir_client/fhir_extensions.dart';
+import 'package:fhir_client/models/fixed_list.dart';
 import 'package:fhir_client/models/meta.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
@@ -27,7 +28,7 @@ void main() {
           Resource.fromJson(jsonDecode(json) as Map<String, dynamic>) as Bundle;
 
       final appointments =
-          result.entry!.map((e) => e.resource! as Appointment).toList();
+          result.entry!.map((e) => e.resource! as Appointment).toFixedList();
 
       expect(appointments.first.id, '00f740554d7b1c5a');
 
@@ -86,7 +87,7 @@ void main() {
       final result =
           Resource.fromJson(jsonDecode(json) as Map<String, dynamic>) as Bundle;
 
-      final entries = result.entry!.toList();
+      final entries = result.entry!.toFixedList();
 
       expect(entries.length, 5);
       expect(entries.first.resource!.id, '2640211');
@@ -143,6 +144,9 @@ void main() {
       expect(org.address!.first.state, 'asda');
       expect(org.address!.first.postalCode, '23423');
       expect(org.address!.first.country, 'BANGLADESH');
+
+      final map = org.toJson();
+      expect(map['address'][0]['postalCode'], '23423');
     });
 
     test('Practitioner Search result', () async {
@@ -155,7 +159,7 @@ void main() {
           Resource.fromJson(jsonDecode(json) as Map<String, dynamic>) as Bundle;
 
       final practitioners =
-          result.entry!.map((e) => e.resource! as Practitioner).toList();
+          result.entry!.map((e) => e.resource! as Practitioner).toFixedList();
 
       expect(practitioners.length, 1);
       expect(practitioners.first.id, '0000016f-a1db-e77f-0000-000000009ed4');
@@ -229,7 +233,7 @@ void main() {
 
       final result = Bundle.fromJson(jsonDecode(json) as Map<String, dynamic>);
 
-      final entries = result.entry!.toList();
+      final entries = result.entry!.toFixedList();
 
       expect(entries.length, 10);
 
@@ -264,7 +268,7 @@ void main() {
           Resource.fromJson(jsonDecode(json) as Map<String, dynamic>) as Bundle;
 
       final schedules =
-          result.entry!.map((e) => e.resource! as Schedule).toList();
+          result.entry!.map((e) => e.resource! as Schedule).toFixedList();
 
       expect(schedules.length, 10);
       expect(schedules.first.id, '055fa740-99e1-4b42-a081-2e4030a2aa7a');
@@ -352,7 +356,7 @@ void main() {
       ) as Bundle;
 
       final schedules =
-          result.entry!.map((e) => e.resource! as Schedule).toList();
+          result.entry!.map((e) => e.resource! as Schedule).toFixedList();
 
       expect(schedules.length, 10);
       expect(schedules.first.id, '055fa740-99e1-4b42-a081-2e4030a2aa7a');
@@ -409,7 +413,7 @@ void main() {
             await Client().getResource<Bundle>(baseUri, path) as Bundle;
 
         final practitioners =
-            bundle.entry!.map((e) => e.resource! as Practitioner).toList();
+            bundle.entry!.map((e) => e.resource! as Practitioner).toFixedList();
 
         expect(practitioners.length, 1);
         expect(practitioners.first.id, '0000016f-a1db-e77f-0000-000000009ed4');

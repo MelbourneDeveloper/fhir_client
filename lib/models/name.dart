@@ -1,3 +1,5 @@
+import 'package:fhir_client/models/fixed_list.dart';
+
 class Name {
   Name({
     this.family,
@@ -9,15 +11,16 @@ class Name {
   factory Name.fromJson(Map<String, dynamic> json) => Name(
         family: json['family'] != null ? json['family'] as String? : null,
         use: json['use'] as String?,
-        given: (json['given'] as List<dynamic>?)?.cast<String>().toList(),
-        prefix: (json['prefix'] as List<dynamic>?)?.cast<String>().toList(),
+        given: (json['given'] as List<dynamic>?)?.cast<String>().toFixedList(),
+        prefix:
+            (json['prefix'] as List<dynamic>?)?.cast<String>().toFixedList(),
       );
 
   final String? family;
   //TODO: enum
   final String? use;
-  final List<String>? given;
-  final List<String>? prefix;
+  final FixedList<String>? given;
+  final FixedList<String>? prefix;
 
   Map<String, dynamic> toJson() => {
         'family': family,

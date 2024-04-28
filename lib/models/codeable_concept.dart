@@ -1,5 +1,6 @@
 import 'package:fhir_client/models/coding.dart';
 import 'package:fhir_client/models/coding_list.dart';
+import 'package:fhir_client/models/fixed_list.dart';
 
 class CodeableConcept implements CodingList {
   CodeableConcept({
@@ -11,12 +12,12 @@ class CodeableConcept implements CodingList {
       CodeableConcept(
         coding: (json['coding'] as List<dynamic>?)
             ?.map((e) => Coding.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         text: json['text'] != null ? json['text'] as String? : null,
       );
 
   @override
-  final List<Coding>? coding;
+  final FixedList<Coding>? coding;
 
   @override
   final String? text;

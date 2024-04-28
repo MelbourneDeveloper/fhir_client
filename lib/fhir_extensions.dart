@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fhir_client/models/fixed_list.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
@@ -174,8 +175,8 @@ extension FhirExtensions on Client {
                           //for null and type above
                           entry.resource! as T,
                     )
-                    .toList() ??
-                [],
+                    .toFixedList() ??
+                <T>[].toFixedList(),
             b,
           ),
         //Unexpected Result

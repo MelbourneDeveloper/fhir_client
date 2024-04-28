@@ -6,6 +6,7 @@ import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/codeable_reference.dart';
 import 'package:fhir_client/models/entry.dart';
 import 'package:fhir_client/models/extension.dart';
+import 'package:fhir_client/models/fixed_list.dart';
 import 'package:fhir_client/models/identifier.dart';
 import 'package:fhir_client/models/issue.dart';
 import 'package:fhir_client/models/link.dart';
@@ -30,7 +31,7 @@ final class BundleEntries<T> implements Result<T> {
   BundleEntries(this.entries, this.bundle);
 
   /// The entries in the bundle
-  final List<T> entries;
+  final FixedList<T> entries;
 
   /// The bundle itself
   final Bundle bundle;
@@ -85,24 +86,25 @@ class Appointment extends Resource {
         status: json['status'] != null ? json['status'] as String? : null,
         serviceCategory: (json['serviceCategory'] as List<dynamic>?)
             ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         participant: (json['participant'] as List<dynamic>?)
             ?.map((e) => Participant.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
       );
   static const ResourceType resourceType = ResourceType.appointment;
 
   final String? status;
-  final List<CodeableConcept>? serviceCategory;
-  final List<Participant>? participant;
+  final FixedList<CodeableConcept>? serviceCategory;
+  final FixedList<Participant>? participant;
 
   Map<String, dynamic> toJson() => {
         'resourceType': resourceType,
         'id': id,
         'meta': meta?.toJson(),
         'status': status,
-        'serviceCategory': serviceCategory?.map((e) => e.toJson()).toList(),
-        'participant': participant?.map((e) => e.toJson()).toList(),
+        'serviceCategory':
+            serviceCategory?.map((e) => e.toJson()).toFixedList(),
+        'participant': participant?.map((e) => e.toJson()).toFixedList(),
       };
 }
 
@@ -131,51 +133,51 @@ class Bundle extends Resource {
             : null,
         extension: (json['extension'] as List<dynamic>?)
             ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         identifier: (json['identifier'] as List<dynamic>?)
             ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         active: json['active'] != null ? json['active'] as bool? : null,
         type: json['type'] as String?,
         name: json['name'] != null ? json['name'] as String? : null,
         code: (json['code'] as List<dynamic>?)
             ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         location: (json['location'] as List<dynamic>?)
             ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         link: (json['link'] as List<dynamic>?)
             ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         entry: (json['entry'] as List<dynamic>?)
             ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
       );
   static const ResourceType resourceType = ResourceType.bundle;
 
-  final List<Extension>? extension;
-  final List<Identifier>? identifier;
+  final FixedList<Extension>? extension;
+  final FixedList<Identifier>? identifier;
   final bool? active;
   final String? type;
   final String? name;
-  final List<CodeableConcept>? code;
-  final List<Location>? location;
-  final List<Link>? link;
-  final List<Entry>? entry;
+  final FixedList<CodeableConcept>? code;
+  final FixedList<Location>? location;
+  final FixedList<Link>? link;
+  final FixedList<Entry>? entry;
 
   Map<String, dynamic> toJson() => {
         'resourceType': resourceType,
         'id': id,
         'meta': meta?.toJson(),
-        'extension': extension?.map((e) => e.toJson()).toList(),
-        'identifier': identifier?.map((e) => e.toJson()).toList(),
+        'extension': extension?.map((e) => e.toJson()).toFixedList(),
+        'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
         'active': active,
         'type': type,
         'name': name,
-        'code': code?.map((e) => e.toJson()).toList(),
-        'location': location?.map((e) => e.toJson()).toList(),
-        'link': link?.map((e) => e.toJson()).toList(),
-        'entry': entry?.map((e) => e.toJson()).toList(),
+        'code': code?.map((e) => e.toJson()).toFixedList(),
+        'location': location?.map((e) => e.toJson()).toFixedList(),
+        'link': link?.map((e) => e.toJson()).toFixedList(),
+        'entry': entry?.map((e) => e.toJson()).toFixedList(),
       };
 }
 
@@ -205,14 +207,14 @@ class Encounter extends Resource {
             : null,
         identifier: (json['identifier'] as List<dynamic>?)
             ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         status: json['status'] as String?,
         classCode: json['class'] != null
             ? CodeableConcept.fromJson(json['class'] as Map<String, dynamic>)
             : null,
         type: (json['type'] as List<dynamic>?)
             ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         serviceType: json['serviceType'] != null
             ? CodeableConcept.fromJson(
                 json['serviceType'] as Map<String, dynamic>,
@@ -226,7 +228,7 @@ class Encounter extends Resource {
             : null,
         participant: (json['participant'] as List<dynamic>?)
             ?.map((e) => Participant.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         period: json['period'] != null
             ? Period.fromJson(json['period'] as Map<String, dynamic>)
             : null,
@@ -237,7 +239,7 @@ class Encounter extends Resource {
             : null,
         reasonCode: (json['reasonCode'] as List<dynamic>?)
             ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         hospitalization: json['hospitalization'] != null
             ? Hospitalization.fromJson(
                 json['hospitalization'] as Map<String, dynamic>,
@@ -245,47 +247,47 @@ class Encounter extends Resource {
             : null,
         location: (json['location'] as List<dynamic>?)
             ?.map((e) => Reference.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
       );
   static const ResourceType resourceType = ResourceType.encounter;
 
-  final List<Identifier>? identifier;
+  final FixedList<Identifier>? identifier;
   final String? status;
 
   /// Classification of patient encounter context - e.g. Inpatient, outpatient.
   /// Note: actual FHIR field is Class
   final CodeableConcept? classCode;
 
-  final List<CodeableConcept>? type;
+  final FixedList<CodeableConcept>? type;
   final CodeableConcept? serviceType;
   final CodeableConcept? priority;
   final Reference? subject;
-  final List<Participant>? participant;
+  final FixedList<Participant>? participant;
   final Period? period;
   final Duration? length;
-  final List<CodeableConcept>? reasonCode;
+  final FixedList<CodeableConcept>? reasonCode;
   final Hospitalization? hospitalization;
-  final List<Reference>? location;
+  final FixedList<Reference>? location;
 
   Map<String, dynamic> toJson() => {
         'resourceType': resourceType.code,
         'id': id,
         'meta': meta?.toJson(),
-        'identifier': identifier?.map((e) => e.toJson()).toList(),
+        'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
         'status': status,
         'class': classCode?.toJson(),
-        'type': type?.map((e) => e.toJson()).toList(),
+        'type': type?.map((e) => e.toJson()).toFixedList(),
         'serviceType': serviceType?.toJson(),
         'priority': priority?.toJson(),
         'subject': subject?.toJson(),
-        'participant': participant?.map((e) => e.toJson()).toList(),
+        'participant': participant?.map((e) => e.toJson()).toFixedList(),
         'period': period?.toJson(),
         'length': length?.inMilliseconds != null
             ? length!.inMilliseconds ~/ 1000
             : null,
-        'reasonCode': reasonCode?.map((e) => e.toJson()).toList(),
+        'reasonCode': reasonCode?.map((e) => e.toJson()).toFixedList(),
         'hospitalization': hospitalization?.toJson(),
-        'location': location?.map((e) => e.toJson()).toList(),
+        'location': location?.map((e) => e.toJson()).toFixedList(),
       };
 }
 
@@ -307,29 +309,30 @@ class Hospitalization {
             : null,
         specialCourtesy: (json['specialCourtesy'] as List<dynamic>?)
             ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         destination: (json['destination'] as List<dynamic>?)
             ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         preAdmissionIdentifier:
             (json['preAdmissionIdentifier'] as List<dynamic>?)
                 ?.map((e) => Reference.fromJson(e as Map<String, dynamic>))
-                .toList(),
+                .toFixedList(),
       );
 
   final AdmitSource? admitSource;
   final Period? period;
-  final List<CodeableConcept>? specialCourtesy;
-  final List<Location>? destination;
-  final List<Reference>? preAdmissionIdentifier;
+  final FixedList<CodeableConcept>? specialCourtesy;
+  final FixedList<Location>? destination;
+  final FixedList<Reference>? preAdmissionIdentifier;
 
   Map<String, dynamic> toJson() => {
         'admitSource': admitSource?.toJson(),
         'period': period?.toJson(),
-        'specialCourtesy': specialCourtesy?.map((e) => e.toJson()).toList(),
-        'destination': destination?.map((e) => e.toJson()).toList(),
+        'specialCourtesy':
+            specialCourtesy?.map((e) => e.toJson()).toFixedList(),
+        'destination': destination?.map((e) => e.toJson()).toFixedList(),
         'preAdmissionIdentifier':
-            preAdmissionIdentifier?.map((e) => e.toJson()).toList(),
+            preAdmissionIdentifier?.map((e) => e.toJson()).toFixedList(),
       };
 }
 
@@ -349,17 +352,17 @@ class OperationOutcome<T> extends Resource implements Result<T> {
             : null,
         issue: (json['issue'] as List<dynamic>?)
             ?.map((e) => Issue.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
       );
   static const ResourceType resourceType = ResourceType.operationOutcome;
 
   final Text? text;
-  final List<Issue>? issue;
+  final FixedList<Issue>? issue;
 
   Map<String, dynamic> toJson() => {
         'resourceType': resourceType,
         'text': text?.toJson(),
-        'issue': issue?.map((e) => e.toJson()).toList(),
+        'issue': issue?.map((e) => e.toJson()).toFixedList(),
       };
 }
 
@@ -388,51 +391,51 @@ final class Organization extends Resource {
             : null,
         identifier: (json['identifier'] as List<dynamic>?)
             ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         type: (json['type'] as List<dynamic>?)
             ?.map((e) => t.Type.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         name: json['name'] != null ? json['name'] as String? : null,
         total: json['total'] != null ? json['total'] as int? : null,
         link: (json['link'] as List<dynamic>?)
             ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         entry: (json['entry'] as List<dynamic>?)
             ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         active: json['active'] as bool?,
         telecom: (json['telecom'] as List<dynamic>?)
             ?.map((e) => Telecom.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         address: (json['address'] as List<dynamic>?)
             ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
       );
   static const ResourceType resourceType = ResourceType.organization;
 
-  final List<t.Type>? type;
+  final FixedList<t.Type>? type;
   final String? name;
   final int? total;
-  final List<Link>? link;
-  final List<Entry>? entry;
-  final List<Identifier>? identifier;
+  final FixedList<Link>? link;
+  final FixedList<Entry>? entry;
+  final FixedList<Identifier>? identifier;
   final bool? active;
-  final List<Telecom>? telecom;
-  final List<Address>? address;
+  final FixedList<Telecom>? telecom;
+  final FixedList<Address>? address;
 
   Map<String, dynamic> toJson() => {
         'resourceType': resourceType,
         'id': id,
         'meta': meta?.toJson(),
-        'identifier': identifier?.map((e) => e.toJson()).toList(),
-        'type': type?.cast<dynamic>().toList(),
+        'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
+        'type': type?.cast<dynamic>().toFixedList(),
         'name': name,
         'total': total,
-        'link': link?.map((e) => e.toJson()).toList(),
-        'entry': entry?.map((e) => e.toJson()).toList(),
+        'link': link?.map((e) => e.toJson()).toFixedList(),
+        'entry': entry?.map((e) => e.toJson()).toFixedList(),
         'active': active,
-        'telecom': telecom?.map((e) => e.toJson()).toList(),
-        'address': address?.map((e) => e.toJson()).toList(),
+        'telecom': telecom?.map((e) => e.toJson()).toFixedList(),
+        'address': address?.map((e) => e.toJson()).toFixedList(),
       };
 }
 
@@ -456,14 +459,14 @@ class Patient extends Resource {
             : null,
         identifier: (json['identifier'] as List<dynamic>?)
             ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         active: json['active'] as bool?,
         name: (json['name'] as List<dynamic>?)
             ?.map((e) => Name.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         telecom: (json['telecom'] as List<dynamic>?)
             ?.map((e) => Telecom.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         gender: json['gender'] != null
             ? AdministrativeGender.fromCode(json['gender'] as String)
             : null,
@@ -472,29 +475,29 @@ class Patient extends Resource {
             : null,
         address: (json['address'] as List<dynamic>?)
             ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
       );
   static const ResourceType resourceType = ResourceType.patient;
 
-  final List<Identifier>? identifier;
+  final FixedList<Identifier>? identifier;
   final bool? active;
-  final List<Name>? name;
-  final List<Telecom>? telecom;
+  final FixedList<Name>? name;
+  final FixedList<Telecom>? telecom;
   final AdministrativeGender? gender;
   final DateTime? birthDate;
-  final List<Address>? address;
+  final FixedList<Address>? address;
 
   Map<String, dynamic> toJson() => {
         'resourceType': resourceType.code,
         'id': id,
         'meta': meta?.toJson(),
-        'identifier': identifier?.map((e) => e.toJson()).toList(),
+        'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
         'active': active,
-        'name': name?.map((e) => e.toJson()).toList(),
-        'telecom': telecom?.map((e) => e.toJson()).toList(),
+        'name': name?.map((e) => e.toJson()).toFixedList(),
+        'telecom': telecom?.map((e) => e.toJson()).toFixedList(),
         'gender': gender?.code,
         'birthDate': birthDate?.toIso8601String(),
-        'address': address?.map((e) => e.toJson()).toList(),
+        'address': address?.map((e) => e.toJson()).toFixedList(),
       };
 }
 
@@ -524,27 +527,27 @@ final class Practitioner extends Resource {
             : null,
         identifier: (json['identifier'] as List<dynamic>?)
             ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         type: (json['type'] as List<dynamic>?)
             ?.map((e) => t.Type.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         name: (json['name'] as List<dynamic>?)
             ?.map((e) => Name.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         total: json['total'] != null ? json['total'] as int? : null,
         link: (json['link'] as List<dynamic>?)
             ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         entry: (json['entry'] as List<dynamic>?)
             ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         active: json['active'] as bool?,
         telecom: (json['telecom'] as List<dynamic>?)
             ?.map((e) => Telecom.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         address: (json['address'] as List<dynamic>?)
             ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         gender: AdministrativeGender.fromCode(
           json['gender'] as String? ?? 'unknown',
         ),
@@ -552,30 +555,30 @@ final class Practitioner extends Resource {
 
   static const ResourceType resourceType = ResourceType.practitioner;
 
-  final List<t.Type>? type;
-  final List<Name>? name;
+  final FixedList<t.Type>? type;
+  final FixedList<Name>? name;
   final int? total;
-  final List<Link>? link;
-  final List<Entry>? entry;
-  final List<Identifier>? identifier;
+  final FixedList<Link>? link;
+  final FixedList<Entry>? entry;
+  final FixedList<Identifier>? identifier;
   final bool? active;
-  final List<Telecom>? telecom;
-  final List<Address>? address;
+  final FixedList<Telecom>? telecom;
+  final FixedList<Address>? address;
   final AdministrativeGender gender;
 
   Map<String, dynamic> toJson() => {
         'resourceType': resourceType,
         'id': id,
         'meta': meta?.toJson(),
-        'identifier': identifier?.map((e) => e.toJson()).toList(),
-        'type': type?.cast<dynamic>().toList(),
-        'name': name?.map((e) => e.toJson()).toList(),
+        'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
+        'type': type?.cast<dynamic>().toFixedList(),
+        'name': name?.map((e) => e.toJson()).toFixedList(),
         'total': total,
-        'link': link?.map((e) => e.toJson()).toList(),
-        'entry': entry?.map((e) => e.toJson()).toList(),
+        'link': link?.map((e) => e.toJson()).toFixedList(),
+        'entry': entry?.map((e) => e.toJson()).toFixedList(),
         'active': active,
-        'telecom': telecom?.map((e) => e.toJson()).toList(),
-        'address': address?.map((e) => e.toJson()).toList(),
+        'telecom': telecom?.map((e) => e.toJson()).toFixedList(),
+        'address': address?.map((e) => e.toJson()).toFixedList(),
         'gender': gender.code,
       };
 }
@@ -604,10 +607,10 @@ final class PractitionerRole extends Resource {
         id: json['id'] as String,
         extension: (json['extension'] as List<dynamic>?)
             ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         identifier: (json['identifier'] as List<dynamic>?)
             ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         active: json['active'] != null ? json['active'] as bool? : null,
         name: json['name'] != null ? json['name'] as String? : null,
         period: json['period'] != null
@@ -618,46 +621,46 @@ final class PractitionerRole extends Resource {
             : null,
         code: (json['code'] as List<dynamic>?)
             ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         specialty: (json['specialty'] as List<dynamic>?)
             ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         location: (json['location'] as List<dynamic>?)
             ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         availableTime: (json['availableTime'] as List<dynamic>?)
             ?.map((e) => AvailableTime.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         meta: json['meta'] != null
             ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
             : null,
       );
   static const ResourceType resourceType = ResourceType.practitionerRole;
 
-  final List<Extension>? extension;
-  final List<Identifier>? identifier;
+  final FixedList<Extension>? extension;
+  final FixedList<Identifier>? identifier;
   final bool? active;
   final String? name;
   final Period? period;
   final Reference? practitioner;
-  final List<CodeableConcept>? code;
-  final List<CodeableConcept>? specialty;
-  final List<Location>? location;
-  final List<AvailableTime>? availableTime;
+  final FixedList<CodeableConcept>? code;
+  final FixedList<CodeableConcept>? specialty;
+  final FixedList<Location>? location;
+  final FixedList<AvailableTime>? availableTime;
 
   Map<String, dynamic> toJson() => {
         'resourceType': resourceType,
         'id': id,
-        'extension': extension?.map((e) => e.toJson()).toList(),
-        'identifier': identifier?.map((e) => e.toJson()).toList(),
+        'extension': extension?.map((e) => e.toJson()).toFixedList(),
+        'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
         'active': active,
         'name': name,
         'period': period?.toJson(),
         'practitioner': practitioner?.toJson(),
-        'code': code?.map((e) => e.toJson()).toList(),
-        'specialty': specialty?.map((e) => e.toJson()).toList(),
-        'location': location?.map((e) => e.toJson()).toList(),
-        'availableTime': availableTime?.map((e) => e.toJson()).toList(),
+        'code': code?.map((e) => e.toJson()).toFixedList(),
+        'specialty': specialty?.map((e) => e.toJson()).toFixedList(),
+        'location': location?.map((e) => e.toJson()).toFixedList(),
+        'availableTime': availableTime?.map((e) => e.toJson()).toFixedList(),
       };
 }
 
@@ -686,16 +689,16 @@ class Slot extends Resource {
             : null,
         identifier: (json['identifier'] as List<dynamic>?)
             ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         serviceCategory: (json['serviceCategory'] as List<dynamic>?)
             ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         serviceType: (json['serviceType'] as List<dynamic>?)
             ?.map((e) => CodeableReference.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         specialty: (json['specialty'] as List<dynamic>?)
             ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         appointmentType: json['appointmentType'] != null
             ? CodeableConcept.fromJson(
                 json['appointmentType'] as Map<String, dynamic>,
@@ -708,10 +711,10 @@ class Slot extends Resource {
       );
   static const ResourceType resourceType = ResourceType.slot;
 
-  final List<Identifier>? identifier;
-  final List<CodeableConcept>? serviceCategory;
-  final List<CodeableReference>? serviceType;
-  final List<CodeableConcept>? specialty;
+  final FixedList<Identifier>? identifier;
+  final FixedList<CodeableConcept>? serviceCategory;
+  final FixedList<CodeableReference>? serviceType;
+  final FixedList<CodeableConcept>? specialty;
   final CodeableConcept? appointmentType;
   final String? status;
   final DateTime? start;
@@ -722,10 +725,11 @@ class Slot extends Resource {
         'resourceType': resourceType,
         'id': id,
         'meta': meta?.toJson(),
-        'identifier': identifier?.map((e) => e.toJson()).toList(),
-        'serviceCategory': serviceCategory?.map((e) => e.toJson()).toList(),
-        'serviceType': serviceType?.map((e) => e.toJson()).toList(),
-        'specialty': specialty?.map((e) => e.toJson()).toList(),
+        'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
+        'serviceCategory':
+            serviceCategory?.map((e) => e.toJson()).toFixedList(),
+        'serviceType': serviceType?.map((e) => e.toJson()).toFixedList(),
+        'specialty': specialty?.map((e) => e.toJson()).toFixedList(),
         'appointmentType': appointmentType?.toJson(),
         'status': status,
         'start': start.toString(),
@@ -759,19 +763,19 @@ class Schedule extends Resource {
         active: json['active'] as bool?,
         identifier: (json['identifier'] as List<dynamic>?)
             ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         serviceType: (json['serviceType'] as List<dynamic>?)
             ?.map((e) => CodeableReference.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         serviceCategory: (json['serviceCategory'] as List<dynamic>?)
             ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         specialty: (json['specialty'] as List<dynamic>?)
             ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         actor: (json['actor'] as List<dynamic>?)
             ?.map((e) => Actor.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         planningHorizon: json['planningHorizon'] != null
             ? PlanningHorizon.fromJson(
                 json['planningHorizon'] as Map<String, dynamic>,
@@ -781,11 +785,11 @@ class Schedule extends Resource {
       );
   static const ResourceType resourceType = ResourceType.schedule;
 
-  final List<Identifier>? identifier;
-  final List<CodeableReference>? serviceType;
-  final List<CodeableConcept>? serviceCategory;
-  final List<CodeableConcept>? specialty;
-  final List<Actor>? actor;
+  final FixedList<Identifier>? identifier;
+  final FixedList<CodeableReference>? serviceType;
+  final FixedList<CodeableConcept>? serviceCategory;
+  final FixedList<CodeableConcept>? specialty;
+  final FixedList<Actor>? actor;
   final PlanningHorizon? planningHorizon;
   final String? comment;
   final bool? active;
@@ -794,11 +798,11 @@ class Schedule extends Resource {
         'resourceType': resourceType,
         'id': id,
         'meta': meta?.toJson(),
-        'identifier': identifier?.map((e) => e.toJson()).toList(),
-        'serviceType': serviceType?.map((e) => e.toJson()).toList(),
-        'serviceCategory': serviceType?.map((e) => e.toJson()).toList(),
-        'specialty': specialty?.map((e) => e.toJson()).toList(),
-        'actor': actor?.map((e) => e.toJson()).toList(),
+        'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
+        'serviceType': serviceType?.map((e) => e.toJson()).toFixedList(),
+        'serviceCategory': serviceType?.map((e) => e.toJson()).toFixedList(),
+        'specialty': specialty?.map((e) => e.toJson()).toFixedList(),
+        'actor': actor?.map((e) => e.toJson()).toFixedList(),
         'planningHorizon': planningHorizon?.toJson(),
         'comment': comment,
         'active': active,

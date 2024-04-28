@@ -1,3 +1,5 @@
+import 'package:fhir_client/models/fixed_list.dart';
+
 class AvailableTime {
   AvailableTime({
     this.daysOfWeek,
@@ -6,8 +8,9 @@ class AvailableTime {
   });
 
   factory AvailableTime.fromJson(Map<String, dynamic> json) => AvailableTime(
-        daysOfWeek:
-            (json['daysOfWeek'] as List<dynamic>?)?.cast<String>().toList(),
+        daysOfWeek: (json['daysOfWeek'] as List<dynamic>?)
+            ?.cast<String>()
+            .toFixedList(),
         availableStartTime: json['availableStartTime'] != null
             ? json['availableStartTime'] as String?
             : null,
@@ -15,7 +18,7 @@ class AvailableTime {
             ? json['availableEndTime'] as String?
             : null,
       );
-  final List<String>? daysOfWeek;
+  final FixedList<String>? daysOfWeek;
   final String? availableStartTime;
   final String? availableEndTime;
 

@@ -1,3 +1,5 @@
+import 'package:fhir_client/models/fixed_list.dart';
+
 class Extension {
   Extension({
     this.url,
@@ -9,13 +11,13 @@ class Extension {
         url: Uri.tryParse(json['url'] as String? ?? ''),
         extension: (json['extension'] as List<dynamic>?)
             ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
         valueBoolean:
             json['valueBoolean'] != null ? json['valueBoolean'] as bool? : null,
       );
 
   final Uri? url;
-  final List<Extension>? extension;
+  final FixedList<Extension>? extension;
   final bool? valueBoolean;
 
   Map<String, dynamic> toJson() => {

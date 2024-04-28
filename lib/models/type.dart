@@ -1,4 +1,5 @@
 import 'package:fhir_client/models/coding.dart';
+import 'package:fhir_client/models/fixed_list.dart';
 
 class Type {
   Type({
@@ -10,10 +11,11 @@ class Type {
         text: json['text'] != null ? json['text'] as String? : null,
         coding: (json['coding'] as List<dynamic>?)
             ?.map((e) => Coding.fromJson(e as Map<String, dynamic>))
-            .toList(),
+            .toFixedList(),
       );
+
   final String? text;
-  final List<Coding>? coding;
+  final FixedList<Coding>? coding;
 
   Map<String, dynamic> toJson() => {
         'text': text,
