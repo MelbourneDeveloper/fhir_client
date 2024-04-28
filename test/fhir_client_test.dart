@@ -447,6 +447,97 @@ void main() {
       );
     });
 
+    test('Observation Search', () async {
+      final bundleEntries = await _mockSearch(
+        (c) async => await c.searchObservations(
+          baseUri,
+          count: 10,
+        ) as BundleEntries<Observation>,
+      );
+
+      expect(bundleEntries.length, 10);
+
+      expect(
+        bundleEntries.bundle.entry![2].fullUrl,
+        Uri.parse('https://hapi.fhir.org/baseR4/Observation/9391493'),
+      );
+
+      final first = bundleEntries.entries.first;
+
+      // Assertions for each field in the JSON
+      expect(first.id, '9391491');
+      expect(first.meta?.versionId, '1');
+      expect(
+        first.meta?.lastUpdated,
+        DateTime.parse('2023-04-10T10:33:32.673+00:00'),
+      );
+      expect(first.meta?.source, '#nw7ecyTCXojBLbEq');
+      expect(first.status, 'final');
+      expect(first.category?.length, 1);
+      expect(first.category?.first.coding?.length, 1);
+      expect(
+        first.category?.first.coding?.first.system,
+        Uri.parse('http://terminology.hl7.org/CodeSystem/observation-category'),
+      );
+      expect(first.category?.first.coding?.first.code, 'vital-signs');
+      expect(first.category?.first.coding?.first.display, 'vital-signs');
+      expect(first.code?.coding?.length, 1);
+      expect(first.code?.coding?.first.system, Uri.parse('http://loinc.org'));
+      expect(first.code?.coding?.first.code, '8302-2');
+      expect(first.code?.coding?.first.display, 'Body Height');
+      expect(first.code?.text, 'Body Height');
+      expect(first.subject?.reference, 'Patient/9391475');
+      expect(first.encounter?.reference, 'Encounter/9391490');
+      expect(
+        first.effectiveDateTime,
+        DateTime.parse('2011-04-18T15:44:18-04:00'),
+      );
+      expect(first.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
+      expect(first.valueQuantity?.value, 179.30389202058845);
+      expect(first.valueQuantity?.unit, 'cm');
+      expect(first.valueQuantity?.system, 'http://unitsofmeasure.org');
+      expect(first.valueQuantity?.code, 'cm');
+
+      final map = first.toJson();
+      final firstObs = Observation.fromJson(map);
+
+      expect(firstObs.id, '9391491');
+      expect(firstObs.meta?.versionId, '1');
+      expect(
+        firstObs.meta?.lastUpdated,
+        DateTime.parse('2023-04-10T10:33:32.673+00:00'),
+      );
+      expect(firstObs.meta?.source, '#nw7ecyTCXojBLbEq');
+      expect(firstObs.status, 'final');
+      expect(firstObs.category?.length, 1);
+      expect(firstObs.category?.first.coding?.length, 1);
+      expect(
+        firstObs.category?.first.coding?.first.system,
+        Uri.parse('http://terminology.hl7.org/CodeSystem/observation-category'),
+      );
+      expect(firstObs.category?.first.coding?.first.code, 'vital-signs');
+      expect(firstObs.category?.first.coding?.first.display, 'vital-signs');
+      expect(firstObs.code?.coding?.length, 1);
+      expect(
+        firstObs.code?.coding?.first.system,
+        Uri.parse('http://loinc.org'),
+      );
+      expect(firstObs.code?.coding?.first.code, '8302-2');
+      expect(firstObs.code?.coding?.first.display, 'Body Height');
+      expect(firstObs.code?.text, 'Body Height');
+      expect(firstObs.subject?.reference, 'Patient/9391475');
+      expect(firstObs.encounter?.reference, 'Encounter/9391490');
+      expect(
+        firstObs.effectiveDateTime,
+        DateTime.parse('2011-04-18T15:44:18-04:00'),
+      );
+      expect(firstObs.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
+      expect(firstObs.valueQuantity?.value, 179.30389202058845);
+      expect(firstObs.valueQuantity?.unit, 'cm');
+      expect(firstObs.valueQuantity?.system, 'http://unitsofmeasure.org');
+      expect(firstObs.valueQuantity?.code, 'cm');
+    });
+
     test('Slot Search', () async {
       final bundleEntries = await _mockSearch<Slot>(
         (c) async => await c.searchSlots(
