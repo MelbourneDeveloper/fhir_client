@@ -76,6 +76,7 @@ void main() {
       expect(org.identifier!.first.type!.text, 'SNO');
 
       final map = org.toJson();
+      expect(map['resourceType'], 'Organization');
 
       expect(map['id'], '2640211');
     });

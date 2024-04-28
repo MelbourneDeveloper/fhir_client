@@ -93,7 +93,7 @@ extension FhirExtensions on Client {
   }) async =>
       search(
         baseUri,
-        resourceType: Patient.resourceType,
+        resourceType: ResourceType.patient,
         version: version,
         queryString: _queryString([
           if (count != null) MapEntry('_count', count.toString()),

@@ -91,14 +91,13 @@ class Appointment extends Resource {
             ?.map((e) => Participant.fromJson(e as Map<String, dynamic>))
             .toFixedList(),
       );
-  static const ResourceType resourceType = ResourceType.appointment;
 
   final String? status;
   final FixedList<CodeableConcept>? serviceCategory;
   final FixedList<Participant>? participant;
 
   Map<String, dynamic> toJson() => {
-        'resourceType': resourceType,
+        'resourceType': ResourceType.appointment.code,
         'id': id,
         'meta': meta?.toJson(),
         'status': status,
@@ -153,7 +152,6 @@ class Bundle extends Resource {
             ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
             .toFixedList(),
       );
-  static const ResourceType resourceType = ResourceType.bundle;
 
   final FixedList<Extension>? extension;
   final FixedList<Identifier>? identifier;
@@ -166,7 +164,7 @@ class Bundle extends Resource {
   final FixedList<Entry>? entry;
 
   Map<String, dynamic> toJson() => {
-        'resourceType': resourceType,
+        'resourceType': ResourceType.bundle.code,
         'id': id,
         'meta': meta?.toJson(),
         'extension': extension?.map((e) => e.toJson()).toFixedList(),
@@ -249,7 +247,6 @@ class Encounter extends Resource {
             ?.map((e) => Reference.fromJson(e as Map<String, dynamic>))
             .toFixedList(),
       );
-  static const ResourceType resourceType = ResourceType.encounter;
 
   final FixedList<Identifier>? identifier;
   final String? status;
@@ -270,7 +267,7 @@ class Encounter extends Resource {
   final FixedList<Reference>? location;
 
   Map<String, dynamic> toJson() => {
-        'resourceType': resourceType.code,
+        'resourceType': ResourceType.encounter.code,
         'id': id,
         'meta': meta?.toJson(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
@@ -354,13 +351,12 @@ class OperationOutcome<T> extends Resource implements Result<T> {
             ?.map((e) => Issue.fromJson(e as Map<String, dynamic>))
             .toFixedList(),
       );
-  static const ResourceType resourceType = ResourceType.operationOutcome;
 
   final Text? text;
   final FixedList<Issue>? issue;
 
   Map<String, dynamic> toJson() => {
-        'resourceType': resourceType,
+        'resourceType': ResourceType.operationOutcome.code,
         'text': text?.toJson(),
         'issue': issue?.map((e) => e.toJson()).toFixedList(),
       };
@@ -411,7 +407,6 @@ final class Organization extends Resource {
             ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
             .toFixedList(),
       );
-  static const ResourceType resourceType = ResourceType.organization;
 
   final FixedList<t.Type>? type;
   final String? name;
@@ -424,7 +419,7 @@ final class Organization extends Resource {
   final FixedList<Address>? address;
 
   Map<String, dynamic> toJson() => {
-        'resourceType': resourceType,
+        'resourceType': ResourceType.organization.code,
         'id': id,
         'meta': meta?.toJson(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
@@ -477,7 +472,6 @@ class Patient extends Resource {
             ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
             .toFixedList(),
       );
-  static const ResourceType resourceType = ResourceType.patient;
 
   final FixedList<Identifier>? identifier;
   final bool? active;
@@ -488,7 +482,7 @@ class Patient extends Resource {
   final FixedList<Address>? address;
 
   Map<String, dynamic> toJson() => {
-        'resourceType': resourceType.code,
+        'resourceType': ResourceType.patient.code,
         'id': id,
         'meta': meta?.toJson(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
@@ -553,8 +547,6 @@ final class Practitioner extends Resource {
         ),
       );
 
-  static const ResourceType resourceType = ResourceType.practitioner;
-
   final FixedList<t.Type>? type;
   final FixedList<Name>? name;
   final int? total;
@@ -567,7 +559,7 @@ final class Practitioner extends Resource {
   final AdministrativeGender gender;
 
   Map<String, dynamic> toJson() => {
-        'resourceType': resourceType,
+        'resourceType': ResourceType.practitioner.code,
         'id': id,
         'meta': meta?.toJson(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
@@ -635,7 +627,6 @@ final class PractitionerRole extends Resource {
             ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
             : null,
       );
-  static const ResourceType resourceType = ResourceType.practitionerRole;
 
   final FixedList<Extension>? extension;
   final FixedList<Identifier>? identifier;
@@ -649,7 +640,7 @@ final class PractitionerRole extends Resource {
   final FixedList<AvailableTime>? availableTime;
 
   Map<String, dynamic> toJson() => {
-        'resourceType': resourceType,
+        'resourceType': ResourceType.practitionerRole.code,
         'id': id,
         'extension': extension?.map((e) => e.toJson()).toFixedList(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
@@ -709,7 +700,6 @@ class Slot extends Resource {
         end: DateTime.tryParse(json['end'] as String? ?? ''),
         comment: json['comment'] != null ? json['comment'] as String? : null,
       );
-  static const ResourceType resourceType = ResourceType.slot;
 
   final FixedList<Identifier>? identifier;
   final FixedList<CodeableConcept>? serviceCategory;
@@ -722,7 +712,7 @@ class Slot extends Resource {
   final String? comment;
 
   Map<String, dynamic> toJson() => {
-        'resourceType': resourceType,
+        'resourceType': ResourceType.slot.code,
         'id': id,
         'meta': meta?.toJson(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
@@ -783,7 +773,6 @@ class Schedule extends Resource {
             : null,
         comment: json['comment'] != null ? json['comment'] as String? : null,
       );
-  static const ResourceType resourceType = ResourceType.schedule;
 
   final FixedList<Identifier>? identifier;
   final FixedList<CodeableReference>? serviceType;
@@ -795,7 +784,7 @@ class Schedule extends Resource {
   final bool? active;
 
   Map<String, dynamic> toJson() => {
-        'resourceType': resourceType,
+        'resourceType': ResourceType.schedule.code,
         'id': id,
         'meta': meta?.toJson(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
