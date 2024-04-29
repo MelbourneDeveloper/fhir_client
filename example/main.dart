@@ -72,7 +72,9 @@ String _formatActor(List<Actor>? actors) => actors != null
     ? 'Actors:\n${actors.map(
           (actor) => ' - '
               '${actor.reference}: ${switch (actor.display) {
-            (final Defined<String> displayValue) => displayValue.value,
+            (final Defined<String> displayValue)
+                when displayValue.value != null =>
+              displayValue.value,
             _ => 'N/A',
           }}',
         ).join('\n')}'
