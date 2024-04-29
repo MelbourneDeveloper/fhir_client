@@ -108,9 +108,12 @@ void main() {
 
       expect(org.id, '2640211');
 
-      expect(org.meta!.versionId, '1');
-      expect(org.meta!.lastUpdated, DateTime.utc(2021, 10, 13, 7, 52, 35, 268));
-      expect(org.meta!.source, '#VAvOSFPlfBChwJZ4');
+      expectEquals(org.meta!.versionId, '1');
+      expectEquals(
+        org.meta!.lastUpdated,
+        DateTime.utc(2021, 10, 13, 7, 52, 35, 268),
+      );
+      expectEquals(org.meta!.source, '#VAvOSFPlfBChwJZ4');
 
       expect(org.identifier!.length, 1);
       expect(org.identifier!.first.type!.text, 'SNO');
@@ -175,8 +178,8 @@ void main() {
 
       // Test individual properties of the practitioner
       expect(practitioner.id, '0000016f-a1db-e77f-0000-000000009ed4');
-      expect(practitioner.meta!.versionId, '1');
-      expect(
+      expectEquals(practitioner.meta!.versionId, '1');
+      expectEquals(
         practitioner.meta!.lastUpdated,
         DateTime.utc(2020, 03, 24, 17, 59, 12, 935),
       );

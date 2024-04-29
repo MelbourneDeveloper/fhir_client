@@ -21,15 +21,12 @@ class Meta extends JsonObject {
         _lastUpdatedField,
         tryParse: (d) => DateTime.tryParse(d ?? ''),
       );
-
   Definable<String> get versionId => getValue(_versionIdField);
-  Definable<DateTime> get source => getValue(_sourceField);
-
+  Definable<String> get source => getValue(_sourceField);
   Definable<FixedList<String>> get profile => getValueFromArray(
         'profile',
         (strings) => strings?.map((e) => e as String).toFixedList(),
       );
-
   Definable<FixedList<Tag>> get tag => getValue(
         'tag',
         fromObjectArray: (jsonTags) =>
