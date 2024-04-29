@@ -22,8 +22,8 @@ void main() {
       'Actor',
       () {
         expect(
-          Actor(reference: '1', display: 'a'),
-          equals(Actor(reference: '1', display: 'a')),
+          Actor.primitives(reference: '1', display: 'a'),
+          equals(Actor.primitives(reference: '1', display: 'a')),
         );
 
         expect(
@@ -32,14 +32,17 @@ void main() {
         );
 
         expect(
-          Actor(reference: '1', display: 'a') !=
-              Actor(reference: '1', display: 'b'),
+          Actor.primitives(reference: '1', display: 'a') !=
+              Actor.primitives(reference: '1', display: 'b'),
           true,
         );
 
-        final actor1 = Actor(reference: 'reference1', display: 'Actor 1');
-        final actor2 = Actor(reference: 'reference2', display: 'Actor 2');
-        final actor3 = Actor(reference: 'reference3', display: 'Actor 3');
+        final actor1 =
+            Actor.primitives(reference: 'reference1', display: 'Actor 1');
+        final actor2 =
+            Actor.primitives(reference: 'reference2', display: 'Actor 2');
+        final actor3 =
+            Actor.primitives(reference: 'reference3', display: 'Actor 3');
 
         final list1 = FixedList([actor1, actor2, actor3]);
         final list2 = FixedList([actor1, actor2, actor3]);

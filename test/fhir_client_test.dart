@@ -341,16 +341,16 @@ void main() {
 
 // Assert actors
       expect(schedule.actor!.length, 2);
-      expect(
+      expectEquals(
         schedule.actor![0].reference,
         'Location/bded1b2f-bdd5-424b-8725-4c6f3d525e07',
       );
-      expect(schedule.actor![0].display, 'Norte');
-      expect(
+      expectEquals(schedule.actor![0].display, 'Norte');
+      expectEquals(
         schedule.actor![1].reference,
         'HealthcareService/70ab9bd6-ff24-4bfb-902f-86a5f47a2866',
       );
-      expect(schedule.actor![1].display, 'Medicina General');
+      expectEquals(schedule.actor![1].display, 'Medicina General');
 
       // Assert planning horizon
       expect(schedule.planningHorizon!.start, DateTime.utc(2023, 12));

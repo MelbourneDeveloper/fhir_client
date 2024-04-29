@@ -2,6 +2,7 @@
 
 import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/actor.dart';
+import 'package:fhir_client/models/basic_types/json_object.dart';
 import 'package:fhir_client/models/coding_list.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:http/http.dart';
@@ -70,7 +71,10 @@ String _formatSlot(Slot slot) => 'Id: ${slot.id}\n'
 String _formatActor(List<Actor>? actors) => actors != null
     ? 'Actors:\n${actors.map(
           (actor) => ' - '
-              '${actor.reference}: ${actor.display ?? 'N/A'}',
+              '${actor.reference}: ${switch (actor.display) {
+            (final Defined<String> displayValue) => displayValue.value,
+            _ => 'N/A',
+          }}',
         ).join('\n')}'
     : '';
 
