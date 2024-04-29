@@ -12,6 +12,8 @@ class Tag extends JsonObject {
           if (system is Defined<Uri>) _systemField: system.value,
         });
 
+  Tag.fromJson(super.json);
+
   Definable<String> get code => getValue(_codeField);
   Definable<Uri> get system =>
       getValue(_systemField, tryParse: (u) => Uri.tryParse(u ?? ''));

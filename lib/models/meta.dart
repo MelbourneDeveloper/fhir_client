@@ -1,36 +1,38 @@
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/json_object.dart';
 import 'package:fhir_client/models/tag.dart';
 
-class Meta {
-  Meta({
-    this.lastUpdated,
-    this.versionId,
-    this.source,
-    this.profile,
-    this.tag,
-  });
+const _lastUpdatedField = 'lastUpdated';
+const _versionIdField = 'versionId';
+const _sourceField = 'source';
 
-  factory Meta.fromJson(Map<String, dynamic> json) => Meta(
-        lastUpdated: DateTime.tryParse(json['lastUpdated'] as String? ?? ''),
-        versionId: json['versionId'] as String?,
-        source: json['source'] as String?,
-        profile:
-            (json['profile'] as List<dynamic>?)?.cast<String>().toFixedList(),
-        tag: (json['tag'] as List<dynamic>?)
-            ?.map((e) => Tag(e as Map<String, dynamic>))
-            .toFixedList(),
+class Meta extends JsonObject {
+  // Meta({
+  //   this.lastUpdated,
+  //   this.versionId,
+  //   this.source,
+  //   this.profile,
+  //   this.tag,
+  // });
+
+  Meta.fromJson(super.json);
+
+  Definable<DateTime> get lastUpdated => getValue(
+        _lastUpdatedField,
+        tryParse: (d) => DateTime.tryParse(d ?? ''),
       );
-  final DateTime? lastUpdated;
-  final String? versionId;
-  final String? source;
-  final FixedList<String>? profile;
-  final FixedList<Tag>? tag;
 
-  Map<String, dynamic> toJson() => {
-        'lastUpdated': lastUpdated.toString(),
-        'versionId': versionId.toString(),
-        'source': source,
-        'profile': profile?.cast<String>().toList(),
-        'tag': tag?.map((e) => e.toJson()).toList(),
-      };
+  Definable<String> get versionId => getValue(_versionIdField);
+  Definable<DateTime> get source => getValue(_sourceField);
+
+  Definable<FixedList<String>> get profile => getValueFromArray(
+        'profile',
+        (strings) => strings?.map((e) => e as String).toFixedList(),
+      );
+
+  Definable<FixedList<Tag>> get tag => getValue(
+        'tag',
+        fromObjectArray: (jsonTags) =>
+            jsonTags?.map(Tag.fromJson).toFixedList(),
+      );
 }

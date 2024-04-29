@@ -17,6 +17,8 @@ class Identifier {
         use: json['use'] as String?,
       );
   final Type? type;
+
+  //TODO: Uri
   final String? system;
   final String? value;
   final String? use;

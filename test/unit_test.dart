@@ -14,6 +14,8 @@ import 'package:fhir_client/models/tag.dart';
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
+import 'fhir_client_test.dart';
+
 void main() {
   group('Equality', () {
     test(
@@ -135,7 +137,7 @@ void main() {
     test('Tag', () {
       final tag = Tag(code: Defined('code'), system: Defined(Uri.parse('url')));
       expect(tag.code, isA<Defined<String>>());
-      expect(tag.code as Defined<String>, 'code');
+      expectEquals(tag.code as Defined<String>, 'code');
     });
   });
 }

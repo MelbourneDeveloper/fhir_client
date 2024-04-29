@@ -10,15 +10,31 @@ abstract class JsonObject {
   Definable<T> getValue<T>(
     String fieldName, {
     T? Function(String?)? tryParse,
+    T? Function(List<Map<String, dynamic>>?)? fromObjectArray,
   }) =>
       json.containsKey(fieldName)
           ? tryParse != null
               //TODO: may not be a string
               ? Defined(tryParse(json[fieldName] as String?))
-              : json[fieldName] is T
-                  ? Defined(json[fieldName] as T)
-                  // ignore: avoid_dynamic_calls
-                  : WrongType(json[fieldName].runtimeType.toString())
+              : fromObjectArray != null
+                  ? Defined(
+                      fromObjectArray(
+                        json[fieldName] as List<Map<String, dynamic>>?,
+                      ),
+                    )
+                  : json[fieldName] is T
+                      ? Defined(json[fieldName] as T)
+                      // ignore: avoid_dynamic_calls
+                      : WrongType(json[fieldName].runtimeType.toString())
+          : const Undefined();
+
+  Definable<T> getValueFromArray<T>(
+    String fieldName,
+    T? Function(List<dynamic>?) fromArray,
+  ) =>
+      json.containsKey(fieldName)
+          ? Defined<T>(fromArray(json[fieldName] as List<dynamic>?))
+              as Definable<T>
           : const Undefined();
 
   Map<String, dynamic> toJson() => json;

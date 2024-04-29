@@ -11,8 +11,10 @@ import 'dart:io';
 
 import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/json_object.dart';
 import 'package:fhir_client/models/meta.dart';
 import 'package:fhir_client/models/resource.dart';
+import 'package:fhir_client/models/tag.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
@@ -43,9 +45,9 @@ void main() {
       expect(appointment.id, '05fda0d9-7d96-4869-bccd-8976ed9f35d8');
 
       // Assert meta
-      expect(appointment.meta!.versionId, '1');
+      expectEquals(appointment.meta!.versionId, '1');
       final expectedLastUpdated = DateTime.utc(2023, 08, 04, 8, 59, 32, 432);
-      expect(
+      expectEquals(
         appointment.meta!.lastUpdated,
         expectedLastUpdated,
       );
@@ -55,7 +57,7 @@ void main() {
 
       final map = appointment.meta!.toJson();
       final meta = Meta.fromJson(map);
-      expect(meta.lastUpdated, expectedLastUpdated);
+      expectEquals(meta.lastUpdated, expectedLastUpdated);
     });
 
     test('OperationOutcome', () async {
@@ -179,15 +181,18 @@ void main() {
         DateTime.utc(2020, 03, 24, 17, 59, 12, 935),
       );
       expect(
-        practitioner.meta!.profile!.first,
+        (practitioner.meta!.profile as Defined<FixedList<String>>).value!.first,
         'http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner',
       );
+
+      final tags = (practitioner.meta!.tag as Defined<FixedList<Tag>>).value!;
+
       expectEquals(
-        practitioner.meta!.tag!.first.system,
+        tags.first.system,
         Uri.parse('https://smarthealthit.org/tags'),
       );
       expectEquals(
-        practitioner.meta!.tag!.first.code,
+        tags.first.code,
         'Covid19 synthetic population from Synthea',
       );
 
