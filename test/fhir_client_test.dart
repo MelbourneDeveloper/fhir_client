@@ -117,7 +117,10 @@ void main() {
 
       expect(org.identifier!.length, 1);
       expect(org.identifier!.first.type!.text, 'SNO');
-      expect(org.identifier!.first.system, 'http://miup.jp/bangladesh/mej2021');
+      expect(
+        org.identifier!.first.system,
+        Uri.parse('http://miup.jp/bangladesh/mej2021'),
+      );
       expect(org.identifier!.first.value, '1');
 
       expect(org.active, true);
@@ -201,7 +204,7 @@ void main() {
 
       expect(
         practitioner.identifier!.first.system,
-        'http://hl7.org/fhir/sid/us-npi',
+        Uri.parse('http://hl7.org/fhir/sid/us-npi'),
       );
       expect(practitioner.identifier!.first.value, '40660');
 
@@ -306,7 +309,10 @@ void main() {
       // Assert identifier
       expect(schedule.identifier!.length, 1);
       expect(schedule.identifier![0].use, 'usual');
-      expect(schedule.identifier![0].system, 'http://example.org/scheduleid');
+      expect(
+        schedule.identifier![0].system,
+        Uri.parse('http://example.org/scheduleid'),
+      );
       expect(schedule.identifier![0].value, '45');
 
       // Assert active status
@@ -741,7 +747,7 @@ void main() {
       );
 
       expectEquals(slot.meta?.source, '#Tvh7DyVNf71GZIci');
-      expect(slot.identifier?.first.system, 'urn:system');
+      expect(slot.identifier?.first.system, Uri.parse('urn:system'));
       expect(slot.identifier?.first.value, 'slot-0001');
       expect(
         slot.serviceCategory?.first.coding?.first.system,
@@ -831,7 +837,7 @@ void main() {
       expect(first.identifier!.length, 1);
       expect(
         first.identifier!.first.system,
-        'http://clinfhir.com/fhir/NamingSystem/identifier',
+        Uri.parse('http://clinfhir.com/fhir/NamingSystem/identifier'),
       );
       expect(first.identifier!.first.value, '0987654321');
       expect(first.name!.length, 1);
@@ -858,7 +864,7 @@ void main() {
       expect(patient.identifier!.length, 1);
       expect(
         patient.identifier!.first.system,
-        'http://clinfhir.com/fhir/NamingSystem/identifier',
+        Uri.parse('http://clinfhir.com/fhir/NamingSystem/identifier'),
       );
       expect(patient.identifier!.first.value, '4241697');
       expect(patient.name!.length, 1);
