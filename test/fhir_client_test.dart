@@ -478,12 +478,12 @@ void main() {
 
       // Assertions for each field in the JSON
       expect(first.id, '9391491');
-      expect(first.meta?.versionId, '1');
-      expect(
+      expectEquals(first.meta?.versionId, '1');
+      expectEquals(
         first.meta?.lastUpdated,
         DateTime.parse('2023-04-10T10:33:32.673+00:00'),
       );
-      expect(first.meta?.source, '#nw7ecyTCXojBLbEq');
+      expectEquals(first.meta?.source, '#nw7ecyTCXojBLbEq');
       expect(first.status, 'final');
       expect(first.category?.length, 1);
       expect(first.category?.first.coding?.length, 1);
@@ -517,12 +517,12 @@ void main() {
       final firstObs = Observation.fromJson(map);
 
       expect(firstObs.id, '9391491');
-      expect(firstObs.meta?.versionId, '1');
-      expect(
+      expectEquals(firstObs.meta?.versionId, '1');
+      expectEquals(
         firstObs.meta?.lastUpdated,
         DateTime.parse('2023-04-10T10:33:32.673+00:00'),
       );
-      expect(firstObs.meta?.source, '#nw7ecyTCXojBLbEq');
+      expectEquals(firstObs.meta?.source, '#nw7ecyTCXojBLbEq');
       expect(firstObs.status, 'final');
       expect(firstObs.category?.length, 1);
       expect(firstObs.category?.first.coding?.length, 1);
@@ -557,12 +557,12 @@ void main() {
 
       final entry = bundleEntries.entries[4];
       expect(entry.id, '9391495');
-      expect(entry.meta?.versionId, '1');
-      expect(
+      expectEquals(entry.meta?.versionId, '1');
+      expectEquals(
         entry.meta?.lastUpdated,
         DateTime.parse('2023-04-10T10:33:32.673+00:00'),
       );
-      expect(entry.meta?.source, '#nw7ecyTCXojBLbEq');
+      expectEquals(entry.meta?.source, '#nw7ecyTCXojBLbEq');
       expect(entry.status, 'final');
       expect(entry.category?.length, 1);
       expect(entry.category?.first.coding?.length, 1);
@@ -632,12 +632,12 @@ void main() {
       final entry2 = Observation.fromJson(entryMap);
 
       expect(entry2.id, '9391495');
-      expect(entry2.meta?.versionId, '1');
-      expect(
+      expectEquals(entry2.meta?.versionId, '1');
+      expectEquals(
         entry2.meta?.lastUpdated,
         DateTime.parse('2023-04-10T10:33:32.673+00:00'),
       );
-      expect(entry2.meta?.source, '#nw7ecyTCXojBLbEq');
+      expectEquals(entry2.meta?.source, '#nw7ecyTCXojBLbEq');
       expect(entry2.status, 'final');
       expect(entry2.category?.length, 1);
       expect(entry2.category?.first.coding?.length, 1);
