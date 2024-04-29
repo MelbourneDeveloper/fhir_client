@@ -22,8 +22,7 @@ abstract class JsonObject {
     required T? Function(List<dynamic>?) fromObjectArray,
   }) =>
       json.containsKey(fieldName)
-          ? json[fieldName] is List<dynamic> ||
-                  json[fieldName] == null
+          ? json[fieldName] is List<dynamic> || json[fieldName] == null
               ? Defined(
                   fromObjectArray(
                     json[fieldName] as List<dynamic>?,
@@ -68,6 +67,15 @@ sealed class Definable<T> {
 
 final class Undefined<T> extends Definable<T> {
   const Undefined() : super.undefined();
+
+  @override
+  //Note: We don't specify a type argument here because they may not
+  //match. But, regardless of type, undefined is undefined
+  bool operator ==(Object other) => other is Undefined;
+
+  //TODO: is there a different option here?
+  @override
+  int get hashCode => 'Undefined'.hashCode;
 }
 
 final class WrongType<T> extends Definable<T> {

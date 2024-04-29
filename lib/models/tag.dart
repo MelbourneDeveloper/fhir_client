@@ -19,7 +19,7 @@ class Tag extends JsonObject {
           if (system is Defined<Uri>) _systemField: system.value,
         });
 
-  /// Constructs a new `Tag` instance from the provided JSON object.
+  /// Constructs a new [Tag] instance from the provided JSON object.
   Tag.fromJson(super.json);
 
   /// The machine-readable value of the tag.

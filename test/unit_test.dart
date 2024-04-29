@@ -138,9 +138,23 @@ void main() {
 
   group('Json Object', () {
     test('Tag', () {
-      final tag = Tag(code: Defined('code'), system: Defined(Uri.parse('url')));
+      final tag = Tag(
+        code: Defined('code'),
+        system: Defined(Uri.parse('http://www.url.com')),
+      );
       expect(tag.code, isA<Defined<String>>());
       expectEquals(tag.code as Defined<String>, 'code');
+
+      const system = 'sdfsdfsfd';
+      final tag2 = Tag.fromJson({'system': system});
+      final map = tag2.toJson();
+      expect(map['system'], system);
+
+      final tag3 = tag2.copyWith(code: Defined('new code'));
+      expectEquals(tag3.code, 'new code');
+
+      final tag4 = tag3.copyWith(code: const Undefined());
+      expectEquals(tag4.code, const Undefined<String>());
     });
   });
 }
