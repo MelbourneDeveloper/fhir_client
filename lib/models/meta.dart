@@ -17,19 +17,21 @@ class Meta extends JsonObject {
 
   Meta.fromJson(super.json);
 
-  Definable<DateTime> get lastUpdated => getValue(
+  Definable<DateTime> get lastUpdated => getValueFromString(
         _lastUpdatedField,
         tryParse: (d) => DateTime.tryParse(d ?? ''),
       );
+
   Definable<String> get versionId => getValue(_versionIdField);
   Definable<String> get source => getValue(_sourceField);
   Definable<FixedList<String>> get profile => getValueFromArray(
         'profile',
         (strings) => strings?.map((e) => e as String).toFixedList(),
       );
-  Definable<FixedList<Tag>> get tag => getValue(
+  Definable<FixedList<Tag>> get tag => getValueFromObjectArray(
         'tag',
-        fromObjectArray: (jsonTags) =>
-            jsonTags?.map(Tag.fromJson).toFixedList(),
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Tag.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
       );
 }

@@ -16,7 +16,7 @@ class Tag extends JsonObject {
 
   Definable<String> get code => getValue(_codeField);
   Definable<Uri> get system =>
-      getValue(_systemField, tryParse: (u) => Uri.tryParse(u ?? ''));
+      getValueFromString(_systemField, tryParse: (u) => Uri.tryParse(u ?? ''));
 
   Tag copyWith({
     Definable<String>? code,

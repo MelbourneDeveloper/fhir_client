@@ -8,24 +8,40 @@ abstract class JsonObject {
   final Map<String, dynamic> json;
 
   Definable<T> getValue<T>(
+    String fieldName,
+  ) =>
+      json.containsKey(fieldName)
+          ? json[fieldName] is T || json[fieldName] == null
+              ? Defined(json[fieldName] as T?)
+              // ignore: avoid_dynamic_calls
+              : WrongType(json[fieldName].runtimeType.toString())
+          : const Undefined();
+
+  Definable<T> getValueFromObjectArray<T>(
     String fieldName, {
-    T? Function(String?)? tryParse,
-    T? Function(List<Map<String, dynamic>>?)? fromObjectArray,
+    required T? Function(List<dynamic>?) fromObjectArray,
   }) =>
       json.containsKey(fieldName)
-          ? tryParse != null
-              //TODO: may not be a string
+          ? json[fieldName] is List<dynamic> ||
+                  json[fieldName] == null
+              ? Defined(
+                  fromObjectArray(
+                    json[fieldName] as List<dynamic>?,
+                  ),
+                )
+              // ignore: avoid_dynamic_calls
+              : WrongType(json[fieldName].runtimeType.toString())
+          : const Undefined();
+
+  Definable<T> getValueFromString<T>(
+    String fieldName, {
+    required T? Function(String?) tryParse,
+  }) =>
+      json.containsKey(fieldName)
+          ? json[fieldName] is String || json[fieldName] == null
               ? Defined(tryParse(json[fieldName] as String?))
-              : fromObjectArray != null
-                  ? Defined(
-                      fromObjectArray(
-                        json[fieldName] as List<Map<String, dynamic>>?,
-                      ),
-                    )
-                  : json[fieldName] is T
-                      ? Defined(json[fieldName] as T)
-                      // ignore: avoid_dynamic_calls
-                      : WrongType(json[fieldName].runtimeType.toString())
+              // ignore: avoid_dynamic_calls
+              : WrongType(json[fieldName].runtimeType.toString())
           : const Undefined();
 
   Definable<T> getValueFromArray<T>(
