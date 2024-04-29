@@ -733,14 +733,14 @@ void main() {
 
 // Assert all fields (Thanks to Anthropic Claude 3)
 
-      expect(slot.meta?.versionId, '2');
+      expectEquals(slot.meta?.versionId, '2');
 
-      expect(
+      expectEquals(
         slot.meta?.lastUpdated,
         DateTime.utc(2022, 10, 5, 23, 41, 27, 908),
       );
 
-      expect(slot.meta?.source, '#Tvh7DyVNf71GZIci');
+      expectEquals(slot.meta?.source, '#Tvh7DyVNf71GZIci');
       expect(slot.identifier?.first.system, 'urn:system');
       expect(slot.identifier?.first.value, 'slot-0001');
       expect(
@@ -815,12 +815,12 @@ void main() {
       expect(patient.id, '8728374');
 
       expect(first.id, '8728293');
-      expect(first.meta!.versionId, '1');
-      expect(
+      expectEquals(first.meta!.versionId, '1');
+      expectEquals(
         first.meta!.lastUpdated,
         DateTime.parse('2023-03-21T10:42:21.276+00:00'),
       );
-      expect(first.meta!.source, '#atCUOwuOCtijIb20');
+      expectEquals(first.meta!.source, '#atCUOwuOCtijIb20');
 
       //HAPI has a list of texts, but these don't seem to be in the
       //FHIR spect
@@ -844,12 +844,12 @@ void main() {
       expect(first.birthDate, DateTime.parse('1992-10-12'));
 
       expect(patient.id, '8728374');
-      expect(patient.meta!.versionId, '1');
-      expect(
+      expectEquals(patient.meta!.versionId, '1');
+      expectEquals(
         patient.meta!.lastUpdated,
         DateTime.parse('2023-03-21T10:42:27.116+00:00'),
       );
-      expect(patient.meta!.source, '#sPvtkIxUA0WunOfK');
+      expectEquals(patient.meta!.source, '#sPvtkIxUA0WunOfK');
       // expect(patient.text!.status, 'generated');
       // expect(
       //   patient.text!.div,
@@ -878,7 +878,7 @@ void main() {
       expect(map['meta']['versionId'], '1');
       expect(
         map['meta']['lastUpdated'],
-        DateTime.utc(2023, 3, 21, 10, 42, 21, 276).toString(),
+        '2023-03-21T10:42:21.276+00:00',
       );
       expect(map['meta']['source'], '#atCUOwuOCtijIb20');
       // expect(map['text']['status'], 'generated');
