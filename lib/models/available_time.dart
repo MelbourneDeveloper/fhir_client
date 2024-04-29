@@ -1,12 +1,13 @@
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/string_backed_value.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 
 /// Represents the time during which the resource is available.
 class AvailableTime {
   /// Creates an instance of [AvailableTime].
   AvailableTime({
+    required this.availableStartTime,
     this.daysOfWeek,
-    this.availableStartTime,
     this.availableEndTime,
   });
 
@@ -16,7 +17,7 @@ class AvailableTime {
             ?.cast<String>()
             .toFixedList(),
         availableStartTime:
-            Time.tryParse(json['availableStartTime'] as String? ?? ''),
+            StringBackedValue(json['availableStartTime'] as String?),
         availableEndTime:
             Time.tryParse(json['availableEndTime'] as String? ?? ''),
       );
@@ -25,7 +26,7 @@ class AvailableTime {
   final FixedList<String>? daysOfWeek;
 
   /// The start time of availability.
-  final Time? availableStartTime;
+  final StringBackedValue<Time> availableStartTime;
 
   /// The end time of availability.
   final Time? availableEndTime;
@@ -33,7 +34,7 @@ class AvailableTime {
   /// Converts this [AvailableTime] instance to a JSON map.
   Map<String, dynamic> toJson() => {
         'daysOfWeek': daysOfWeek?.cast<dynamic>().toList(),
-        'availableStartTime': availableStartTime.toString(),
+        'availableStartTime': availableStartTime.text,
         'availableEndTime': availableEndTime.toString(),
       };
 
@@ -50,4 +51,17 @@ class AvailableTime {
       daysOfWeek.hashCode ^
       availableStartTime.hashCode ^
       availableEndTime.hashCode;
+
+  /// Makes a copy of this [AvailableTime] and allows for 
+  /// non-destructive mutation.
+  AvailableTime copyWith({
+    FixedList<String>? daysOfWeek,
+    StringBackedValue<Time>? availableStartTime,
+    Time? availableEndTime,
+  }) =>
+      AvailableTime(
+        daysOfWeek: daysOfWeek ?? this.daysOfWeek,
+        availableStartTime: availableStartTime ?? this.availableStartTime,
+        availableEndTime: availableEndTime ?? this.availableEndTime,
+      );
 }

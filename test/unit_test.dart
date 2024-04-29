@@ -6,6 +6,7 @@ import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/available_time.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/string_backed_value.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:http/testing.dart';
@@ -44,24 +45,23 @@ void main() {
     );
 
     test('AvailableTime equality and hash code', () {
-
       //TODO More Time parsing and testing
 
-      final nineAM = Time.tryParse('09:00')!;
-      expect(nineAM.hour, 9);
-      expect(nineAM.minute, 0);
-      expect(nineAM.second, 0);
+      final nineAM = StringBackedValue<Time>('09:00');
+      expect(nineAM.value!.hour, 9);
+      expect(nineAM.value!.minute, 0);
+      expect(nineAM.value!.second, 0);
       // Test case 1: Equal objects
 
       final availableTime1 = AvailableTime(
         daysOfWeek: FixedList<String>(['Monday', 'Tuesday']),
-        availableStartTime: nineAM,
-        availableEndTime: '17:00',
+        availableStartTime: StringBackedValue('09:00'),
+        availableEndTime: Time.tryParse('17:00'),
       );
       final availableTime2 = AvailableTime(
         daysOfWeek: FixedList<String>(['Monday', 'Tuesday']),
-        availableStartTime: Time.tryParse('09:00'),
-        availableEndTime: '17:00',
+        availableStartTime: StringBackedValue('09:00'),
+        availableEndTime: Time.tryParse('17:00'),
       );
       expect(availableTime1, equals(availableTime2));
       expect(availableTime1.hashCode, equals(availableTime2.hashCode));
@@ -69,8 +69,8 @@ void main() {
       // Test case 2: Unequal objects (different daysOfWeek)
       final availableTime3 = AvailableTime(
         daysOfWeek: FixedList<String>(['Wednesday', 'Thursday']),
-        availableStartTime: Time.tryParse('09:00'),
-        availableEndTime: '17:00',
+        availableStartTime: nineAM,
+        availableEndTime: Time.tryParse('17:00'),
       );
       expect(availableTime1, isNot(equals(availableTime3)));
       expect(availableTime1.hashCode, isNot(equals(availableTime3.hashCode)));
@@ -78,24 +78,26 @@ void main() {
       // Test case 3: Unequal objects (different availableStartTime)
       final availableTime4 = AvailableTime(
         daysOfWeek: FixedList<String>(['Monday', 'Tuesday']),
-        availableStartTime: Time.tryParse('10:00'),
-        availableEndTime: '17:00',
+        availableStartTime: StringBackedValue('10:00'),
+        availableEndTime: Time.tryParse('17:00'),
       );
-      expect(availableTime1, isNot(equals(availableTime4)));
+      expect(availableTime1 == availableTime4, false);
       expect(availableTime1.hashCode, isNot(equals(availableTime4.hashCode)));
 
       // Test case 4: Unequal objects (different availableEndTime)
       final availableTime5 = AvailableTime(
         daysOfWeek: FixedList<String>(['Monday', 'Tuesday']),
-        availableStartTime: Time.tryParse('09:00'),
-        availableEndTime: '18:00',
+        availableStartTime: nineAM,
+        availableEndTime: Time.tryParse('18:00'),
       );
       expect(availableTime1, isNot(equals(availableTime5)));
       expect(availableTime1.hashCode, isNot(equals(availableTime5.hashCode)));
 
       // Test case 5: Null values
-      final availableTime6 = AvailableTime();
-      final availableTime7 = AvailableTime();
+      final availableTime6 =
+          AvailableTime(availableStartTime: StringBackedValue(null));
+      final availableTime7 =
+          AvailableTime(availableStartTime: StringBackedValue(null));
       expect(availableTime6, equals(availableTime7));
       expect(availableTime6.hashCode, equals(availableTime7.hashCode));
     });

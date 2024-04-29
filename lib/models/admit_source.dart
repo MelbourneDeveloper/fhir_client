@@ -40,4 +40,15 @@ class AdmitSource {
 
   @override
   int get hashCode => Object.hash(coding, admitter);
+
+  /// Creates a copy of the [AdmitSource] instance and allows
+  /// for non-destructive mutation
+  AdmitSource copyWith({
+    CodeableConcept? coding,
+    Reference? admitter,
+  }) =>
+      AdmitSource(
+        coding: coding ?? this.coding,
+        admitter: admitter ?? this.admitter,
+      );
 }

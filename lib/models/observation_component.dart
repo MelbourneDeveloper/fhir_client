@@ -1,6 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/string_backed_value.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/observation_reference_range.dart';
@@ -60,9 +61,7 @@ class ObservationComponent {
               )
             : null,
         valueTime: Time.tryParse(json['valueTime'] as String? ?? ''),
-        valueDateTime: json['valueDateTime'] != null
-            ? DateTime.parse(json['valueDateTime'] as String)
-            : null,
+        valueDateTime: StringBackedValue.fromJson(json, 'valueDateTime'),
         valuePeriod: json['valuePeriod'] != null
             ? Period.fromJson(json['valuePeriod'] as Map<String, dynamic>)
             : null,
@@ -123,7 +122,7 @@ class ObservationComponent {
 
   /// The information determined as a result of making the observation,
   /// if the information has a simple value.
-  final DateTime? valueDateTime;
+  final StringBackedValue<DateTime>? valueDateTime;
 
   /// The information determined as a result of making the observation,
   /// if the information has a simple value.
@@ -150,7 +149,7 @@ class ObservationComponent {
         'valueRatio': valueRatio?.toJson(),
         'valueSampledData': valueSampledData?.toJson(),
         'valueTime': valueTime.toString(),
-        'valueDateTime': valueDateTime?.toIso8601String(),
+        if (valueDateTime != null) 'valueDateTime': valueDateTime!.text,
         'valuePeriod': valuePeriod?.toJson(),
         'dataAbsentReason': dataAbsentReason?.toJson(),
         'interpretation': interpretation?.map((e) => e.toJson()).toFixedList(),

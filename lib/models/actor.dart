@@ -21,7 +21,7 @@ class Actor {
 
   /// Converts an [Actor] instance to JSON data
   Map<String, dynamic> toJson() => {
-        'reference': reference,
+        if (reference != null) 'reference': reference,
         'display': display,
       };
 
@@ -34,4 +34,15 @@ class Actor {
 
   @override
   int get hashCode => Object.hash(reference, display);
+
+  /// Creates a copy of the [Actor] instance and allows
+  /// for non-destructive mutation
+  Actor copyWith({
+    String? reference,
+    String? display,
+  }) =>
+      Actor(
+        reference: reference ?? this.reference,
+        display: display ?? this.display,
+      );
 }

@@ -4,6 +4,7 @@ import 'package:fhir_client/models/admit_source.dart';
 import 'package:fhir_client/models/annotation.dart';
 import 'package:fhir_client/models/available_time.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/string_backed_value.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/codeable_reference.dart';
@@ -345,6 +346,7 @@ class Hospitalization {
 
 class Observation extends Resource {
   Observation({
+    required this.effectiveDateTime,
     String? id,
     Meta? meta,
     this.identifier,
@@ -355,7 +357,6 @@ class Observation extends Resource {
     this.code,
     this.subject,
     this.encounter,
-    this.effectiveDateTime,
     this.effectivePeriod,
     this.effectiveTiming,
     this.effectiveInstant,
@@ -413,9 +414,8 @@ class Observation extends Resource {
         encounter: json['encounter'] != null
             ? Reference.fromJson(json['encounter'] as Map<String, dynamic>)
             : null,
-        effectiveDateTime: json['effectiveDateTime'] != null
-            ? DateTime.parse(json['effectiveDateTime'] as String)
-            : null,
+        effectiveDateTime:
+            StringBackedValue(json['effectiveDateTime'] as String? ?? ''),
         effectivePeriod: json['effectivePeriod'] != null
             ? Period.fromJson(json['effectivePeriod'] as Map<String, dynamic>)
             : null,
@@ -516,7 +516,7 @@ class Observation extends Resource {
   final CodeableConcept? code;
   final Reference? subject;
   final Reference? encounter;
-  final DateTime? effectiveDateTime;
+  final StringBackedValue<DateTime> effectiveDateTime;
   final Period? effectivePeriod;
   final Timing? effectiveTiming;
   final DateTime? effectiveInstant;
@@ -558,7 +558,7 @@ class Observation extends Resource {
         'code': code?.toJson(),
         'subject': subject?.toJson(),
         'encounter': encounter?.toJson(),
-        'effectiveDateTime': effectiveDateTime?.toIso8601String(),
+        'effectiveDateTime': effectiveDateTime.text,
         'effectivePeriod': effectivePeriod?.toJson(),
         'effectiveTiming': effectiveTiming?.toJson(),
         'effectiveInstant': effectiveInstant?.toIso8601String(),

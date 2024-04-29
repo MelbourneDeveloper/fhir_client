@@ -493,8 +493,8 @@ void main() {
       expect(first.subject?.reference, 'Patient/9391475');
       expect(first.encounter?.reference, 'Encounter/9391490');
       expect(
-        first.effectiveDateTime,
-        DateTime.parse('2011-04-18T15:44:18-04:00'),
+        first.effectiveDateTime == '2011-04-18T15:44:18-04:00',
+        true,
       );
       expect(first.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
       expect(first.valueQuantity?.value, 179.30389202058845);
@@ -535,8 +535,8 @@ void main() {
       expect(firstObs.subject?.reference, 'Patient/9391475');
       expect(firstObs.encounter?.reference, 'Encounter/9391490');
       expect(
-        firstObs.effectiveDateTime,
-        DateTime.parse('2011-04-18T15:44:18-04:00'),
+        firstObs.effectiveDateTime == '2011-04-18T15:44:18-04:00',
+        true,
       );
       expect(firstObs.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
       expect(firstObs.valueQuantity?.value, 179.30389202058845);
@@ -572,8 +572,8 @@ void main() {
       expect(entry.subject?.reference, 'Patient/9391475');
       expect(entry.encounter?.reference, 'Encounter/9391490');
       expect(
-        entry.effectiveDateTime,
-        DateTime.parse('2011-04-18T15:44:18-04:00'),
+        entry.effectiveDateTime == '2011-04-18T15:44:18-04:00',
+        true,
       );
       expect(entry.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
       expect(entry.component?.length, 2);
@@ -646,9 +646,9 @@ void main() {
       expect(entry2.code?.text, 'Blood Pressure');
       expect(entry2.subject?.reference, 'Patient/9391475');
       expect(entry2.encounter?.reference, 'Encounter/9391490');
-      expect(
+      expectEquals(
         entry2.effectiveDateTime,
-        DateTime.parse('2011-04-18T15:44:18-04:00'),
+        '2011-04-18T15:44:18-04:00',
       );
       expect(entry2.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
       expect(entry2.component?.length, 2);
@@ -975,3 +975,5 @@ MockClient _mockClient(String filePath) => MockClient(
         ),
       ),
     );
+
+void expectEquals<T>(T a, T b) => expect(a == b, true);

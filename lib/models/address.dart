@@ -92,4 +92,27 @@ class Address {
         postalCode,
         country,
       );
+
+  /// Creates a copy of the Address instance and allows
+  /// for non-destructive mutation
+  Address copyWith({
+    String? use,
+    String? type,
+    FixedList<String>? line,
+    String? city,
+    String? district,
+    String? state,
+    String? postalCode,
+    String? country,
+  }) =>
+      Address(
+        use: use ?? this.use,
+        type: type ?? this.type,
+        line: line ?? this.line,
+        city: city ?? this.city,
+        district: district ?? this.district,
+        state: state ?? this.state,
+        postalCode: postalCode ?? this.postalCode,
+        country: country ?? this.country,
+      );
 }

@@ -26,4 +26,15 @@ class CodeableConcept implements CodingList {
         'coding': coding?.map((e) => e.toJson()).toList(),
         'text': text,
       };
+
+  /// Makes a copy of this [CodeableConcept] and allows for
+  /// non-destructive mutation.
+  CodeableConcept copyWith({
+    FixedList<Coding>? coding,
+    String? text,
+  }) =>
+      CodeableConcept(
+        coding: coding ?? this.coding,
+        text: text ?? this.text,
+      );
 }
