@@ -182,11 +182,11 @@ void main() {
         practitioner.meta!.profile!.first,
         'http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner',
       );
-      expect(
+      expectEquals(
         practitioner.meta!.tag!.first.system,
-        'https://smarthealthit.org/tags',
+        Uri.parse('https://smarthealthit.org/tags'),
       );
-      expect(
+      expectEquals(
         practitioner.meta!.tag!.first.code,
         'Covid19 synthetic population from Synthea',
       );

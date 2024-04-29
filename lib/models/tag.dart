@@ -1,18 +1,27 @@
-class Tag {
+import 'package:fhir_client/models/basic_types/json_object.dart';
+
+const _codeField = 'code';
+const _systemField = 'system';
+
+class Tag extends JsonObject {
   Tag({
-    this.system,
-    this.code,
-  });
+    Definable<String> code = const Undefined(),
+    Definable<Uri> system = const Undefined(),
+  }) : super({
+          if (code is Defined<String>) _codeField: code.value,
+          if (system is Defined<Uri>) _systemField: system.value,
+        });
 
-  factory Tag.fromJson(Map<String, dynamic> json) => Tag(
-        system: json['system'] != null ? json['system'] as String? : null,
-        code: json['code'] != null ? json['code'] as String? : null,
+  Definable<String> get code => getValue(_codeField);
+  Definable<Uri> get system =>
+      getValue(_systemField, tryParse: (u) => Uri.tryParse(u ?? ''));
+
+  Tag copyWith({
+    Definable<String>? code,
+    Definable<Uri>? system,
+  }) =>
+      Tag(
+        code: code ?? this.code,
+        system: system ?? this.system,
       );
-  final String? system;
-  final String? code;
-
-  Map<String, dynamic> toJson() => {
-        'system': system,
-        'code': code,
-      };
 }

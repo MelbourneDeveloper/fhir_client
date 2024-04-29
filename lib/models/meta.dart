@@ -17,7 +17,7 @@ class Meta {
         profile:
             (json['profile'] as List<dynamic>?)?.cast<String>().toFixedList(),
         tag: (json['tag'] as List<dynamic>?)
-            ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
+            ?.map((e) => Tag(e as Map<String, dynamic>))
             .toFixedList(),
       );
   final DateTime? lastUpdated;

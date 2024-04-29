@@ -6,9 +6,11 @@ import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/available_time.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/json_object.dart';
 import 'package:fhir_client/models/basic_types/string_backed_value.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/resource.dart';
+import 'package:fhir_client/models/tag.dart';
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
@@ -126,6 +128,14 @@ void main() {
         result.text!.div,
         'Exception: Simulated exception',
       );
+    });
+  });
+
+  group('Json Object', () {
+    test('Tag', () {
+      final tag = Tag(code: Defined('code'), system: Defined(Uri.parse('url')));
+      expect(tag.code, isA<Defined<String>>());
+      expect(tag.code as Defined<String>, 'code');
     });
   });
 }
