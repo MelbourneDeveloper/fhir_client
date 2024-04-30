@@ -819,46 +819,6 @@ class Hospitalization {
       };
 }
 
-// Observation fields
-const _identifierField = 'identifier';
-const _basedOnField = 'basedOn';
-const _partOfField = 'partOf';
-const _statusField = 'status';
-const _categoryField = 'category';
-const _codeField = 'code';
-const _subjectField = 'subject';
-const _encounterField = 'encounter';
-const _effectiveDateTimeField = 'effectiveDateTime';
-const _effectivePeriodField = 'effectivePeriod';
-const _effectiveTimingField = 'effectiveTiming';
-const _effectiveInstantField = 'effectiveInstant';
-const _issuedField = 'issued';
-const _valueQuantityField = 'valueQuantity';
-const _valueCodeableConceptField = 'valueCodeableConcept';
-const _valueStringField = 'valueString';
-const _valueBooleanField = 'valueBoolean';
-const _valueIntegerField = 'valueInteger';
-const _valueRangeField = 'valueRange';
-const _valueRatioField = 'valueRatio';
-const _valueSampledDataField = 'valueSampledData';
-const _valueTimeField = 'valueTime';
-const _valueDateTimeField = 'valueDateTime';
-const _valuePeriodField = 'valuePeriod';
-const _dataAbsentReasonField = 'dataAbsentReason';
-const _interpretationField = 'interpretation';
-const _noteField = 'note';
-const _bodySiteField = 'bodySite';
-const _methodField = 'method';
-const _specimenField = 'specimen';
-const _deviceField = 'device';
-const _referenceRangeField = 'referenceRange';
-const _hasMemberField = 'hasMember';
-const _derivedFromField = 'derivedFrom';
-const _componentField = 'component';
-const _complicatedByField = 'complicatedBy';
-const _contextOfUseField = 'contextOfUse';
-//-----------------------
-
 /// Measurements and simple assertions made about a patient, device or other subject.
 class Observation extends Resource {
   /// Constructs a new [Observation].
@@ -966,18 +926,14 @@ class Observation extends Resource {
   /// Creates an [Observation] instance from the provided JSON object.
   Observation.fromJson(super.json) : super._internal();
 
-  /// Business identifier for this observation.
+/// Business identifier for this observation.
   ///
   /// Type: List<Identifier>
   /// Path: Observation.identifier
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: *
-  Definable<FixedList<Identifier>> get identifier => getValueFromObjectArray(
-        _identifierField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Identifier.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  Definable<FixedList<Identifier>> get identifier =>
+      identifierField.getValue(this);
 
   /// A plan, proposal or order that is fulfilled in whole or in part by this event.
   ///
@@ -985,26 +941,15 @@ class Observation extends Resource {
   /// Path: Observation.basedOn
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: *
-  Definable<FixedList<Reference>> get basedOn => getValueFromObjectArray(
-        _basedOnField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  Definable<FixedList<Reference>> get basedOn => basedOnField.getValue(this);
 
-  /// A larger event of which this particular observation is a component or
-  /// step.
+  /// A larger event of which this particular observation is a component or step.
   ///
   /// Type: List<Reference>
   /// Path: Observation.partOf
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: *
-  Definable<FixedList<Reference>> get partOf => getValueFromObjectArray(
-        _partOfField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  Definable<FixedList<Reference>> get partOf => partOfField.getValue(this);
 
   /// The status of the result value.
   ///
@@ -1012,7 +957,7 @@ class Observation extends Resource {
   /// Path: Observation.status
   /// Minimum Cardinality: 1
   /// Maximum Cardinality: 1
-  Definable<String> get status => getValue(_statusField);
+  Definable<String> get status => statusField.getValue(this);
 
   /// A code that classifies the general type of observation being made.
   ///
@@ -1020,12 +965,8 @@ class Observation extends Resource {
   /// Path: Observation.category
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: *
-  Definable<FixedList<CodeableConcept>> get category => getValueFromObjectArray(
-        _categoryField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  Definable<FixedList<CodeableConcept>> get category =>
+      categoryField.getValue(this);
 
   /// Type of observation (code / type).
   ///
@@ -1033,284 +974,173 @@ class Observation extends Resource {
   /// Path: Observation.code
   /// Minimum Cardinality: 1
   /// Maximum Cardinality: 1
-  Definable<CodeableConcept> get code => getValueFromObjectArray(
-        _codeField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<CodeableConcept> get code => codeField.getValue(this);
 
-  /// The patient, or group of patients, location, or device this observation
-  /// is about and into whose record the observation is placed. If the actual
-  /// focus of the observation is different from the subject (or a sample of,
-  /// part, or region of the subject), the `focus` element or the
-  /// `code` itself specifies the actual focus of the observation.
+  /// The patient, or group of patients, location, or device this observation is about and into whose record the observation is placed. If the actual focus of the observation is different from the subject (or a sample of, part, or region of the subject), the `focus` element or the `code` itself specifies the actual focus of the observation.
   ///
   /// Type: Reference
   /// Path: Observation.subject
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<Reference> get subject => getValueFromObjectArray(
-        _subjectField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<Reference> get subject => subjectField.getValue(this);
 
-  /// The healthcare event (e.g. a patient and healthcare provider interaction)
-  /// during which this observation is made.
+  /// The healthcare event (e.g. a patient and healthcare provider interaction) during which this observation is made.
   ///
   /// Type: Reference
   /// Path: Observation.encounter
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<Reference> get encounter => getValueFromObjectArray(
-        _encounterField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<Reference> get encounter => encounterField.getValue(this);
 
-  /// The time or time-period the observed value is asserted as being true.
-  /// For biological subjects - e.g. human patients - this is usually called
-  /// the "physiologically relevant time". This is usually either the time of
-  /// the procedure or of specimen collection, but very often the source of
-  /// the date/time is not known, only the date/time itself.
+  /// The time or time-period the observed value is asserted as being true. For biological subjects - e.g. human patients - this is usually called the "physiologically relevant time". This is usually either the time of the procedure or of specimen collection, but very often the source of the date/time is not known, only the date/time itself.
   ///
   /// Type: DateTimeType
-  /// Path: Observation.effective[]
+  /// Path: Observation.effective[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<DateTime> get effectiveDateTime => getValueFromString(
-        _effectiveDateTimeField,
-        tryParse: (d) => DateTime.tryParse(d ?? ''),
-      );
+  Definable<DateTime> get effectiveDateTime =>
+      effectiveDateTimeField.getValue(this);
 
-  /// The time or time-period the observed value is asserted as being true.
-  /// For biological subjects - e.g. human patients - this is usually called
-  /// the "physiologically relevant time". This is usually either the time of
-  /// the procedure or of specimen collection, but very often the source of
-  /// the date/time is not known, only the date/time itself.
+  /// The time or time-period the observed value is asserted as being true. For biological subjects - e.g. human patients - this is usually called the "physiologically relevant time". This is usually either the time of the procedure or of specimen collection, but very often the source of the date/time is not known, only the date/time itself.
   ///
   /// Type: Period
-  /// Path: Observation.effective[]
+  /// Path: Observation.effective[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<Period> get effectivePeriod => getValueFromObjectArray(
-        _effectivePeriodField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Period.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<Period> get effectivePeriod => effectivePeriodField.getValue(this);
 
-  /// The time or time-period the observed value is asserted as being true.
-  /// For biological subjects - e.g. human patients - this is usually called
-  /// the "physiologically relevant time". This is usually either the time of
-  /// the procedure or of specimen collection, but very often the source of
-  /// the date/time is not known, only the date/time itself.
+  /// The time or time-period the observed value is asserted as being true. For biological subjects - e.g. human patients - this is usually called the "physiologically relevant time". This is usually either the time of the procedure or of specimen collection, but very often the source of the date/time is not known, only the date/time itself.
   ///
   /// Type: Timing
-  /// Path: Observation.effective[]
+  /// Path: Observation.effective[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<Timing> get effectiveTiming => getValueFromObjectArray(
-        _effectiveTimingField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Timing.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<Timing> get effectiveTiming => effectiveTimingField.getValue(this);
 
-  /// The time or time-period the observed value is asserted as being true.
-  /// For biological subjects - e.g. human patients - this is usually called
-  /// the "physiologically relevant time". This is usually either the time of
-  /// the procedure or of specimen collection, but very often the source of
-  /// the date/time is not known, only the date/time itself.
+  /// The time or time-period the observed value is asserted as being true. For biological subjects - e.g. human patients - this is usually called the "physiologically relevant time". This is usually either the time of the procedure or of specimen collection, but very often the source of the date/time is not known, only the date/time itself.
   ///
   /// Type: InstantType
-  /// Path: Observation.effective[]
+  /// Path: Observation.effective[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<DateTime> get effectiveInstant => getValueFromString(
-        _effectiveInstantField,
-        tryParse: (d) => DateTime.tryParse(d ?? ''),
-      );
+  Definable<DateTime> get effectiveInstant =>
+      effectiveInstantField.getValue(this);
 
-  /// The date and time this version of the observation was made available to
-  /// providers, typically after the results have been reviewed and verified.
+  /// The date and time this version of the observation was made available to providers, typically after the results have been reviewed and verified.
   ///
   /// Type: InstantType
   /// Path: Observation.issued
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<DateTime> get issued => getValueFromString(
-        _issuedField,
-        tryParse: (d) => DateTime.tryParse(d ?? ''),
-      );
+  Definable<DateTime> get issued => issuedField.getValue(this);
 
-  /// The information determined as a result of making the observation, if the
-  /// information has a simple value.
+  /// The information determined as a result of making the observation, if the information has a simple value.
   ///
   /// Type: Quantity
-  /// Path: Observation.value[]
+  /// Path: Observation.value[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<Quantity> get valueQuantity => getValueFromObjectArray(
-        _valueQuantityField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Quantity.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<Quantity> get valueQuantity => valueQuantityField.getValue(this);
 
-  /// The information determined as a result of making the observation, if the
-  /// information has a simple value.
+  /// The information determined as a result of making the observation, if the information has a simple value.
   ///
   /// Type: CodeableConcept
-  /// Path: Observation.value[]
+  /// Path: Observation.value[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
   Definable<CodeableConcept> get valueCodeableConcept =>
-      getValueFromObjectArray(
-        _valueCodeableConceptField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+      valueCodeableConceptField.getValue(this);
 
-  /// The information determined as a result of making the observation, if the
-  /// information has a simple value.
+  /// The information determined as a result of making the observation, if the information has a simple value.
   ///
   /// Type: StringType
-  /// Path: Observation.value[]
+  /// Path: Observation.value[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<String> get valueString => getValue(_valueStringField);
+  Definable<String> get valueString => valueStringField.getValue(this);
 
-  /// The information determined as a result of making the observation, if the
-  /// information has a simple value.
+  /// The information determined as a result of making the observation, if the information has a simple value.
   ///
   /// Type: BooleanType
   /// Path: Observation.value[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<bool> get valueBoolean => getValue(_valueBooleanField);
+  Definable<bool> get valueBoolean => valueBooleanField.getValue(this);
 
-  /// The information determined as a result of making the observation, if the
-  /// information has a simple value.
+  /// The information determined as a result of making the observation, if the information has a simple value.
   ///
   /// Type: IntegerType
   /// Path: Observation.value[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<int> get valueInteger => getValue(_valueIntegerField);
+  Definable<int> get valueInteger => valueIntegerField.getValue(this);
 
-  /// The information determined as a result of making the observation, if the
-  /// information has a simple value.
+  /// The information determined as a result of making the observation, if the information has a simple value.
   ///
   /// Type: Range
   /// Path: Observation.value[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<Range> get valueRange => getValueFromObjectArray(
-        _valueRangeField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Range.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<Range> get valueRange => valueRangeField.getValue(this);
 
-  /// The information determined as a result of making the observation, if the
-  /// information has a simple value.
+  /// The information determined as a result of making the observation, if the information has a simple value.
   ///
   /// Type: Ratio
   /// Path: Observation.value[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<Ratio> get valueRatio => getValueFromObjectArray(
-        _valueRatioField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Ratio.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<Ratio> get valueRatio => valueRatioField.getValue(this);
 
-  /// The information determined as a result of making the observation, if the
-  /// information has a simple value.
+  /// The information determined as a result of making the observation, if the information has a simple value.
   ///
   /// Type: SampledData
   /// Path: Observation.value[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<SampledData> get valueSampledData => getValueFromObjectArray(
-        _valueSampledDataField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => SampledData.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<SampledData> get valueSampledData =>
+      valueSampledDataField.getValue(this);
 
-  /// The information determined as a result of making the observation, if the
-  /// information has a simple value.
+  /// The information determined as a result of making the observation, if the information has a simple value.
   ///
   /// Type: TimeType
   /// Path: Observation.value[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<Time> get valueTime => getValueFromString(
-        _valueTimeField,
-        tryParse: (t) => Time.tryParse(t ?? ''),
-      );
+  Definable<Time> get valueTime => valueTimeField.getValue(this);
 
-  /// The information determined as a result of making the observation, if the
-  /// information has a simple value.
+  /// The information determined as a result of making the observation, if the information has a simple value.
   ///
   /// Type: DateTimeType
   /// Path: Observation.value[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<DateTime> get valueDateTime => getValueFromString(
-        _valueDateTimeField,
-        tryParse: (d) => DateTime.tryParse(d ?? ''),
-      );
+  Definable<DateTime> get valueDateTime => valueDateTimeField.getValue(this);
 
-  /// The information determined as a result of making the observation, if the
-  /// information has a simple value.
+  /// The information determined as a result of making the observation, if the information has a simple value.
   ///
   /// Type: Period
   /// Path: Observation.value[x]
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<Period> get valuePeriod => getValueFromObjectArray(
-        _valuePeriodField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Period.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<Period> get valuePeriod => valuePeriodField.getValue(this);
 
-  /// Provides a reason why the expected value in the element
-  /// Observation.value[x] is missing.
+  /// Provides a reason why the expected value in the element Observation.value[x] is missing.
   ///
   /// Type: CodeableConcept
   /// Path: Observation.dataAbsentReason
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<CodeableConcept> get dataAbsentReason => getValueFromObjectArray(
-        _dataAbsentReasonField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<CodeableConcept> get dataAbsentReason =>
+      dataAbsentReasonField.getValue(this);
 
-  /// A categorical assessment of an observation value. This is often used to
-  /// supply a "normal" range categorization for numeric values.
+  /// A categorical assessment of an observation value. This is often used to supply a "normal" range categorization for numeric values.
   ///
   /// Type: List<CodeableConcept>
   /// Path: Observation.interpretation
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: *
   Definable<FixedList<CodeableConcept>> get interpretation =>
-      getValueFromObjectArray(
-        _interpretationField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+      interpretationField.getValue(this);
 
   /// Comments about the observation or the results.
   ///
@@ -1318,26 +1148,15 @@ class Observation extends Resource {
   /// Path: Observation.note
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: *
-  Definable<FixedList<Annotation>> get note => getValueFromObjectArray(
-        _noteField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Annotation.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  Definable<FixedList<Annotation>> get note => noteField.getValue(this);
 
-  /// Indicates the site on the subject's body where the observation was made
-  /// (i.e. the target site).
+  /// Indicates the site on the subject's body where the observation was made (i.e. the target site).
   ///
   /// Type: CodeableConcept
   /// Path: Observation.bodySite
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<CodeableConcept> get bodySite => getValueFromObjectArray(
-        _bodySiteField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<CodeableConcept> get bodySite => bodySiteField.getValue(this);
 
   /// Indicates the mechanism used to perform the observation.
   ///
@@ -1345,12 +1164,7 @@ class Observation extends Resource {
   /// Path: Observation.method
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<CodeableConcept> get method => getValueFromObjectArray(
-        _methodField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<CodeableConcept> get method => methodField.getValue(this);
 
   /// The specimen that was used when this observation was made.
   ///
@@ -1358,32 +1172,556 @@ class Observation extends Resource {
   /// Path: Observation.specimen
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<Reference> get specimen => getValueFromObjectArray(
-        _specimenField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<Reference> get specimen => specimenField.getValue(this);
 
+  /// The device used to generate the observation data.
+  ///
+  /// Type: Reference
+  /// Path: Observation.device
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<Reference> get device => getValueFromObjectArray(
-        _deviceField,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  Definable<Reference> get device => deviceField.getValue(this);
 
-  /// Guidance on how to interpret the value by comparison to a normal or
-  /// recommended range.
+  /// Guidance on how to interpret the value by comparison to a normal or recommended range.
   ///
   /// Type: List<ObservationReferenceRange>
   /// Path: Observation.referenceRange
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: *
   Definable<FixedList<ObservationReferenceRange>> get referenceRange =>
-      getValueFromObjectArray(
-        _referenceRangeField,
+      referenceRangeField.getValue(this);
+
+  /// This observation is a group observation (e.g. a battery, a panel of tests, a set of vital sign measurements) that includes the target as a member of the group.
+  ///
+  /// Type: List<Reference>
+  /// Path: Observation.hasMember
+  /// Minimum Cardinality: 0
+  /// Maximum Cardinality: *
+  Definable<FixedList<Reference>> get hasMember =>
+      hasMemberField.getValue(this);
+
+  /// The target resource that represents a measurement from which this observation value is derived. For example, a calculated anion gap or a fetal measurement based on an ultrasound image.
+  ///
+  /// Type: List<Reference>
+  /// Path: Observation.derivedFrom
+  /// Minimum Cardinality: 0
+  /// Maximum Cardinality: *
+  Definable<FixedList<Reference>> get derivedFrom =>
+      derivedFromField.getValue(this);
+
+  /// Some observations have multiple component observations. These component observations are expressed as separate code value pairs that share the same attributes. Examples include systolic and diastolic component observations for blood pressure measurement and multiple component observations for genetics observations.
+  ///
+  /// Type: List<ObservationComponent>
+  /// Path: Observation.component
+  /// Minimum Cardinality: 0
+  /// Maximum Cardinality: *
+  Definable<FixedList<ObservationComponent>> get component =>
+      componentField.getValue(this);
+
+  /// The complications or conditions that interfere with the interpretation of the observation.
+  ///
+  /// Type: List<CodeableReference>
+  /// Path: Observation.complicatedBy
+  /// Minimum Cardinality: 0
+  /// Maximum Cardinality: *
+  Definable<FixedList<CodeableReference>> get complicatedBy =>
+      complicatedByField.getValue(this);
+
+  /// Details the use context for the Observation, if appropriate.
+  ///
+  /// Type: List<CodeableReference>
+  /// Path: Observation.contextOfUse
+  /// Minimum Cardinality: 0
+  /// Maximum Cardinality: *
+  Definable<FixedList<CodeableReference>> get contextOfUse =>
+      contextOfUseField.getValue(this);
+
+  /// Field definition for [identifier]
+  static const identifierField = FieldDefinition(
+    name: 'identifier',
+    getValue: _getIdentifier,
+  );
+
+  /// Field definition for [basedOn]
+  static const basedOnField = FieldDefinition(
+    name: 'basedOn',
+    getValue: _getBasedOn,
+  );
+
+  /// Field definition for [partOf]
+  static const partOfField = FieldDefinition(
+    name: 'partOf',
+    getValue: _getPartOf,
+  );
+
+  /// Field definition for [status]
+  static const statusField = FieldDefinition(
+    name: 'status',
+    getValue: _getStatus,
+  );
+
+  /// Field definition for [category]
+  static const categoryField = FieldDefinition(
+    name: 'category',
+    getValue: _getCategory,
+  );
+
+  /// Field definition for [code]
+  static const codeField = FieldDefinition(
+    name: 'code',
+    getValue: _getCode,
+  );
+
+  /// Field definition for [subject]
+  static const subjectField = FieldDefinition(
+    name: 'subject',
+    getValue: _getSubject,
+  );
+
+  /// Field definition for [encounter]
+  static const encounterField = FieldDefinition(
+    name: 'encounter',
+    getValue: _getEncounter,
+  );
+
+  /// Field definition for [effectiveDateTime]
+  static const effectiveDateTimeField = FieldDefinition(
+    name: 'effectiveDateTime',
+    getValue: _getEffectiveDateTime,
+  );
+
+  /// Field definition for [effectivePeriod]
+  static const effectivePeriodField = FieldDefinition(
+    name: 'effectivePeriod',
+    getValue: _getEffectivePeriod,
+  );
+
+  /// Field definition for [effectiveTiming]
+  static const effectiveTimingField = FieldDefinition(
+    name: 'effectiveTiming',
+    getValue: _getEffectiveTiming,
+  );
+
+  /// Field definition for [effectiveInstant]
+  static const effectiveInstantField = FieldDefinition(
+    name: 'effectiveInstant',
+    getValue: _getEffectiveInstant,
+  );
+
+  /// Field definition for [issued]
+  static const issuedField = FieldDefinition(
+    name: 'issued',
+    getValue: _getIssued,
+  );
+
+  /// Field definition for [valueQuantity]
+  static const valueQuantityField = FieldDefinition(
+    name: 'valueQuantity',
+    getValue: _getValueQuantity,
+  );
+
+  /// Field definition for [valueCodeableConcept]
+  static const valueCodeableConceptField = FieldDefinition(
+    name: 'valueCodeableConcept',
+    getValue: _getValueCodeableConcept,
+  );
+
+  /// Field definition for [valueString]
+  static const valueStringField = FieldDefinition(
+    name: 'valueString',
+    getValue: _getValueString,
+  );
+
+  /// Field definition for [valueBoolean]
+  static const valueBooleanField = FieldDefinition(
+    name: 'valueBoolean',
+    getValue: _getValueBoolean,
+  );
+
+  /// Field definition for [valueInteger]
+  static const valueIntegerField = FieldDefinition(
+    name: 'valueInteger',
+    getValue: _getValueInteger,
+  );
+
+  /// Field definition for [valueRange]
+  static const valueRangeField = FieldDefinition(
+    name: 'valueRange',
+    getValue: _getValueRange,
+  );
+
+  /// Field definition for [valueRatio]
+  static const valueRatioField = FieldDefinition(
+    name: 'valueRatio',
+    getValue: _getValueRatio,
+  );
+
+  /// Field definition for [valueSampledData]
+  static const valueSampledDataField = FieldDefinition(
+    name: 'valueSampledData',
+    getValue: _getValueSampledData,
+  );
+
+  /// Field definition for [valueTime]
+  static const valueTimeField = FieldDefinition(
+    name: 'valueTime',
+    getValue: _getValueTime,
+  );
+
+  /// Field definition for [valueDateTime]
+  static const valueDateTimeField = FieldDefinition(
+    name: 'valueDateTime',
+    getValue: _getValueDateTime,
+  );
+
+  /// Field definition for [valuePeriod]
+  static const valuePeriodField = FieldDefinition(
+    name: 'valuePeriod',
+    getValue: _getValuePeriod,
+  );
+
+  /// Field definition for [dataAbsentReason]
+  static const dataAbsentReasonField = FieldDefinition(
+    name: 'dataAbsentReason',
+    getValue: _getDataAbsentReason,
+  );
+
+  /// Field definition for [interpretation]
+  static const interpretationField = FieldDefinition(
+    name: 'interpretation',
+    getValue: _getInterpretation,
+  );
+
+  /// Field definition for [note]
+  static const noteField = FieldDefinition(
+    name: 'note',
+    getValue: _getNote,
+  );
+
+  /// Field definition for [bodySite]
+  static const bodySiteField = FieldDefinition(
+    name: 'bodySite',
+    getValue: _getBodySite,
+  );
+
+  /// Field definition for [method]
+  static const methodField = FieldDefinition(
+    name: 'method',
+    getValue: _getMethod,
+  );
+
+  /// Field definition for [specimen]
+  static const specimenField = FieldDefinition(
+    name: 'specimen',
+    getValue: _getSpecimen,
+  );
+
+  /// Field definition for [device]
+  static const deviceField = FieldDefinition(
+    name: 'device',
+    getValue: _getDevice,
+  );
+
+  /// Field definition for [referenceRange]
+  static const referenceRangeField = FieldDefinition(
+    name: 'referenceRange',
+    getValue: _getReferenceRange,
+  );
+
+  /// Field definition for [hasMember]
+  static const hasMemberField = FieldDefinition(
+    name: 'hasMember',
+    getValue: _getHasMember,
+  );
+
+  /// Field definition for [derivedFrom]
+  static const derivedFromField = FieldDefinition(
+    name: 'derivedFrom',
+    getValue: _getDerivedFrom,
+  );
+
+  /// Field definition for [component]
+  static const componentField = FieldDefinition(
+    name: 'component',
+    getValue: _getComponent,
+  );
+
+  /// Field definition for [complicatedBy]
+  static const complicatedByField = FieldDefinition(
+    name: 'complicatedBy',
+    getValue: _getComplicatedBy,
+  );
+
+  /// Field definition for [contextOfUse]
+  static const contextOfUseField = FieldDefinition(
+    name: 'contextOfUse',
+    getValue: _getContextOfUse,
+  );
+
+  /// All field definitions for [Observation].
+  static const fieldDefinitions = [
+    identifierField,
+    basedOnField,
+    partOfField,
+    statusField,
+    categoryField,
+    codeField,
+    subjectField,
+    encounterField,
+    effectiveDateTimeField,
+    effectivePeriodField,
+    effectiveTimingField,
+    effectiveInstantField,
+    issuedField,
+    valueQuantityField,
+    valueCodeableConceptField,
+    valueStringField,
+    valueBooleanField,
+    valueIntegerField,
+    valueRangeField,
+    valueRatioField,
+    valueSampledDataField,
+    valueTimeField,
+    valueDateTimeField,
+    valuePeriodField,
+    dataAbsentReasonField,
+    interpretationField,
+    noteField,
+    bodySiteField,
+    methodField,
+    specimenField,
+    deviceField,
+    referenceRangeField,
+    hasMemberField,
+    derivedFromField,
+    componentField,
+    complicatedByField,
+    contextOfUseField,
+  ];
+
+  static Definable<FixedList<Identifier>> _getIdentifier(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        identifierField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Identifier.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Reference>> _getBasedOn(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        basedOnField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Reference>> _getPartOf(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        partOfField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<String> _getStatus(JsonObject jo) =>
+      jo.getValue(statusField.name);
+
+  static Definable<FixedList<CodeableConcept>> _getCategory(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        categoryField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<CodeableConcept> _getCode(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        codeField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<Reference> _getSubject(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        subjectField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<Reference> _getEncounter(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        encounterField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<DateTime> _getEffectiveDateTime(JsonObject jo) =>
+      jo.getValueFromString(
+        effectiveDateTimeField.name,
+        tryParse: (d) => DateTime.tryParse(d ?? ''),
+      );
+
+  static Definable<Period> _getEffectivePeriod(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        effectivePeriodField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Period.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<Timing> _getEffectiveTiming(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        effectiveTimingField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Timing.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<DateTime> _getEffectiveInstant(JsonObject jo) =>
+      jo.getValueFromString(
+        effectiveInstantField.name,
+        tryParse: (d) => DateTime.tryParse(d ?? ''),
+      );
+
+  static Definable<DateTime> _getIssued(JsonObject jo) => jo.getValueFromString(
+        issuedField.name,
+        tryParse: (d) => DateTime.tryParse(d ?? ''),
+      );
+
+  static Definable<Quantity> _getValueQuantity(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        valueQuantityField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Quantity.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<CodeableConcept> _getValueCodeableConcept(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        valueCodeableConceptField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<String> _getValueString(JsonObject jo) =>
+      jo.getValue(valueStringField.name);
+
+  static Definable<bool> _getValueBoolean(JsonObject jo) =>
+      jo.getValue(valueBooleanField.name);
+
+  static Definable<int> _getValueInteger(JsonObject jo) =>
+      jo.getValue(valueIntegerField.name);
+
+  static Definable<Range> _getValueRange(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        valueRangeField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Range.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<Ratio> _getValueRatio(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        valueRatioField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Ratio.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<SampledData> _getValueSampledData(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        valueSampledDataField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => SampledData.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<Time> _getValueTime(JsonObject jo) => jo.getValueFromString(
+        valueTimeField.name,
+        tryParse: (t) => Time.tryParse(t ?? ''),
+      );
+
+  static Definable<DateTime> _getValueDateTime(JsonObject jo) =>
+      jo.getValueFromString(
+        valueDateTimeField.name,
+        tryParse: (d) => DateTime.tryParse(d ?? ''),
+      );
+
+  static Definable<Period> _getValuePeriod(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        valuePeriodField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Period.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<CodeableConcept> _getDataAbsentReason(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        dataAbsentReasonField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<FixedList<CodeableConcept>> _getInterpretation(
+    JsonObject jo,
+  ) =>
+      jo.getValueFromObjectArray(
+        interpretationField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Annotation>> _getNote(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        noteField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Annotation.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<CodeableConcept> _getBodySite(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        bodySiteField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<CodeableConcept> _getMethod(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        methodField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<Reference> _getSpecimen(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        specimenField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<Reference> _getDevice(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        deviceField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<FixedList<ObservationReferenceRange>> _getReferenceRange(
+    JsonObject jo,
+  ) =>
+      jo.getValueFromObjectArray(
+        referenceRangeField.name,
         fromObjectArray: (jsonTags) => jsonTags
             ?.map(
               (dm) => ObservationReferenceRange.fromJson(
@@ -1393,49 +1731,27 @@ class Observation extends Resource {
             .toFixedList(),
       );
 
-  /// This observation is a group observation (e.g. a battery, a panel of
-  /// tests, a set of vital sign measurements) that includes the target as a
-  /// member of the group.
-  ///
-  /// Type: List<Reference>
-  /// Path: Observation.hasMember
-  /// Minimum Cardinality: 0
-  /// Maximum Cardinality: *
-  Definable<FixedList<Reference>> get hasMember => getValueFromObjectArray(
-        _hasMemberField,
+  static Definable<FixedList<Reference>> _getHasMember(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        hasMemberField.name,
         fromObjectArray: (jsonTags) => jsonTags
             ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
             .toFixedList(),
       );
 
-  /// The target resource that represents a measurement from which this
-  /// observation value is derived. For example, a calculated anion gap or a
-  /// fetal measurement based on an ultrasound image.
-  ///
-  /// Type: List<Reference>
-  /// Path: Observation.derivedFrom
-  /// Minimum Cardinality: 0
-  /// Maximum Cardinality: *
-  Definable<FixedList<Reference>> get derivedFrom => getValueFromObjectArray(
-        _derivedFromField,
+  static Definable<FixedList<Reference>> _getDerivedFrom(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        derivedFromField.name,
         fromObjectArray: (jsonTags) => jsonTags
             ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
             .toFixedList(),
       );
 
-  /// Some observations have multiple component observations. These component
-  /// observations are expressed as separate code value pairs that share the
-  /// same attributes. Examples include systolic and diastolic component
-  /// observations for blood pressure measurement and multiple component
-  /// observations for genetics observations.
-  ///
-  /// Type: List<ObservationComponent>
-  /// Path: Observation.component
-  /// Minimum Cardinality: 0
-  /// Maximum Cardinality: *
-  Definable<FixedList<ObservationComponent>> get component =>
-      getValueFromObjectArray(
-        _componentField,
+  static Definable<FixedList<ObservationComponent>> _getComponent(
+    JsonObject jo,
+  ) =>
+      jo.getValueFromObjectArray(
+        componentField.name,
         fromObjectArray: (jsonTags) => jsonTags
             ?.map(
               (dm) => ObservationComponent.fromJson(dm as Map<String, dynamic>),
@@ -1443,16 +1759,11 @@ class Observation extends Resource {
             .toFixedList(),
       );
 
-  /// The complications or conditions that interfere with the interpretation of
-  /// the observation.
-  ///
-  /// Type: List<CodeableReference>
-  /// Path: Observation.complicatedBy
-  /// Minimum Cardinality: 0
-  /// Maximum Cardinality: *
-  Definable<FixedList<CodeableReference>> get complicatedBy =>
-      getValueFromObjectArray(
-        _complicatedByField,
+  static Definable<FixedList<CodeableReference>> _getComplicatedBy(
+    JsonObject jo,
+  ) =>
+      jo.getValueFromObjectArray(
+        complicatedByField.name,
         fromObjectArray: (jsonTags) => jsonTags
             ?.map(
               (dm) => CodeableReference.fromJson(dm as Map<String, dynamic>),
@@ -1460,21 +1771,18 @@ class Observation extends Resource {
             .toFixedList(),
       );
 
-  /// Details the use context for the Observation, if appropriate.
-  ///
-  /// Type: List<CodeableReference>
-  /// Path: Observation.contextOfUse
-  /// Minimum Cardinality: 0
-  /// Maximum Cardinality: *
-  Definable<FixedList<CodeableReference>> get contextOfUse =>
-      getValueFromObjectArray(
-        _contextOfUseField,
+  static Definable<FixedList<CodeableReference>> _getContextOfUse(
+    JsonObject jo,
+  ) =>
+      jo.getValueFromObjectArray(
+        contextOfUseField.name,
         fromObjectArray: (jsonTags) => jsonTags
             ?.map(
               (dm) => CodeableReference.fromJson(dm as Map<String, dynamic>),
             )
             .toFixedList(),
       );
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
