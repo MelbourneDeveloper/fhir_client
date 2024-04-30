@@ -7,6 +7,12 @@ abstract class JsonObject {
   //TODO: make this immutable at compile time
   final Map<String, dynamic> json;
 
+  // static Definable<String> getString(JsonObject jo, String fieldName) =>
+  //     jo.getValue<String>(fieldName);
+
+  // static Definable<T> getObject<T>(JsonObject jo, String fieldName) =>
+  //     jo.getValue<T>(fieldName);
+
   Definable<T> getValue<T>(
     String fieldName,
   ) =>
@@ -89,8 +95,6 @@ final class WrongType<T> extends Definable<T> {
 
   final String typeName;
 }
-
-
 
 final class Defined<T> extends Definable<T> {
   Defined(this.value, this.fieldName);

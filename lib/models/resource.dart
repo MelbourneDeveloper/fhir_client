@@ -85,6 +85,11 @@ sealed class Resource extends JsonObject {
   static const idField = FieldDefinition(name: 'id', getValue: _getId);
   static const metaField = FieldDefinition(name: 'meta', getValue: _getMeta);
 
+  static const fieldDefinitions = [
+    idField,
+    metaField,
+  ];
+
   static Definable<String> _getId(JsonObject jo) => jo.getValue(idField.name);
 
   static Definable<Meta> _getMeta(JsonObject jo) => jo.getValue(metaField.name);
@@ -926,7 +931,7 @@ class Observation extends Resource {
   /// Creates an [Observation] instance from the provided JSON object.
   Observation.fromJson(super.json) : super._internal();
 
-/// Business identifier for this observation.
+  /// Business identifier for this observation.
   ///
   /// Type: List<Identifier>
   /// Path: Observation.identifier
@@ -1949,105 +1954,331 @@ class Observation extends Resource {
       );
 }
 
+/// A collection of error, warning, or information messages that result from a system action.
 class OperationOutcome<T> extends Resource implements Result<T> {
+  /// Constructs a new [OperationOutcome].
   OperationOutcome({
-    this.text,
-    this.issue,
+    Definable<String> id = const Undefined(),
+    Definable<Meta> meta = const Undefined(),
+    Definable<Text> text = const Undefined(),
+    Definable<FixedList<Issue>> issue = const Undefined(),
   }) : super._internal(
-          null,
-          null,
+          Map<String, dynamic>.fromEntries([
+            if (id is Defined<String>) id.toMapEntry(),
+            if (meta is Defined<Meta>) meta.toMapEntry(),
+            if (text is Defined<Text>) text.toMapEntry(),
+            if (issue is Defined<FixedList<Issue>>) issue.toMapEntry(),
+          ]),
         );
 
-  factory OperationOutcome.fromJson(Map<String, dynamic> json) =>
-      OperationOutcome(
-        text: json['text'] != null
-            ? Text.fromJson(json['text'] as Map<String, dynamic>)
-            : null,
-        issue: (json['issue'] as List<dynamic>?)
-            ?.map((e) => Issue.fromJson(e as Map<String, dynamic>))
+  /// Creates an [OperationOutcome] instance from the provided JSON object.
+  OperationOutcome.fromJson(super.json) : super._internal();
+
+  /// A human-readable narrative that contains a summary of the resource and can be used to represent the content of the resource to a human.
+  Definable<Text> get text => textField.getValue(this);
+
+  /// A single issue associated with the action.
+  Definable<FixedList<Issue>> get issue => issueField.getValue(this);
+
+  /// Field definition for [text].
+  static const textField = FieldDefinition(
+    name: 'text',
+    getValue: _getText,
+  );
+
+  /// Field definition for [issue].
+  static const issueField = FieldDefinition(
+    name: 'issue',
+    getValue: _getIssue,
+  );
+
+  /// All field definitions for [OperationOutcome].
+  static const fieldDefinitions = [
+    ...Resource.fieldDefinitions,
+    textField,
+    issueField,
+  ];
+
+  static Definable<Text> _getText(JsonObject jo) => jo.getValueFromObjectArray(
+        'text',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Text.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<FixedList<Issue>> _getIssue(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'issue',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Issue.fromJson(dm as Map<String, dynamic>))
             .toFixedList(),
       );
 
-  final Text? text;
-  final FixedList<Issue>? issue;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is OperationOutcome &&
+          other.id == id &&
+          other.meta == meta &&
+          other.text == text &&
+          other.issue == issue);
 
-  Map<String, dynamic> toJson() => {
-        'resourceType': ResourceType.operationOutcome.code,
-        'text': text?.toJson(),
-        'issue': issue?.map((e) => e.toJson()).toFixedList(),
-      };
+  @override
+  int get hashCode => Object.hash(id, meta, text, issue);
+
+  /// Creates a copy of the [OperationOutcome] instance and allows for non-destructive mutation.
+  OperationOutcome<T> copyWith({
+    Definable<String>? id,
+    Definable<Meta>? meta,
+    Definable<Text>? text,
+    Definable<FixedList<Issue>>? issue,
+  }) =>
+      OperationOutcome<T>(
+        id: id ?? this.id,
+        meta: meta ?? this.meta,
+        text: text ?? this.text,
+        issue: issue ?? this.issue,
+      );
 }
 
-final class Organization extends Resource {
+class Organization extends Resource {
+  /// Constructs a new [Organization].
   Organization({
-    required String id,
-    required Meta? meta,
-    this.identifier,
-    this.type,
-    this.name,
-    this.total,
-    this.link,
-    this.entry,
-    this.active,
-    this.telecom,
-    this.address,
+    Definable<String> id = const Undefined(),
+    Definable<Meta> meta = const Undefined(),
+    Definable<FixedList<Identifier>> identifier = const Undefined(),
+    Definable<FixedList<t.Type>> type = const Undefined(),
+    Definable<String> name = const Undefined(),
+    Definable<int> total = const Undefined(),
+    Definable<FixedList<Link>> link = const Undefined(),
+    Definable<FixedList<Entry>> entry = const Undefined(),
+    Definable<bool> active = const Undefined(),
+    Definable<FixedList<Telecom>> telecom = const Undefined(),
+    Definable<FixedList<Address>> address = const Undefined(),
   }) : super._internal(
-          id,
-          meta,
+          Map<String, dynamic>.fromEntries([
+            if (id is Defined<String>) id.toMapEntry(),
+            if (meta is Defined<Meta>) meta.toMapEntry(),
+            if (identifier is Defined<FixedList<Identifier>>)
+              identifier.toMapEntry(),
+            if (type is Defined<FixedList<t.Type>>) type.toMapEntry(),
+            if (name is Defined<String>) name.toMapEntry(),
+            if (total is Defined<int>) total.toMapEntry(),
+            if (link is Defined<FixedList<Link>>) link.toMapEntry(),
+            if (entry is Defined<FixedList<Entry>>) entry.toMapEntry(),
+            if (active is Defined<bool>) active.toMapEntry(),
+            if (telecom is Defined<FixedList<Telecom>>) telecom.toMapEntry(),
+            if (address is Defined<FixedList<Address>>) address.toMapEntry(),
+          ]),
         );
 
-  factory Organization.fromJson(Map<String, dynamic> json) => Organization(
-        id: json[_idField] as String,
-        meta: json[_metaField] != null
-            ? Meta.fromJson(json[_metaField] as Map<String, dynamic>)
-            : null,
-        identifier: (json['identifier'] as List<dynamic>?)
-            ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        type: (json['type'] as List<dynamic>?)
-            ?.map((e) => t.Type.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        name: json['name'] != null ? json['name'] as String? : null,
-        total: json['total'] != null ? json['total'] as int? : null,
-        link: (json['link'] as List<dynamic>?)
-            ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        entry: (json['entry'] as List<dynamic>?)
-            ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        active: json['active'] as bool?,
-        telecom: (json['telecom'] as List<dynamic>?)
-            ?.map((e) => Telecom.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        address: (json['address'] as List<dynamic>?)
-            ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
+  /// Creates an [Organization] instance from the provided JSON object.
+  Organization.fromJson(super.json) : super._internal();
+
+  /// Identifier for the organization that is used to identify the organization across multiple disparate systems.
+  Definable<FixedList<Identifier>> get identifier =>
+      identifierField.getValue(this);
+
+  /// The kind(s) of organization that this is.
+  Definable<FixedList<t.Type>> get type => typeField.getValue(this);
+
+  /// A name associated with the organization.
+  Definable<String> get name => nameField.getValue(this);
+
+  /// The total number of entries.
+  Definable<int> get total => totalField.getValue(this);
+
+  /// A reference to a link.
+  Definable<FixedList<Link>> get link => linkField.getValue(this);
+
+  /// An entry in the organization.
+  Definable<FixedList<Entry>> get entry => entryField.getValue(this);
+
+  /// Whether the organization's record is still in active use.
+  Definable<bool> get active => activeField.getValue(this);
+
+  /// A contact detail for the organization.
+  Definable<FixedList<Telecom>> get telecom => telecomField.getValue(this);
+
+  /// An address for the organization.
+  Definable<FixedList<Address>> get address => addressField.getValue(this);
+
+  /// Field definition for [identifier].
+  static const identifierField = FieldDefinition(
+    name: 'identifier',
+    getValue: _getIdentifier,
+  );
+
+  /// Field definition for [type].
+  static const typeField = FieldDefinition(
+    name: 'type',
+    getValue: _getType,
+  );
+
+  /// Field definition for [name].
+  static final nameField = FieldDefinition(
+    name: 'name',
+    getValue: (jo) => jo.getValue<String>('name'),
+  );
+
+  /// Field definition for [total].
+  static final totalField = FieldDefinition(
+    name: 'total',
+    getValue: (jo) => jo.getValue<int>('total'),
+  );
+
+  /// Field definition for [link].
+  static const linkField = FieldDefinition(
+    name: 'link',
+    getValue: _getLink,
+  );
+
+  /// Field definition for [entry].
+  static const entryField = FieldDefinition(
+    name: 'entry',
+    getValue: _getEntry,
+  );
+
+  /// Field definition for [active].
+  static final activeField = FieldDefinition(
+    name: 'active',
+    getValue: (jo) => jo.getValue<bool>('active'),
+  );
+
+  /// Field definition for [telecom].
+  static const telecomField = FieldDefinition(
+    name: 'telecom',
+    getValue: _getTelecom,
+  );
+
+  /// Field definition for [address].
+  static const addressField = FieldDefinition(
+    name: 'address',
+    getValue: _getAddress,
+  );
+
+  //Note: not all const...
+
+  /// All field definitions for [Organization].
+  static final fieldDefinitions = [
+    ...Resource.fieldDefinitions,
+    identifierField,
+    typeField,
+    nameField,
+    totalField,
+    linkField,
+    entryField,
+    activeField,
+    telecomField,
+    addressField,
+  ];
+
+  static Definable<FixedList<Identifier>> _getIdentifier(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'identifier',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Identifier.fromJson(dm as Map<String, dynamic>))
             .toFixedList(),
       );
 
-  final FixedList<t.Type>? type;
-  final String? name;
-  final int? total;
-  final FixedList<Link>? link;
-  final FixedList<Entry>? entry;
-  final FixedList<Identifier>? identifier;
-  final bool? active;
-  final FixedList<Telecom>? telecom;
-  final FixedList<Address>? address;
+  static Definable<FixedList<t.Type>> _getType(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'type',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => t.Type.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
 
-  Map<String, dynamic> toJson() => {
-        'resourceType': ResourceType.organization.code,
-        _idField: id,
-        _metaField: meta?.toJson(),
-        'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
-        'type': type?.cast<dynamic>().toFixedList(),
-        'name': name,
-        'total': total,
-        'link': link?.map((e) => e.toJson()).toFixedList(),
-        'entry': entry?.map((e) => e.toJson()).toFixedList(),
-        'active': active,
-        'telecom': telecom?.map((e) => e.toJson()).toFixedList(),
-        'address': address?.map((e) => e.toJson()).toFixedList(),
-      };
+  static Definable<FixedList<Link>> _getLink(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'link',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Link.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Entry>> _getEntry(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'entry',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Entry.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Telecom>> _getTelecom(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'telecom',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Telecom.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Address>> _getAddress(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'address',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Address.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Organization &&
+          other.id == id &&
+          other.meta == meta &&
+          other.identifier == identifier &&
+          other.type == type &&
+          other.name == name &&
+          other.total == total &&
+          other.link == link &&
+          other.entry == entry &&
+          other.active == active &&
+          other.telecom == telecom &&
+          other.address == address);
+
+  @override
+  int get hashCode => Object.hash(
+        id,
+        meta,
+        identifier,
+        type,
+        name,
+        total,
+        link,
+        entry,
+        active,
+        telecom,
+        address,
+      );
+
+  /// Creates a copy of the [Organization] instance and allows for non-destructive mutation.
+  Organization copyWith({
+    Definable<String>? id,
+    Definable<Meta>? meta,
+    Definable<FixedList<Identifier>>? identifier,
+    Definable<FixedList<t.Type>>? type,
+    Definable<String>? name,
+    Definable<int>? total,
+    Definable<FixedList<Link>>? link,
+    Definable<FixedList<Entry>>? entry,
+    Definable<bool>? active,
+    Definable<FixedList<Telecom>>? telecom,
+    Definable<FixedList<Address>>? address,
+  }) =>
+      Organization(
+        id: id ?? this.id,
+        meta: meta ?? this.meta,
+        identifier: identifier ?? this.identifier,
+        type: type ?? this.type,
+        name: name ?? this.name,
+        total: total ?? this.total,
+        link: link ?? this.link,
+        entry: entry ?? this.entry,
+        active: active ?? this.active,
+        telecom: telecom ?? this.telecom,
+        address: address ?? this.address,
+      );
 }
 
 class Patient extends Resource {
