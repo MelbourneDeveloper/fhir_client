@@ -2281,10 +2281,9 @@ class Organization extends Resource {
       );
 }
 
+/// Demographics and other administrative information about an individual or animal receiving care or other health-related services.
 class Patient extends Resource {
   /// Constructs a new [Patient].
-  ///
-  /// Demographics and other administrative information about an individual or animal receiving care or other health-related services.
   Patient({
     Definable<String> id = const Undefined(),
     Definable<Meta> meta = const Undefined(),
@@ -2486,237 +2485,809 @@ class Patient extends Resource {
       );
 }
 
-final class Practitioner extends Resource {
+/// A person who is directly or indirectly involved in the provisioning of healthcare.
+class Practitioner extends Resource {
+  /// Constructs a new [Practitioner].
   Practitioner({
-    required String id,
-    required Meta? meta,
-    required this.gender,
-    this.identifier,
-    this.type,
-    this.name,
-    this.total,
-    this.link,
-    this.entry,
-    this.active,
-    this.telecom,
-    this.address,
+    Definable<String> id = const Undefined(),
+    Definable<Meta> meta = const Undefined(),
+    Definable<FixedList<Identifier>> identifier = const Undefined(),
+    Definable<FixedList<t.Type>> type = const Undefined(),
+    Definable<FixedList<Name>> name = const Undefined(),
+    Definable<int> total = const Undefined(),
+    Definable<FixedList<Link>> link = const Undefined(),
+    Definable<FixedList<Entry>> entry = const Undefined(),
+    Definable<bool> active = const Undefined(),
+    Definable<FixedList<Telecom>> telecom = const Undefined(),
+    Definable<FixedList<Address>> address = const Undefined(),
+    Definable<AdministrativeGender> gender = const Undefined(),
   }) : super._internal(
-          id,
-          meta,
+          Map<String, dynamic>.fromEntries([
+            if (id is Defined<String>) id.toMapEntry(),
+            if (meta is Defined<Meta>) meta.toMapEntry(),
+            if (identifier is Defined<FixedList<Identifier>>)
+              identifier.toMapEntry(),
+            if (type is Defined<FixedList<t.Type>>) type.toMapEntry(),
+            if (name is Defined<FixedList<Name>>) name.toMapEntry(),
+            if (total is Defined<int>) total.toMapEntry(),
+            if (link is Defined<FixedList<Link>>) link.toMapEntry(),
+            if (entry is Defined<FixedList<Entry>>) entry.toMapEntry(),
+            if (active is Defined<bool>) active.toMapEntry(),
+            if (telecom is Defined<FixedList<Telecom>>) telecom.toMapEntry(),
+            if (address is Defined<FixedList<Address>>) address.toMapEntry(),
+            if (gender is Defined<AdministrativeGender>) gender.toMapEntry(),
+          ]),
         );
 
-  factory Practitioner.fromJson(Map<String, dynamic> json) => Practitioner(
-        id: json[_idField] as String,
-        meta: json[_metaField] != null
-            ? Meta.fromJson(json[_metaField] as Map<String, dynamic>)
-            : null,
-        identifier: (json['identifier'] as List<dynamic>?)
-            ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
+  /// Creates a [Practitioner] instance from the provided JSON object.
+  Practitioner.fromJson(super.json) : super._internal();
+
+  /// An identifier that applies to this person in this role.
+  Definable<FixedList<Identifier>> get identifier =>
+      identifierField.getValue(this);
+
+  /// The kind(s) of roles the practitioner plays.
+  Definable<FixedList<t.Type>> get type => typeField.getValue(this);
+
+  /// The name(s) associated with the practitioner.
+  Definable<FixedList<Name>> get name => nameField.getValue(this);
+
+  /// The total number of entries.
+  Definable<int> get total => totalField.getValue(this);
+
+  /// A reference to a link.
+  Definable<FixedList<Link>> get link => linkField.getValue(this);
+
+  /// An entry in the practitioner's record.
+  Definable<FixedList<Entry>> get entry => entryField.getValue(this);
+
+  /// Whether this practitioner's record is in active use.
+  Definable<bool> get active => activeField.getValue(this);
+
+  /// A contact detail for the practitioner, e.g. a telephone number or an email address.
+  Definable<FixedList<Telecom>> get telecom => telecomField.getValue(this);
+
+  /// Address(es) of the practitioner that are not role specific (typically home address).
+  Definable<FixedList<Address>> get address => addressField.getValue(this);
+
+  /// Administrative Gender - the gender that the practitioner is considered to have for administration and record keeping purposes.
+  Definable<AdministrativeGender> get gender => genderField.getValue(this);
+
+  /// Field definition for [identifier].
+  static const identifierField = FieldDefinition(
+    name: 'identifier',
+    getValue: _getIdentifier,
+  );
+
+  /// Field definition for [type].
+  static const typeField = FieldDefinition(
+    name: 'type',
+    getValue: _getType,
+  );
+
+  /// Field definition for [name].
+  static const nameField = FieldDefinition(
+    name: 'name',
+    getValue: _getName,
+  );
+
+  /// Field definition for [total].
+  static final totalField = FieldDefinition(
+    name: 'total',
+    getValue: (jo) => jo.getValue<int>('total'),
+  );
+
+  /// Field definition for [link].
+  static const linkField = FieldDefinition(
+    name: 'link',
+    getValue: _getLink,
+  );
+
+  /// Field definition for [entry].
+  static const entryField = FieldDefinition(
+    name: 'entry',
+    getValue: _getEntry,
+  );
+
+  /// Field definition for [active].
+  static final activeField = FieldDefinition(
+    name: 'active',
+    getValue: (jo) => jo.getValue<bool>('active'),
+  );
+
+  /// Field definition for [telecom].
+  static const telecomField = FieldDefinition(
+    name: 'telecom',
+    getValue: _getTelecom,
+  );
+
+  /// Field definition for [address].
+  static const addressField = FieldDefinition(
+    name: 'address',
+    getValue: _getAddress,
+  );
+
+  /// Field definition for [gender].
+  static const genderField = FieldDefinition(
+    name: 'gender',
+    getValue: _getGender,
+  );
+
+  /// All field definitions for [Practitioner].
+  static final fieldDefinitions = [
+    ...Resource.fieldDefinitions,
+    identifierField,
+    typeField,
+    nameField,
+    totalField,
+    linkField,
+    entryField,
+    activeField,
+    telecomField,
+    addressField,
+    genderField,
+  ];
+
+  static Definable<FixedList<Identifier>> _getIdentifier(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'identifier',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Identifier.fromJson(dm as Map<String, dynamic>))
             .toFixedList(),
-        type: (json['type'] as List<dynamic>?)
-            ?.map((e) => t.Type.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        name: (json['name'] as List<dynamic>?)
-            ?.map((e) => Name.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        total: json['total'] != null ? json['total'] as int? : null,
-        link: (json['link'] as List<dynamic>?)
-            ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        entry: (json['entry'] as List<dynamic>?)
-            ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        active: json['active'] as bool?,
-        telecom: (json['telecom'] as List<dynamic>?)
-            ?.map((e) => Telecom.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        address: (json['address'] as List<dynamic>?)
-            ?.map((e) => Address.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        gender: AdministrativeGender.fromCode(
-          json['gender'] as String? ?? 'unknown',
-        ),
       );
 
-  final FixedList<t.Type>? type;
-  final FixedList<Name>? name;
-  final int? total;
-  final FixedList<Link>? link;
-  final FixedList<Entry>? entry;
-  final FixedList<Identifier>? identifier;
-  final bool? active;
-  final FixedList<Telecom>? telecom;
-  final FixedList<Address>? address;
-  final AdministrativeGender gender;
+  static Definable<FixedList<t.Type>> _getType(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'type',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => t.Type.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
 
-  Map<String, dynamic> toJson() => {
-        'resourceType': ResourceType.practitioner.code,
-        _idField: id,
-        _metaField: meta?.toJson(),
-        'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
-        'type': type?.cast<dynamic>().toFixedList(),
-        'name': name?.map((e) => e.toJson()).toFixedList(),
-        'total': total,
-        'link': link?.map((e) => e.toJson()).toFixedList(),
-        'entry': entry?.map((e) => e.toJson()).toFixedList(),
-        'active': active,
-        'telecom': telecom?.map((e) => e.toJson()).toFixedList(),
-        'address': address?.map((e) => e.toJson()).toFixedList(),
-        'gender': gender.code,
-      };
+  static Definable<FixedList<Name>> _getName(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'name',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Name.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Link>> _getLink(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'link',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Link.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Entry>> _getEntry(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'entry',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Entry.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Telecom>> _getTelecom(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'telecom',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Telecom.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Address>> _getAddress(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'address',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Address.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<AdministrativeGender> _getGender(JsonObject jo) =>
+      jo.getValueFromString(
+        'gender',
+        tryParse: (value) => value != null
+            ? AdministrativeGender.fromCode(value)
+            : AdministrativeGender.unknown,
+      );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Practitioner &&
+          other.id == id &&
+          other.meta == meta &&
+          other.identifier == identifier &&
+          other.type == type &&
+          other.name == name &&
+          other.total == total &&
+          other.link == link &&
+          other.entry == entry &&
+          other.active == active &&
+          other.telecom == telecom &&
+          other.address == address &&
+          other.gender == gender);
+
+  @override
+  int get hashCode => Object.hash(
+        id,
+        meta,
+        identifier,
+        type,
+        name,
+        total,
+        link,
+        entry,
+        active,
+        telecom,
+        address,
+        gender,
+      );
+
+  /// Creates a copy of the [Practitioner] instance and allows for non-destructive mutation.
+  Practitioner copyWith({
+    Definable<String>? id,
+    Definable<Meta>? meta,
+    Definable<FixedList<Identifier>>? identifier,
+    Definable<FixedList<t.Type>>? type,
+    Definable<FixedList<Name>>? name,
+    Definable<int>? total,
+    Definable<FixedList<Link>>? link,
+    Definable<FixedList<Entry>>? entry,
+    Definable<bool>? active,
+    Definable<FixedList<Telecom>>? telecom,
+    Definable<FixedList<Address>>? address,
+    Definable<AdministrativeGender>? gender,
+  }) =>
+      Practitioner(
+        id: id ?? this.id,
+        meta: meta ?? this.meta,
+        identifier: identifier ?? this.identifier,
+        type: type ?? this.type,
+        name: name ?? this.name,
+        total: total ?? this.total,
+        link: link ?? this.link,
+        entry: entry ?? this.entry,
+        active: active ?? this.active,
+        telecom: telecom ?? this.telecom,
+        address: address ?? this.address,
+        gender: gender ?? this.gender,
+      );
 }
 
-final class PractitionerRole extends Resource {
+class PractitionerRole extends Resource {
+  /// Constructs a new [PractitionerRole].
+  ///
+  /// A specific set of Roles/Locations/specialties/services that a practitioner may perform at an organization for a period of time.
   PractitionerRole({
-    required String id,
-    required Meta? meta,
-    this.extension,
-    this.identifier,
-    this.active,
-    this.name,
-    this.period,
-    this.practitioner,
-    this.code,
-    this.specialty,
-    this.location,
-    this.availableTime,
+    Definable<String> id = const Undefined(),
+    Definable<Meta> meta = const Undefined(),
+    Definable<FixedList<Extension>> extension = const Undefined(),
+    Definable<FixedList<Identifier>> identifier = const Undefined(),
+    Definable<bool> active = const Undefined(),
+    Definable<String> name = const Undefined(),
+    Definable<Period> period = const Undefined(),
+    Definable<Reference> practitioner = const Undefined(),
+    Definable<FixedList<CodeableConcept>> code = const Undefined(),
+    Definable<FixedList<CodeableConcept>> specialty = const Undefined(),
+    Definable<FixedList<Location>> location = const Undefined(),
+    Definable<FixedList<AvailableTime>> availableTime = const Undefined(),
   }) : super._internal(
-          id,
-          meta,
+          Map<String, dynamic>.fromEntries([
+            if (id is Defined<String>) id.toMapEntry(),
+            if (meta is Defined<Meta>) meta.toMapEntry(),
+            if (extension is Defined<FixedList<Extension>>)
+              extension.toMapEntry(),
+            if (identifier is Defined<FixedList<Identifier>>)
+              identifier.toMapEntry(),
+            if (active is Defined<bool>) active.toMapEntry(),
+            if (name is Defined<String>) name.toMapEntry(),
+            if (period is Defined<Period>) period.toMapEntry(),
+            if (practitioner is Defined<Reference>) practitioner.toMapEntry(),
+            if (code is Defined<FixedList<CodeableConcept>>) code.toMapEntry(),
+            if (specialty is Defined<FixedList<CodeableConcept>>)
+              specialty.toMapEntry(),
+            if (location is Defined<FixedList<Location>>) location.toMapEntry(),
+            if (availableTime is Defined<FixedList<AvailableTime>>)
+              availableTime.toMapEntry(),
+          ]),
         );
 
-  factory PractitionerRole.fromJson(Map<String, dynamic> json) =>
-      PractitionerRole(
-        id: json[_idField] as String,
-        extension: (json['extension'] as List<dynamic>?)
-            ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
+  /// Creates a [PractitionerRole] instance from the provided JSON object.
+  PractitionerRole.fromJson(super.json) : super._internal();
+
+  /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions.
+  Definable<FixedList<Extension>> get extension =>
+      extensionField.getValue(this);
+
+  /// Business Identifiers that are specific to a role/location.
+  Definable<FixedList<Identifier>> get identifier =>
+      identifierField.getValue(this);
+
+  /// Whether this practitioner role record is in active use.
+  Definable<bool> get active => activeField.getValue(this);
+
+  /// A name associated with the role.
+  Definable<String> get name => nameField.getValue(this);
+
+  /// The period during which the practitioner is authorized to perform in these role(s).
+  Definable<Period> get period => periodField.getValue(this);
+
+  /// Practitioner that is able to provide the defined services for the organization.
+  Definable<Reference> get practitioner => practitionerField.getValue(this);
+
+  /// Roles which this practitioner is authorized to perform for the organization.
+  Definable<FixedList<CodeableConcept>> get code => codeField.getValue(this);
+
+  /// Specific specialty of the practitioner.
+  Definable<FixedList<CodeableConcept>> get specialty =>
+      specialtyField.getValue(this);
+
+  /// The location(s) at which this practitioner provides care.
+  Definable<FixedList<Location>> get location => locationField.getValue(this);
+
+  /// A collection of times the practitioner is available or performing this role at the location and/or healthcareservice.
+  Definable<FixedList<AvailableTime>> get availableTime =>
+      availableTimeField.getValue(this);
+
+  /// Field definition for [extension].
+  static const extensionField = FieldDefinition(
+    name: 'extension',
+    getValue: _getExtension,
+  );
+
+  /// Field definition for [identifier].
+  static const identifierField = FieldDefinition(
+    name: 'identifier',
+    getValue: _getIdentifier,
+  );
+
+  /// Field definition for [active].
+  static final activeField = FieldDefinition(
+    name: 'active',
+    getValue: (jo) => jo.getValue<bool>('active'),
+  );
+
+  /// Field definition for [name].
+  static final nameField = FieldDefinition(
+    name: 'name',
+    getValue: (jo) => jo.getValue<String>('name'),
+  );
+
+  /// Field definition for [period].
+  static const periodField = FieldDefinition(
+    name: 'period',
+    getValue: _getPeriod,
+  );
+
+  /// Field definition for [practitioner].
+  static const practitionerField = FieldDefinition(
+    name: 'practitioner',
+    getValue: _getPractitioner,
+  );
+
+  /// Field definition for [code].
+  static const codeField = FieldDefinition(
+    name: 'code',
+    getValue: _getCode,
+  );
+
+  /// Field definition for [specialty].
+  static const specialtyField = FieldDefinition(
+    name: 'specialty',
+    getValue: _getSpecialty,
+  );
+
+  /// Field definition for [location].
+  static const locationField = FieldDefinition(
+    name: 'location',
+    getValue: _getLocation,
+  );
+
+  /// Field definition for [availableTime].
+  static const availableTimeField = FieldDefinition(
+    name: 'availableTime',
+    getValue: _getAvailableTime,
+  );
+
+  /// All field definitions for [PractitionerRole].
+  static final fieldDefinitions = [
+    ...Resource.fieldDefinitions,
+    extensionField,
+    identifierField,
+    activeField,
+    nameField,
+    periodField,
+    practitionerField,
+    codeField,
+    specialtyField,
+    locationField,
+    availableTimeField,
+  ];
+
+  static Definable<FixedList<Extension>> _getExtension(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'extension',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Extension.fromJson(dm as Map<String, dynamic>))
             .toFixedList(),
-        identifier: (json['identifier'] as List<dynamic>?)
-            ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        active: json['active'] != null ? json['active'] as bool? : null,
-        name: json['name'] != null ? json['name'] as String? : null,
-        period: json['period'] != null
-            ? Period.fromJson(json['period'] as Map<String, dynamic>)
-            : null,
-        practitioner: json['practitioner'] != null
-            ? Reference.fromJson(json['practitioner'] as Map<String, dynamic>)
-            : null,
-        code: (json['code'] as List<dynamic>?)
-            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        specialty: (json['specialty'] as List<dynamic>?)
-            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        location: (json['location'] as List<dynamic>?)
-            ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        availableTime: (json['availableTime'] as List<dynamic>?)
-            ?.map((e) => AvailableTime.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        meta: json[_metaField] != null
-            ? Meta.fromJson(json[_metaField] as Map<String, dynamic>)
-            : null,
       );
 
-  final FixedList<Extension>? extension;
-  final FixedList<Identifier>? identifier;
-  final bool? active;
-  final String? name;
-  final Period? period;
-  final Reference? practitioner;
-  final FixedList<CodeableConcept>? code;
-  final FixedList<CodeableConcept>? specialty;
-  final FixedList<Location>? location;
-  final FixedList<AvailableTime>? availableTime;
+  static Definable<FixedList<Identifier>> _getIdentifier(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'identifier',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Identifier.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
 
-  Map<String, dynamic> toJson() => {
-        'resourceType': ResourceType.practitionerRole.code,
-        _idField: id,
-        'extension': extension?.map((e) => e.toJson()).toFixedList(),
-        'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
-        'active': active,
-        'name': name,
-        'period': period?.toJson(),
-        'practitioner': practitioner?.toJson(),
-        'code': code?.map((e) => e.toJson()).toFixedList(),
-        'specialty': specialty?.map((e) => e.toJson()).toFixedList(),
-        'location': location?.map((e) => e.toJson()).toFixedList(),
-        'availableTime': availableTime?.map((e) => e.toJson()).toFixedList(),
-      };
+  static Definable<Period> _getPeriod(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'period',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Period.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<Reference> _getPractitioner(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'practitioner',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<FixedList<CodeableConcept>> _getCode(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'code',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<CodeableConcept>> _getSpecialty(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'specialty',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Location>> _getLocation(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'location',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Location.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<AvailableTime>> _getAvailableTime(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'availableTime',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => AvailableTime.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PractitionerRole &&
+          other.id == id &&
+          other.meta == meta &&
+          other.extension == extension &&
+          other.identifier == identifier &&
+          other.active == active &&
+          other.name == name &&
+          other.period == period &&
+          other.practitioner == practitioner &&
+          other.code == code &&
+          other.specialty == specialty &&
+          other.location == location &&
+          other.availableTime == availableTime);
+
+  @override
+  int get hashCode => Object.hash(
+        id,
+        meta,
+        extension,
+        identifier,
+        active,
+        name,
+        period,
+        practitioner,
+        code,
+        specialty,
+        location,
+        availableTime,
+      );
+
+  /// Creates a copy of the [PractitionerRole] instance and allows for non-destructive mutation.
+  PractitionerRole copyWith({
+    Definable<String>? id,
+    Definable<Meta>? meta,
+    Definable<FixedList<Extension>>? extension,
+    Definable<FixedList<Identifier>>? identifier,
+    Definable<bool>? active,
+    Definable<String>? name,
+    Definable<Period>? period,
+    Definable<Reference>? practitioner,
+    Definable<FixedList<CodeableConcept>>? code,
+    Definable<FixedList<CodeableConcept>>? specialty,
+    Definable<FixedList<Location>>? location,
+    Definable<FixedList<AvailableTime>>? availableTime,
+  }) =>
+      PractitionerRole(
+        id: id ?? this.id,
+        meta: meta ?? this.meta,
+        extension: extension ?? this.extension,
+        identifier: identifier ?? this.identifier,
+        active: active ?? this.active,
+        name: name ?? this.name,
+        period: period ?? this.period,
+        practitioner: practitioner ?? this.practitioner,
+        code: code ?? this.code,
+        specialty: specialty ?? this.specialty,
+        location: location ?? this.location,
+        availableTime: availableTime ?? this.availableTime,
+      );
 }
 
 class Slot extends Resource {
+  /// Constructs a new [Slot].
+  ///
+  /// A slot of time on a schedule that may be available for booking appointments.
   Slot({
-    String? id,
-    Meta? meta,
-    this.identifier,
-    this.serviceCategory,
-    this.serviceType,
-    this.specialty,
-    this.appointmentType,
-    this.status,
-    this.start,
-    this.end,
-    this.comment,
+    Definable<String> id = const Undefined(),
+    Definable<Meta> meta = const Undefined(),
+    Definable<FixedList<Identifier>> identifier = const Undefined(),
+    Definable<FixedList<CodeableConcept>> serviceCategory = const Undefined(),
+    Definable<FixedList<CodeableReference>> serviceType = const Undefined(),
+    Definable<FixedList<CodeableConcept>> specialty = const Undefined(),
+    Definable<CodeableConcept> appointmentType = const Undefined(),
+    Definable<String> status = const Undefined(),
+    Definable<DateTime> start = const Undefined(),
+    Definable<DateTime> end = const Undefined(),
+    Definable<String> comment = const Undefined(),
   }) : super._internal(
-          id,
-          meta,
+          Map<String, dynamic>.fromEntries([
+            if (id is Defined<String>) id.toMapEntry(),
+            if (meta is Defined<Meta>) meta.toMapEntry(),
+            if (identifier is Defined<FixedList<Identifier>>)
+              identifier.toMapEntry(),
+            if (serviceCategory is Defined<FixedList<CodeableConcept>>)
+              serviceCategory.toMapEntry(),
+            if (serviceType is Defined<FixedList<CodeableReference>>)
+              serviceType.toMapEntry(),
+            if (specialty is Defined<FixedList<CodeableConcept>>)
+              specialty.toMapEntry(),
+            if (appointmentType is Defined<CodeableConcept>)
+              appointmentType.toMapEntry(),
+            if (status is Defined<String>) status.toMapEntry(),
+            if (start is Defined<DateTime>) start.toMapEntry(),
+            if (end is Defined<DateTime>) end.toMapEntry(),
+            if (comment is Defined<String>) comment.toMapEntry(),
+          ]),
         );
 
-  factory Slot.fromJson(Map<String, dynamic> json) => Slot(
-        id: json[_idField] != null ? json[_idField] as String? : null,
-        meta: json[_metaField] != null
-            ? Meta.fromJson(json[_metaField] as Map<String, dynamic>)
-            : null,
-        identifier: (json['identifier'] as List<dynamic>?)
-            ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
+  /// Creates a [Slot] instance from the provided JSON object.
+  Slot.fromJson(super.json) : super._internal();
+
+  /// External Ids for this item.
+  Definable<FixedList<Identifier>> get identifier =>
+      identifierField.getValue(this);
+
+  /// A broad categorization of the service that is to be performed during this appointment.
+  Definable<FixedList<CodeableConcept>> get serviceCategory =>
+      serviceCategoryField.getValue(this);
+
+  /// The type of appointments that can be booked into this slot (ideally this would be an identifiable service - which is at a location, rather than the location itself). If provided then this overrides the value provided on the availability resource.
+  Definable<FixedList<CodeableReference>> get serviceType =>
+      serviceTypeField.getValue(this);
+
+  /// The specialty of a practitioner that would be required to perform the service requested in this appointment.
+  Definable<FixedList<CodeableConcept>> get specialty =>
+      specialtyField.getValue(this);
+
+  /// The style of appointment or patient that may be booked in the slot (not service type).
+  Definable<CodeableConcept> get appointmentType =>
+      appointmentTypeField.getValue(this);
+
+  /// The status of the slot.
+  Definable<String> get status => statusField.getValue(this);
+
+  /// Date/Time that the slot is to begin.
+  Definable<DateTime> get start => startField.getValue(this);
+
+  /// Date/Time that the slot is to conclude.
+  Definable<DateTime> get end => endField.getValue(this);
+
+  /// Comments on the slot to describe any extended information. Such as custom constraints on the slot.
+  Definable<String> get comment => commentField.getValue(this);
+
+  /// Field definition for [identifier].
+  static const identifierField = FieldDefinition(
+    name: 'identifier',
+    getValue: _getIdentifier,
+  );
+
+  /// Field definition for [serviceCategory].
+  static const serviceCategoryField = FieldDefinition(
+    name: 'serviceCategory',
+    getValue: _getServiceCategory,
+  );
+
+  /// Field definition for [serviceType].
+  static const serviceTypeField = FieldDefinition(
+    name: 'serviceType',
+    getValue: _getServiceType,
+  );
+
+  /// Field definition for [specialty].
+  static const specialtyField = FieldDefinition(
+    name: 'specialty',
+    getValue: _getSpecialty,
+  );
+
+  /// Field definition for [appointmentType].
+  static const appointmentTypeField = FieldDefinition(
+    name: 'appointmentType',
+    getValue: _getAppointmentType,
+  );
+
+  /// Field definition for [status].
+  static final statusField = FieldDefinition(
+    name: 'status',
+    getValue: (jo) => jo.getValue<String>('status'),
+  );
+
+  /// Field definition for [start].
+  static const startField = FieldDefinition(
+    name: 'start',
+    getValue: _getStart,
+  );
+
+  /// Field definition for [end].
+  static const endField = FieldDefinition(
+    name: 'end',
+    getValue: _getEnd,
+  );
+
+  /// Field definition for [comment].
+  static final commentField = FieldDefinition(
+    name: 'comment',
+    getValue: (jo) => jo.getValue<String>('comment'),
+  );
+
+  /// All field definitions for [Slot].
+  static final fieldDefinitions = [
+    ...Resource.fieldDefinitions,
+    identifierField,
+    serviceCategoryField,
+    serviceTypeField,
+    specialtyField,
+    appointmentTypeField,
+    statusField,
+    startField,
+    endField,
+    commentField,
+  ];
+
+  static Definable<FixedList<Identifier>> _getIdentifier(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'identifier',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Identifier.fromJson(dm as Map<String, dynamic>))
             .toFixedList(),
-        serviceCategory: (json['serviceCategory'] as List<dynamic>?)
-            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        serviceType: (json['serviceType'] as List<dynamic>?)
-            ?.map((e) => CodeableReference.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        specialty: (json['specialty'] as List<dynamic>?)
-            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        appointmentType: json['appointmentType'] != null
-            ? CodeableConcept.fromJson(
-                json['appointmentType'] as Map<String, dynamic>,
-              )
-            : null,
-        status: json['status'] != null ? json['status'] as String? : null,
-        start: DateTime.tryParse(json['start'] as String? ?? ''),
-        end: DateTime.tryParse(json['end'] as String? ?? ''),
-        comment: json['comment'] != null ? json['comment'] as String? : null,
       );
 
-  final FixedList<Identifier>? identifier;
-  final FixedList<CodeableConcept>? serviceCategory;
-  final FixedList<CodeableReference>? serviceType;
-  final FixedList<CodeableConcept>? specialty;
-  final CodeableConcept? appointmentType;
-  final String? status;
-  final DateTime? start;
-  final DateTime? end;
-  final String? comment;
+  static Definable<FixedList<CodeableConcept>> _getServiceCategory(
+    JsonObject jo,
+  ) =>
+      jo.getValueFromObjectArray(
+        'serviceCategory',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
 
-  Map<String, dynamic> toJson() => {
-        'resourceType': ResourceType.slot.code,
-        _idField: id,
-        _metaField: meta?.toJson(),
-        'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
-        'serviceCategory':
-            serviceCategory?.map((e) => e.toJson()).toFixedList(),
-        'serviceType': serviceType?.map((e) => e.toJson()).toFixedList(),
-        'specialty': specialty?.map((e) => e.toJson()).toFixedList(),
-        'appointmentType': appointmentType?.toJson(),
-        'status': status,
-        'start': start.toString(),
-        'end': end.toString(),
-        'comment': comment,
-      };
+  static Definable<FixedList<CodeableReference>> _getServiceType(
+    JsonObject jo,
+  ) =>
+      jo.getValueFromObjectArray(
+        'serviceType',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map(
+              (dm) => CodeableReference.fromJson(dm as Map<String, dynamic>),
+            )
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<CodeableConcept>> _getSpecialty(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'specialty',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<CodeableConcept> _getAppointmentType(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'appointmentType',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  static Definable<DateTime> _getStart(JsonObject jo) => jo.getValueFromString(
+        'start',
+        tryParse: (value) => value != null ? DateTime.tryParse(value) : null,
+      );
+
+  static Definable<DateTime> _getEnd(JsonObject jo) => jo.getValueFromString(
+        'end',
+        tryParse: (value) => value != null ? DateTime.tryParse(value) : null,
+      );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Slot &&
+          other.id == id &&
+          other.meta == meta &&
+          other.identifier == identifier &&
+          other.serviceCategory == serviceCategory &&
+          other.serviceType == serviceType &&
+          other.specialty == specialty &&
+          other.appointmentType == appointmentType &&
+          other.status == status &&
+          other.start == start &&
+          other.end == end &&
+          other.comment == comment);
+
+  @override
+  int get hashCode => Object.hash(
+        id,
+        meta,
+        identifier,
+        serviceCategory,
+        serviceType,
+        specialty,
+        appointmentType,
+        status,
+        start,
+        end,
+        comment,
+      );
+
+  /// Creates a copy of the [Slot] instance and allows for non-destructive mutation.
+  Slot copyWith({
+    Definable<String>? id,
+    Definable<Meta>? meta,
+    Definable<FixedList<Identifier>>? identifier,
+    Definable<FixedList<CodeableConcept>>? serviceCategory,
+    Definable<FixedList<CodeableReference>>? serviceType,
+    Definable<FixedList<CodeableConcept>>? specialty,
+    Definable<CodeableConcept>? appointmentType,
+    Definable<String>? status,
+    Definable<DateTime>? start,
+    Definable<DateTime>? end,
+    Definable<String>? comment,
+  }) =>
+      Slot(
+        id: id ?? this.id,
+        meta: meta ?? this.meta,
+        identifier: identifier ?? this.identifier,
+        serviceCategory: serviceCategory ?? this.serviceCategory,
+        serviceType: serviceType ?? this.serviceType,
+        specialty: specialty ?? this.specialty,
+        appointmentType: appointmentType ?? this.appointmentType,
+        status: status ?? this.status,
+        start: start ?? this.start,
+        end: end ?? this.end,
+        comment: comment ?? this.comment,
+      );
 }
 
 class Schedule extends Resource {
