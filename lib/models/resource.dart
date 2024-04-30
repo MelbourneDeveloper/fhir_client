@@ -76,6 +76,12 @@ sealed class Resource extends JsonObject {
         (ResourceType.slot) => Slot.fromJson(map),
       };
 
+  /// The id of the resource
+  Definable<String> get id => getValue(Resource.idField.name);
+
+  /// The metadata of the resource
+  Definable<Meta> get meta => getValue(Resource.metaField.name);
+
   static const idField = FieldDefinition(name: 'id', getValue: _getId);
   static const metaField = FieldDefinition(name: 'meta', getValue: _getMeta);
 
@@ -99,8 +105,8 @@ class Appointment extends Resource {
     Definable<FixedList<Participant>> participant = const Undefined(),
   }) : super._internal(
           {
-            if (id is Defined<String>) idField.name: id.value,
-            if (meta is Defined<Meta>) metaField.name: meta.value,
+            if (id is Defined<String>) Resource.idField.name: id.value,
+            if (meta is Defined<Meta>) Resource.metaField.name: meta.value,
             if (status is Defined<String>)
               _appointmentstatusField: status.value,
             if (serviceCategory is Defined<FixedList<CodeableConcept>>)
@@ -260,26 +266,27 @@ class Encounter extends Resource {
     Definable<FixedList<Reference>> location = const Undefined(),
   }) : super._internal(
           Map<String, dynamic>.fromEntries([
-            if (id is Defined) id.toMapEntry(Resource.idField.name),
-            if (meta is Defined) id.toMapEntry(Resource.metaField.name),
-            if (identifier is Defined)
-              identifier.toMapEntry(identifierField.name),
-            if (status is Defined) status.toMapEntry(statusField.name),
-            if (classCode is Defined) classCode.toMapEntry(classField.name),
-            if (type is Defined) type.toMapEntry(typeField.name),
-            if (serviceType is Defined)
-              serviceType.toMapEntry(serviceTypeField.name),
-            if (priority is Defined) priority.toMapEntry(priorityField.name),
-            if (subject is Defined) subject.toMapEntry(subjectField.name),
-            if (participant is Defined)
-              participant.toMapEntry(participantField.name),
-            if (period is Defined) period.toMapEntry(periodField.name),
-            if (length is Defined) length.toMapEntry(lengthField.name),
-            if (reasonCode is Defined)
-              reasonCode.toMapEntry(reasonCodeField.name),
-            if (hospitalization is Defined)
-              hospitalization.toMapEntry(hospitalizationField.name),
-            if (location is Defined) location.toMapEntry(locationField.name),
+            if (id is Defined<String>) id.toMapEntry(),
+            if (meta is Defined<Meta>) meta.toMapEntry(),
+            if (identifier is Defined<FixedList<Identifier>>)
+              identifier.toMapEntry(),
+            if (status is Defined<String>) status.toMapEntry(),
+            if (classCode is Defined<CodeableConcept>) classCode.toMapEntry(),
+            if (type is Defined<FixedList<CodeableConcept>>) type.toMapEntry(),
+            if (serviceType is Defined<CodeableConcept>)
+              serviceType.toMapEntry(),
+            if (priority is Defined<CodeableConcept>) priority.toMapEntry(),
+            if (subject is Defined<Reference>) subject.toMapEntry(),
+            if (participant is Defined<FixedList<Participant>>)
+              participant.toMapEntry(),
+            if (period is Defined<Period>) period.toMapEntry(),
+            if (length is Defined<Duration>) length.toMapEntry(),
+            if (reasonCode is Defined<FixedList<CodeableConcept>>)
+              reasonCode.toMapEntry(),
+            if (hospitalization is Defined<Hospitalization>)
+              hospitalization.toMapEntry(),
+            if (location is Defined<FixedList<Reference>>)
+              location.toMapEntry(),
           ]),
         );
 

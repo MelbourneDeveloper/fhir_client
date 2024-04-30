@@ -71,21 +71,11 @@ sealed class Definable<T> {
   const Definable();
 }
 
-extension DefinableExtensions<T> on Definable<T> {
-  MapEntry<String, dynamic> toMapEntry(
-    String fieldName,
-  ) =>
-      MapEntry(
-        fieldName,
-        this is Defined<T> ? (this as Defined<T>).value : null,
-      );
-}
-
 final class Undefined<T> extends Definable<T> {
   const Undefined();
 
   @override
-  //Note: We don't specify a type argument here because they may not
+  //Note: We don't specify a t-ype argument here because they may not
   //match. But, regardless of type, undefined is undefined
   bool operator ==(Object other) => other is Undefined;
 
@@ -100,11 +90,18 @@ final class WrongType<T> extends Definable<T> {
   final String typeName;
 }
 
+
+
 final class Defined<T> extends Definable<T> {
   Defined(this.value, this.fieldName);
 
   final T? value;
   final String fieldName;
+
+  MapEntry<String, dynamic> toMapEntry() => MapEntry(
+        fieldName,
+        value,
+      );
 
   @override
   bool operator ==(Object other) =>

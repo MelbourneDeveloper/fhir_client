@@ -15,11 +15,11 @@ class Annotation extends JsonObject {
   }) : super(
           Map<String, dynamic>.fromEntries([
             if (authorReference is Defined)
-              authorReference.toMapEntry(authorReferenceField.name),
-            if (authorString is Defined)
-              authorString.toMapEntry(authorStringField.name),
-            if (time is Defined) time.toMapEntry(timeField.name),
-            if (text is Defined) text.toMapEntry(textField.name),
+              (authorReference as Defined).toMapEntry(),
+            if (authorString is Defined<String>)
+              authorString.toMapEntry(),
+            if (time is Defined) (time as Defined).toMapEntry(),
+            if (text is Defined) (text as Defined).toMapEntry(),
           ]),
         );
 
