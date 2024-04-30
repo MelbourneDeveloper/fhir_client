@@ -3291,71 +3291,239 @@ class Slot extends Resource {
 }
 
 class Schedule extends Resource {
+  /// Constructs a new [Schedule].
+  ///
+  /// A schedule of appointments.
   Schedule({
-    String? id,
-    Meta? meta,
-    this.active,
-    this.identifier,
-    this.serviceType,
-    this.serviceCategory,
-    this.specialty,
-    this.actor,
-    this.planningHorizon,
-    this.comment,
+    Definable<String> id = const Undefined(),
+    Definable<Meta> meta = const Undefined(),
+    Definable<FixedList<Identifier>> identifier = const Undefined(),
+    Definable<FixedList<CodeableReference>> serviceType = const Undefined(),
+    Definable<FixedList<CodeableConcept>> serviceCategory = const Undefined(),
+    Definable<FixedList<CodeableConcept>> specialty = const Undefined(),
+    Definable<FixedList<Actor>> actor = const Undefined(),
+    Definable<PlanningHorizon> planningHorizon = const Undefined(),
+    Definable<String> comment = const Undefined(),
+    Definable<bool> active = const Undefined(),
   }) : super._internal(
-          id,
-          meta,
+          Map<String, dynamic>.fromEntries([
+            if (id is Defined<String>) id.toMapEntry(),
+            if (meta is Defined<Meta>) meta.toMapEntry(),
+            if (identifier is Defined<FixedList<Identifier>>)
+              identifier.toMapEntry(),
+            if (serviceType is Defined<FixedList<CodeableReference>>)
+              serviceType.toMapEntry(),
+            if (serviceCategory is Defined<FixedList<CodeableConcept>>)
+              serviceCategory.toMapEntry(),
+            if (specialty is Defined<FixedList<CodeableConcept>>)
+              specialty.toMapEntry(),
+            if (actor is Defined<FixedList<Actor>>) actor.toMapEntry(),
+            if (planningHorizon is Defined<PlanningHorizon>)
+              planningHorizon.toMapEntry(),
+            if (comment is Defined<String>) comment.toMapEntry(),
+            if (active is Defined<bool>) active.toMapEntry(),
+          ]),
         );
 
-  factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
-        id: json[_idField] != null ? json[_idField] as String? : null,
-        meta: json[_metaField] != null
-            ? Meta.fromJson(json[_metaField] as Map<String, dynamic>)
-            : null,
-        active: json['active'] as bool?,
-        identifier: (json['identifier'] as List<dynamic>?)
-            ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
+  /// Creates a [Schedule] instance from the provided JSON object.
+  Schedule.fromJson(super.json) : super._internal();
+
+  /// External Ids for this item.
+  Definable<FixedList<Identifier>> get identifier =>
+      identifierField.getValue(this);
+
+  /// The type of appointments that can be booked into this schedule (ideally this would be an identifiable service - which is at a location, rather than the location itself).
+  Definable<FixedList<CodeableReference>> get serviceType =>
+      serviceTypeField.getValue(this);
+
+  /// A broad categorization of the service that is to be performed during this schedule.
+  Definable<FixedList<CodeableConcept>> get serviceCategory =>
+      serviceCategoryField.getValue(this);
+
+  /// The specialty of a practitioner that would be required to perform the services requested in this schedule.
+  Definable<FixedList<CodeableConcept>> get specialty =>
+      specialtyField.getValue(this);
+
+  /// The actors that are available to perform services in this schedule.
+  Definable<FixedList<Actor>> get actor => actorField.getValue(this);
+
+  /// The period of time that the schedule refers to.
+  Definable<PlanningHorizon> get planningHorizon =>
+      planningHorizonField.getValue(this);
+
+  /// Comments on the schedule to describe any extended information. Such as custom constraints on the schedule.
+  Definable<String> get comment => commentField.getValue(this);
+
+  /// Whether this schedule is currently active or not.
+  Definable<bool> get active => activeField.getValue(this);
+
+  /// Field definition for [identifier].
+  static const identifierField = FieldDefinition(
+    name: 'identifier',
+    getValue: _getIdentifier,
+  );
+
+  /// Field definition for [serviceType].
+  static const serviceTypeField = FieldDefinition(
+    name: 'serviceType',
+    getValue: _getServiceType,
+  );
+
+  /// Field definition for [serviceCategory].
+  static const serviceCategoryField = FieldDefinition(
+    name: 'serviceCategory',
+    getValue: _getServiceCategory,
+  );
+
+  /// Field definition for [specialty].
+  static const specialtyField = FieldDefinition(
+    name: 'specialty',
+    getValue: _getSpecialty,
+  );
+
+  /// Field definition for [actor].
+  static const actorField = FieldDefinition(
+    name: 'actor',
+    getValue: _getActor,
+  );
+
+  /// Field definition for [planningHorizon].
+  static const planningHorizonField = FieldDefinition(
+    name: 'planningHorizon',
+    getValue: _getPlanningHorizon,
+  );
+
+  /// Field definition for [comment].
+  static final commentField = FieldDefinition(
+    name: 'comment',
+    getValue: (jo) => jo.getValue<String>('comment'),
+  );
+
+  /// Field definition for [active].
+  static final activeField = FieldDefinition(
+    name: 'active',
+    getValue: (jo) => jo.getValue<bool>('active'),
+  );
+
+  /// All field definitions for [Schedule].
+  static final fieldDefinitions = [
+    ...Resource.fieldDefinitions,
+    identifierField,
+    serviceTypeField,
+    serviceCategoryField,
+    specialtyField,
+    actorField,
+    planningHorizonField,
+    commentField,
+    activeField,
+  ];
+
+  static Definable<FixedList<Identifier>> _getIdentifier(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'identifier',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Identifier.fromJson(dm as Map<String, dynamic>))
             .toFixedList(),
-        serviceType: (json['serviceType'] as List<dynamic>?)
-            ?.map((e) => CodeableReference.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        serviceCategory: (json['serviceCategory'] as List<dynamic>?)
-            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        specialty: (json['specialty'] as List<dynamic>?)
-            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        actor: (json['actor'] as List<dynamic>?)
-            ?.map((e) => Actor.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        planningHorizon: json['planningHorizon'] != null
-            ? PlanningHorizon.fromJson(
-                json['planningHorizon'] as Map<String, dynamic>,
-              )
-            : null,
-        comment: json['comment'] != null ? json['comment'] as String? : null,
       );
 
-  final FixedList<Identifier>? identifier;
-  final FixedList<CodeableReference>? serviceType;
-  final FixedList<CodeableConcept>? serviceCategory;
-  final FixedList<CodeableConcept>? specialty;
-  final FixedList<Actor>? actor;
-  final PlanningHorizon? planningHorizon;
-  final String? comment;
-  final bool? active;
+  static Definable<FixedList<CodeableReference>> _getServiceType(
+    JsonObject jo,
+  ) =>
+      jo.getValueFromObjectArray(
+        'serviceType',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map(
+              (dm) => CodeableReference.fromJson(dm as Map<String, dynamic>),
+            )
+            .toFixedList(),
+      );
 
-  Map<String, dynamic> toJson() => {
-        'resourceType': ResourceType.schedule.code,
-        _idField: id,
-        _metaField: meta?.toJson(),
-        'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
-        'serviceType': serviceType?.map((e) => e.toJson()).toFixedList(),
-        'serviceCategory': serviceType?.map((e) => e.toJson()).toFixedList(),
-        'specialty': specialty?.map((e) => e.toJson()).toFixedList(),
-        'actor': actor?.map((e) => e.toJson()).toFixedList(),
-        'planningHorizon': planningHorizon?.toJson(),
-        'comment': comment,
-        'active': active,
-      };
+  static Definable<FixedList<CodeableConcept>> _getServiceCategory(
+    JsonObject jo,
+  ) =>
+      jo.getValueFromObjectArray(
+        'serviceCategory',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<CodeableConcept>> _getSpecialty(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'specialty',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Actor>> _getActor(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'actor',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Actor.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<PlanningHorizon> _getPlanningHorizon(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        'planningHorizon',
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => PlanningHorizon.fromJson(dm as Map<String, dynamic>))
+            .first,
+      );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Schedule &&
+          other.id == id &&
+          other.meta == meta &&
+          other.identifier == identifier &&
+          other.serviceType == serviceType &&
+          other.serviceCategory == serviceCategory &&
+          other.specialty == specialty &&
+          other.actor == actor &&
+          other.planningHorizon == planningHorizon &&
+          other.comment == comment &&
+          other.active == active);
+
+  @override
+  int get hashCode => Object.hash(
+        id,
+        meta,
+        identifier,
+        serviceType,
+        serviceCategory,
+        specialty,
+        actor,
+        planningHorizon,
+        comment,
+        active,
+      );
+
+  /// Creates a copy of the [Schedule] instance and allows for non-destructive mutation.
+  Schedule copyWith({
+    Definable<String>? id,
+    Definable<Meta>? meta,
+    Definable<FixedList<Identifier>>? identifier,
+    Definable<FixedList<CodeableReference>>? serviceType,
+    Definable<FixedList<CodeableConcept>>? serviceCategory,
+    Definable<FixedList<CodeableConcept>>? specialty,
+    Definable<FixedList<Actor>>? actor,
+    Definable<PlanningHorizon>? planningHorizon,
+    Definable<String>? comment,
+    Definable<bool>? active,
+  }) =>
+      Schedule(
+        id: id ?? this.id,
+        meta: meta ?? this.meta,
+        identifier: identifier ?? this.identifier,
+        serviceType: serviceType ?? this.serviceType,
+        serviceCategory: serviceCategory ?? this.serviceCategory,
+        specialty: specialty ?? this.specialty,
+        actor: actor ?? this.actor,
+        planningHorizon: planningHorizon ?? this.planningHorizon,
+        comment: comment ?? this.comment,
+        active: active ?? this.active,
+      );
 }
