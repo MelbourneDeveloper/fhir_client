@@ -904,169 +904,63 @@ class Observation extends Resource {
     Definable<FixedList<CodeableReference>> complicatedBy = const Undefined(),
     Definable<FixedList<CodeableReference>> contextOfUse = const Undefined(),
   }) : super._internal(
-          {
-            if (id is Defined<String>) _idField: id.value,
-            if (meta is Defined<Meta>) _metaField: meta.value,
+          Map<String, dynamic>.fromEntries([
+            if (id is Defined<String>) id.toMapEntry(),
+            if (meta is Defined<Meta>) meta.toMapEntry(),
             if (identifier is Defined<FixedList<Identifier>>)
-              _identifierField: identifier.value,
-            if (basedOn is Defined<FixedList<Reference>>)
-              _basedOnField: basedOn.value,
-            if (partOf is Defined<FixedList<Reference>>)
-              _partOfField: partOf.value,
-            if (status is Defined<String>) _statusField: status.value,
+              identifier.toMapEntry(),
+            if (basedOn is Defined<FixedList<Reference>>) basedOn.toMapEntry(),
+            if (partOf is Defined<FixedList<Reference>>) partOf.toMapEntry(),
+            if (status is Defined<String>) status.toMapEntry(),
             if (category is Defined<FixedList<CodeableConcept>>)
-              _categoryField: category.value,
-            if (code is Defined<CodeableConcept>) _codeField: code.value,
-            if (subject is Defined<Reference>) _subjectField: subject.value,
-            if (encounter is Defined<Reference>)
-              _encounterField: encounter.value,
+              category.toMapEntry(),
+            if (code is Defined<CodeableConcept>) code.toMapEntry(),
+            if (subject is Defined<Reference>) subject.toMapEntry(),
+            if (encounter is Defined<Reference>) encounter.toMapEntry(),
             if (effectiveDateTime is Defined<DateTime>)
-              _effectiveDateTimeField:
-                  effectiveDateTime.value?.toIso8601String(),
+              effectiveDateTime.toMapEntry(),
             if (effectivePeriod is Defined<Period>)
-              _effectivePeriodField: effectivePeriod.value,
+              effectivePeriod.toMapEntry(),
             if (effectiveTiming is Defined<Timing>)
-              _effectiveTimingField: effectiveTiming.value,
+              effectiveTiming.toMapEntry(),
             if (effectiveInstant is Defined<DateTime>)
-              _effectiveInstantField: effectiveInstant.value?.toIso8601String(),
-            if (issued is Defined<DateTime>)
-              _issuedField: issued.value?.toIso8601String(),
-            if (valueQuantity is Defined<Quantity>)
-              _valueQuantityField: valueQuantity.value,
+              effectiveInstant.toMapEntry(),
+            if (issued is Defined<DateTime>) issued.toMapEntry(),
+            if (valueQuantity is Defined<Quantity>) valueQuantity.toMapEntry(),
             if (valueCodeableConcept is Defined<CodeableConcept>)
-              _valueCodeableConceptField: valueCodeableConcept.value,
-            if (valueString is Defined<String>)
-              _valueStringField: valueString.value,
-            if (valueBoolean is Defined<bool>)
-              _valueBooleanField: valueBoolean.value,
-            if (valueInteger is Defined<int>)
-              _valueIntegerField: valueInteger.value,
-            if (valueRange is Defined<Range>)
-              _valueRangeField: valueRange.value,
-            if (valueRatio is Defined<Ratio>)
-              _valueRatioField: valueRatio.value,
+              valueCodeableConcept.toMapEntry(),
+            if (valueString is Defined<String>) valueString.toMapEntry(),
+            if (valueBoolean is Defined<bool>) valueBoolean.toMapEntry(),
+            if (valueInteger is Defined<int>) valueInteger.toMapEntry(),
+            if (valueRange is Defined<Range>) valueRange.toMapEntry(),
+            if (valueRatio is Defined<Ratio>) valueRatio.toMapEntry(),
             if (valueSampledData is Defined<SampledData>)
-              _valueSampledDataField: valueSampledData.value,
-            if (valueTime is Defined<Time>)
-              _valueTimeField: valueTime.value.toString(),
-            if (valueDateTime is Defined<DateTime>)
-              _valueDateTimeField: valueDateTime.value?.toIso8601String(),
-            if (valuePeriod is Defined<Period>)
-              _valuePeriodField: valuePeriod.value,
+              valueSampledData.toMapEntry(),
+            if (valueTime is Defined<Time>) valueTime.toMapEntry(),
+            if (valueDateTime is Defined<DateTime>) valueDateTime.toMapEntry(),
+            if (valuePeriod is Defined<Period>) valuePeriod.toMapEntry(),
             if (dataAbsentReason is Defined<CodeableConcept>)
-              _dataAbsentReasonField: dataAbsentReason.value,
+              dataAbsentReason.toMapEntry(),
             if (interpretation is Defined<FixedList<CodeableConcept>>)
-              _interpretationField: interpretation.value,
-            if (note is Defined<FixedList<Annotation>>) _noteField: note.value,
-            if (bodySite is Defined<CodeableConcept>)
-              _bodySiteField: bodySite.value,
-            if (method is Defined<CodeableConcept>) _methodField: method.value,
-            if (specimen is Defined<Reference>) _specimenField: specimen.value,
-            if (device is Defined<Reference>) _deviceField: device.value,
+              interpretation.toMapEntry(),
+            if (note is Defined<FixedList<Annotation>>) note.toMapEntry(),
+            if (bodySite is Defined<CodeableConcept>) bodySite.toMapEntry(),
+            if (method is Defined<CodeableConcept>) method.toMapEntry(),
+            if (specimen is Defined<Reference>) specimen.toMapEntry(),
+            if (device is Defined<Reference>) device.toMapEntry(),
             if (referenceRange is Defined<FixedList<ObservationReferenceRange>>)
-              _referenceRangeField: referenceRange.value,
+              referenceRange.toMapEntry(),
             if (hasMember is Defined<FixedList<Reference>>)
-              _hasMemberField: hasMember.value,
+              hasMember.toMapEntry(),
             if (derivedFrom is Defined<FixedList<Reference>>)
-              _derivedFromField: derivedFrom.value,
+              derivedFrom.toMapEntry(),
             if (component is Defined<FixedList<ObservationComponent>>)
-              _componentField: component.value,
+              component.toMapEntry(),
             if (complicatedBy is Defined<FixedList<CodeableReference>>)
-              _complicatedByField: complicatedBy.value,
+              complicatedBy.toMapEntry(),
             if (contextOfUse is Defined<FixedList<CodeableReference>>)
-              _contextOfUseField: contextOfUse.value,
-          },
-        );
-
-  /// Constructs a new [Observation]. This constructor treats nulls as undefined.
-  Observation.primitives({
-    String? id,
-    Meta? meta,
-    FixedList<Identifier>? identifier,
-    FixedList<Reference>? basedOn,
-    FixedList<Reference>? partOf,
-    String? status,
-    FixedList<CodeableConcept>? category,
-    CodeableConcept? code,
-    Reference? subject,
-    Reference? encounter,
-    DateTime? effectiveDateTime,
-    Period? effectivePeriod,
-    Timing? effectiveTiming,
-    DateTime? effectiveInstant,
-    DateTime? issued,
-    Quantity? valueQuantity,
-    CodeableConcept? valueCodeableConcept,
-    String? valueString,
-    bool? valueBoolean,
-    int? valueInteger,
-    Range? valueRange,
-    Ratio? valueRatio,
-    SampledData? valueSampledData,
-    Time? valueTime,
-    DateTime? valueDateTime,
-    Period? valuePeriod,
-    CodeableConcept? dataAbsentReason,
-    FixedList<CodeableConcept>? interpretation,
-    FixedList<Annotation>? note,
-    CodeableConcept? bodySite,
-    CodeableConcept? method,
-    Reference? specimen,
-    Reference? device,
-    FixedList<ObservationReferenceRange>? referenceRange,
-    FixedList<Reference>? hasMember,
-    FixedList<Reference>? derivedFrom,
-    FixedList<ObservationComponent>? component,
-    FixedList<CodeableReference>? complicatedBy,
-    FixedList<CodeableReference>? contextOfUse,
-  }) : super._internal(
-          {
-            if (id != null) _idField: id,
-            if (meta != null) _metaField: meta,
-            if (identifier != null) _identifierField: identifier,
-            if (basedOn != null) _basedOnField: basedOn,
-            if (partOf != null) _partOfField: partOf,
-            if (status != null) _statusField: status,
-            if (category != null) _categoryField: category,
-            if (code != null) _codeField: code,
-            if (subject != null) _subjectField: subject,
-            if (encounter != null) _encounterField: encounter,
-            if (effectiveDateTime != null)
-              _effectiveDateTimeField: effectiveDateTime.toIso8601String(),
-            if (effectivePeriod != null) _effectivePeriodField: effectivePeriod,
-            if (effectiveTiming != null) _effectiveTimingField: effectiveTiming,
-            if (effectiveInstant != null)
-              _effectiveInstantField: effectiveInstant.toIso8601String(),
-            if (issued != null) _issuedField: issued.toIso8601String(),
-            if (valueQuantity != null) _valueQuantityField: valueQuantity,
-            if (valueCodeableConcept != null)
-              _valueCodeableConceptField: valueCodeableConcept,
-            if (valueString != null) _valueStringField: valueString,
-            if (valueBoolean != null) _valueBooleanField: valueBoolean,
-            if (valueInteger != null) _valueIntegerField: valueInteger,
-            if (valueRange != null) _valueRangeField: valueRange,
-            if (valueRatio != null) _valueRatioField: valueRatio,
-            if (valueSampledData != null)
-              _valueSampledDataField: valueSampledData,
-            if (valueTime != null) _valueTimeField: valueTime.toString(),
-            if (valueDateTime != null)
-              _valueDateTimeField: valueDateTime.toIso8601String(),
-            if (valuePeriod != null) _valuePeriodField: valuePeriod,
-            if (dataAbsentReason != null)
-              _dataAbsentReasonField: dataAbsentReason,
-            if (interpretation != null) _interpretationField: interpretation,
-            if (note != null) _noteField: note,
-            if (bodySite != null) _bodySiteField: bodySite,
-            if (method != null) _methodField: method,
-            if (specimen != null) _specimenField: specimen,
-            if (device != null) _deviceField: device,
-            if (referenceRange != null) _referenceRangeField: referenceRange,
-            if (hasMember != null) _hasMemberField: hasMember,
-            if (derivedFrom != null) _derivedFromField: derivedFrom,
-            if (component != null) _componentField: component,
-            if (complicatedBy != null) _complicatedByField: complicatedBy,
-            if (contextOfUse != null) _contextOfUseField: contextOfUse,
-          },
+              contextOfUse.toMapEntry(),
+          ]),
         );
 
   /// Creates an [Observation] instance from the provided JSON object.
@@ -1493,7 +1387,8 @@ class Observation extends Resource {
         fromObjectArray: (jsonTags) => jsonTags
             ?.map(
               (dm) => ObservationReferenceRange.fromJson(
-                  dm as Map<String, dynamic>),
+                dm as Map<String, dynamic>,
+              ),
             )
             .toFixedList(),
       );
