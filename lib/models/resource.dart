@@ -35,6 +35,9 @@ import 'package:fhir_client/models/type.dart' as t;
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
 
+const _idField = 'id';
+const _metaField = 'meta';
+
 /// Either a successful [Resource] result or an [OperationOutcome] (error)
 sealed class Result<T> {}
 
@@ -75,49 +78,91 @@ sealed class Resource extends JsonObject {
         (ResourceType.slot) => Slot.fromJson(map),
       };
 
-  Definable<String> get id => getValue('id');
-  Definable<Meta> get meta => getValue('meta');
+  Definable<String> get id => getValue(_idField);
+  Definable<Meta> get meta => getValue(_metaField);
 }
 
+const _appointmentstatusField = 'status';
+const _serviceCategoryField = 'serviceCategory';
+const _participantField = 'participant';
+
+/// A booking of a healthcare event among patient(s), practitioner(s), related person(s) and/or device(s) for a specific date/time.
 class Appointment extends Resource {
+  /// Constructs a new [Appointment].
   Appointment({
-    String? id,
-    Meta? meta,
-    this.status,
-    this.serviceCategory,
-    this.participant,
+    Definable<String> id = const Undefined(),
+    Definable<Meta> meta = const Undefined(),
+    Definable<String> status = const Undefined(),
+    Definable<FixedList<CodeableConcept>> serviceCategory = const Undefined(),
+    Definable<FixedList<Participant>> participant = const Undefined(),
   }) : super._internal(
-          id,
-          meta,
+          {
+            if (id is Defined<String>) _idField: id.value,
+            if (meta is Defined<Meta>) _metaField: meta.value,
+            if (status is Defined<String>)
+              _appointmentstatusField: status.value,
+            if (serviceCategory is Defined<FixedList<CodeableConcept>>)
+              _serviceCategoryField: serviceCategory.value,
+            if (participant is Defined<FixedList<Participant>>)
+              _participantField: participant.value,
+          },
         );
 
-  factory Appointment.fromJson(Map<String, dynamic> json) => Appointment(
-        id: json['id'] != null ? json['id'] as String? : null,
-        meta: json['meta'] != null
-            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
-            : null,
-        status: json['status'] != null ? json['status'] as String? : null,
-        serviceCategory: (json['serviceCategory'] as List<dynamic>?)
-            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        participant: (json['participant'] as List<dynamic>?)
-            ?.map((e) => Participant.fromJson(e as Map<String, dynamic>))
+  /// Creates an [Appointment] instance from the provided JSON object.
+  Appointment.fromJson(super.json) : super._internal();
+
+  /// The overall status of the appointment.
+  Definable<String> get status => getValue(_appointmentstatusField);
+
+  /// A broad categorization of the service that is to be performed during this appointment.
+  Definable<FixedList<CodeableConcept>> get serviceCategory =>
+      getValueFromObjectArray(
+        _serviceCategoryField,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
             .toFixedList(),
       );
 
-  final String? status;
-  final FixedList<CodeableConcept>? serviceCategory;
-  final FixedList<Participant>? participant;
+  /// List of participants involved in the appointment.
+  Definable<FixedList<Participant>> get participant => getValueFromObjectArray(
+        _participantField,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Participant.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
 
-  Map<String, dynamic> toJson() => {
-        'resourceType': ResourceType.appointment.code,
-        'id': id,
-        'meta': meta?.toJson(),
-        'status': status,
-        'serviceCategory':
-            serviceCategory?.map((e) => e.toJson()).toFixedList(),
-        'participant': participant?.map((e) => e.toJson()).toFixedList(),
-      };
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Appointment &&
+          other.id == id &&
+          other.meta == meta &&
+          other.status == status &&
+          other.serviceCategory == serviceCategory &&
+          other.participant == participant);
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      meta.hashCode ^
+      status.hashCode ^
+      serviceCategory.hashCode ^
+      participant.hashCode;
+
+  /// Creates a copy of the [Appointment] instance and allows
+  /// for non-destructive mutation.
+  Appointment copyWith({
+    Definable<String>? status,
+    Definable<FixedList<CodeableConcept>>? serviceCategory,
+    Definable<FixedList<Participant>>? participant,
+  }) =>
+      Appointment(
+        id: id,
+        meta: meta,
+        status: status ?? this.status,
+        serviceCategory: serviceCategory ?? this.serviceCategory,
+        participant: participant ?? this.participant,
+      );
 }
 
 class Bundle extends Resource {
@@ -139,9 +184,9 @@ class Bundle extends Resource {
         );
 
   factory Bundle.fromJson(Map<String, dynamic> json) => Bundle(
-        id: json['id'] as String,
-        meta: json['meta'] != null
-            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+        id: json[_idField] as String,
+        meta: json[_metaField] != null
+            ? Meta.fromJson(json[_metaField] as Map<String, dynamic>)
             : null,
         extension: (json['extension'] as List<dynamic>?)
             ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
@@ -178,8 +223,8 @@ class Bundle extends Resource {
 
   Map<String, dynamic> toJson() => {
         'resourceType': ResourceType.bundle.code,
-        'id': id,
-        'meta': meta?.toJson(),
+        _idField: id,
+        _metaField: meta?.toJson(),
         'extension': extension?.map((e) => e.toJson()).toFixedList(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
         'active': active,
@@ -212,9 +257,9 @@ class Encounter extends Resource {
   }) : super._internal(id, meta);
 
   factory Encounter.fromJson(Map<String, dynamic> json) => Encounter(
-        id: json['id'] as String?,
-        meta: json['meta'] != null
-            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+        id: json[_idField] as String?,
+        meta: json[_metaField] != null
+            ? Meta.fromJson(json[_metaField] as Map<String, dynamic>)
             : null,
         identifier: (json['identifier'] as List<dynamic>?)
             ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
@@ -281,8 +326,8 @@ class Encounter extends Resource {
 
   Map<String, dynamic> toJson() => {
         'resourceType': ResourceType.encounter.code,
-        'id': id,
-        'meta': meta?.toJson(),
+        _idField: id,
+        _metaField: meta?.toJson(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
         'status': status,
         'class': classCode?.toJson(),
@@ -432,8 +477,8 @@ class Observation extends Resource {
     Definable<FixedList<CodeableReference>> contextOfUse = const Undefined(),
   }) : super._internal(
           {
-            if (id is Defined<String>) 'id': id.value,
-            if (meta is Defined<Meta>) 'meta': meta.value,
+            if (id is Defined<String>) _idField: id.value,
+            if (meta is Defined<Meta>) _metaField: meta.value,
             if (identifier is Defined<FixedList<Identifier>>)
               _identifierField: identifier.value,
             if (basedOn is Defined<FixedList<Reference>>)
@@ -548,8 +593,8 @@ class Observation extends Resource {
     FixedList<CodeableReference>? contextOfUse,
   }) : super._internal(
           {
-            if (id != null) 'id': id,
-            if (meta != null) 'meta': meta,
+            if (id != null) _idField: id,
+            if (meta != null) _metaField: meta,
             if (identifier != null) _identifierField: identifier,
             if (basedOn != null) _basedOnField: basedOn,
             if (partOf != null) _partOfField: partOf,
@@ -1018,8 +1063,10 @@ class Observation extends Resource {
       getValueFromObjectArray(
         _referenceRangeField,
         fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) =>
-                ObservationReferenceRange.fromJson(dm as Map<String, dynamic>),)
+            ?.map(
+              (dm) => ObservationReferenceRange.fromJson(
+                  dm as Map<String, dynamic>),
+            )
             .toFixedList(),
       );
 
@@ -1067,8 +1114,9 @@ class Observation extends Resource {
       getValueFromObjectArray(
         _componentField,
         fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) =>
-                ObservationComponent.fromJson(dm as Map<String, dynamic>),)
+            ?.map(
+              (dm) => ObservationComponent.fromJson(dm as Map<String, dynamic>),
+            )
             .toFixedList(),
       );
 
@@ -1084,7 +1132,8 @@ class Observation extends Resource {
         _complicatedByField,
         fromObjectArray: (jsonTags) => jsonTags
             ?.map(
-                (dm) => CodeableReference.fromJson(dm as Map<String, dynamic>),)
+              (dm) => CodeableReference.fromJson(dm as Map<String, dynamic>),
+            )
             .toFixedList(),
       );
 
@@ -1099,7 +1148,8 @@ class Observation extends Resource {
         _contextOfUseField,
         fromObjectArray: (jsonTags) => jsonTags
             ?.map(
-                (dm) => CodeableReference.fromJson(dm as Map<String, dynamic>),)
+              (dm) => CodeableReference.fromJson(dm as Map<String, dynamic>),
+            )
             .toFixedList(),
       );
   @override
@@ -1316,9 +1366,9 @@ final class Organization extends Resource {
         );
 
   factory Organization.fromJson(Map<String, dynamic> json) => Organization(
-        id: json['id'] as String,
-        meta: json['meta'] != null
-            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+        id: json[_idField] as String,
+        meta: json[_metaField] != null
+            ? Meta.fromJson(json[_metaField] as Map<String, dynamic>)
             : null,
         identifier: (json['identifier'] as List<dynamic>?)
             ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
@@ -1355,8 +1405,8 @@ final class Organization extends Resource {
 
   Map<String, dynamic> toJson() => {
         'resourceType': ResourceType.organization.code,
-        'id': id,
-        'meta': meta?.toJson(),
+        _idField: id,
+        _metaField: meta?.toJson(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
         'type': type?.cast<dynamic>().toFixedList(),
         'name': name,
@@ -1383,9 +1433,9 @@ class Patient extends Resource {
   }) : super._internal(id, meta);
 
   factory Patient.fromJson(Map<String, dynamic> json) => Patient(
-        id: json['id'] as String?,
-        meta: json['meta'] != null
-            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+        id: json[_idField] as String?,
+        meta: json[_metaField] != null
+            ? Meta.fromJson(json[_metaField] as Map<String, dynamic>)
             : null,
         identifier: (json['identifier'] as List<dynamic>?)
             ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
@@ -1418,8 +1468,8 @@ class Patient extends Resource {
 
   Map<String, dynamic> toJson() => {
         'resourceType': ResourceType.patient.code,
-        'id': id,
-        'meta': meta?.toJson(),
+        _idField: id,
+        _metaField: meta?.toJson(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
         'active': active,
         'name': name?.map((e) => e.toJson()).toFixedList(),
@@ -1450,9 +1500,9 @@ final class Practitioner extends Resource {
         );
 
   factory Practitioner.fromJson(Map<String, dynamic> json) => Practitioner(
-        id: json['id'] as String,
-        meta: json['meta'] != null
-            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+        id: json[_idField] as String,
+        meta: json[_metaField] != null
+            ? Meta.fromJson(json[_metaField] as Map<String, dynamic>)
             : null,
         identifier: (json['identifier'] as List<dynamic>?)
             ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
@@ -1495,8 +1545,8 @@ final class Practitioner extends Resource {
 
   Map<String, dynamic> toJson() => {
         'resourceType': ResourceType.practitioner.code,
-        'id': id,
-        'meta': meta?.toJson(),
+        _idField: id,
+        _metaField: meta?.toJson(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
         'type': type?.cast<dynamic>().toFixedList(),
         'name': name?.map((e) => e.toJson()).toFixedList(),
@@ -1531,7 +1581,7 @@ final class PractitionerRole extends Resource {
 
   factory PractitionerRole.fromJson(Map<String, dynamic> json) =>
       PractitionerRole(
-        id: json['id'] as String,
+        id: json[_idField] as String,
         extension: (json['extension'] as List<dynamic>?)
             ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
             .toFixedList(),
@@ -1558,8 +1608,8 @@ final class PractitionerRole extends Resource {
         availableTime: (json['availableTime'] as List<dynamic>?)
             ?.map((e) => AvailableTime.fromJson(e as Map<String, dynamic>))
             .toFixedList(),
-        meta: json['meta'] != null
-            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+        meta: json[_metaField] != null
+            ? Meta.fromJson(json[_metaField] as Map<String, dynamic>)
             : null,
       );
 
@@ -1576,7 +1626,7 @@ final class PractitionerRole extends Resource {
 
   Map<String, dynamic> toJson() => {
         'resourceType': ResourceType.practitionerRole.code,
-        'id': id,
+        _idField: id,
         'extension': extension?.map((e) => e.toJson()).toFixedList(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
         'active': active,
@@ -1609,9 +1659,9 @@ class Slot extends Resource {
         );
 
   factory Slot.fromJson(Map<String, dynamic> json) => Slot(
-        id: json['id'] != null ? json['id'] as String? : null,
-        meta: json['meta'] != null
-            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+        id: json[_idField] != null ? json[_idField] as String? : null,
+        meta: json[_metaField] != null
+            ? Meta.fromJson(json[_metaField] as Map<String, dynamic>)
             : null,
         identifier: (json['identifier'] as List<dynamic>?)
             ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
@@ -1648,8 +1698,8 @@ class Slot extends Resource {
 
   Map<String, dynamic> toJson() => {
         'resourceType': ResourceType.slot.code,
-        'id': id,
-        'meta': meta?.toJson(),
+        _idField: id,
+        _metaField: meta?.toJson(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
         'serviceCategory':
             serviceCategory?.map((e) => e.toJson()).toFixedList(),
@@ -1681,9 +1731,9 @@ class Schedule extends Resource {
         );
 
   factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
-        id: json['id'] != null ? json['id'] as String? : null,
-        meta: json['meta'] != null
-            ? Meta.fromJson(json['meta'] as Map<String, dynamic>)
+        id: json[_idField] != null ? json[_idField] as String? : null,
+        meta: json[_metaField] != null
+            ? Meta.fromJson(json[_metaField] as Map<String, dynamic>)
             : null,
         active: json['active'] as bool?,
         identifier: (json['identifier'] as List<dynamic>?)
@@ -1720,8 +1770,8 @@ class Schedule extends Resource {
 
   Map<String, dynamic> toJson() => {
         'resourceType': ResourceType.schedule.code,
-        'id': id,
-        'meta': meta?.toJson(),
+        _idField: id,
+        _metaField: meta?.toJson(),
         'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
         'serviceType': serviceType?.map((e) => e.toJson()).toFixedList(),
         'serviceCategory': serviceType?.map((e) => e.toJson()).toFixedList(),
