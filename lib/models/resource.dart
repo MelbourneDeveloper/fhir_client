@@ -104,16 +104,15 @@ class Appointment extends Resource {
     Definable<FixedList<CodeableConcept>> serviceCategory = const Undefined(),
     Definable<FixedList<Participant>> participant = const Undefined(),
   }) : super._internal(
-          {
-            if (id is Defined<String>) Resource.idField.name: id.value,
-            if (meta is Defined<Meta>) Resource.metaField.name: meta.value,
-            if (status is Defined<String>)
-              _appointmentstatusField: status.value,
+          Map<String, dynamic>.fromEntries([
+            if (id is Defined<String>) id.toMapEntry(),
+            if (meta is Defined<Meta>) meta.toMapEntry(),
+            if (status is Defined<String>) status.toMapEntry(),
             if (serviceCategory is Defined<FixedList<CodeableConcept>>)
-              _serviceCategoryField: serviceCategory.value,
+              serviceCategory.toMapEntry(),
             if (participant is Defined<FixedList<Participant>>)
-              _participantField: participant.value,
-          },
+              participant.toMapEntry(),
+          ]),
         );
 
   /// Creates an [Appointment] instance from the provided JSON object.
@@ -163,86 +162,264 @@ class Appointment extends Resource {
     Definable<String>? status,
     Definable<FixedList<CodeableConcept>>? serviceCategory,
     Definable<FixedList<Participant>>? participant,
+    Definable<String>? id,
+    Definable<Meta>? meta,
   }) =>
       Appointment(
-        id: id,
-        meta: meta,
+        id: id ?? this.id,
+        meta: meta ?? this.meta,
         status: status ?? this.status,
         serviceCategory: serviceCategory ?? this.serviceCategory,
         participant: participant ?? this.participant,
       );
 }
 
+/// A container for a collection of resources.
 class Bundle extends Resource {
+  /// Constructs a new [Bundle].
   Bundle({
-    required String? id,
-    required Meta? meta,
-    this.extension,
-    this.identifier,
-    this.active,
-    this.type,
-    this.name,
-    this.code,
-    this.location,
-    this.link,
-    this.entry,
+    Definable<String> id = const Undefined(),
+    Definable<Meta> meta = const Undefined(),
+    Definable<FixedList<Extension>> extension = const Undefined(),
+    Definable<FixedList<Identifier>> identifier = const Undefined(),
+    Definable<bool> active = const Undefined(),
+    Definable<String> type = const Undefined(),
+    Definable<String> name = const Undefined(),
+    Definable<FixedList<CodeableConcept>> code = const Undefined(),
+    Definable<FixedList<Location>> location = const Undefined(),
+    Definable<FixedList<Link>> link = const Undefined(),
+    Definable<FixedList<Entry>> entry = const Undefined(),
   }) : super._internal(
-          id,
-          meta,
+          Map<String, dynamic>.fromEntries([
+            if (id is Defined<String>) id.toMapEntry(),
+            if (meta is Defined<Meta>) meta.toMapEntry(),
+            if (extension is Defined<FixedList<Extension>>)
+              extension.toMapEntry(),
+            if (identifier is Defined<FixedList<Identifier>>)
+              identifier.toMapEntry(),
+            if (active is Defined<bool>) active.toMapEntry(),
+            if (type is Defined<String>) type.toMapEntry(),
+            if (name is Defined<String>) name.toMapEntry(),
+            if (code is Defined<FixedList<CodeableConcept>>) code.toMapEntry(),
+            if (location is Defined<FixedList<Location>>) location.toMapEntry(),
+            if (link is Defined<FixedList<Link>>) link.toMapEntry(),
+            if (entry is Defined<FixedList<Entry>>) entry.toMapEntry(),
+          ]),
         );
 
-  factory Bundle.fromJson(Map<String, dynamic> json) => Bundle(
-        id: json[_idField] as String,
-        meta: json[_metaField] != null
-            ? Meta.fromJson(json[_metaField] as Map<String, dynamic>)
-            : null,
-        extension: (json['extension'] as List<dynamic>?)
-            ?.map((e) => Extension.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        identifier: (json['identifier'] as List<dynamic>?)
-            ?.map((e) => Identifier.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        active: json['active'] != null ? json['active'] as bool? : null,
-        type: json['type'] as String?,
-        name: json['name'] != null ? json['name'] as String? : null,
-        code: (json['code'] as List<dynamic>?)
-            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        location: (json['location'] as List<dynamic>?)
-            ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        link: (json['link'] as List<dynamic>?)
-            ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        entry: (json['entry'] as List<dynamic>?)
-            ?.map((e) => Entry.fromJson(e as Map<String, dynamic>))
+  /// Creates a [Bundle] instance from the provided JSON object.
+  Bundle.fromJson(super.json) : super._internal();
+
+  /// Additional content defined by implementations.
+  Definable<FixedList<Extension>> get extension =>
+      extensionField.getValue(this);
+
+  /// Persistent identifier for the bundle.
+  Definable<FixedList<Identifier>> get identifier =>
+      identifierField.getValue(this);
+
+  /// Indicates whether the bundle is currently in active use.
+  Definable<bool> get active => activeField.getValue(this);
+
+  /// Indicates the purpose of the bundle.
+  Definable<String> get type => typeField.getValue(this);
+
+  /// A name for the bundle.
+  Definable<String> get name => nameField.getValue(this);
+
+  /// A code that identifies the type of bundle.
+  Definable<FixedList<CodeableConcept>> get code => codeField.getValue(this);
+
+  /// The location(s) where the bundle was assembled.
+  Definable<FixedList<Location>> get location => locationField.getValue(this);
+
+  /// A series of links that provide context to the bundle.
+  Definable<FixedList<Link>> get link => linkField.getValue(this);
+
+  /// An entry in the bundle - will have a resource or information.
+  Definable<FixedList<Entry>> get entry => entryField.getValue(this);
+
+  /// Field definition for [extension]
+  static const extensionField = FieldDefinition(
+    name: 'extension',
+    getValue: _getExtension,
+  );
+
+  /// Field definition for [identifier]
+  static const identifierField = FieldDefinition(
+    name: 'identifier',
+    getValue: _getIdentifier,
+  );
+
+  /// Field definition for [active]
+  static const activeField = FieldDefinition(
+    name: 'active',
+    getValue: _getActive,
+  );
+
+  /// Field definition for [type]
+  static const typeField = FieldDefinition(
+    name: 'type',
+    getValue: _getType,
+  );
+
+  /// Field definition for [name]
+  static const nameField = FieldDefinition(
+    name: 'name',
+    getValue: _getName,
+  );
+
+  /// Field definition for [code]
+  static const codeField = FieldDefinition(
+    name: 'code',
+    getValue: _getCode,
+  );
+
+  /// Field definition for [location]
+  static const locationField = FieldDefinition(
+    name: 'location',
+    getValue: _getLocation,
+  );
+
+  /// Field definition for [link]
+  static const linkField = FieldDefinition(
+    name: 'link',
+    getValue: _getLink,
+  );
+
+  /// Field definition for [entry]
+  static const entryField = FieldDefinition(
+    name: 'entry',
+    getValue: _getEntry,
+  );
+
+  static Definable<FixedList<Extension>> _getExtension(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        extensionField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Extension.fromJson(dm as Map<String, dynamic>))
             .toFixedList(),
       );
 
-  final FixedList<Extension>? extension;
-  final FixedList<Identifier>? identifier;
-  final bool? active;
-  final String? type;
-  final String? name;
-  final FixedList<CodeableConcept>? code;
-  final FixedList<Location>? location;
-  final FixedList<Link>? link;
-  final FixedList<Entry>? entry;
+  static Definable<FixedList<Identifier>> _getIdentifier(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        identifierField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Identifier.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
 
-  Map<String, dynamic> toJson() => {
-        'resourceType': ResourceType.bundle.code,
-        _idField: id,
-        _metaField: meta?.toJson(),
-        'extension': extension?.map((e) => e.toJson()).toFixedList(),
-        'identifier': identifier?.map((e) => e.toJson()).toFixedList(),
-        'active': active,
-        'type': type,
-        'name': name,
-        'code': code?.map((e) => e.toJson()).toFixedList(),
-        'location': location?.map((e) => e.toJson()).toFixedList(),
-        'link': link?.map((e) => e.toJson()).toFixedList(),
-        'entry': entry?.map((e) => e.toJson()).toFixedList(),
-      };
+  static Definable<bool> _getActive(JsonObject jo) =>
+      jo.getValue(activeField.name);
+
+  static Definable<String> _getType(JsonObject jo) =>
+      jo.getValue(typeField.name);
+
+  static Definable<String> _getName(JsonObject jo) =>
+      jo.getValue(nameField.name);
+
+  static Definable<FixedList<CodeableConcept>> _getCode(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        codeField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Location>> _getLocation(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        locationField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Location.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Link>> _getLink(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        linkField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Link.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  static Definable<FixedList<Entry>> _getEntry(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        entryField.name,
+        fromObjectArray: (jsonTags) => jsonTags
+            ?.map((dm) => Entry.fromJson(dm as Map<String, dynamic>))
+            .toFixedList(),
+      );
+
+  /// All field definitions for [Bundle]
+  static const fieldDefinitions = [
+    extensionField,
+    identifierField,
+    activeField,
+    typeField,
+    nameField,
+    codeField,
+    locationField,
+    linkField,
+    entryField,
+  ];
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Bundle &&
+          other.id == id &&
+          other.meta == meta &&
+          other.extension == extension &&
+          other.identifier == identifier &&
+          other.active == active &&
+          other.type == type &&
+          other.name == name &&
+          other.code == code &&
+          other.location == location &&
+          other.link == link &&
+          other.entry == entry);
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      meta.hashCode ^
+      extension.hashCode ^
+      identifier.hashCode ^
+      active.hashCode ^
+      type.hashCode ^
+      name.hashCode ^
+      code.hashCode ^
+      location.hashCode ^
+      link.hashCode ^
+      entry.hashCode;
+
+  /// Creates a copy of the [Bundle] instance and allows
+  /// for non-destructive mutation.
+  Bundle copyWith({
+    Definable<String>? id,
+    Definable<Meta>? meta,
+    Definable<FixedList<Extension>>? extension,
+    Definable<FixedList<Identifier>>? identifier,
+    Definable<bool>? active,
+    Definable<String>? type,
+    Definable<String>? name,
+    Definable<FixedList<CodeableConcept>>? code,
+    Definable<FixedList<Location>>? location,
+    Definable<FixedList<Link>>? link,
+    Definable<FixedList<Entry>>? entry,
+  }) =>
+      Bundle(
+        id: id ?? this.id,
+        meta: meta ?? this.meta,
+        extension: extension ?? this.extension,
+        identifier: identifier ?? this.identifier,
+        active: active ?? this.active,
+        type: type ?? this.type,
+        name: name ?? this.name,
+        code: code ?? this.code,
+        location: location ?? this.location,
+        link: link ?? this.link,
+        entry: entry ?? this.entry,
+      );
 }
 
 /// An interaction between a patient and healthcare provider(s) for the purpose of providing healthcare service(s) or assessing the health status of a patient.
