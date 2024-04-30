@@ -2,9 +2,12 @@
 
 import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/actor.dart';
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/basic_types/json_object.dart';
 import 'package:fhir_client/models/coding_list.dart';
+import 'package:fhir_client/models/planning_horizon.dart';
 import 'package:fhir_client/models/resource.dart';
+import 'package:fhir_client/models/text.dart';
 import 'package:http/http.dart';
 
 //The base HAPI API URI
@@ -38,11 +41,12 @@ Future<void> main() async {
           (final BundleEntries<PractitionerRole> roles) =>
             'PractitionerRoles:\n\n'
                 '${roles.formatResult(_formatPractitionerRole)}',
-          BundleEntries<Resource>() => "This case shouldn't happen, but the "
-              "compiler doesn't know this.",
           // ignore: strict_raw_type
-          (final OperationOutcome oo) =>
-            'Error: ${oo.text!.status}\n${oo.text?.div}',
+          (final OperationOutcome<Resource> oo) when oo.text is Defined =>
+            'Error: ${(oo.text as Defined<Text>).value?.status}\n'
+                '${(oo.text as Defined<Text>).value?.div}',
+          _ => "This case shouldn't happen, but the "
+              "compiler doesn't know this.",
         },
       )
       .join('\n');
@@ -50,8 +54,14 @@ Future<void> main() async {
   print(formattedResult);
 }
 
-String _formatCodingListList(List<CodingList>? list) =>
-    list?.map(_formatCodingList).join('/n') ?? '';
+String _formatCodingListList(Definable<FixedList<CodingList>> list) =>
+    list is Defined<FixedList<CodingList>>
+        // ignore: unnecessary_lambdas
+        ? list.value?.map((cl) => _formatCodingList(cl)).join('/n') ?? ''
+        : '';
+
+String _formatDefinableCodingList(Definable<CodingList> cc) =>
+    (cc is Defined<CodingList>) ? _formatCodingList(cc.value) : '';
 
 String _formatCodingList(CodingList? cc) =>
     cc?.coding
@@ -63,27 +73,28 @@ String _formatPractitionerRole(PractitionerRole pr) =>
     'Id: ${pr.id}\nCodes:\n${_formatCodingListList(pr.code)}\n';
 
 String _formatSlot(Slot slot) => 'Id: ${slot.id}\n'
-    'Appointment Type: ${_formatCodingList(slot.appointmentType)}\n'
+    'Appointment Type: ${_formatDefinableCodingList(slot.appointmentType)}\n'
     'Service Category: ${_formatCodingListList(slot.serviceCategory)}\n'
     'Service Type: ${_formatCodingListList(slot.serviceType)}\n'
     'Start ${slot.start} End: ${slot.end}\nComment: ${slot.comment}\n';
 
-String _formatActor(List<Actor>? actors) => actors != null
-    ? 'Actors:\n${actors.map(
-          (actor) => ' - '
-              '${actor.reference}: ${switch (actor.display) {
-            (final Defined<String> displayValue)
-                when displayValue.value != null =>
-              displayValue.value,
-            _ => 'N/A',
-          }}',
-        ).join('\n')}'
-    : '';
+String _formatActor(Definable<FixedList<Actor>> actors) =>
+    actors is Defined<FixedList<Actor>>
+        ? 'Actors:\n${actors.value?.map(
+              (actor) => ' - '
+                  '${actor.reference}: ${switch (actor.display) {
+                (final Defined<String> displayValue)
+                    when displayValue.value != null =>
+                  displayValue.value,
+                _ => 'N/A',
+              }}',
+            ).join('\n')}'
+        : '';
 
 String _formatSchedule(Schedule schedule) =>
     'Schedule ID: ${schedule.id}\nSlot Start: '
-    '${schedule.planningHorizon!.start!.toIso8601String()}\nSlot End: '
-    '${schedule.planningHorizon!.end!.toIso8601String()}\n'
+    '${schedule.planningHorizon.start!.toIso8601String()}\nSlot End: '
+    '${schedule.planningHorizon.end!.toIso8601String()}\n'
     'Service Types:\n${_formatCodingListList(schedule.serviceType)}\n'
     'Service Categories:\n${_formatCodingListList(schedule.serviceCategory)}\n'
     '${_formatActor(schedule.actor)}';
@@ -97,4 +108,14 @@ String _formatSchedule(Schedule schedule) =>
 extension ResultExtensions<T> on BundleEntries<T> {
   String formatResult(String Function(T) format) =>
       entries.map(format).join('\n');
+}
+
+extension Dadasd on Definable<PlanningHorizon> {
+  DateTime? get start => (this is Defined<PlanningHorizon>)
+      ? (this as Defined<PlanningHorizon>).value?.start
+      : null;
+
+  DateTime? get end => (this is Defined<PlanningHorizon>)
+      ? (this as Defined<PlanningHorizon>).value?.end
+      : null;
 }

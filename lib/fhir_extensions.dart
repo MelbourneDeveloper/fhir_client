@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/json_object.dart';
+import 'package:fhir_client/models/entry.dart';
 import 'package:fhir_client/models/resource.dart';
-import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
 import 'package:http/http.dart';
 
@@ -23,21 +24,17 @@ extension FhirExtensions on Client {
         return Resource.fromJson(jsonDecode(json) as Map<String, dynamic>);
         // ignore: avoid_catches_without_on_clauses
       } catch (e) {
-        return OperationOutcome<T>(
-          text: Text(
-            status:
-                'Exception or Error occurred when converting JSON to Resource',
-            div: e.toString(),
-          ),
+        return OperationOutcome<T>.error(
+          message:
+              'Exception or Error occurred when converting JSON to Resource',
+          details: e.toString(),
         );
       }
       // ignore: avoid_catches_without_on_clauses
     } catch (e) {
-      return OperationOutcome<T>(
-        text: Text(
-          status: 'Exception or Error occurred when contacting the FHIR server',
-          div: e.toString(),
-        ),
+      return OperationOutcome<T>.error(
+        message: 'Exception or Error occurred when contacting the FHIR server',
+        details: e.toString(),
       );
     }
   }
@@ -180,10 +177,14 @@ extension FhirExtensions on Client {
         (final OperationOutcome<T> o) => o,
         (final Bundle b)
             //Check all items are the correct type
-            when b.entry != null &&
-                !b.entry!.any((entry) => entry.resource is! T) =>
+            when b.entry is Defined<FixedList<Entry>> &&
+                (b.entry as Defined<FixedList<Entry>>).value != null &&
+                (b.entry as Defined<FixedList<Entry>>)
+                    .value!
+                    .every((entry) => entry.resource is T) =>
           BundleEntries<T>(
-            b.entry
+            (b.entry as Defined<FixedList<Entry>>)
+                    .value
                     ?.map(
                       (entry) =>
                           //This is not very nice but we already checked
@@ -195,12 +196,10 @@ extension FhirExtensions on Client {
             b,
           ),
         //Unexpected Result
-        (final Resource r) => OperationOutcome(
-            text: Text(
-              status: 'Unexpected Result',
-              div: 'Expected a list of ${resourceType.code}s, but '
-                  'got a ${r.runtimeType}',
-            ),
+        (final Resource r) => OperationOutcome.error(
+            message: 'Unexpected Result',
+            details: 'Expected a list of ${resourceType.code}s, but '
+                'got a ${r.runtimeType}',
           ),
       };
 }

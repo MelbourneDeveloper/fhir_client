@@ -1974,6 +1974,17 @@ class OperationOutcome<T> extends Resource implements Result<T> {
   /// Creates an [OperationOutcome] instance from the provided JSON object.
   OperationOutcome.fromJson(super.json) : super._internal();
 
+  OperationOutcome.error({required String message, required String details})
+      : this(
+          text: Defined(
+            Text(
+              status: message,
+              div: details,
+            ),
+            textField.name,
+          ),
+        );
+
   /// A human-readable narrative that contains a summary of the resource and can be used to represent the content of the resource to a human.
   Definable<Text> get text => textField.getValue(this);
 
