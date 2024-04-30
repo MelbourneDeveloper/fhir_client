@@ -90,10 +90,6 @@ sealed class Resource extends JsonObject {
   static Definable<Meta> _getMeta(JsonObject jo) => jo.getValue(metaField.name);
 }
 
-const _appointmentstatusField = 'status';
-const _serviceCategoryField = 'serviceCategory';
-const _participantField = 'participant';
-
 /// A booking of a healthcare event among patient(s), practitioner(s), related person(s) and/or device(s) for a specific date/time.
 class Appointment extends Resource {
   /// Constructs a new [Appointment].
@@ -119,24 +115,61 @@ class Appointment extends Resource {
   Appointment.fromJson(super.json) : super._internal();
 
   /// The overall status of the appointment.
-  Definable<String> get status => getValue(_appointmentstatusField);
+  Definable<String> get status => statusField.getValue(this);
 
   /// A broad categorization of the service that is to be performed during this appointment.
   Definable<FixedList<CodeableConcept>> get serviceCategory =>
-      getValueFromObjectArray(
-        _serviceCategoryField,
+      serviceCategoryField.getValue(this);
+
+  /// List of participants involved in the appointment.
+  Definable<FixedList<Participant>> get participant =>
+      participantField.getValue(this);
+
+  /// Field definition for [status]
+  static const statusField = FieldDefinition(
+    name: 'status',
+    getValue: _getStatus,
+  );
+
+  /// Field definition for [serviceCategory]
+  static const serviceCategoryField = FieldDefinition(
+    name: 'serviceCategory',
+    getValue: _getServiceCategory,
+  );
+
+  /// Field definition for [participant]
+  static const participantField = FieldDefinition(
+    name: 'participant',
+    getValue: _getParticipant,
+  );
+
+  static Definable<String> _getStatus(JsonObject jo) =>
+      jo.getValue(statusField.name);
+
+  static Definable<FixedList<CodeableConcept>> _getServiceCategory(
+    JsonObject jo,
+  ) =>
+      jo.getValueFromObjectArray(
+        serviceCategoryField.name,
         fromObjectArray: (jsonTags) => jsonTags
             ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
             .toFixedList(),
       );
 
-  /// List of participants involved in the appointment.
-  Definable<FixedList<Participant>> get participant => getValueFromObjectArray(
-        _participantField,
+  static Definable<FixedList<Participant>> _getParticipant(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        participantField.name,
         fromObjectArray: (jsonTags) => jsonTags
             ?.map((dm) => Participant.fromJson(dm as Map<String, dynamic>))
             .toFixedList(),
       );
+
+  /// All field definitions for [Appointment]
+  static const fieldDefinitions = [
+    statusField,
+    serviceCategoryField,
+    participantField,
+  ];
 
   @override
   bool operator ==(Object other) =>
