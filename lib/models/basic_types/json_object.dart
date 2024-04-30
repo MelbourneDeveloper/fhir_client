@@ -12,9 +12,14 @@ abstract class JsonObject {
   ) =>
       json.containsKey(fieldName)
           ? json[fieldName] is T || json[fieldName] == null
-              ? Defined(json[fieldName] as T?)
-              // ignore: avoid_dynamic_calls
-              : WrongType(json[fieldName].runtimeType.toString())
+              ? Defined(
+                  json[fieldName] as T?,
+                  fieldName,
+                )
+              : WrongType(
+                  // ignore: avoid_dynamic_calls
+                  json[fieldName].runtimeType.toString(),
+                )
           : const Undefined();
 
   Definable<T> getValueFromObjectArray<T>(
@@ -27,9 +32,12 @@ abstract class JsonObject {
                   fromObjectArray(
                     json[fieldName] as List<dynamic>?,
                   ),
+                  fieldName,
                 )
-              // ignore: avoid_dynamic_calls
-              : WrongType(json[fieldName].runtimeType.toString())
+              : WrongType(
+                  // ignore: avoid_dynamic_calls
+                  json[fieldName].runtimeType.toString(),
+                )
           : const Undefined();
 
   Definable<T> getValueFromString<T>(
@@ -38,9 +46,11 @@ abstract class JsonObject {
   }) =>
       json.containsKey(fieldName)
           ? json[fieldName] is String || json[fieldName] == null
-              ? Defined(tryParse(json[fieldName] as String?))
-              // ignore: avoid_dynamic_calls
-              : WrongType(json[fieldName].runtimeType.toString())
+              ? Defined(tryParse(json[fieldName] as String?), fieldName)
+              : WrongType(
+                  // ignore: avoid_dynamic_calls
+                  json[fieldName].runtimeType.toString(),
+                )
           : const Undefined();
 
   Definable<T> getValueFromArray<T>(
@@ -48,25 +58,31 @@ abstract class JsonObject {
     T? Function(List<dynamic>?) fromArray,
   ) =>
       json.containsKey(fieldName)
-          ? Defined<T>(fromArray(json[fieldName] as List<dynamic>?))
-              as Definable<T>
+          ? Defined<T>(
+              fromArray(json[fieldName] as List<dynamic>?),
+              fieldName,
+            ) as Definable<T>
           : const Undefined();
 
   Map<String, dynamic> toJson() => json;
 }
 
 sealed class Definable<T> {
-  Definable(this._value) : isDefined = true;
-  const Definable.undefined()
-      : isDefined = false,
-        _value = null;
+  const Definable();
+}
 
-  final T? _value;
-  final bool isDefined;
+extension DefinableExtensions<T> on Definable<T> {
+  MapEntry<String, dynamic> toMapEntry(
+    String fieldName,
+  ) =>
+      MapEntry(
+        fieldName,
+        this is Defined<T> ? (this as Defined<T>).value : null,
+      );
 }
 
 final class Undefined<T> extends Definable<T> {
-  const Undefined() : super.undefined();
+  const Undefined();
 
   @override
   //Note: We don't specify a type argument here because they may not
@@ -79,19 +95,21 @@ final class Undefined<T> extends Definable<T> {
 }
 
 final class WrongType<T> extends Definable<T> {
-  WrongType(this.typeName) : super.undefined();
+  WrongType(this.typeName);
 
   final String typeName;
 }
 
 final class Defined<T> extends Definable<T> {
-  Defined(super._value);
-  T? get value => _value;
+  Defined(this.value, this.fieldName);
+
+  final T? value;
+  final String fieldName;
 
   @override
   bool operator ==(Object other) =>
       (other is Defined<T> && other.value == value) ||
-      other is T && other == _value;
+      other is T && other == value;
 
   //Is value.hashCode correct? Could this cause collisions?
   @override

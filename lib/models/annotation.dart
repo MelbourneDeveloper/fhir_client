@@ -1,12 +1,8 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/basic_types/json_object.dart';
 import 'package:fhir_client/models/reference.dart';
-
-const _authorReferenceField = 'authorReference';
-const _authorStringField = 'authorString';
-const _timeField = 'time';
-const _textField = 'text';
 
 /// A text note which also contains information about who made the statement and when.
 class Annotation extends JsonObject {
@@ -16,72 +12,85 @@ class Annotation extends JsonObject {
     Definable<String> authorString = const Undefined(),
     Definable<DateTime> time = const Undefined(),
     Definable<String> text = const Undefined(),
-  }) : super({
-          if (authorReference is Defined<Reference>)
-            _authorReferenceField: authorReference.value,
-          if (authorString is Defined<String>)
-            _authorStringField: authorString.value,
-          if (time is Defined<DateTime>)
-            _timeField: time.value?.toIso8601String(),
-          if (text is Defined<String>) _textField: text.value,
-        });
-
-  /// Constructs a new [Annotation]. This constructor treats nulls as undefined.
-  Annotation.primitives({
-    Reference? authorReference,
-    String? authorString,
-    DateTime? time,
-    String? text,
-  }) : super({
-          if (authorReference != null)
-            'authorReference': authorReference.toJson(),
-          if (authorString != null) 'authorString': authorString,
-          if (time != null) 'time': time.toIso8601String(),
-          if (text != null) 'text': text,
-        });
+  }) : super(
+          Map<String, dynamic>.fromEntries([
+            if (authorReference is Defined)
+              authorReference.toMapEntry(authorReferenceField.name),
+            if (authorString is Defined)
+              authorString.toMapEntry(authorStringField.name),
+            if (time is Defined) time.toMapEntry(timeField.name),
+            if (text is Defined) text.toMapEntry(textField.name),
+          ]),
+        );
 
   /// Creates an [Annotation] instance from the provided JSON object.
   Annotation.fromJson(super.json);
 
   /// The individual responsible for making the annotation.
-  ///
-  /// Type: ReferenceType
-  /// Path: Annotation.authorReference
-  /// Minimum Cardinality: 0
-  /// Maximum Cardinality: 1
-  Definable<Reference> get authorReference => getValueFromObjectArray(
-        _authorReferenceField,
+  Definable<Reference> get authorReference =>
+      authorReferenceField.getValue(this);
+
+  /// The individual responsible for making the annotation.
+  Definable<String> get authorString => authorStringField.getValue(this);
+
+  /// Indicates when this particular annotation was made.
+  Definable<DateTime> get time => timeField.getValue(this);
+
+  /// The text of the annotation in markdown format.
+  Definable<String> get text => textField.getValue(this);
+
+  /// Field definition for [authorReference]
+  static const authorReferenceField = FieldDefinition(
+    name: 'authorReference',
+    getValue: _getAuthorReference,
+  );
+
+  /// Field definition for [authorString]
+  static const authorStringField = FieldDefinition(
+    name: 'authorString',
+    getValue: _getauthorString,
+  );
+
+  /// Field definition for [time]
+  static const timeField = FieldDefinition(
+    name: 'time',
+    getValue: _getTime,
+  );
+
+  /// Field definition for [text]
+  static const textField = FieldDefinition(
+    name: 'text',
+    getValue: _getText,
+  );
+
+  /// All field definitions for [Annotation]
+  static const fieldDefinitions = [
+    authorReferenceField,
+    authorStringField,
+    timeField,
+    textField,
+  ];
+
+  //TODO: this looks wrong. Add a test that includes a reference on
+  //an annotation
+  static Definable<Reference> _getAuthorReference(JsonObject jo) =>
+      jo.getValueFromObjectArray(
+        authorReferenceField.name,
         fromObjectArray: (jsonTags) => jsonTags
             ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
             .first,
       );
 
-  /// The individual responsible for making the annotation.
-  ///
-  /// Type: StringType
-  /// Path: Annotation.authorString
-  /// Minimum Cardinality: 0
-  /// Maximum Cardinality: 1
-  Definable<String> get authorString => getValue(_authorStringField);
+  static Definable<String> _getauthorString(JsonObject jo) =>
+      jo.getValue(authorStringField.name);
 
-  /// Indicates when this particular annotation was made.
-  ///
-  /// Type: DateTimeType
-  /// Path: Annotation.time
-  /// Minimum Cardinality: 0
-  /// Maximum Cardinality: 1
-  Definable<DateTime> get time => getValueFromString(
-        _timeField,
+  static Definable<DateTime> _getTime(JsonObject jo) => jo.getValueFromString(
+        timeField.name,
         tryParse: (t) => DateTime.tryParse(t ?? ''),
       );
 
-  /// The text of the annotation in markdown format.
-  ///
-  /// Type: MarkdownType
-  /// Path: Annotation.text
-  /// Minimum Cardinality: 1
-  /// Maximum Cardinality: 1
-  Definable<String> get text => getValue(_textField);
+  static Definable<String> _getText(JsonObject jo) =>
+      jo.getValue(textField.name);
 
   @override
   bool operator ==(Object other) =>
