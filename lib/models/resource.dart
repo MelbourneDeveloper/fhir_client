@@ -1,5 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars, comment_references
 
+import 'dart:svg';
+
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/address.dart';
 import 'package:fhir_client/models/admit_source.dart';
@@ -15,6 +17,7 @@ import 'package:fhir_client/models/entry.dart';
 import 'package:fhir_client/models/extension.dart';
 import 'package:fhir_client/models/identifier.dart';
 import 'package:fhir_client/models/issue.dart';
+import 'package:fhir_client/models/length.dart';
 import 'package:fhir_client/models/link.dart';
 import 'package:fhir_client/models/location.dart';
 import 'package:fhir_client/models/meta.dart';
@@ -55,9 +58,7 @@ final class BundleEntries<T> implements Result<T> {
 
 /// Any of the FHIR resources
 sealed class Resource {
-  final JsonObject json;
-
-  factory Resource(
+  factory Resource.fromJson(
     this.json,
   ) =>
       switch (ResourceType.fromCode(json['resourceType'] as String? ?? '')) {
@@ -74,6 +75,8 @@ sealed class Resource {
         (ResourceType.schedule) => Schedule.fromJson(json),
         (ResourceType.slot) => Slot.fromJson(json),
       };
+
+  final JsonObject json;
 
   /// The id of the resource
   String? get id => json[Resource.idField.name].stringValue;
@@ -121,7 +124,7 @@ class Appointment extends Resource {
         );
 
   /// Constructs a new [Appointment] instance from the provided JSON object.
-  Appointment.fromJson(JsonObject json) : super(json);
+  Appointment.fromJson(JsonObject json) : super.fromJson(json);
 
   /// The overall status of the appointment.
   String? get status => statusField.getValue(json);
@@ -224,38 +227,34 @@ class Bundle extends Resource {
         );
 
   /// Creates an [Bundle] instance from the provided JSON object.
-  Bundle.fromJson(JsonObject json) : super(json);
+  Bundle.fromJson(JsonObject json) : super.fromJson(json);
 
   /// List of extensions for the bundle
-  List<Extension>? get extension =>
-      extensionField.getValue(json).asListExtension;
+  List<Extension>? get extension => extensionField.getValue(json);
 
   /// Identifiers associated with the bundle
-  List<Identifier>? get identifier =>
-      identifierField.getValue(json).asListIdentifier;
+  List<Identifier>? get identifier => identifierField.getValue(json);
 
   /// Indicates whether the bundle is currently active
-  bool? get active => activeField.getValue(json).booleanValue;
+  bool? get active => activeField.getValue(json);
 
   /// The type of the bundle (e.g., transaction, batch, history)
-  String? get type => typeField.getValue(json).stringValue;
+  String? get type => typeField.getValue(json);
 
   /// The human-readable name for the bundle
-  String? get name => nameField.getValue(json).stringValue;
+  String? get name => nameField.getValue(json);
 
   /// Codes identifying the bundle
-  List<CodeableConcept>? get code =>
-      codeField.getValue(json).asListCodeableConcept;
+  List<CodeableConcept>? get code => codeField.getValue(json);
 
   /// Participants involved in the bundle
-  List<Participant>? get participant =>
-      participantField.getValue(json).asListParticipant;
+  List<Participant>? get participant => participantField.getValue(json);
 
   /// Links related to the bundle
-  List<Link>? get link => linkField.getValue(json).asListLink;
+  List<Link>? get link => linkField.getValue(json);
 
   /// Entries within the bundle
-  List<Resource>? get entry => entryField.getValue(json).asListResource;
+  List<Resource>? get entry => entryField.getValue(json);
 
   static const extensionField = FieldDefinition(
     name: 'extension',
@@ -374,14 +373,14 @@ class Encounter extends Resource {
     Reference? subject,
     FixedList<Participant>? participant,
     Period? period,
-    Duration? length,
+    Length? length,
     FixedList<CodeableConcept>? reasonCode,
     Hospitalization? hospitalization,
     FixedList<Reference>? location,
-  }) : super(
-          id: id,
-          meta: meta,
-          jsonObject: JsonObject({
+  }) : super.fromJson(
+          JsonObject({
+            if (id != null) 'id': JsonString(id),
+            if (meta != null) 'meta': meta.json,
             if (identifier != null)
               identifierField.name:
                   JsonArray.unmodifiable(identifier.map((e) => e.json)),
@@ -412,43 +411,43 @@ class Encounter extends Resource {
   Encounter.fromJson(JsonObject jsonObject) : super.fromJson(jsonObject);
 
   /// Identifier(s) by which this encounter is known.
-  FixedList<Identifier>? get identifier => identifierField.getValue(_json);
+  FixedList<Identifier>? get identifier => identifierField.getValue(json);
 
   /// The current status of the encounter.
-  String? get status => statusField.getValue(_json);
+  String? get status => statusField.getValue(json);
 
   /// Classification of patient encounter context - e.g. Inpatient, outpatient.
-  CodeableConcept? get classCode => classField.getValue(_json);
+  CodeableConcept? get classCode => classField.getValue(json);
 
   /// Specific type of encounter (e.g. e-mail consultation, surgical day-care, skilled nursing, rehabilitation).
-  FixedList<CodeableConcept>? get type => typeField.getValue(_json);
+  FixedList<CodeableConcept>? get type => typeField.getValue(json);
 
   /// Broad categorization of the service that is to be provided (e.g. cardiology).
-  CodeableConcept? get serviceType => serviceTypeField.getValue(_json);
+  CodeableConcept? get serviceType => serviceTypeField.getValue(json);
 
   /// Indicates the urgency of the encounter.
-  CodeableConcept? get priority => priorityField.getValue(_json);
+  CodeableConcept? get priority => priorityField.getValue(json);
 
   /// The patient or group present at the encounter.
-  Reference? get subject => subjectField.getValue(_json);
+  Reference? get subject => subjectField.getValue(json);
 
   /// The list of people responsible for providing the service.
-  FixedList<Participant>? get participant => participantField.getValue(_json);
+  FixedList<Participant>? get participant => participantField.getValue(json);
 
   /// The start and end time of the encounter.
-  Period? get period => periodField.getValue(_json);
+  Period? get period => periodField.getValue(json);
 
   /// Quantity of time the encounter lasted. This excludes the time during leaves of absence.
-  Duration? get length => lengthField.getValue(_json);
+  Length? get length => lengthField.getValue(json);
 
   /// Reason the encounter takes place, expressed as a code. For admissions, this can be used for a coded admission diagnosis.
-  FixedList<CodeableConcept>? get reasonCode => reasonCodeField.getValue(_json);
+  FixedList<CodeableConcept>? get reasonCode => reasonCodeField.getValue(json);
 
   /// Details about the admission to a healthcare service.
-  Hospitalization? get hospitalization => hospitalizationField.getValue(_json);
+  Hospitalization? get hospitalization => hospitalizationField.getValue(json);
 
   /// List of locations where the patient has been during this encounter.
-  FixedList<Reference>? get location => locationField.getValue(_json);
+  FixedList<Reference>? get location => locationField.getValue(json);
 
   /// Field definition for [identifier].
   static const identifierField = FieldDefinition(
@@ -597,8 +596,8 @@ class Encounter extends Resource {
         _ => null,
       };
 
-  static Duration? _getLength(JsonObject jo) => switch (jo['length']) {
-        (final JsonObject jsonObject) => Duration.fromJson(jsonObject),
+  static Length? _getLength(JsonObject jo) => switch (jo['length']) {
+        (final JsonObject jsonObject) => Length.fromJson(jsonObject),
         _ => null,
       };
 
@@ -668,7 +667,7 @@ class Encounter extends Resource {
     Reference? subject,
     FixedList<Participant>? participant,
     Period? period,
-    Duration? length,
+    Length? length,
     FixedList<CodeableConcept>? reasonCode,
     Hospitalization? hospitalization,
     FixedList<Reference>? location,
@@ -893,10 +892,10 @@ class Observation extends Resource {
     FixedList<ObservationComponent>? component,
     FixedList<CodeableReference>? complicatedBy,
     FixedList<CodeableReference>? contextOfUse,
-  }) : super(
-          id: id,
-          meta: meta,
-          jsonObject: JsonObject({
+  }) : super.fromJson(
+          JsonObject({
+            if (id != null) Resource.idField.name: JsonString(id),
+            if (meta != null) Resource.metaField.name: meta.json,
             if (identifier != null)
               identifierField.name:
                   JsonArray.unmodifiable(identifier.map((e) => e.json)),

@@ -27,6 +27,9 @@ class Annotation {
 
   final JsonObject _json;
 
+  /// Json object representation of the [Annotation] instance.
+  JsonObject get json => _json;
+
   /// The individual responsible for making the annotation.
   Reference? get authorReference => authorReferenceField.getValue(_json);
 

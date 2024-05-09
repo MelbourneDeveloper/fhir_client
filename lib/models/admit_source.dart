@@ -21,7 +21,7 @@ class AdmitSource {
 
   final JsonObject _json;
   /// Converts the [AdmitSource] instance to a JSON object.
-  JsonObject toJson() => _json;
+  JsonObject get json => _json;
 
   /// The coded value for the admit source.
   CodeableConcept? get coding => codingField.getValue(_json);
