@@ -19,7 +19,7 @@ extension FhirExtensions on Client {
         final jsonValue = jsonValueDecode(response.body);
 
         if (jsonValue is JsonObject) {
-          return Resource.fromJson(jsonValue);
+          return Resource(jsonValue);
         } else {
           return OperationOutcome<T>.error(
             message: 'Unexpected Result',

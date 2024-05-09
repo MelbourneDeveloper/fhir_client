@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/coding_list.dart';

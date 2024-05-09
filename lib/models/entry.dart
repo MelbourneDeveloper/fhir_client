@@ -69,7 +69,7 @@ class Entry {
   }
 
   static Resource? _getResource(JsonObject jo) => switch (jo['resource']) {
-        (final JsonObject jsonObject) => Resource.fromJson(jsonObject),
+        (final JsonObject jsonObject) => Resource(jsonObject),
         _ => null,
       };
 
