@@ -5,6 +5,8 @@ import 'package:jayse/jayse.dart';
 
 /// A place holder that means any kind of data type
 class Type {
+
+  /// Constructs a new [Type] with an optional text and coding.
   Type({
     String? text,
     FixedList<Coding>? coding,
@@ -18,6 +20,7 @@ class Type {
           }),
         );
 
+  /// Constructs a new [Type] instance from the provided JSON object.
   Type.fromJson(this._json);
 
   final JsonObject _json;
