@@ -7,7 +7,6 @@ import 'package:fhir_client/models/annotation.dart';
 import 'package:fhir_client/models/available_time.dart';
 import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
-import 'package:fhir_client/models/basic_types/json_object.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/codeable_reference.dart';

@@ -6,8 +6,6 @@ import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/available_time.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
-import 'package:fhir_client/models/basic_types/json_object.dart';
-import 'package:fhir_client/models/basic_types/string_backed_value.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/tag.dart';

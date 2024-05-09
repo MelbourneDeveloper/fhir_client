@@ -1,6 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-import 'package:fhir_client/models/basic_types/json_object.dart';
+import 'package:jayse/jayse.dart';
 
 const _codeField = 'code';
 const _systemField = 'system';

@@ -3,7 +3,6 @@
 import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
-import 'package:fhir_client/models/basic_types/json_object.dart';
 import 'package:fhir_client/models/coding_list.dart';
 import 'package:fhir_client/models/planning_horizon.dart';
 import 'package:fhir_client/models/resource.dart';
