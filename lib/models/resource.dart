@@ -383,97 +383,103 @@ class Bundle extends Resource {
         entry: entry ?? this.entry,
       );
 }
+import 'package:fhir_client/models/basic_types/field_definition.dart';
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/codeable_concept.dart';
+import 'package:fhir_client/models/duration.dart';
+import 'package:fhir_client/models/hospitalization.dart';
+import 'package:fhir_client/models/identifier.dart';
+import 'package:fhir_client/models/meta.dart';
+import 'package:fhir_client/models/participant.dart';
+import 'package:fhir_client/models/period.dart';
+import 'package:fhir_client/models/reference.dart';
+import 'package:fhir_client/models/resource.dart';
+import 'package:jayse/jayse.dart';
 
 /// An interaction between a patient and healthcare provider(s) for the purpose of providing healthcare service(s) or assessing the health status of a patient.
 class Encounter extends Resource {
   /// Constructs a new [Encounter].
   Encounter({
-    Definable<String> id = const Undefined(),
-    Definable<Meta> meta = const Undefined(),
-    Definable<FixedList<Identifier>> identifier = const Undefined(),
-    Definable<String> status = const Undefined(),
-    Definable<CodeableConcept> classCode = const Undefined(),
-    Definable<FixedList<CodeableConcept>> type = const Undefined(),
-    Definable<CodeableConcept> serviceType = const Undefined(),
-    Definable<CodeableConcept> priority = const Undefined(),
-    Definable<Reference> subject = const Undefined(),
-    Definable<FixedList<Participant>> participant = const Undefined(),
-    Definable<Period> period = const Undefined(),
-    Definable<Duration> length = const Undefined(),
-    Definable<FixedList<CodeableConcept>> reasonCode = const Undefined(),
-    Definable<Hospitalization> hospitalization = const Undefined(),
-    Definable<FixedList<Reference>> location = const Undefined(),
-  }) : super._internal(
-          Map<String, dynamic>.fromEntries([
-            if (id is Defined<String>) id.toMapEntry(),
-            if (meta is Defined<Meta>) meta.toMapEntry(),
-            if (identifier is Defined<FixedList<Identifier>>)
-              identifier.toMapEntry(),
-            if (status is Defined<String>) status.toMapEntry(),
-            if (classCode is Defined<CodeableConcept>) classCode.toMapEntry(),
-            if (type is Defined<FixedList<CodeableConcept>>) type.toMapEntry(),
-            if (serviceType is Defined<CodeableConcept>)
-              serviceType.toMapEntry(),
-            if (priority is Defined<CodeableConcept>) priority.toMapEntry(),
-            if (subject is Defined<Reference>) subject.toMapEntry(),
-            if (participant is Defined<FixedList<Participant>>)
-              participant.toMapEntry(),
-            if (period is Defined<Period>) period.toMapEntry(),
-            if (length is Defined<Duration>) length.toMapEntry(),
-            if (reasonCode is Defined<FixedList<CodeableConcept>>)
-              reasonCode.toMapEntry(),
-            if (hospitalization is Defined<Hospitalization>)
-              hospitalization.toMapEntry(),
-            if (location is Defined<FixedList<Reference>>)
-              location.toMapEntry(),
-          ]),
+    String? id,
+    Meta? meta,
+    FixedList<Identifier>? identifier,
+    String? status,
+    CodeableConcept? classCode,
+    FixedList<CodeableConcept>? type,
+    CodeableConcept? serviceType,
+    CodeableConcept? priority,
+    Reference? subject,
+    FixedList<Participant>? participant,
+    Period? period,
+    Duration? length,
+    FixedList<CodeableConcept>? reasonCode,
+    Hospitalization? hospitalization,
+    FixedList<Reference>? location,
+  }) : super(
+          id: id,
+          meta: meta,
+          jsonObject: JsonObject({
+            if (identifier != null)
+              identifierField.name: JsonArray.unmodifiable(identifier.map((e) => e.json)),
+            if (status != null) statusField.name: JsonString(status),
+            if (classCode != null) classField.name: classCode.json,
+            if (type != null) typeField.name: JsonArray.unmodifiable(type.map((e) => e.json)),
+            if (serviceType != null) serviceTypeField.name: serviceType.json,
+            if (priority != null) priorityField.name: priority.json,
+            if (subject != null) subjectField.name: subject.json,
+            if (participant != null)
+              participantField.name: JsonArray.unmodifiable(participant.map((e) => e.json)),
+            if (period != null) periodField.name: period.json,
+            if (length != null) lengthField.name: length.json,
+            if (reasonCode != null)
+              reasonCodeField.name: JsonArray.unmodifiable(reasonCode.map((e) => e.json)),
+            if (hospitalization != null) hospitalizationField.name: hospitalization.json,
+            if (location != null)
+              locationField.name: JsonArray.unmodifiable(location.map((e) => e.json)),
+          }),
         );
 
   /// Creates an [Encounter] instance from the provided JSON object.
-  Encounter.fromJson(super.json) : super._internal();
+  Encounter.fromJson(JsonObject jsonObject) : super.fromJson(jsonObject);
 
   /// Identifier(s) by which this encounter is known.
-  Definable<FixedList<Identifier>> get identifier =>
-      identifierField.getValue(this);
+  FixedList<Identifier>? get identifier => identifierField.getValue(_json);
 
   /// The current status of the encounter.
-  Definable<String> get status => statusField.getValue(this);
+  String? get status => statusField.getValue(_json);
 
   /// Classification of patient encounter context - e.g. Inpatient, outpatient.
-  Definable<CodeableConcept> get classCode => classField.getValue(this);
+  CodeableConcept? get classCode => classField.getValue(_json);
 
   /// Specific type of encounter (e.g. e-mail consultation, surgical day-care, skilled nursing, rehabilitation).
-  Definable<FixedList<CodeableConcept>> get type => typeField.getValue(this);
+  FixedList<CodeableConcept>? get type => typeField.getValue(_json);
 
   /// Broad categorization of the service that is to be provided (e.g. cardiology).
-  Definable<CodeableConcept> get serviceType => serviceTypeField.getValue(this);
+  CodeableConcept? get serviceType => serviceTypeField.getValue(_json);
 
   /// Indicates the urgency of the encounter.
-  Definable<CodeableConcept> get priority => priorityField.getValue(this);
+  CodeableConcept? get priority => priorityField.getValue(_json);
 
   /// The patient or group present at the encounter.
-  Definable<Reference> get subject => subjectField.getValue(this);
+  Reference? get subject => subjectField.getValue(_json);
 
   /// The list of people responsible for providing the service.
-  Definable<FixedList<Participant>> get participant =>
-      participantField.getValue(this);
+  FixedList<Participant>? get participant => participantField.getValue(_json);
 
   /// The start and end time of the encounter.
-  Definable<Period> get period => periodField.getValue(this);
+  Period? get period => periodField.getValue(_json);
 
   /// Quantity of time the encounter lasted. This excludes the time during leaves of absence.
-  Definable<Duration> get length => lengthField.getValue(this);
+  Duration? get length => lengthField.getValue(_json);
 
   /// Reason the encounter takes place, expressed as a code. For admissions, this can be used for a coded admission diagnosis.
-  Definable<FixedList<CodeableConcept>> get reasonCode =>
-      reasonCodeField.getValue(this);
+  FixedList<CodeableConcept>? get reasonCode => reasonCodeField.getValue(_json);
 
   /// Details about the admission to a healthcare service.
-  Definable<Hospitalization> get hospitalization =>
-      hospitalizationField.getValue(this);
+  Hospitalization? get hospitalization => hospitalizationField.getValue(_json);
 
   /// List of locations where the patient has been during this encounter.
-  Definable<FixedList<Reference>> get location => locationField.getValue(this);
+  FixedList<Reference>? get location => locationField.getValue(_json);
 
   /// Field definition for [identifier].
   static const identifierField = FieldDefinition(
@@ -555,6 +561,7 @@ class Encounter extends Resource {
 
   /// All field definitions for [Encounter].
   static const fieldDefinitions = [
+    ...Resource.fieldDefinitions,
     identifierField,
     statusField,
     classField,
@@ -570,102 +577,72 @@ class Encounter extends Resource {
     locationField,
   ];
 
-  static Definable<FixedList<Identifier>> _getIdentifier(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        identifierField.name,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Identifier.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static FixedList<Identifier>? _getIdentifier(JsonObject jo) => switch (jo['identifier']) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Identifier.fromJson(e as JsonObject))),
+        _ => null,
+      };
 
-  static Definable<String> _getStatus(JsonObject jo) =>
-      jo.getValue(statusField.name);
+  static String? _getStatus(JsonObject jo) => jo.getValue(statusField.name).stringValue;
 
-  static Definable<CodeableConcept> _getClassCode(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        classField.name,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  static CodeableConcept? _getClassCode(JsonObject jo) => switch (jo['class']) {
+        (final JsonObject jsonObject) => CodeableConcept.fromJson(jsonObject),
+        _ => null,
+      };
 
-  static Definable<FixedList<CodeableConcept>> _getType(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        typeField.name,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static FixedList<CodeableConcept>? _getType(JsonObject jo) => switch (jo['type']) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => CodeableConcept.fromJson(e as JsonObject))),
+        _ => null,
+      };
 
-  static Definable<CodeableConcept> _getServiceType(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        serviceTypeField.name,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  static CodeableConcept? _getServiceType(JsonObject jo) => switch (jo['serviceType']) {
+        (final JsonObject jsonObject) => CodeableConcept.fromJson(jsonObject),
+        _ => null,
+      };
 
-  static Definable<CodeableConcept> _getPriority(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        priorityField.name,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  static CodeableConcept? _getPriority(JsonObject jo) => switch (jo['priority']) {
+        (final JsonObject jsonObject) => CodeableConcept.fromJson(jsonObject),
+        _ => null,
+      };
 
-  static Definable<Reference> _getSubject(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        subjectField.name,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  static Reference? _getSubject(JsonObject jo) => switch (jo['subject']) {
+        (final JsonObject jsonObject) => Reference.fromJson(jsonObject),
+        _ => null,
+      };
 
-  static Definable<FixedList<Participant>> _getParticipant(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        participantField.name,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Participant.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static FixedList<Participant>? _getParticipant(JsonObject jo) => switch (jo['participant']) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Participant.fromJson(e as JsonObject))),
+        _ => null,
+      };
 
-  static Definable<Period> _getPeriod(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        periodField.name,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Period.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  static Period? _getPeriod(JsonObject jo) => switch (jo['period']) {
+        (final JsonObject jsonObject) => Period.fromJson(jsonObject),
+        _ => null,
+      };
 
-  static Definable<Duration> _getLength(JsonObject jo) => jo.getValueFromString(
-        lengthField.name,
-        tryParse: (t) =>
-            t != null ? Duration(milliseconds: int.parse(t) * 1000) : null,
-      );
+  static Duration? _getLength(JsonObject jo) => switch (jo['length']) {
+        (final JsonObject jsonObject) => Duration.fromJson(jsonObject),
+        _ => null,
+      };
 
-  static Definable<FixedList<CodeableConcept>> _getReasonCode(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        reasonCodeField.name,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => CodeableConcept.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static FixedList<CodeableConcept>? _getReasonCode(JsonObject jo) => switch (jo['reasonCode']) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => CodeableConcept.fromJson(e as JsonObject))),
+        _ => null,
+      };
 
-  static Definable<Hospitalization> _getHospitalization(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        hospitalizationField.name,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Hospitalization.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  static Hospitalization? _getHospitalization(JsonObject jo) => switch (jo['hospitalization']) {
+        (final JsonObject jsonObject) => Hospitalization.fromJson(jsonObject),
+        _ => null,
+      };
 
-  static Definable<FixedList<Reference>> _getLocation(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        locationField.name,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static FixedList<Reference>? _getLocation(JsonObject jo) => switch (jo['location']) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject))),
+        _ => null,
+      };
 
   @override
   bool operator ==(Object other) =>
@@ -701,53 +678,198 @@ class Encounter extends Resource {
         hospitalization,
         location,
       );
+
+  /// Creates a copy of the [Encounter] instance and allows for non-destructive mutation.
+  Encounter copyWith({
+    FixedList<Identifier>? identifier,
+    String? status,
+    CodeableConcept? classCode,
+    FixedList<CodeableConcept>? type,
+    CodeableConcept? serviceType,
+    CodeableConcept? priority,
+    Reference? subject,
+    FixedList<Participant>? participant,
+    Period? period,
+    Duration? length,
+    FixedList<CodeableConcept>? reasonCode,
+    Hospitalization? hospitalization,
+    FixedList<Reference>? location,
+  }) =>
+      Encounter(
+        id: id,
+        meta: meta,
+        identifier: identifier ?? this.identifier,
+        status: status ?? this.status,
+        classCode: classCode ?? this.classCode,
+        type: type ?? this.type,
+        serviceType: serviceType ?? this.serviceType,
+        priority: priority ?? this.priority,
+        subject: subject ?? this.subject,
+        participant: participant ?? this.participant,
+        period: period ?? this.period,
+        length: length ?? this.length,
+        reasonCode: reasonCode ?? this.reasonCode,
+        hospitalization: hospitalization ?? this.hospitalization,
+        location: location ?? this.location,
+      );
 }
 
+import 'package:fhir_client/models/admit_source.dart';
+import 'package:fhir_client/models/basic_types/field_definition.dart';
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/codeable_concept.dart';
+import 'package:fhir_client/models/location.dart';
+import 'package:fhir_client/models/period.dart';
+import 'package:fhir_client/models/reference.dart';
+import 'package:jayse/jayse.dart';
+
+/// Details about the admission to a healthcare service.
 class Hospitalization {
+  /// Constructs a new [Hospitalization] with optional admitSource, period, specialCourtesy, destination, and preAdmissionIdentifier.
   Hospitalization({
-    this.admitSource,
-    this.period,
-    this.specialCourtesy,
-    this.destination,
-    this.preAdmissionIdentifier,
-  });
-  factory Hospitalization.fromJson(Map<String, dynamic> json) =>
-      Hospitalization(
-        admitSource: json['admitSource'] != null
-            ? AdmitSource.fromJson(json['admitSource'] as Map<String, dynamic>)
-            : null,
-        period: json['period'] != null
-            ? Period.fromJson(json['period'] as Map<String, dynamic>)
-            : null,
-        specialCourtesy: (json['specialCourtesy'] as List<dynamic>?)
-            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        destination: (json['destination'] as List<dynamic>?)
-            ?.map((e) => Location.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        preAdmissionIdentifier:
-            (json['preAdmissionIdentifier'] as List<dynamic>?)
-                ?.map((e) => Reference.fromJson(e as Map<String, dynamic>))
-                .toFixedList(),
+    AdmitSource? admitSource,
+    Period? period,
+    FixedList<CodeableConcept>? specialCourtesy,
+    FixedList<Location>? destination,
+    FixedList<Reference>? preAdmissionIdentifier,
+  }) : this.fromJson(
+          JsonObject({
+            if (admitSource != null) admitSourceField.name: admitSource.json,
+            if (period != null) periodField.name: period.json,
+            if (specialCourtesy != null)
+              specialCourtesyField.name: JsonArray.unmodifiable(specialCourtesy.map((e) => e.json)),
+            if (destination != null)
+              destinationField.name: JsonArray.unmodifiable(destination.map((e) => e.json)),
+            if (preAdmissionIdentifier != null)
+              preAdmissionIdentifierField.name: JsonArray.unmodifiable(preAdmissionIdentifier.map((e) => e.json)),
+          }),
+        );
+
+  /// Constructs a new [Hospitalization] instance from the provided JSON object.
+  Hospitalization.fromJson(this._json);
+
+  final JsonObject _json;
+
+  /// From where patient was admitted (physician referral, transfer).
+  AdmitSource? get admitSource => admitSourceField.getValue(_json);
+
+  /// The actual or estimated period of admission.
+  Period? get period => periodField.getValue(_json);
+
+  /// Special courtesies (VIP, board member).
+  FixedList<CodeableConcept>? get specialCourtesy => specialCourtesyField.getValue(_json);
+
+  /// Location/organization to which the patient is discharged.
+  FixedList<Location>? get destination => destinationField.getValue(_json);
+
+  /// The pre-admission identifier.
+  FixedList<Reference>? get preAdmissionIdentifier => preAdmissionIdentifierField.getValue(_json);
+
+  /// Field definition for [admitSource].
+  static const admitSourceField = FieldDefinition(
+    name: 'admitSource',
+    getValue: _getAdmitSource,
+  );
+
+  /// Field definition for [period].
+  static const periodField = FieldDefinition(
+    name: 'period',
+    getValue: _getPeriod,
+  );
+
+  /// Field definition for [specialCourtesy].
+  static const specialCourtesyField = FieldDefinition(
+    name: 'specialCourtesy',
+    getValue: _getSpecialCourtesy,
+  );
+
+  /// Field definition for [destination].
+  static const destinationField = FieldDefinition(
+    name: 'destination',
+    getValue: _getDestination,
+  );
+
+  /// Field definition for [preAdmissionIdentifier].
+  static const preAdmissionIdentifierField = FieldDefinition(
+    name: 'preAdmissionIdentifier',
+    getValue: _getPreAdmissionIdentifier,
+  );
+
+  /// All field definitions for [Hospitalization].
+  static const fieldDefinitions = [
+    admitSourceField,
+    periodField,
+    specialCourtesyField,
+    destinationField,
+    preAdmissionIdentifierField,
+  ];
+
+  static AdmitSource? _getAdmitSource(JsonObject jo) => switch (jo['admitSource']) {
+        (final JsonObject jsonObject) => AdmitSource.fromJson(jsonObject),
+        _ => null,
+      };
+
+  static Period? _getPeriod(JsonObject jo) => switch (jo['period']) {
+        (final JsonObject jsonObject) => Period.fromJson(jsonObject),
+        _ => null,
+      };
+
+  static FixedList<CodeableConcept>? _getSpecialCourtesy(JsonObject jo) => switch (jo['specialCourtesy']) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => CodeableConcept.fromJson(e as JsonObject))),
+        _ => null,
+      };
+
+  static FixedList<Location>? _getDestination(JsonObject jo) => switch (jo['destination']) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Location.fromJson(e as JsonObject))),
+        _ => null,
+      };
+
+  static FixedList<Reference>? _getPreAdmissionIdentifier(JsonObject jo) => switch (jo['preAdmissionIdentifier']) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject))),
+        _ => null,
+      };
+
+  /// Converts this [Hospitalization] instance to a JSON object.
+  JsonObject get json => _json;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Hospitalization &&
+          other.admitSource == admitSource &&
+          other.period == period &&
+          other.specialCourtesy == specialCourtesy &&
+          other.destination == destination &&
+          other.preAdmissionIdentifier == preAdmissionIdentifier);
+
+  @override
+  int get hashCode => Object.hash(
+        admitSource,
+        period,
+        specialCourtesy,
+        destination,
+        preAdmissionIdentifier,
       );
 
-  final AdmitSource? admitSource;
-  final Period? period;
-  final FixedList<CodeableConcept>? specialCourtesy;
-  final FixedList<Location>? destination;
-  final FixedList<Reference>? preAdmissionIdentifier;
-
-  Map<String, dynamic> toJson() => {
-        'admitSource': admitSource?.toJson(),
-        'period': period?.toJson(),
-        'specialCourtesy':
-            specialCourtesy?.map((e) => e.toJson()).toFixedList(),
-        'destination': destination?.map((e) => e.toJson()).toFixedList(),
-        'preAdmissionIdentifier':
-            preAdmissionIdentifier?.map((e) => e.toJson()).toFixedList(),
-      };
+  /// Creates a copy of the [Hospitalization] instance and allows for non-destructive mutation.
+  Hospitalization copyWith({
+    AdmitSource? admitSource,
+    Period? period,
+    FixedList<CodeableConcept>? specialCourtesy,
+    FixedList<Location>? destination,
+    FixedList<Reference>? preAdmissionIdentifier,
+  }) =>
+      Hospitalization(
+        admitSource: admitSource ?? this.admitSource,
+        period: period ?? this.period,
+        specialCourtesy: specialCourtesy ?? this.specialCourtesy,
+        destination: destination ?? this.destination,
+        preAdmissionIdentifier: preAdmissionIdentifier ?? this.preAdmissionIdentifier,
+      );
 }
-
 /// Measurements and simple assertions made about a patient, device or other subject.
 class Observation extends Resource {
   /// Constructs a new [Observation].
