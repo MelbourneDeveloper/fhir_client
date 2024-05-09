@@ -137,6 +137,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  jayse:
+    dependency: "direct main"
+    description:
+      name: jayse
+      sha256: "37d30763a1e89c7c42225eb7e6acc7b38a8f5b09788c4193ba2e9e96b9f2bd0a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2-alpha"
   js:
     dependency: transitive
     description:
