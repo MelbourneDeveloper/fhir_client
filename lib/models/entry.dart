@@ -7,7 +7,6 @@ import 'package:jayse/jayse.dart';
 
 /// An entry in a bundle resource - will either contain a resource or information about a resource (transactions and history only).
 class Entry {
-
   /// Creates a new [Entry] instance.
   Entry({
     Uri? fullUrl,
@@ -70,7 +69,7 @@ class Entry {
   }
 
   static Resource? _getResource(JsonObject jo) => switch (jo['resource']) {
-        (final JsonObject jsonObject) => Resource(jsonObject),
+        (final JsonObject jsonObject) => Resource.fromJson(jsonObject),
         _ => null,
       };
 
@@ -98,9 +97,10 @@ class Entry {
     Uri? fullUrl,
     Resource? resource,
     Search? search,
-  }) => Entry(
-      fullUrl: fullUrl ?? this.fullUrl,
-      resource: resource ?? this.resource,
-      search: search ?? this.search,
-    );
+  }) =>
+      Entry(
+        fullUrl: fullUrl ?? this.fullUrl,
+        resource: resource ?? this.resource,
+        search: search ?? this.search,
+      );
 }
