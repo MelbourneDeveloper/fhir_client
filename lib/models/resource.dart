@@ -1,6 +1,4 @@
-// ignore_for_file: lines_longer_than_80_chars, comment_references
-
-import 'dart:svg';
+// ignore_for_file: lines_longer_than_80_chars, comment_references, use_super_parameters
 
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/address.dart';
@@ -58,8 +56,10 @@ final class BundleEntries<T> implements Result<T> {
 
 /// Any of the FHIR resources
 sealed class Resource {
+  Resource._internal(this.json);
+
   factory Resource.fromJson(
-    this.json,
+    JsonObject json,
   ) =>
       switch (ResourceType.fromCode(json['resourceType'] as String? ?? '')) {
         (ResourceType.appointment) => Appointment.fromJson(json),
@@ -110,21 +110,22 @@ class Appointment extends Resource {
     String? status,
     FixedList<CodeableConcept>? serviceCategory,
     FixedList<Participant>? participant,
-  }) : this.fromJson(
+  }) : super._internal(
           JsonObject({
             if (id != null) 'id': JsonString(id),
             if (meta != null) 'meta': meta.json,
-            if (status != null) 'status': JsonString(status),
+            if (status != null) statusField.name: JsonString(status),
             if (serviceCategory != null)
-              'serviceCategory':
-                  JsonArray(serviceCategory.map((e) => e.json).toList()),
+              serviceCategoryField.name:
+                  JsonArray.unmodifiable(serviceCategory.map((e) => e.json)),
             if (participant != null)
-              'participant': JsonArray(participant.map((e) => e.json).toList()),
+              participantField.name:
+                  JsonArray.unmodifiable(participant.map((e) => e.json)),
           }),
         );
 
   /// Constructs a new [Appointment] instance from the provided JSON object.
-  Appointment.fromJson(JsonObject json) : super.fromJson(json);
+  Appointment.fromJson(JsonObject jsonObject) : super._internal(jsonObject);
 
   /// The overall status of the appointment.
   String? get status => statusField.getValue(json);
@@ -139,20 +140,48 @@ class Appointment extends Resource {
   /// Field definition for [status]
   static const statusField = FieldDefinition(
     name: 'status',
-    getValue: (JsonObject jo) => jo['status'],
+    getValue: _getStatus,
   );
 
   /// Field definition for [serviceCategory]
   static const serviceCategoryField = FieldDefinition(
     name: 'serviceCategory',
-    getValue: (JsonObject jo) => jo['serviceCategory'],
+    getValue: _getServiceCategory,
   );
 
   /// Field definition for [participant]
   static const participantField = FieldDefinition(
     name: 'participant',
-    getValue: (JsonObject jo) => jo['participant'],
+    getValue: _getParticipant,
   );
+
+  /// All field definitions for [Appointment].
+  static const fieldDefinitions = [
+    ...Resource.fieldDefinitions,
+    statusField,
+    serviceCategoryField,
+    participantField,
+  ];
+
+  static String? _getStatus(JsonObject jo) =>
+      jo.getValue(statusField.name).stringValue;
+
+  static FixedList<CodeableConcept>? _getServiceCategory(JsonObject jo) =>
+      switch (jo['serviceCategory']) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => CodeableConcept.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static FixedList<Participant>? _getParticipant(JsonObject jo) =>
+      switch (jo['participant']) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Participant.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
 
   @override
   bool operator ==(Object other) =>
@@ -227,7 +256,7 @@ class Bundle extends Resource {
         );
 
   /// Creates an [Bundle] instance from the provided JSON object.
-  Bundle.fromJson(JsonObject json) : super.fromJson(json);
+  Bundle.fromJson(JsonObject json) : super._internal(json);
 
   /// List of extensions for the bundle
   List<Extension>? get extension => extensionField.getValue(json);
@@ -548,7 +577,8 @@ class Encounter extends Resource {
   static FixedList<Identifier>? _getIdentifier(JsonObject jo) =>
       switch (jo['identifier']) {
         (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) => Identifier.fromJson(e as JsonObject))),
+            jsonArray.value.map((e) => Identifier.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
@@ -562,8 +592,10 @@ class Encounter extends Resource {
 
   static FixedList<CodeableConcept>? _getType(JsonObject jo) =>
       switch (jo['type']) {
-        (final JsonArray jsonArray) => FixedList(jsonArray.value
-            .map((e) => CodeableConcept.fromJson(e as JsonObject))),
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => CodeableConcept.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
@@ -587,7 +619,8 @@ class Encounter extends Resource {
   static FixedList<Participant>? _getParticipant(JsonObject jo) =>
       switch (jo['participant']) {
         (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) => Participant.fromJson(e as JsonObject))),
+            jsonArray.value.map((e) => Participant.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
@@ -603,8 +636,10 @@ class Encounter extends Resource {
 
   static FixedList<CodeableConcept>? _getReasonCode(JsonObject jo) =>
       switch (jo['reasonCode']) {
-        (final JsonArray jsonArray) => FixedList(jsonArray.value
-            .map((e) => CodeableConcept.fromJson(e as JsonObject))),
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => CodeableConcept.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
@@ -617,7 +652,8 @@ class Encounter extends Resource {
   static FixedList<Reference>? _getLocation(JsonObject jo) =>
       switch (jo['location']) {
         (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject))),
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
@@ -712,31 +748,32 @@ class Hospitalization {
                   JsonArray.unmodifiable(destination.map((e) => e.json)),
             if (preAdmissionIdentifier != null)
               preAdmissionIdentifierField.name: JsonArray.unmodifiable(
-                  preAdmissionIdentifier.map((e) => e.json)),
+                preAdmissionIdentifier.map((e) => e.json),
+              ),
           }),
         );
 
   /// Constructs a new [Hospitalization] instance from the provided JSON object.
-  Hospitalization.fromJson(this._json);
+  Hospitalization.fromJson(this.json);
 
-  final JsonObject _json;
+  final JsonObject json;
 
   /// From where patient was admitted (physician referral, transfer).
-  AdmitSource? get admitSource => admitSourceField.getValue(_json);
+  AdmitSource? get admitSource => admitSourceField.getValue(json);
 
   /// The actual or estimated period of admission.
-  Period? get period => periodField.getValue(_json);
+  Period? get period => periodField.getValue(json);
 
   /// Special courtesies (VIP, board member).
   FixedList<CodeableConcept>? get specialCourtesy =>
-      specialCourtesyField.getValue(_json);
+      specialCourtesyField.getValue(json);
 
   /// Location/organization to which the patient is discharged.
-  FixedList<Location>? get destination => destinationField.getValue(_json);
+  FixedList<Location>? get destination => destinationField.getValue(json);
 
   /// The pre-admission identifier.
   FixedList<Reference>? get preAdmissionIdentifier =>
-      preAdmissionIdentifierField.getValue(_json);
+      preAdmissionIdentifierField.getValue(json);
 
   /// Field definition for [admitSource].
   static const admitSourceField = FieldDefinition(
@@ -790,27 +827,31 @@ class Hospitalization {
 
   static FixedList<CodeableConcept>? _getSpecialCourtesy(JsonObject jo) =>
       switch (jo['specialCourtesy']) {
-        (final JsonArray jsonArray) => FixedList(jsonArray.value
-            .map((e) => CodeableConcept.fromJson(e as JsonObject))),
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => CodeableConcept.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
   static FixedList<Location>? _getDestination(JsonObject jo) =>
       switch (jo['destination']) {
         (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) => Location.fromJson(e as JsonObject))),
+            jsonArray.value.map((e) => Location.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
   static FixedList<Reference>? _getPreAdmissionIdentifier(JsonObject jo) =>
       switch (jo['preAdmissionIdentifier']) {
         (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject))),
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
   /// Converts this [Hospitalization] instance to a JSON object.
-  JsonObject get json => _json;
+  JsonObject get json => json;
 
   @override
   bool operator ==(Object other) =>
@@ -980,122 +1021,121 @@ class Observation extends Resource {
   Observation.fromJson(JsonObject jsonObject) : super.fromJson(jsonObject);
 
   /// Business identifier for this observation.
-  FixedList<Identifier>? get identifier => identifierField.getValue(_json);
+  FixedList<Identifier>? get identifier => identifierField.getValue(json);
 
   /// A plan, proposal or order that is fulfilled in whole or in part by this event.
-  FixedList<Reference>? get basedOn => basedOnField.getValue(_json);
+  FixedList<Reference>? get basedOn => basedOnField.getValue(json);
 
   /// A larger event of which this particular observation is a component or step.
-  FixedList<Reference>? get partOf => partOfField.getValue(_json);
+  FixedList<Reference>? get partOf => partOfField.getValue(json);
 
   /// The status of the result value.
-  String? get status => statusField.getValue(_json);
+  String? get status => statusField.getValue(json);
 
   /// A code that classifies the general type of observation being made.
-  FixedList<CodeableConcept>? get category => categoryField.getValue(_json);
+  FixedList<CodeableConcept>? get category => categoryField.getValue(json);
 
   /// Type of observation (code / type).
-  CodeableConcept? get code => codeField.getValue(_json);
+  CodeableConcept? get code => codeField.getValue(json);
 
   /// The patient, or group of patients, location, or device this observation is about and into whose record the observation is placed. If the actual focus of the observation is different from the subject (or a sample of, part, or region of the subject), the `focus` element or the `code` itself specifies the actual focus of the observation.
-  Reference? get subject => subjectField.getValue(_json);
+  Reference? get subject => subjectField.getValue(json);
 
   /// The healthcare event (e.g. a patient and healthcare provider interaction) during which this observation is made.
-  Reference? get encounter => encounterField.getValue(_json);
+  Reference? get encounter => encounterField.getValue(json);
 
   /// The time or time-period the observed value is asserted as being true. For biological subjects - e.g. human patients - this is usually called the "physiologically relevant time". This is usually either the time of the procedure or of specimen collection, but very often the source of the date/time is not known, only the date/time itself.
-  DateTime? get effectiveDateTime => effectiveDateTimeField.getValue(_json);
+  DateTime? get effectiveDateTime => effectiveDateTimeField.getValue(json);
 
   /// The time or time-period the observed value is asserted as being true. For biological subjects - e.g. human patients - this is usually called the "physiologically relevant time". This is usually either the time of the procedure or of specimen collection, but very often the source of the date/time is not known, only the date/time itself.
-  Period? get effectivePeriod => effectivePeriodField.getValue(_json);
+  Period? get effectivePeriod => effectivePeriodField.getValue(json);
 
   /// The time or time-period the observed value is asserted as being true. For biological subjects - e.g. human patients - this is usually called the "physiologically relevant time". This is usually either the time of the procedure or of specimen collection, but very often the source of the date/time is not known, only the date/time itself.
-  Timing? get effectiveTiming => effectiveTimingField.getValue(_json);
+  Timing? get effectiveTiming => effectiveTimingField.getValue(json);
 
   /// The time or time-period the observed value is asserted as being true. For biological subjects - e.g. human patients - this is usually called the "physiologically relevant time". This is usually either the time of the procedure or of specimen collection, but very often the source of the date/time is not known, only the date/time itself.
-  DateTime? get effectiveInstant => effectiveInstantField.getValue(_json);
+  DateTime? get effectiveInstant => effectiveInstantField.getValue(json);
 
   /// The date and time this version of the observation was made available to providers, typically after the results have been reviewed and verified.
-  DateTime? get issued => issuedField.getValue(_json);
+  DateTime? get issued => issuedField.getValue(json);
 
   /// The information determined as a result of making the observation, if the information has a simple value.
-  Quantity? get valueQuantity => valueQuantityField.getValue(_json);
+  Quantity? get valueQuantity => valueQuantityField.getValue(json);
 
   /// The information determined as a result of making the observation, if the information has a simple value.
   CodeableConcept? get valueCodeableConcept =>
-      valueCodeableConceptField.getValue(_json);
+      valueCodeableConceptField.getValue(json);
 
   /// The information determined as a result of making the observation, if the information has a simple value.
-  String? get valueString => valueStringField.getValue(_json);
+  String? get valueString => valueStringField.getValue(json);
 
   /// The information determined as a result of making the observation, if the information has a simple value.
-  bool? get valueBoolean => valueBooleanField.getValue(_json);
+  bool? get valueBoolean => valueBooleanField.getValue(json);
 
   /// The information determined as a result of making the observation, if the information has a simple value.
-  int? get valueInteger => valueIntegerField.getValue(_json);
+  int? get valueInteger => valueIntegerField.getValue(json);
 
   /// The information determined as a result of making the observation, if the information has a simple value.
-  Range? get valueRange => valueRangeField.getValue(_json);
+  Range? get valueRange => valueRangeField.getValue(json);
 
   /// The information determined as a result of making the observation, if the information has a simple value.
-  Ratio? get valueRatio => valueRatioField.getValue(_json);
+  Ratio? get valueRatio => valueRatioField.getValue(json);
 
   /// The information determined as a result of making the observation, if the information has a simple value.
-  SampledData? get valueSampledData => valueSampledDataField.getValue(_json);
+  SampledData? get valueSampledData => valueSampledDataField.getValue(json);
 
   /// The information determined as a result of making the observation, if the information has a simple value.
-  Time? get valueTime => valueTimeField.getValue(_json);
+  Time? get valueTime => valueTimeField.getValue(json);
 
   /// The information determined as a result of making the observation, if the information has a simple value.
-  DateTime? get valueDateTime => valueDateTimeField.getValue(_json);
+  DateTime? get valueDateTime => valueDateTimeField.getValue(json);
 
   /// The information determined as a result of making the observation, if the information has a simple value.
-  Period? get valuePeriod => valuePeriodField.getValue(_json);
+  Period? get valuePeriod => valuePeriodField.getValue(json);
 
   /// Provides a reason why the expected value in the element Observation.value[x] is missing.
-  CodeableConcept? get dataAbsentReason =>
-      dataAbsentReasonField.getValue(_json);
+  CodeableConcept? get dataAbsentReason => dataAbsentReasonField.getValue(json);
 
   /// A categorical assessment of an observation value. This is often used to supply a "normal" range categorization for numeric values.
   FixedList<CodeableConcept>? get interpretation =>
-      interpretationField.getValue(_json);
+      interpretationField.getValue(json);
 
   /// Comments about the observation or the results.
-  FixedList<Annotation>? get note => noteField.getValue(_json);
+  FixedList<Annotation>? get note => noteField.getValue(json);
 
   /// Indicates the site on the subject's body where the observation was made (i.e. the target site).
-  CodeableConcept? get bodySite => bodySiteField.getValue(_json);
+  CodeableConcept? get bodySite => bodySiteField.getValue(json);
 
   /// Indicates the mechanism used to perform the observation.
-  CodeableConcept? get method => methodField.getValue(_json);
+  CodeableConcept? get method => methodField.getValue(json);
 
   /// The specimen that was used when this observation was made.
-  Reference? get specimen => specimenField.getValue(_json);
+  Reference? get specimen => specimenField.getValue(json);
 
   /// The device used to generate the observation data.
-  Reference? get device => deviceField.getValue(_json);
+  Reference? get device => deviceField.getValue(json);
 
   /// Guidance on how to interpret the value by comparison to a normal or recommended range.
   FixedList<ObservationReferenceRange>? get referenceRange =>
-      referenceRangeField.getValue(_json);
+      referenceRangeField.getValue(json);
 
   /// This observation is a group observation (e.g. a battery, a panel of tests, a set of vital sign measurements) that includes the target as a member of the group.
-  FixedList<Reference>? get hasMember => hasMemberField.getValue(_json);
+  FixedList<Reference>? get hasMember => hasMemberField.getValue(json);
 
   /// The target resource that represents a measurement from which this observation value is derived. For example, a calculated anion gap or a fetal measurement based on an ultrasound image.
-  FixedList<Reference>? get derivedFrom => derivedFromField.getValue(_json);
+  FixedList<Reference>? get derivedFrom => derivedFromField.getValue(json);
 
   /// Some observations have multiple component observations. These component observations are expressed as separate code value pairs that share the same attributes. Examples include systolic and diastolic component observations for blood pressure measurement and multiple component observations for genetics observations.
   FixedList<ObservationComponent>? get component =>
-      componentField.getValue(_json);
+      componentField.getValue(json);
 
   /// The complications or conditions that interfere with the interpretation of the observation.
   FixedList<CodeableReference>? get complicatedBy =>
-      complicatedByField.getValue(_json);
+      complicatedByField.getValue(json);
 
   /// Details the use context for the Observation, if appropriate.
   FixedList<CodeableReference>? get contextOfUse =>
-      contextOfUseField.getValue(_json);
+      contextOfUseField.getValue(json);
 
   /// Field definition for [identifier]
   static const identifierField = FieldDefinition(
@@ -1364,21 +1404,24 @@ class Observation extends Resource {
   static FixedList<Identifier>? _getIdentifier(JsonObject jo) =>
       switch (jo['identifier']) {
         (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) => Identifier.fromJson(e as JsonObject))),
+            jsonArray.value.map((e) => Identifier.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
   static FixedList<Reference>? _getBasedOn(JsonObject jo) =>
       switch (jo['basedOn']) {
         (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject))),
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
   static FixedList<Reference>? _getPartOf(JsonObject jo) =>
       switch (jo['partOf']) {
         (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject))),
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
@@ -1387,8 +1430,10 @@ class Observation extends Resource {
 
   static FixedList<CodeableConcept>? _getCategory(JsonObject jo) =>
       switch (jo['category']) {
-        (final JsonArray jsonArray) => FixedList(jsonArray.value
-            .map((e) => CodeableConcept.fromJson(e as JsonObject))),
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => CodeableConcept.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
@@ -1408,7 +1453,8 @@ class Observation extends Resource {
       };
 
   static DateTime? _getEffectiveDateTime(JsonObject jo) => DateTime.tryParse(
-      jo.getValue(effectiveDateTimeField.name).stringValue ?? '');
+        jo.getValue(effectiveDateTimeField.name).stringValue ?? '',
+      );
 
   static Period? _getEffectivePeriod(JsonObject jo) =>
       switch (jo['effectivePeriod']) {
@@ -1423,7 +1469,8 @@ class Observation extends Resource {
       };
 
   static DateTime? _getEffectiveInstant(JsonObject jo) => DateTime.tryParse(
-      jo.getValue(effectiveInstantField.name).stringValue ?? '');
+        jo.getValue(effectiveInstantField.name).stringValue ?? '',
+      );
 
   static DateTime? _getIssued(JsonObject jo) =>
       DateTime.tryParse(jo.getValue(issuedField.name).stringValue ?? '');
@@ -1484,14 +1531,17 @@ class Observation extends Resource {
 
   static FixedList<CodeableConcept>? _getInterpretation(JsonObject jo) =>
       switch (jo['interpretation']) {
-        (final JsonArray jsonArray) => FixedList(jsonArray.value
-            .map((e) => CodeableConcept.fromJson(e as JsonObject))),
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => CodeableConcept.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
   static FixedList<Annotation>? _getNote(JsonObject jo) => switch (jo['note']) {
         (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) => Annotation.fromJson(e as JsonObject))),
+            jsonArray.value.map((e) => Annotation.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
@@ -1517,45 +1567,56 @@ class Observation extends Resource {
       };
 
   static FixedList<ObservationReferenceRange>? _getReferenceRange(
-          JsonObject jo) =>
+    JsonObject jo,
+  ) =>
       switch (jo['referenceRange']) {
-        (final JsonArray jsonArray) => FixedList(jsonArray.value
-            .map((e) => ObservationReferenceRange.fromJson(e as JsonObject))),
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map(
+                (e) => ObservationReferenceRange.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
   static FixedList<Reference>? _getHasMember(JsonObject jo) =>
       switch (jo['hasMember']) {
         (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject))),
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
   static FixedList<Reference>? _getDerivedFrom(JsonObject jo) =>
       switch (jo['derivedFrom']) {
         (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject))),
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
   static FixedList<ObservationComponent>? _getComponent(JsonObject jo) =>
       switch (jo['component']) {
-        (final JsonArray jsonArray) => FixedList(jsonArray.value
-            .map((e) => ObservationComponent.fromJson(e as JsonObject))),
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => ObservationComponent.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
   static FixedList<CodeableReference>? _getComplicatedBy(JsonObject jo) =>
       switch (jo['complicatedBy']) {
-        (final JsonArray jsonArray) => FixedList(jsonArray.value
-            .map((e) => CodeableReference.fromJson(e as JsonObject))),
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => CodeableReference.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
   static FixedList<CodeableReference>? _getContextOfUse(JsonObject jo) =>
       switch (jo['contextOfUse']) {
-        (final JsonArray jsonArray) => FixedList(jsonArray.value
-            .map((e) => CodeableReference.fromJson(e as JsonObject))),
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => CodeableReference.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
