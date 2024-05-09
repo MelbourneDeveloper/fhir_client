@@ -7,6 +7,8 @@ import 'package:jayse/jayse.dart';
 /// A concept that may be defined by a formal reference to a terminology or
 /// ontology or may be provided by text.
 class CodeableConcept implements CodingList {
+
+  /// Creates a new [CodeableConcept] instance.
   CodeableConcept({
     FixedList<Coding>? coding,
     String? text,

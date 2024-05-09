@@ -55,14 +55,11 @@ final class BundleEntries<T> implements Result<T> {
 
 /// Any of the FHIR resources
 sealed class Resource {
-  Resource._internal(
-    this.json,
-  );
 
   final JsonObject json;
 
-  factory Resource.fromJson(
-    Map<String, dynamic> map,
+  factory Resource(
+    this.json,
   ) =>
       switch (ResourceType.fromCode(map['resourceType'] as String? ?? '')) {
         (ResourceType.appointment) => Appointment.fromJson(map),
