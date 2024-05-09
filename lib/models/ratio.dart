@@ -1,28 +1,71 @@
-// ignore_for_file: lines_longer_than_80_chars
-
+import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/quantity.dart';
+import 'package:jayse/jayse.dart';
 
-/// A relationship of two Quantity values - expressed as a numerator and a denominator.
+/// A relationship of two Quantity values - expressed as a numerator and a
+/// denominator.
 class Ratio {
-  Ratio({this.numerator, this.denominator});
+  /// Constructs a new [Ratio] with optional numerator and denominator.
+  Ratio({
+    Quantity? numerator,
+    Quantity? denominator,
+  }) : this.fromJson(
+          JsonObject({
+            if (numerator != null) numeratorField.name: numerator.json,
+            if (denominator != null) denominatorField.name: denominator.json,
+          }),
+        );
 
-  factory Ratio.fromJson(Map<String, dynamic> json) => Ratio(
-        numerator: json['numerator'] != null
-            ? Quantity.fromJson(json['numerator'] as Map<String, dynamic>)
-            : null,
-        denominator: json['denominator'] != null
-            ? Quantity.fromJson(json['denominator'] as Map<String, dynamic>)
-            : null,
-      );
+  /// Constructs a new [Ratio] instance from the provided JSON object.
+  Ratio.fromJson(this._json);
 
-  /// The value of the numerator.
-  final Quantity? numerator;
+  final JsonObject _json;
 
-  /// The value of the denominator.
-  final Quantity? denominator;
+  /// The value of the numerator in the ratio.
+  Quantity? get numerator => numeratorField.getValue(_json);
 
-  Map<String, dynamic> toJson() => {
-        'numerator': numerator?.toJson(),
-        'denominator': denominator?.toJson(),
+  /// The value of the denominator in the ratio.
+  Quantity? get denominator => denominatorField.getValue(_json);
+
+  /// Field definition for [numerator]
+  static const numeratorField = FieldDefinition(
+    name: 'numerator',
+    getValue: _getNumerator,
+  );
+
+  /// Field definition for [denominator]
+  static const denominatorField = FieldDefinition(
+    name: 'denominator',
+    getValue: _getDenominator,
+  );
+
+  /// All field definitions for [Ratio]
+  static const fieldDefinitions = [
+    numeratorField,
+    denominatorField,
+  ];
+
+  static Quantity? _getNumerator(JsonObject jo) => switch (jo['numerator']) {
+        (final JsonObject jo) => Quantity.fromJson(jo),
+        _ => null,
       };
+
+  static Quantity? _getDenominator(JsonObject jo) =>
+      switch (jo['denominator']) {
+        (final JsonObject jo) => Quantity.fromJson(jo),
+        _ => null,
+      };
+
+  /// Converts this [Ratio] instance to a JSON object.
+  JsonObject get json => _json;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Ratio &&
+          other.numerator == numerator &&
+          other.denominator == denominator);
+
+  @override
+  int get hashCode => Object.hash(numerator, denominator);
 }

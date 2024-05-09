@@ -23,6 +23,9 @@ class Actor {
   Actor.fromJson(this._json);
 
   final JsonObject _json;
+  
+  /// The underlying JSON object for this instance.
+  JsonObject get json => _json;
 
   /// The reference to the participant.
   ///
