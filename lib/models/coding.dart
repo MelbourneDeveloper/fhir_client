@@ -3,6 +3,8 @@ import 'package:jayse/jayse.dart';
 
 /// A reference to a code defined by a terminology system.
 class Coding {
+
+  /// Creates a new [Coding] instance.
   Coding({
     Uri? system,
     String? code,
@@ -18,6 +20,7 @@ class Coding {
   /// Creates a new [Coding] instance from a [JsonObject].
   Coding.fromJson(this._json);
 
+  /// The underlying JSON object for this instance.
   JsonObject get json => _json;
 
   final JsonObject _json;

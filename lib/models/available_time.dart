@@ -1,43 +1,34 @@
-// ignore_for_file: lines_longer_than_80_chars
-
+import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
-
-const _daysOfWeekField = 'daysOfWeek';
-const _availableStartTimeField = 'availableStartTime';
-const _availableEndTimeField = 'availableEndTime';
+import 'package:jayse/jayse.dart';
 
 /// Represents the time during which the resource is available.
-class AvailableTime extends JsonObject {
+class AvailableTime {
   /// Constructs a new [AvailableTime].
   AvailableTime({
-    Definable<FixedList<String>> daysOfWeek = const Undefined(),
-    Definable<Time> availableStartTime = const Undefined(),
-    Definable<Time> availableEndTime = const Undefined(),
-  }) : super({
-          if (daysOfWeek is Defined<FixedList<String>>)
-            _daysOfWeekField: daysOfWeek.value,
-          if (availableStartTime is Defined<Time>)
-            _availableStartTimeField: availableStartTime.value.toString(),
-          if (availableEndTime is Defined<Time>)
-            _availableEndTimeField: availableEndTime.value.toString(),
-        });
-
-  /// Constructs a new [AvailableTime]. This constructor treats nulls as undefined.
-  AvailableTime.primitives({
     FixedList<String>? daysOfWeek,
     Time? availableStartTime,
     Time? availableEndTime,
-  }) : super({
-          if (daysOfWeek != null) _daysOfWeekField: daysOfWeek,
-          if (availableStartTime != null)
-            _availableStartTimeField: availableStartTime.toString(),
-          if (availableEndTime != null)
-            _availableEndTimeField: availableEndTime.toString(),
-        });
+  }) : this.fromJson(
+          JsonObject({
+            if (daysOfWeek != null)
+              daysOfWeekField.name: JsonArray.unmodifiable(
+                daysOfWeek.map(JsonString.new),
+              ),
+            if (availableStartTime != null)
+              availableStartTimeField.name:
+                  JsonString(availableStartTime.toString()),
+            if (availableEndTime != null)
+              availableEndTimeField.name:
+                  JsonString(availableEndTime.toString()),
+          }),
+        );
 
   /// Creates an [AvailableTime] instance from the provided JSON object.
-  AvailableTime.fromJson(super.json);
+  AvailableTime.fromJson(this._json);
+
+  final JsonObject _json;
 
   /// The days of the week when the resource is available.
   ///
@@ -45,10 +36,7 @@ class AvailableTime extends JsonObject {
   /// Path: AvailableTime.daysOfWeek
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: *
-  Definable<FixedList<String>> get daysOfWeek => getValueFromArray(
-        _daysOfWeekField,
-        (strings) => strings?.map((e) => e as String).toFixedList(),
-      );
+  FixedList<String>? get daysOfWeek => daysOfWeekField.getValue(_json);
 
   /// The start time of availability.
   ///
@@ -56,10 +44,7 @@ class AvailableTime extends JsonObject {
   /// Path: AvailableTime.availableStartTime
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<Time> get availableStartTime => getValueFromString(
-        _availableStartTimeField,
-        tryParse: (t) => Time.tryParse(t ?? ''),
-      );
+  Time? get availableStartTime => availableStartTimeField.getValue(_json);
 
   /// The end time of availability.
   ///
@@ -67,10 +52,49 @@ class AvailableTime extends JsonObject {
   /// Path: AvailableTime.availableEndTime
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<Time> get availableEndTime => getValueFromString(
-        _availableEndTimeField,
-        tryParse: (t) => Time.tryParse(t ?? ''),
+  Time? get availableEndTime => availableEndTimeField.getValue(_json);
+
+  /// Field definition for [daysOfWeek]
+  static const daysOfWeekField = FieldDefinition(
+    name: 'daysOfWeek',
+    getValue: _getDaysOfWeek,
+  );
+
+  /// Field definition for [availableStartTime]
+  static const availableStartTimeField = FieldDefinition(
+    name: 'availableStartTime',
+    getValue: _getAvailableStartTime,
+  );
+
+  /// Field definition for [availableEndTime]
+  static const availableEndTimeField = FieldDefinition(
+    name: 'availableEndTime',
+    getValue: _getAvailableEndTime,
+  );
+
+  /// All field definitions for [AvailableTime]
+  static const fieldDefinitions = [
+    daysOfWeekField,
+    availableStartTimeField,
+    availableEndTimeField,
+  ];
+
+  static FixedList<String>? _getDaysOfWeek(JsonObject jo) =>
+      switch (jo['daysOfWeek']) {
+        (final JsonArray jsonArray) =>
+          FixedList(jsonArray.value.whereType<String>()),
+        _ => null,
+      };
+
+  static Time? _getAvailableStartTime(JsonObject jo) => Time.tryParse(
+        jo.getValue(availableStartTimeField.name).stringValue ?? '',
       );
+
+  static Time? _getAvailableEndTime(JsonObject jo) =>
+      Time.tryParse(jo.getValue(availableEndTimeField.name).stringValue ?? '');
+
+  /// Converts this [AvailableTime] instance to a JSON object.
+  JsonObject get json => _json;
 
   @override
   bool operator ==(Object other) =>
@@ -89,9 +113,9 @@ class AvailableTime extends JsonObject {
   /// Creates a copy of the [AvailableTime] instance and allows
   /// for non-destructive mutation.
   AvailableTime copyWith({
-    Definable<FixedList<String>>? daysOfWeek,
-    Definable<Time>? availableStartTime,
-    Definable<Time>? availableEndTime,
+    FixedList<String>? daysOfWeek,
+    Time? availableStartTime,
+    Time? availableEndTime,
   }) =>
       AvailableTime(
         daysOfWeek: daysOfWeek ?? this.daysOfWeek,
