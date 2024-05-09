@@ -7,6 +7,7 @@ import 'package:fhir_client/models/annotation.dart';
 import 'package:fhir_client/models/available_time.dart';
 import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/jayse_extensions.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/codeable_reference.dart';
@@ -34,6 +35,7 @@ import 'package:fhir_client/models/timing.dart';
 import 'package:fhir_client/models/type.dart' as t;
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
+import 'package:jayse/jayse.dart';
 
 /// Either a successful [Resource] result or an [OperationOutcome] (error)
 sealed class Result<T> {}
@@ -52,10 +54,12 @@ final class BundleEntries<T> implements Result<T> {
 }
 
 /// Any of the FHIR resources
-sealed class Resource extends JsonObject {
+sealed class Resource {
   Resource._internal(
-    super.json,
+    this.json,
   );
+
+  final JsonObject json;
 
   factory Resource.fromJson(
     Map<String, dynamic> map,
@@ -76,10 +80,13 @@ sealed class Resource extends JsonObject {
       };
 
   /// The id of the resource
-  Definable<String> get id => getValue(Resource.idField.name);
+  String? get id => json[Resource.idField.name].stringValue;
 
   /// The metadata of the resource
-  Definable<Meta> get meta => getValue(Resource.metaField.name);
+  Meta? get meta => switch (json[Resource.metaField.name].objectValue) {
+        (final JsonObject jo) => Meta.fromJson(jo),
+        _ => null,
+      };
 
   static const idField = FieldDefinition(name: 'id', getValue: _getId);
   static const metaField = FieldDefinition(name: 'meta', getValue: _getMeta);
@@ -89,9 +96,9 @@ sealed class Resource extends JsonObject {
     metaField,
   ];
 
-  static Definable<String> _getId(JsonObject jo) => jo.getValue(idField.name);
+  static JsonValue _getId(JsonObject jo) => jo.getValue(idField.name);
 
-  static Definable<Meta> _getMeta(JsonObject jo) => jo.getValue(metaField.name);
+  static JsonValue _getMeta(JsonObject jo) => jo.getValue(metaField.name);
 }
 
 /// A booking of a healthcare event among patient(s), practitioner(s), related person(s) and/or device(s) for a specific date/time.

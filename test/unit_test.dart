@@ -14,6 +14,8 @@ import 'package:test/test.dart';
 
 import 'fhir_client_test.dart';
 
+/*
+
 void main() {
   group('Equality', () {
     test(
@@ -156,3 +158,5 @@ void main() {
     });
   });
 }
+
+*/

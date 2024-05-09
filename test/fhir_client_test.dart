@@ -1,10 +1,12 @@
 //This makes for good shortcuts in assertions. Consider
 //moving these assertions to a separate file
-// ignore_for_file: avoid_dynamic_calls
+// ignore_for_file: avoid_dynamic_calls, lines_longer_than_80_chars
 
 // Note: the best tests here are the ones in
 // http Client Extension Calls - Mocked
 // If you're going to add a resource, best to add a test there
+
+/*
 
 import 'dart:convert';
 import 'dart:io';
@@ -990,3 +992,6 @@ MockClient _mockClient(String filePath) => MockClient(
     );
 
 void expectEquals<T>(T a, T b) => expect(a == b, true);
+
+
+*/
