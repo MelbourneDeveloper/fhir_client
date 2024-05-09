@@ -83,4 +83,16 @@ class Issue {
 
   @override
   int get hashCode => severity.hashCode ^ code.hashCode ^ diagnostics.hashCode;
+
+  /// Makes a deep copy of this [Issue].
+  Issue copyWith({
+    String? severity,
+    String? code,
+    String? diagnostics,
+  }) =>
+      Issue(
+        severity: severity ?? this.severity,
+        code: code ?? this.code,
+        diagnostics: diagnostics ?? this.diagnostics,
+      );
 }

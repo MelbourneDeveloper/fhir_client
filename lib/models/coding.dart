@@ -83,4 +83,16 @@ class Coding {
 
   @override
   int get hashCode => Object.hash(system, code, display);
+
+  /// Creates a new [Coding] instance with the provided values.
+  Coding copyWith({
+    Uri? system,
+    String? code,
+    String? display,
+  }) =>
+      Coding(
+        system: system ?? this.system,
+        code: code ?? this.code,
+        display: display ?? this.display,
+      );
 }

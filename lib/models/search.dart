@@ -47,4 +47,12 @@ class Search {
 
   @override
   int get hashCode => mode.hashCode;
+
+  /// Makes a deep copy of this [Search] instance.
+  Search copy({
+    String? mode,
+  }) =>
+      Search(
+        mode: mode ?? this.mode,
+      );
 }

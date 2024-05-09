@@ -68,4 +68,14 @@ class Ratio {
 
   @override
   int get hashCode => Object.hash(numerator, denominator);
+
+  /// Creates a deep copy of this [Ratio].
+  Ratio copyWith({
+    Quantity? numerator,
+    Quantity? denominator,
+  }) =>
+      Ratio(
+        numerator: numerator ?? this.numerator,
+        denominator: denominator ?? this.denominator,
+      );
 }

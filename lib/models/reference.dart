@@ -50,4 +50,18 @@ class Reference {
 
   @override
   int get hashCode => Object.hash(reference, type, identifier, display);
+
+  /// Creates a deep copy of this [Reference].
+  Reference copyWith({
+    String? reference,
+    String? type,
+    String? identifier,
+    String? display,
+  }) =>
+      Reference(
+        reference: reference ?? this.reference,
+        type: type ?? this.type,
+        identifier: identifier ?? this.identifier,
+        display: display ?? this.display,
+      );
 }

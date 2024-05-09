@@ -98,4 +98,16 @@ class Timing {
 
   @override
   int get hashCode => event.hashCode ^ repeat.hashCode ^ code.hashCode;
+
+  /// Creates a deep copy of this [Timing].
+  Timing copyWith({
+    FixedList<DateTime>? event,
+    Repeat? repeat,
+    CodeableConcept? code,
+  }) =>
+      Timing(
+        event: event ?? this.event,
+        repeat: repeat ?? this.repeat,
+        code: code ?? this.code,
+      );
 }

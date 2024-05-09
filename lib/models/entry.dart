@@ -92,4 +92,15 @@ class Entry {
 
   @override
   int get hashCode => fullUrl.hashCode ^ resource.hashCode ^ search.hashCode;
+
+  /// Creates a copy of this [Entry] but with the given fields replaced with the new values.
+  Entry copyWith({
+    Uri? fullUrl,
+    Resource? resource,
+    Search? search,
+  }) => Entry(
+      fullUrl: fullUrl ?? this.fullUrl,
+      resource: resource ?? this.resource,
+      search: search ?? this.search,
+    );
 }

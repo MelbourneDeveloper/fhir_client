@@ -61,4 +61,14 @@ class Link {
 
   @override
   int get hashCode => Object.hash(relation, url);
+
+  /// Makes a deep copy of this [Link].
+  Link copyWith({
+    String? relation,
+    Uri? url,
+  }) =>
+      Link(
+        relation: relation ?? this.relation,
+        url: url ?? this.url,
+      );
 }

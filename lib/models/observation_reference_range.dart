@@ -161,4 +161,22 @@ class ObservationReferenceRange {
       appliesTo.hashCode ^
       age.hashCode ^
       text.hashCode;
+
+  /// Creates a copy of this [ObservationReferenceRange] but with the given fields updated.
+  ObservationReferenceRange copyWith({
+    Quantity? low,
+    Quantity? high,
+    CodeableConcept? type,
+    FixedList<CodeableConcept>? appliesTo,
+    Range? age,
+    String? text,
+  }) =>
+      ObservationReferenceRange(
+        low: low ?? this.low,
+        high: high ?? this.high,
+        type: type ?? this.type,
+        appliesTo: appliesTo ?? this.appliesTo,
+        age: age ?? this.age,
+        text: text ?? this.text,
+      );
 }

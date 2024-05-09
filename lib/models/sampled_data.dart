@@ -161,4 +161,24 @@ class SampledData {
         dimensions,
         data,
       );
+
+  /// Create a deep copy of this [SampledData] instance.
+  SampledData copyWith({
+    Quantity? origin,
+    num? period,
+    num? factor,
+    num? lowerLimit,
+    num? upperLimit,
+    int? dimensions,
+    String? data,
+  }) =>
+      SampledData(
+        origin: origin ?? this.origin,
+        period: period ?? this.period,
+        factor: factor ?? this.factor,
+        lowerLimit: lowerLimit ?? this.lowerLimit,
+        upperLimit: upperLimit ?? this.upperLimit,
+        dimensions: dimensions ?? this.dimensions,
+        data: data ?? this.data,
+      );
 }

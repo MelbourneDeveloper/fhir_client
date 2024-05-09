@@ -9,7 +9,6 @@ import 'package:jayse/jayse.dart';
 
 /// A set of rules that describe when the event should occur.
 class Repeat {
-
   /// Constructs a new [Repeat].
   Repeat({
     Duration? boundsDuration,
@@ -109,13 +108,13 @@ class Repeat {
   String? get periodUnit => periodUnitField.getValue(_json);
 
   /// If one or more days of week is provided, then the action happens only on the specified day(s).
-  FixedList<String?>? get dayOfWeek => dayOfWeekField.getValue(_json);
+  FixedList<String>? get dayOfWeek => dayOfWeekField.getValue(_json);
 
   /// Specified time of day for action to take place.
   FixedList<Time>? get timeOfDay => timeOfDayField.getValue(_json);
 
   /// Real world events that the occurrence of the event should be tied to.
-  FixedList<String?>? get when => whenField.getValue(_json);
+  FixedList<String>? get when => whenField.getValue(_json);
 
   /// The number of minutes from the event. If the event code does not indicate whether the minutes is before or after the event, then the offset is assumed to be after the event.
   int? get offset => offsetField.getValue(_json);
@@ -289,7 +288,7 @@ class Repeat {
   static String? _getPeriodUnit(JsonObject jo) =>
       jo.getValue(periodUnitField.name).stringValue;
 
-  static FixedList<String?>? _getDayOfWeek(JsonObject jo) =>
+  static FixedList<String>? _getDayOfWeek(JsonObject jo) =>
       switch (jo['dayOfWeek']) {
         (final JsonArray jsonArray) =>
           FixedList(jsonArray.value.map((e) => (e as JsonString).value)),
@@ -304,7 +303,7 @@ class Repeat {
         _ => null,
       };
 
-  static FixedList<String?>? _getWhen(JsonObject jo) => switch (jo['when']) {
+  static FixedList<String>? _getWhen(JsonObject jo) => switch (jo['when']) {
         (final JsonArray jsonArray) =>
           FixedList(jsonArray.value.map((e) => (e as JsonString).value)),
         _ => null,
@@ -357,5 +356,45 @@ class Repeat {
         timeOfDay,
         when,
         offset,
+      );
+
+  /// Creates a deep copy of this [Repeat] instance.
+  Repeat copyWith({
+    Duration? boundsDuration,
+    Range? boundsRange,
+    Period? boundsPeriod,
+    int? count,
+    int? countMax,
+    num? duration,
+    num? durationMax,
+    String? durationUnit,
+    int? frequency,
+    int? frequencyMax,
+    num? period,
+    num? periodMax,
+    String? periodUnit,
+    FixedList<String>? dayOfWeek,
+    FixedList<Time>? timeOfDay,
+    FixedList<String>? when,
+    int? offset,
+  }) =>
+      Repeat(
+        boundsDuration: boundsDuration ?? this.boundsDuration,
+        boundsRange: boundsRange ?? this.boundsRange,
+        boundsPeriod: boundsPeriod ?? this.boundsPeriod,
+        count: count ?? this.count,
+        countMax: countMax ?? this.countMax,
+        duration: duration ?? this.duration,
+        durationMax: durationMax ?? this.durationMax,
+        durationUnit: durationUnit ?? this.durationUnit,
+        frequency: frequency ?? this.frequency,
+        frequencyMax: frequencyMax ?? this.frequencyMax,
+        period: period ?? this.period,
+        periodMax: periodMax ?? this.periodMax,
+        periodUnit: periodUnit ?? this.periodUnit,
+        dayOfWeek: dayOfWeek ?? this.dayOfWeek,
+        timeOfDay: timeOfDay ?? this.timeOfDay,
+        when: when ?? this.when,
+        offset: offset ?? this.offset,
       );
 }

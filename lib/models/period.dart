@@ -60,4 +60,14 @@ class Period {
 
   @override
   int get hashCode => start.hashCode ^ end.hashCode;
+
+  /// Makes a copy of this [Period]
+  Period copyWith({
+    String? start,
+    String? end,
+  }) =>
+      Period(
+        start: start ?? this.start,
+        end: end ?? this.end,
+      );
 }

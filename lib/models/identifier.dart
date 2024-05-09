@@ -103,4 +103,18 @@ class Identifier {
   @override
   int get hashCode =>
       type.hashCode ^ system.hashCode ^ value.hashCode ^ use.hashCode;
+
+  /// Makes a deep copy of this [Identifier].
+  Identifier copyWith({
+    Type? type,
+    Uri? system,
+    String? value,
+    String? use,
+  }) =>
+      Identifier(
+        type: type ?? this.type,
+        system: system ?? this.system,
+        value: value ?? this.value,
+        use: use ?? this.use,
+      );
 }

@@ -102,4 +102,18 @@ class Quantity {
   @override
   int get hashCode =>
       value.hashCode ^ unit.hashCode ^ system.hashCode ^ code.hashCode;
+
+  /// Makes a deep copy of this [Quantity].
+  Quantity copyWith({
+    num? value,
+    String? unit,
+    Uri? system,
+    String? code,
+  }) =>
+      Quantity(
+        value: value ?? this.value,
+        unit: unit ?? this.unit,
+        system: system ?? this.system,
+        code: code ?? this.code,
+      );
 }

@@ -91,4 +91,16 @@ class Extension {
 
   @override
   int get hashCode => Object.hash(url, extension, valueBoolean);
+
+  /// Creates a copy of this [Extension] but with the given fields
+  Extension copyWith({
+    Uri? url,
+    FixedList<Extension>? extension,
+    bool? valueBoolean,
+  }) =>
+      Extension(
+        url: url ?? this.url,
+        extension: extension ?? this.extension,
+        valueBoolean: valueBoolean ?? this.valueBoolean,
+      );
 }

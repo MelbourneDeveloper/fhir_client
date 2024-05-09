@@ -125,4 +125,18 @@ class Name {
   @override
   int get hashCode =>
       family.hashCode ^ use.hashCode ^ given.hashCode ^ prefix.hashCode;
+
+  /// Makes a copy of this [Name] but with the given fields updated.
+  Name copyWith({
+    String? family,
+    String? use,
+    FixedList<String>? given,
+    FixedList<String>? prefix,
+  }) =>
+      Name(
+        family: family ?? this.family,
+        use: use ?? this.use,
+        given: given ?? this.given,
+        prefix: prefix ?? this.prefix,
+      );
 }

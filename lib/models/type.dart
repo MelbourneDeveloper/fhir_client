@@ -69,4 +69,14 @@ class Type {
 
   @override
   int get hashCode => text.hashCode ^ coding.hashCode;
+
+  /// Creates a deep copy of this [Type].
+  Type copyWith({
+    String? text,
+    FixedList<Coding>? coding,
+  }) =>
+      Type(
+        text: text ?? this.text,
+        coding: coding ?? this.coding,
+      );
 }

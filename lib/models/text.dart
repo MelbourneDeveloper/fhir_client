@@ -61,4 +61,14 @@ class Text {
 
   @override
   int get hashCode => status.hashCode ^ div.hashCode;
+
+  /// Creates a deep copy of this [Text].
+  Text copyWith({
+    String? status,
+    String? div,
+  }) =>
+      Text(
+        status: status ?? this.status,
+        div: div ?? this.div,
+      );
 }

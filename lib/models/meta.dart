@@ -7,6 +7,31 @@ import 'package:jayse/jayse.dart';
 /// maintained by the infrastructure. Changes to the content might not always 
 /// be associated with version changes to the resource.
 class Meta {
+
+  /// Constructs a new `Meta` with an optional last updated date, version ID
+  Meta({
+    DateTime? lastUpdated,
+    String? versionId,
+    String? source,
+    FixedList<String>? profile,
+    FixedList<Tag>? tag,
+  }) : this.fromJson(
+          JsonObject({
+            if (lastUpdated != null)
+              lastUpdatedField.name: JsonString(lastUpdated.toIso8601String()),
+            if (versionId != null)
+              versionIdField.name: JsonString(versionId),
+            if (source != null) sourceField.name: JsonString(source),
+            if (profile != null)
+              profileField.name: JsonArray.unmodifiable(
+                profile.map(JsonString.new),
+              ),
+            if (tag != null)
+              tagField.name: JsonArray.unmodifiable(
+                tag.map((e) => e.json),
+              ),
+          }),
+        );
   /// Constructs a new `Meta` instance from the provided JSON object.
   Meta.fromJson(this._json);
 
@@ -138,4 +163,20 @@ class Meta {
       source.hashCode ^
       profile.hashCode ^
       tag.hashCode;
+
+  /// Makes a deep copy of this `Meta` instance.
+  Meta copyWith({
+    DateTime? lastUpdated,
+    String? versionId,
+    String? source,
+    FixedList<String>? profile,
+    FixedList<Tag>? tag,
+  }) =>
+      Meta(
+        lastUpdated: lastUpdated ?? this.lastUpdated,
+        versionId: versionId ?? this.versionId,
+        source: source ?? this.source,
+        profile: profile ?? this.profile,
+        tag: tag ?? this.tag,
+      );
 }

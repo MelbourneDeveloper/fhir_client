@@ -74,4 +74,14 @@ class CodeableReference implements CodingList {
 
   @override
   int get hashCode => coding.hashCode ^ text.hashCode;
+
+  /// Creates a copy of this [CodeableReference] but with the given fields
+  CodeableReference copyWith({
+    FixedList<Coding>? coding,
+    String? text,
+  }) =>
+      CodeableReference(
+        coding: coding ?? this.coding,
+        text: text ?? this.text,
+      );
 }

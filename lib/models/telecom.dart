@@ -105,4 +105,18 @@ class Telecom {
   @override
   int get hashCode =>
       extension.hashCode ^ system.hashCode ^ value.hashCode ^ use.hashCode;
+
+  /// Creates a deep copy of this [Telecom].
+  Telecom copyWith({
+    FixedList<Extension>? extension,
+    String? system,
+    String? value,
+    String? use,
+  }) =>
+      Telecom(
+        extension: extension ?? this.extension,
+        system: system ?? this.system,
+        value: value ?? this.value,
+        use: use ?? this.use,
+      );
 }

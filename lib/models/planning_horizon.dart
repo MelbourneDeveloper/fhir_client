@@ -64,4 +64,14 @@ class PlanningHorizon {
 
   @override
   int get hashCode => Object.hash(start, end);
+
+  /// Makes a deep copy of this [PlanningHorizon].
+  PlanningHorizon copyWith({
+    DateTime? start,
+    DateTime? end,
+  }) =>
+      PlanningHorizon(
+        start: start ?? this.start,
+        end: end ?? this.end,
+      );
 }

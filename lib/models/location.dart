@@ -47,4 +47,12 @@ class Location {
 
   @override
   int get hashCode => reference.hashCode;
+
+  ///Makes a deep copy of this [Location] instance.
+  Location copy({
+    String? reference,
+  }) =>
+      Location(
+        reference: reference ?? this.reference,
+      );
 }

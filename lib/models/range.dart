@@ -65,4 +65,14 @@ class Range {
 
   @override
   int get hashCode => low.hashCode ^ high.hashCode;
+
+  /// Creates a deep copy of this [Range].
+  Range copyWith({
+    Quantity? low,
+    Quantity? high,
+  }) =>
+      Range(
+        low: low ?? this.low,
+        high: high ?? this.high,
+      );
 }
