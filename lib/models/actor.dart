@@ -1,33 +1,28 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-import 'package:fhir_client/models/basic_types/json_object.dart';
+import 'package:jayse/jayse.dart';
 
 const _referenceField = 'reference';
 const _displayField = 'display';
 
 /// Participant involved in the resource.
-class Actor extends JsonObject {
+class Actor {
 
-  /// Constructs a new [Actor]
+  /// Creates a new [Actor] instance.
   Actor({
-    Definable<String> reference = const Undefined(),
-    Definable<String> display = const Undefined(),
-  }) : super({
-          if (reference is Defined<String>) _referenceField: reference.value,
-          if (display is Defined<String>) _displayField: display.value,
-        });
-
-  /// Constructs a new [Actor]. This constructor treats nulls as undefined.
-  Actor.primitives({
     String? reference,
     String? display,
-  }) : super({
-          if (reference != null) 'reference': reference,
-          if (display != null) 'display': display,
-        });
+  }) : this.fromJson(
+          JsonObject(<String, JsonValue>{
+            if (reference != null) 'reference': JsonString(reference),
+            if (display != null) 'display': JsonString(display),
+          }),
+        );
 
-  /// Creates an [Actor] instance from the provided JSON object.
-  Actor.fromJson(super.json);
+  /// Constructs a new [Actor] from a [JsonObject].
+  Actor.fromJson(this._json);
+
+  final JsonObject _json;
 
   /// The reference to the participant.
   ///
@@ -35,7 +30,7 @@ class Actor extends JsonObject {
   /// Path: Actor.reference
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<String> get reference => getValue(_referenceField);
+  String? get reference => _json[_referenceField].stringValue;
 
   /// The display name of the participant.
   ///
@@ -43,7 +38,7 @@ class Actor extends JsonObject {
   /// Path: Actor.display
   /// Minimum Cardinality: 0
   /// Maximum Cardinality: 1
-  Definable<String> get display => getValue(_displayField);
+  String? get display => _json[_displayField].stringValue;
 
   @override
   bool operator ==(Object other) =>
@@ -58,8 +53,8 @@ class Actor extends JsonObject {
   /// Creates a copy of the [Actor] instance and allows
   /// for non-destructive mutation
   Actor copyWith({
-    Definable<String>? reference,
-    Definable<String>? display,
+    String? reference,
+    String? display,
   }) =>
       Actor(
         reference: reference ?? this.reference,

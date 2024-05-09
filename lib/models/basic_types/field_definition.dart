@@ -1,6 +1,5 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-
 import 'package:jayse/jayse.dart';
 
 /// FHIR specific metadata about the field
@@ -17,7 +16,8 @@ class FieldDefinition<T> {
   final String name;
 
   MapEntry<String, dynamic> toMapEntry(JsonValue definable) =>
-      MapEntry(name, definable is Defined<T> ? definable.value : null);
+      //TODO: is this ok?
+      MapEntry(name, definable);
 
   //TODO: Cardinality etc.
 }
