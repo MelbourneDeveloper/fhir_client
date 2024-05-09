@@ -1,8 +1,5 @@
 import 'dart:convert';
-import 'package:fhir_client/models/basic_types/fixed_list.dart';
-import 'package:fhir_client/models/entry.dart';
 import 'package:fhir_client/models/resource.dart';
-import 'package:fhir_client/models/value_sets/resource_type.dart';
 import 'package:http/http.dart';
 
 /// Extension methods for the http package [Client] class
@@ -37,7 +34,7 @@ extension FhirExtensions on Client {
       );
     }
   }
-
+  /*
   String? _queryString(List<MapEntry<String, String>>? parameters) =>
       parameters == null || parameters.isEmpty
           ? null
@@ -48,6 +45,8 @@ extension FhirExtensions on Client {
                     '${entry.key}=${entry.value}',
               )
               .join('&');
+
+
 
   /// Search for [Appointment]s
   Future<Result<Appointment>> searchAppointments(
@@ -201,4 +200,5 @@ extension FhirExtensions on Client {
                 'got a ${r.runtimeType}',
           ),
       };
+      */
 }
