@@ -1,6 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/jayse_extensions.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/observation_reference_range.dart';
@@ -12,7 +13,7 @@ import 'package:fhir_client/models/sampled_data.dart';
 import 'package:jayse/jayse.dart';
 
 /// Represents a single observation component within a larger observation.
-class ObservationComponent  {
+class ObservationComponent {
   /// Constructs a new [ObservationComponent] with various optional measurement values and attributes.
   ObservationComponent({
     CodeableConcept? code,
@@ -51,9 +52,11 @@ class ObservationComponent  {
             if (dataAbsentReason != null)
               'dataAbsentReason': dataAbsentReason.json,
             if (interpretation != null)
-              'interpretation': JsonArray(interpretation.map((e) => e.json)),
+              'interpretation':
+                  JsonArray(interpretation.map((e) => e.json).toList()),
             if (referenceRange != null)
-              'referenceRange': JsonArray(referenceRange.map((e) => e.json)),
+              'referenceRange':
+                  JsonArray(referenceRange.map((e) => e.json).toList()),
           }),
         );
 
@@ -66,14 +69,25 @@ class ObservationComponent  {
   JsonObject get json => _json;
 
   /// Returns the code that identifies what was observed.
-  CodeableConcept? get code => getCodeableConcept(_json, 'code');
+  CodeableConcept? get code => _getCodeableConcept(_json, 'code');
+
+  CodeableConcept? _getCodeableConcept(JsonObject jo, String key) =>
+      switch (jo[key]) {
+        (final JsonObject jsonObject) => CodeableConcept.fromJson(jsonObject),
+        _ => null,
+      };
 
   /// Returns the value of the observation if it's a quantity.
-  Quantity? get valueQuantity => getQuantity(_json, 'valueQuantity');
+  Quantity? get valueQuantity => _getQuantity(_json, 'valueQuantity');
+
+  Quantity? _getQuantity(JsonObject jo, String key) => switch (jo[key]) {
+        (final JsonObject jsonObject) => Quantity.fromJson(jsonObject),
+        _ => null,
+      };
 
   /// Returns the value of the observation if it's a codeable concept.
   CodeableConcept? get valueCodeableConcept =>
-      getCodeableConcept(_json, 'valueCodeableConcept');
+      _getCodeableConcept(_json, 'valueCodeableConcept');
 
   /// Returns the value of the observation if it's a string.
   String? get valueString => _json.getValue('valueString').stringValue;
@@ -82,38 +96,84 @@ class ObservationComponent  {
   bool? get valueBoolean => _json.getValue('valueBoolean').booleanValue;
 
   /// Returns the value of the observation if it's an integer.
-  int? get valueInteger => _json.getValue('valueInteger').numericValue;
+  int? get valueInteger => _json.getValue('valueInteger').integerValue;
 
   /// Returns the value of the observation if it's a range.
-  Range? get valueRange => getRange(_json, 'valueRange');
+  Range? get valueRange => _getRange(_json, 'valueRange');
+
+  Range? _getRange(JsonObject jo, String key) => switch (jo[key]) {
+        (final JsonObject jsonObject) => Range.fromJson(jsonObject),
+        _ => null,
+      };
 
   /// Returns the value of the observation if it's a ratio.
-  Ratio? get valueRatio => getRatio(_json, 'valueRatio');
+  Ratio? get valueRatio => _getRatio(_json, 'valueRatio');
+
+  Ratio? _getRatio(JsonObject jo, String key) => switch (jo[key]) {
+        (final JsonObject jsonObject) => Ratio.fromJson(jsonObject),
+        _ => null,
+      };
 
   /// Returns the value of the observation if it's sampled data.
   SampledData? get valueSampledData =>
-      getSampledData(_json, 'valueSampledData');
+      _getSampledData(_json, 'valueSampledData');
+
+  SampledData? _getSampledData(JsonObject jo, String key) => switch (jo[key]) {
+        (final JsonObject jsonObject) => SampledData.fromJson(jsonObject),
+        _ => null,
+      };
 
   /// Returns the value of the observation if it's a time.
-  Time? get valueTime => getTime(_json, 'valueTime');
+  Time? get valueTime => _getTime(_json, 'valueTime');
+  Time? _getTime(JsonObject jo, String key) =>
+      Time.tryParse(jo.getValue(key).stringValue ?? '');
 
   /// Returns the value of the observation if it's a date-time.
   DateTime? get valueDateTime => _json.getValue('valueDateTime').dateTimeValue;
 
   /// Returns the value of the observation if it's a period.
-  Period? get valuePeriod => getPeriod(_json, 'valuePeriod');
+  Period? get valuePeriod => _getPeriod(_json, 'valuePeriod');
+  Period? _getPeriod(JsonObject jo, String key) => switch (jo[key]) {
+        (final JsonObject jsonObject) => Period.fromJson(jsonObject),
+        _ => null,
+      };
 
   /// Returns the codeable concept if there's a reason data is absent.
   CodeableConcept? get dataAbsentReason =>
-      getCodeableConcept(_json, 'dataAbsentReason');
+      _getCodeableConcept(_json, 'dataAbsentReason');
 
   /// Returns the interpretation of the observation as a list of codeable concepts.
   FixedList<CodeableConcept>? get interpretation =>
-      getFixedListCodeableConcept(_json, 'interpretation');
+      _getFixedListCodeableConcept(_json, 'interpretation');
+
+  FixedList<CodeableConcept>? _getFixedListCodeableConcept(
+    JsonObject jo,
+    String key,
+  ) =>
+      switch (jo[key]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => CodeableConcept.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
 
   /// Returns the reference ranges applicable to this component.
   FixedList<ObservationReferenceRange>? get referenceRange =>
-      getFixedListReferenceRange(_json, 'referenceRange');
+      _getFixedListReferenceRange(_json, 'referenceRange');
+
+  FixedList<ObservationReferenceRange>? _getFixedListReferenceRange(
+    JsonObject json,
+    String fieldName,
+  ) =>
+      switch (json[fieldName]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map(
+              (e) => ObservationReferenceRange.fromJson(e as JsonObject),
+            ),
+          ),
+        _ => null,
+      };
 
   @override
   bool operator ==(Object other) =>

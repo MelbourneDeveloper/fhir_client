@@ -99,3 +99,4 @@ analyzer:
     prefer_double_quotes: ignore
     prefer_for_elements_to_map_fromIterable: error
     prefer_generic_function_type_aliases: error
+    pattern_never_matches_value_type: error 
