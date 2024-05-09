@@ -1,6 +1,6 @@
-import 'dart:convert';
 import 'package:fhir_client/models/resource.dart';
 import 'package:http/http.dart';
+import 'package:jayse/jayse.dart';
 
 /// Extension methods for the http package [Client] class
 extension FhirExtensions on Client {
@@ -16,8 +16,18 @@ extension FhirExtensions on Client {
       );
 
       try {
-        final json = response.body;
-        return Resource.fromJson(jsonDecode(json) as Map<String, dynamic>);
+        final jsonValue = jsonValueDecode(response.body);
+
+        if (jsonValue is JsonObject) {
+          return Resource(jsonValue);
+        } else {
+          return OperationOutcome<T>.error(
+            message: 'Unexpected Result',
+            details:
+                'Expected a JSON object, but got a ${jsonValue.runtimeType}',
+          );
+        }
+
         // ignore: avoid_catches_without_on_clauses
       } catch (e) {
         return OperationOutcome<T>.error(
