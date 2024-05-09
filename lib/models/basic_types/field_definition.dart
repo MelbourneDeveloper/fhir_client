@@ -10,7 +10,7 @@ class FieldDefinition<T> {
   });
 
   /// Returns the value of the field from the provided [JsonObject].
-  final JsonValue Function(JsonObject) getValue;
+  final T? Function(JsonObject) getValue;
 
   /// The name of the field.
   final String name;

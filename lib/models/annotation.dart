@@ -5,39 +5,40 @@ import 'package:fhir_client/models/reference.dart';
 import 'package:jayse/jayse.dart';
 
 /// A text note which also contains information about who made the statement and when.
-class Annotation extends JsonObject {
+class Annotation {
   /// Constructs a new [Annotation].
   Annotation({
-    Definable<Reference> authorReference = const Undefined(),
-    Definable<String> authorString = const Undefined(),
-    Definable<DateTime> time = const Undefined(),
-    Definable<String> text = const Undefined(),
-  }) : super(
-          Map<String, dynamic>.fromEntries([
-            if (authorReference is Defined)
-              (authorReference as Defined).toMapEntry(),
-            if (authorString is Defined<String>)
-              authorString.toMapEntry(),
-            if (time is Defined) (time as Defined).toMapEntry(),
-            if (text is Defined) (text as Defined).toMapEntry(),
-          ]),
+    Reference? authorReference,
+    String? authorString,
+    DateTime? time,
+    String? text,
+  }) : this.fromJson(
+          JsonObject({
+            if (authorReference != null)
+              authorReferenceField.name: authorReference.json,
+            if (authorString != null)
+              authorStringField.name: JsonString(authorString),
+            if (time != null) timeField.name: JsonString(time.toString()),
+            if (text != null) textField.name: JsonString(text),
+          }),
         );
 
   /// Creates an [Annotation] instance from the provided JSON object.
-  Annotation.fromJson(super.json);
+  Annotation.fromJson(this._json);
+
+  final JsonObject _json;
 
   /// The individual responsible for making the annotation.
-  Definable<Reference> get authorReference =>
-      authorReferenceField.getValue(this);
+  Reference? get authorReference => authorReferenceField.getValue(_json);
 
   /// The individual responsible for making the annotation.
-  Definable<String> get authorString => authorStringField.getValue(this);
+  String? get authorString => authorStringField.getValue(_json);
 
   /// Indicates when this particular annotation was made.
-  Definable<DateTime> get time => timeField.getValue(this);
+  DateTime? get time => timeField.getValue(_json);
 
   /// The text of the annotation in markdown format.
-  Definable<String> get text => textField.getValue(this);
+  String? get text => textField.getValue(_json);
 
   /// Field definition for [authorReference]
   static const authorReferenceField = FieldDefinition(
@@ -71,26 +72,20 @@ class Annotation extends JsonObject {
     textField,
   ];
 
-  //TODO: this looks wrong. Add a test that includes a reference on
-  //an annotation
-  static Definable<Reference> _getAuthorReference(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        authorReferenceField.name,
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Reference.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  static Reference? _getAuthorReference(JsonObject jo) =>
+      switch (jo['authorReference']) {
+        (final JsonObject jo) => Reference.fromJson(jo),
+        _ => null,
+      };
 
-  static Definable<String> _getauthorString(JsonObject jo) =>
-      jo.getValue(authorStringField.name);
+  static String? _getauthorString(JsonObject jo) =>
+      jo.getValue(authorStringField.name).stringValue;
 
-  static Definable<DateTime> _getTime(JsonObject jo) => jo.getValueFromString(
-        timeField.name,
-        tryParse: (t) => DateTime.tryParse(t ?? ''),
-      );
+  static DateTime? _getTime(JsonObject jo) =>
+      DateTime.tryParse(jo.getValue(timeField.name).stringValue ?? '');
 
-  static Definable<String> _getText(JsonObject jo) =>
-      jo.getValue(textField.name);
+  static String? _getText(JsonObject jo) =>
+      jo.getValue(textField.name).stringValue;
 
   @override
   bool operator ==(Object other) =>
@@ -107,10 +102,10 @@ class Annotation extends JsonObject {
   /// Creates a copy of the [Annotation] instance and allows
   /// for non-destructive mutation.
   Annotation copyWith({
-    Definable<Reference>? authorReference,
-    Definable<String>? authorString,
-    Definable<DateTime>? time,
-    Definable<String>? text,
+    Reference? authorReference,
+    String? authorString,
+    DateTime? time,
+    String? text,
   }) =>
       Annotation(
         authorReference: authorReference ?? this.authorReference,

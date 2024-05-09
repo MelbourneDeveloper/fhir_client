@@ -1,15 +1,11 @@
+import 'package:jayse/jayse.dart';
+
 class Reference {
-  Reference({
-    this.reference,
-  });
+  Reference.fromJson(this._json);
 
-  factory Reference.fromJson(Map<String, dynamic> json) => Reference(
-        reference:
-            json['reference'] != null ? json['reference'] as String? : null,
-      );
-  final String? reference;
+  final JsonObject _json;
 
-  Map<String, dynamic> toJson() => {
-        'reference': reference,
-      };
+  String? get reference => _json['reference'].stringValue;
+
+  JsonObject get json => _json;
 }
