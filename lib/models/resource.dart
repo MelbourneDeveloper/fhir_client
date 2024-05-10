@@ -381,31 +381,10 @@ class Bundle extends Resource {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Bundle &&
-          super == other &&
-          other.extension == extension &&
-          other.identifier == identifier &&
-          other.active == active &&
-          other.type == type &&
-          other.name == name &&
-          other.code == code &&
-          other.participant == participant &&
-          other.link == link &&
-          other.entry == entry);
+      identical(this, other) || (other is Bundle && json == other.json);
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      extension.hashCode ^
-      identifier.hashCode ^
-      active.hashCode ^
-      type.hashCode ^
-      name.hashCode ^
-      code.hashCode ^
-      participant.hashCode ^
-      link.hashCode ^
-      entry.hashCode;
+  int get hashCode => Object.hash(runtimeType.hashCode, json.hashCode);
 
   /// Creates a copy of the [Bundle] instance and allows for non-destructive mutation.
   Bundle copyWith({
@@ -455,7 +434,7 @@ class Encounter extends Resource {
     FixedList<CodeableConcept>? reasonCode,
     Hospitalization? hospitalization,
     FixedList<Reference>? location,
-  }) : super.fromJson(
+  }) : super._internal(
           JsonObject({
             if (id != null) 'id': JsonString(id),
             if (meta != null) 'meta': meta.json,
@@ -486,7 +465,7 @@ class Encounter extends Resource {
         );
 
   /// Creates an [Encounter] instance from the provided JSON object.
-  Encounter.fromJson(JsonObject jsonObject) : super.fromJson(jsonObject);
+  Encounter.fromJson(JsonObject jsonObject) : super._internal(jsonObject);
 
   /// Identifier(s) by which this encounter is known.
   FixedList<Identifier>? get identifier => identifierField.getValue(json);
@@ -624,23 +603,23 @@ class Encounter extends Resource {
   ];
 
   static FixedList<Identifier>? _getIdentifier(JsonObject jo) =>
-      switch (jo['identifier']) {
+      switch (jo[identifierField.name]) {
         (final JsonArray jsonArray) => FixedList(
             jsonArray.value.map((e) => Identifier.fromJson(e as JsonObject)),
           ),
         _ => null,
       };
 
-  static String? _getStatus(JsonObject jo) =>
-      jo.getValue(statusField.name).stringValue;
+  static String? _getStatus(JsonObject jo) => jo[statusField.name].stringValue;
 
-  static CodeableConcept? _getClassCode(JsonObject jo) => switch (jo['class']) {
+  static CodeableConcept? _getClassCode(JsonObject jo) =>
+      switch (jo[classField.name]) {
         (final JsonObject jsonObject) => CodeableConcept.fromJson(jsonObject),
         _ => null,
       };
 
   static FixedList<CodeableConcept>? _getType(JsonObject jo) =>
-      switch (jo['type']) {
+      switch (jo[typeField.name]) {
         (final JsonArray jsonArray) => FixedList(
             jsonArray.value
                 .map((e) => CodeableConcept.fromJson(e as JsonObject)),
@@ -649,42 +628,43 @@ class Encounter extends Resource {
       };
 
   static CodeableConcept? _getServiceType(JsonObject jo) =>
-      switch (jo['serviceType']) {
+      switch (jo[serviceTypeField.name]) {
         (final JsonObject jsonObject) => CodeableConcept.fromJson(jsonObject),
         _ => null,
       };
 
   static CodeableConcept? _getPriority(JsonObject jo) =>
-      switch (jo['priority']) {
+      switch (jo[priorityField.name]) {
         (final JsonObject jsonObject) => CodeableConcept.fromJson(jsonObject),
         _ => null,
       };
 
-  static Reference? _getSubject(JsonObject jo) => switch (jo['subject']) {
+  static Reference? _getSubject(JsonObject jo) =>
+      switch (jo[subjectField.name]) {
         (final JsonObject jsonObject) => Reference.fromJson(jsonObject),
         _ => null,
       };
 
   static FixedList<Participant>? _getParticipant(JsonObject jo) =>
-      switch (jo['participant']) {
+      switch (jo[participantField.name]) {
         (final JsonArray jsonArray) => FixedList(
             jsonArray.value.map((e) => Participant.fromJson(e as JsonObject)),
           ),
         _ => null,
       };
 
-  static Period? _getPeriod(JsonObject jo) => switch (jo['period']) {
+  static Period? _getPeriod(JsonObject jo) => switch (jo[periodField.name]) {
         (final JsonObject jsonObject) => Period.fromJson(jsonObject),
         _ => null,
       };
 
-  static Length? _getLength(JsonObject jo) => switch (jo['length']) {
+  static Length? _getLength(JsonObject jo) => switch (jo[lengthField.name]) {
         (final JsonObject jsonObject) => Length.fromJson(jsonObject),
         _ => null,
       };
 
   static FixedList<CodeableConcept>? _getReasonCode(JsonObject jo) =>
-      switch (jo['reasonCode']) {
+      switch (jo[reasonCodeField.name]) {
         (final JsonArray jsonArray) => FixedList(
             jsonArray.value
                 .map((e) => CodeableConcept.fromJson(e as JsonObject)),
@@ -693,13 +673,13 @@ class Encounter extends Resource {
       };
 
   static Hospitalization? _getHospitalization(JsonObject jo) =>
-      switch (jo['hospitalization']) {
+      switch (jo[hospitalizationField.name]) {
         (final JsonObject jsonObject) => Hospitalization.fromJson(jsonObject),
         _ => null,
       };
 
   static FixedList<Reference>? _getLocation(JsonObject jo) =>
-      switch (jo['location']) {
+      switch (jo[locationField.name]) {
         (final JsonArray jsonArray) => FixedList(
             jsonArray.value.map((e) => Reference.fromJson(e as JsonObject)),
           ),
@@ -898,9 +878,6 @@ class Hospitalization {
           ),
         _ => null,
       };
-
-  /// Converts this [Hospitalization] instance to a JSON object.
-  JsonObject get json => json;
 
   @override
   bool operator ==(Object other) =>
