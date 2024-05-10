@@ -38,48 +38,23 @@ class Meta {
   final JsonObject _json;
 
   /// When the resource last changed - e.g. when the version changed.
-  ///
-  /// Type: DateTimeType
-  /// Path: Meta.lastUpdated
-  /// Minimum Cardinality: 0
-  /// Maximum Cardinality: 1
   DateTime? get lastUpdated => lastUpdatedField.getValue(_json);
 
   /// The version specific identifier.
-  ///
-  /// Type: IdType
-  /// Path: Meta.versionId
-  /// Minimum Cardinality: 0
-  /// Maximum Cardinality: 1
   String? get versionId => versionIdField.getValue(_json);
 
   /// Identifies where the resource comes from.
-  ///
-  /// Type: UriType
-  /// Path: Meta.source
-  /// Minimum Cardinality: 0
-  /// Maximum Cardinality: 1
   String? get source => sourceField.getValue(_json);
 
   /// A list of profiles (references to StructureDefinition resources) that 
   /// this resource claims to conform to. The URL is a reference to 
   /// StructureDefinition.url.
-  ///
-  /// Type: List<CanonicalType>
-  /// Path: Meta.profile
-  /// Minimum Cardinality: 0
-  /// Maximum Cardinality: *
   FixedList<String>? get profile => profileField.getValue(_json);
 
   /// Tags applied to this resource. Tags are intended to be used to identify 
   /// and relate resources to process and workflow, and applications are 
   /// not required to consider the tags when interpreting the meaning of a 
   /// resource.
-  ///
-  /// Type: List<Coding>
-  /// Path: Meta.tag
-  /// Minimum Cardinality: 0
-  /// Maximum Cardinality: *
   FixedList<Tag>? get tag => tagField.getValue(_json);
 
   /// Field definition for [lastUpdated]

@@ -1,7 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
-import 'package:fhir_client/models/basic_types/jayse_extensions.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/observation_reference_range.dart';

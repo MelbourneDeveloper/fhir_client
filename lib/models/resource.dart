@@ -7,7 +7,6 @@ import 'package:fhir_client/models/annotation.dart';
 import 'package:fhir_client/models/available_time.dart';
 import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
-import 'package:fhir_client/models/basic_types/jayse_extensions.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/codeable_reference.dart';
@@ -82,7 +81,7 @@ sealed class Resource {
   String? get id => json[Resource.idField.name].stringValue;
 
   /// The metadata of the resource
-  Meta? get meta => switch (json[Resource.metaField.name].objectValue) {
+  Meta? get meta => switch (json[Resource.metaField.name]) {
         (final JsonObject jo) => Meta.fromJson(jo),
         _ => null,
       };
@@ -287,48 +286,98 @@ class Bundle extends Resource {
 
   static const extensionField = FieldDefinition(
     name: 'extension',
-    getValue: (JsonObject jo) => jo['extension'],
+    getValue: _getExtension,
   );
 
   static const identifierField = FieldDefinition(
     name: 'identifier',
-    getValue: (JsonObject jo) => jo['identifier'],
+    getValue: _getIdentifier,
   );
 
   static const activeField = FieldDefinition(
     name: 'active',
-    getValue: (JsonObject jo) => jo['active'],
+    getValue: _getActive,
   );
 
   static const typeField = FieldDefinition(
     name: 'type',
-    getValue: (JsonObject jo) => jo['type'],
+    getValue: _getType,
   );
 
   static const nameField = FieldDefinition(
     name: 'name',
-    getValue: (JsonObject jo) => jo['name'],
+    getValue: _getName,
   );
 
   static const codeField = FieldDefinition(
     name: 'code',
-    getValue: (JsonObject jo) => jo['code'],
+    getValue: _getCode,
   );
 
   static const participantField = FieldDefinition(
     name: 'participant',
-    getValue: (JsonObject jo) => jo['participant'],
+    getValue: _getParticipant,
   );
 
   static const linkField = FieldDefinition(
     name: 'link',
-    getValue: (JsonObject jo) => jo['link'],
+    getValue: _getLink,
   );
 
   static const entryField = FieldDefinition(
     name: 'entry',
-    getValue: (JsonObject jo) => jo['entry'],
+    getValue: _getEntry,
   );
+
+  static List<Extension>? _getExtension(JsonObject jo) =>
+      switch (jo['extension']) {
+        (final JsonArray jsonArray) => jsonArray.value
+            .map((e) => Extension.fromJson(e as JsonObject))
+            .toList(),
+        _ => null,
+      };
+
+  static List<Identifier>? _getIdentifier(JsonObject jo) =>
+      switch (jo['identifier']) {
+        (final JsonArray jsonArray) => jsonArray.value
+            .map((e) => Identifier.fromJson(e as JsonObject))
+            .toList(),
+        _ => null,
+      };
+
+  static bool? _getActive(JsonObject jo) => jo['active'].booleanValue;
+
+  static String? _getType(JsonObject jo) => jo['type'].stringValue;
+
+  static String? _getName(JsonObject jo) => jo['name'].stringValue;
+
+  static List<CodeableConcept>? _getCode(JsonObject jo) => switch (jo['code']) {
+        (final JsonArray jsonArray) => jsonArray.value
+            .map((e) => CodeableConcept.fromJson(e as JsonObject))
+            .toList(),
+        _ => null,
+      };
+
+  static List<Participant>? _getParticipant(JsonObject jo) =>
+      switch (jo['participant']) {
+        (final JsonArray jsonArray) => jsonArray.value
+            .map((e) => Participant.fromJson(e as JsonObject))
+            .toList(),
+        _ => null,
+      };
+
+  static List<Link>? _getLink(JsonObject jo) => switch (jo['link']) {
+        (final JsonArray jsonArray) =>
+          jsonArray.value.map((e) => Link.fromJson(e as JsonObject)).toList(),
+        _ => null,
+      };
+
+  static List<Resource>? _getEntry(JsonObject jo) => switch (jo['entry']) {
+        (final JsonArray jsonArray) => jsonArray.value
+            .map((e) => Resource.fromJson(e as JsonObject))
+            .toList(),
+        _ => null,
+      };
 
   @override
   bool operator ==(Object other) =>

@@ -1,6 +1,5 @@
 import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
-import 'package:fhir_client/models/basic_types/jayse_extensions.dart';
 import 'package:jayse/jayse.dart';
 
 /// Represents an extension that may modify the interpretation of the
