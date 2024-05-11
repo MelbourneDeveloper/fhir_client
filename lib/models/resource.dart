@@ -10,6 +10,7 @@ import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/codeable_reference.dart';
+import 'package:fhir_client/models/contact_point.dart';
 import 'package:fhir_client/models/entry.dart';
 import 'package:fhir_client/models/extension.dart';
 import 'package:fhir_client/models/identifier.dart';
@@ -29,7 +30,6 @@ import 'package:fhir_client/models/range.dart';
 import 'package:fhir_client/models/ratio.dart';
 import 'package:fhir_client/models/reference.dart';
 import 'package:fhir_client/models/sampled_data.dart';
-import 'package:fhir_client/models/contact_point.dart';
 import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/timing.dart';
 import 'package:fhir_client/models/type.dart' as t;
@@ -2121,55 +2121,60 @@ class Organization extends Resource {
 class Patient extends Resource {
   /// Constructs a new [Patient].
   Patient({
-    Definable<String> id = const Undefined(),
-    Definable<Meta> meta = const Undefined(),
-    Definable<FixedList<Identifier>> identifier = const Undefined(),
-    Definable<bool> active = const Undefined(),
-    Definable<FixedList<Name>> name = const Undefined(),
-    Definable<FixedList<ContactPoint>> telecom = const Undefined(),
-    Definable<AdministrativeGender> gender = const Undefined(),
-    Definable<DateTime> birthDate = const Undefined(),
-    Definable<FixedList<Address>> address = const Undefined(),
+    String? id,
+    Meta? meta,
+    FixedList<Identifier>? identifier,
+    bool? active,
+    FixedList<Name>? name,
+    FixedList<ContactPoint>? telecom,
+    AdministrativeGender? gender,
+    DateTime? birthDate,
+    FixedList<Address>? address,
   }) : super._internal(
-          Map<String, dynamic>.fromEntries([
-            if (id is Defined<String>) id.toMapEntry(),
-            if (meta is Defined<Meta>) meta.toMapEntry(),
-            if (identifier is Defined<FixedList<Identifier>>)
-              identifier.toMapEntry(),
-            if (active is Defined<bool>) active.toMapEntry(),
-            if (name is Defined<FixedList<Name>>) name.toMapEntry(),
-            if (telecom is Defined<FixedList<ContactPoint>>)
-              telecom.toMapEntry(),
-            if (gender is Defined<AdministrativeGender>) gender.toMapEntry(),
-            if (birthDate is Defined<DateTime>) birthDate.toMapEntry(),
-            if (address is Defined<FixedList<Address>>) address.toMapEntry(),
-          ]),
+          JsonObject({
+            if (id != null) Resource.idField.name: JsonString(id),
+            if (meta != null) Resource.metaField.name: meta.json,
+            if (identifier != null)
+              identifierField.name:
+                  JsonArray.unmodifiable(identifier.map((e) => e.json)),
+            if (active != null) activeField.name: JsonBoolean(active),
+            if (name != null)
+              nameField.name: JsonArray.unmodifiable(name.map((e) => e.json)),
+            if (telecom != null)
+              telecomField.name:
+                  JsonArray.unmodifiable(telecom.map((e) => e.json)),
+            if (gender != null) genderField.name: JsonString(gender.code),
+            if (birthDate != null)
+              birthDateField.name: JsonString(birthDate.toIso8601String()),
+            if (address != null)
+              addressField.name:
+                  JsonArray.unmodifiable(address.map((e) => e.json)),
+          }),
         );
 
   /// Creates a [Patient] instance from the provided JSON object.
-  Patient.fromJson(super.json) : super._internal();
+  Patient.fromJson(JsonObject json) : super._internal(json);
 
   /// An identifier for this patient.
-  Definable<FixedList<Identifier>> get identifier =>
-      identifierField.getValue(this);
+  FixedList<Identifier>? get identifier => identifierField.getValue(json);
 
   /// Whether this patient record is in active use.
-  Definable<bool> get active => activeField.getValue(this);
+  bool? get active => activeField.getValue(json);
 
   /// A name associated with the patient.
-  Definable<FixedList<Name>> get name => nameField.getValue(this);
+  FixedList<Name>? get name => nameField.getValue(json);
 
   /// A contact detail (e.g. a telephone number or an email address) by which the individual may be contacted.
-  Definable<FixedList<ContactPoint>> get telecom => telecomField.getValue(this);
+  FixedList<ContactPoint>? get telecom => telecomField.getValue(json);
 
   /// Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes.
-  Definable<AdministrativeGender> get gender => genderField.getValue(this);
+  AdministrativeGender? get gender => genderField.getValue(json);
 
   /// The date of birth for the individual.
-  Definable<DateTime> get birthDate => birthDateField.getValue(this);
+  DateTime? get birthDate => birthDateField.getValue(json);
 
   /// An address for the individual.
-  Definable<FixedList<Address>> get address => addressField.getValue(this);
+  FixedList<Address>? get address => addressField.getValue(json);
 
   /// Field definition for [identifier].
   static const identifierField = FieldDefinition(
@@ -2178,9 +2183,9 @@ class Patient extends Resource {
   );
 
   /// Field definition for [active].
-  static final activeField = FieldDefinition(
+  static const activeField = FieldDefinition(
     name: 'active',
-    getValue: (jo) => jo.getValue<bool>('active'),
+    getValue: _getActive,
   );
 
   /// Field definition for [name].
@@ -2214,7 +2219,7 @@ class Patient extends Resource {
   );
 
   /// All field definitions for [Patient].
-  static final fieldDefinitions = [
+  static const fieldDefinitions = [
     ...Resource.fieldDefinitions,
     identifierField,
     activeField,
@@ -2225,89 +2230,62 @@ class Patient extends Resource {
     addressField,
   ];
 
-  static Definable<FixedList<Identifier>> _getIdentifier(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'identifier',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Identifier.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
+  static FixedList<Identifier>? _getIdentifier(JsonObject jo) =>
+      switch (jo[identifierField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Identifier.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static bool? _getActive(JsonObject jo) => jo[activeField.name].booleanValue;
+
+  static FixedList<Name>? _getName(JsonObject jo) =>
+      switch (jo[nameField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Name.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static FixedList<ContactPoint>? _getTelecom(JsonObject jo) =>
+      switch (jo[telecomField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => ContactPoint.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static AdministrativeGender? _getGender(JsonObject jo) =>
+      switch (jo[genderField.name]) {
+        (final JsonString jsonString) =>
+          AdministrativeGender.fromCode(jsonString.value),
+        _ => null,
+      };
+
+  static DateTime? _getBirthDate(JsonObject jo) => DateTime.tryParse(
+        jo[birthDateField.name].stringValue ?? '',
       );
 
-  static Definable<FixedList<Name>> _getName(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'name',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Name.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
-
-  static Definable<FixedList<ContactPoint>> _getTelecom(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'telecom',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => ContactPoint.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
-
-  static Definable<AdministrativeGender> _getGender(JsonObject jo) =>
-      jo.getValueFromString(
-        'gender',
-        tryParse: (value) =>
-            value != null ? AdministrativeGender.fromCode(value) : null,
-      );
-
-  static Definable<DateTime> _getBirthDate(JsonObject jo) =>
-      jo.getValueFromString(
-        'birthDate',
-        tryParse: (value) => value != null ? DateTime.parse(value) : null,
-      );
-
-  static Definable<FixedList<Address>> _getAddress(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'address',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Address.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Patient &&
-          other.id == id &&
-          other.meta == meta &&
-          other.identifier == identifier &&
-          other.active == active &&
-          other.name == name &&
-          other.telecom == telecom &&
-          other.gender == gender &&
-          other.birthDate == birthDate &&
-          other.address == address);
-
-  @override
-  int get hashCode => Object.hash(
-        id,
-        meta,
-        identifier,
-        active,
-        name,
-        telecom,
-        gender,
-        birthDate,
-        address,
-      );
+  static FixedList<Address>? _getAddress(JsonObject jo) =>
+      switch (jo[addressField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Address.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
 
   /// Creates a copy of the [Patient] instance and allows for non-destructive mutation.
   Patient copyWith({
-    Definable<String>? id,
-    Definable<Meta>? meta,
-    Definable<FixedList<Identifier>>? identifier,
-    Definable<bool>? active,
-    Definable<FixedList<Name>>? name,
-    Definable<FixedList<ContactPoint>>? telecom,
-    Definable<AdministrativeGender>? gender,
-    Definable<DateTime>? birthDate,
-    Definable<FixedList<Address>>? address,
+    String? id,
+    Meta? meta,
+    FixedList<Identifier>? identifier,
+    bool? active,
+    FixedList<Name>? name,
+    FixedList<ContactPoint>? telecom,
+    AdministrativeGender? gender,
+    DateTime? birthDate,
+    FixedList<Address>? address,
   }) =>
       Patient(
         id: id ?? this.id,
