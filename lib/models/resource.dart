@@ -37,6 +37,23 @@ import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
 import 'package:jayse/jayse.dart';
 
+/// The result of an update operation
+sealed class UpdateResult<T extends Resource> {
+  const UpdateResult();
+}
+
+/// The result of a successful update operation
+final class UpdateSuccess<T extends Resource> extends UpdateResult<T> {
+  const UpdateSuccess(this.updatedResource) : super();
+  final T updatedResource;
+}
+
+/// The result of a failed update operation
+final class UpdateFailure<T extends Resource> extends UpdateResult<T> {
+  const UpdateFailure(this.error) : super();
+  final String error;
+}
+
 /// Either a successful [Resource] result or an [OperationOutcome] (error)
 sealed class Result<T> {}
 
@@ -107,6 +124,21 @@ sealed class Resource {
 
   @override
   int get hashCode => Object.hash(runtimeType.hashCode, json.hashCode);
+}
+
+extension ResourceExtensions<T extends Resource> on T {
+  /// Creates a clone of the resource with the provided field updated with 
+  /// another resource
+  UpdateResult<T> withFieldResource<T extends Resource, T2 extends Resource>(
+    FieldDefinition<T2> field,
+    T2 resource, {
+    required T Function(JsonObject) constructor,
+  }) =>
+      switch (this.json[field.name]) {
+        Undefined() => UpdateFailure<T>('${field.name} is undefined'),
+        (final JsonValue fieldValue) => UpdateSuccess(
+            constructor(this.json.withUpdate(field.name, resource.json))),
+      };
 }
 
 /// Represents a booking of a healthcare event among patient(s), practitioner(s),
