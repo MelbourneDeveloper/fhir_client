@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_print
 
 import 'package:fhir_client/fhir_extensions.dart';
-import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
-import 'package:fhir_client/models/coding_list.dart';
+import 'package:fhir_client/models/codeable_concept.dart';
+import 'package:fhir_client/models/reference.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:http/http.dart';
 
@@ -51,25 +51,27 @@ Future<void> main() async {
   print(formattedResult);
 }
 
-String _formatCodingListList(FixedList<CodingList> list) =>
+String _formatCodingListList(FixedList<CodeableConcept> list) =>
     list.map(_formatCodingList).join('/n');
 
-String _formatCodingList(CodingList? cc) =>
+String _formatCodingList(CodeableConcept? cc) =>
     cc?.coding
         ?.map((coding) => '${coding.code} - ${coding.display}')
         .join(', ') ??
     '';
 
-String _formatPractitionerRole(PractitionerRole pr) =>
-    'Id: ${pr.id}\nCodes:\n${_formatCodingListList(pr.code)}\n';
+String _formatPractitionerRole(PractitionerRole pr) => 'Id: ${pr.id}\nCodes:\n'
+    '${_formatCodingListList(FixedList(pr.code ?? []))}\n';
 
 String _formatSlot(Slot slot) => 'Id: ${slot.id}\n'
     'Appointment Type: ${_formatCodingList(slot.appointmentType)}\n'
-    'Service Category: ${_formatCodingListList(slot.serviceCategory)}\n'
-    'Service Type: ${_formatCodingListList(slot.serviceType)}\n'
+    'Service Category: '
+    '${_formatCodingListList(FixedList(slot.serviceCategory ?? []))}\n'
+    'Service Type: '
+    '${_formatCodingListList(FixedList(slot.serviceType ?? []))}\n'
     'Start ${slot.start} End: ${slot.end}\nComment: ${slot.comment}\n';
 
-String _formatActor(FixedList<Actor> actors) => 'Actors:\n${actors.map(
+String _formatActor(FixedList<Reference> actors) => 'Actors:\n${actors.map(
       (actor) => ' - '
           '${actor.reference}: ${switch (actor.display) {
         (final String displayValue) => displayValue,
@@ -81,9 +83,11 @@ String _formatSchedule(Schedule schedule) =>
     'Schedule ID: ${schedule.id}\nSlot Start: '
     '${schedule.planningHorizon?.start!.toIso8601String()}\nSlot End: '
     '${schedule.planningHorizon?.end!.toIso8601String()}\n'
-    'Service Types:\n${_formatCodingListList(schedule.serviceType)}\n'
-    'Service Categories:\n${_formatCodingListList(schedule.serviceCategory)}\n'
-    '${_formatActor(schedule.actor)}';
+    'Service Types:\n'
+    '${_formatCodingListList(FixedList(schedule.serviceType ?? []))}\n'
+    'Service Categories:\n'
+    '${_formatCodingListList(FixedList(schedule.serviceCategory ?? []))}\n'
+    '${_formatActor(FixedList(schedule.actor ?? []))}';
 
 /// Extensions for formatting results in this context
 ///
