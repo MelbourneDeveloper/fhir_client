@@ -1,19 +1,6 @@
-// ignore_for_file: unused_import
-
-import 'dart:js_util';
-
-import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/actor.dart';
-import 'package:fhir_client/models/available_time.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
-
-import 'package:fhir_client/models/basic_types/time.dart';
-import 'package:fhir_client/models/resource.dart';
-import 'package:fhir_client/models/tag.dart';
-import 'package:http/testing.dart';
 import 'package:test/test.dart';
-
-import 'fhir_client_test.dart';
 
 void main() {
   group('Equality', () {

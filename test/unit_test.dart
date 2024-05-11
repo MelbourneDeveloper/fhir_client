@@ -1,5 +1,8 @@
 // ignore_for_file: unused_import
 
+/*
+
+
 import 'dart:js_util';
 
 import 'package:fhir_client/fhir_extensions.dart';
@@ -14,7 +17,6 @@ import 'package:test/test.dart';
 
 import 'fhir_client_test.dart';
 
-/*
 
 void main() {
   group('Equality', () {
