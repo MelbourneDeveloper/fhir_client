@@ -156,7 +156,7 @@ void main() {
       expect(org.address!.first.country, 'BANGLADESH');
 
       final map = org.json;
-      expect(map['address'][0]['postalCode'], '23423');
+      expect((map['address'] as JsonArray).value[0]['postalCode'], '23423');
     });
 
     test('Practitioner Search result', () async {
@@ -891,18 +891,20 @@ void main() {
       //   map['text']['div'],
       //   '<div xmlns="http://www.w3.org/1999/xhtml">Ruben Manzaneque</div>',
       // );
-      expect(map['identifier'].length, 1);
+      expect((map['identifier'] as JsonArray).value.length, 1);
       expect(
-        map['identifier'][0]['system'],
+        (map['identifier'] as JsonArray).value[0]['system'],
         'http://clinfhir.com/fhir/NamingSystem/identifier',
       );
-      expect(map['identifier'][0]['value'], '0987654321');
-      expect(map['name'].length, 1);
-      expect(map['name'][0]['use'], 'official');
+      expect((map['identifier'] as JsonArray).value[0]['value'], '0987654321');
+      final nameArray = (map['name'] as JsonArray).value;
+      expect(nameArray.length, 1);
+      final firstName = nameArray[0];
+      expect(firstName['use'], 'official');
       // expect(map['name'][0]['text'], 'Ruben Manzaneque');
-      expect(map['name'][0]['family'], 'Manzaneque');
-      expect(map['name'][0]['given'].length, 1);
-      expect(map['name'][0]['given'][0], 'Ruben');
+      expect(firstName['family'], 'Manzaneque');
+      expect((firstName['given'] as JsonArray).value.length, 1);
+      expect((firstName['given'] as JsonArray).value[0], 'Ruben');
       // end of block to ignore rules
       expect(map['gender'], 'male');
       expect(map['birthDate'], '1992-10-12T00:00:00.000');

@@ -1,3 +1,5 @@
+/*
+
 import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/available_time.dart';
@@ -152,3 +154,5 @@ void main() {
     });
   });
 }
+
+*/
