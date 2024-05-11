@@ -1,10 +1,3 @@
-// ignore_for_file: unused_import
-
-/*
-
-
-import 'dart:js_util';
-
 import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/available_time.dart';
@@ -17,15 +10,14 @@ import 'package:test/test.dart';
 
 import 'fhir_client_test.dart';
 
-
 void main() {
   group('Equality', () {
     test(
       'Actor',
       () {
         expect(
-          Actor.primitives(reference: '1', display: 'a'),
-          equals(Actor.primitives(reference: '1', display: 'a')),
+          Actor(reference: '1', display: 'a'),
+          equals(Actor(reference: '1', display: 'a')),
         );
 
         expect(
@@ -34,17 +26,17 @@ void main() {
         );
 
         expect(
-          Actor.primitives(reference: '1', display: 'a') !=
-              Actor.primitives(reference: '1', display: 'b'),
+          Actor(reference: '1', display: 'a') !=
+              Actor(reference: '1', display: 'b'),
           true,
         );
 
         final actor1 =
-            Actor.primitives(reference: 'reference1', display: 'Actor 1');
+            Actor(reference: 'reference1', display: 'Actor 1');
         final actor2 =
-            Actor.primitives(reference: 'reference2', display: 'Actor 2');
+            Actor(reference: 'reference2', display: 'Actor 2');
         final actor3 =
-            Actor.primitives(reference: 'reference3', display: 'Actor 3');
+            Actor(reference: 'reference3', display: 'Actor 3');
 
         final list1 = FixedList([actor1, actor2, actor3]);
         final list2 = FixedList([actor1, actor2, actor3]);
@@ -56,7 +48,7 @@ void main() {
     test('AvailableTime equality and hash code', () {
       //TODO More Time parsing and testing
 
-      final nineAM = StringBackedValue<Time>('09:00');
+      final nineAM = Time('09:00');
       expect(nineAM.value!.hour, 9);
       expect(nineAM.value!.minute, 0);
       expect(nineAM.value!.second, 0);
@@ -160,5 +152,3 @@ void main() {
     });
   });
 }
-
-*/
