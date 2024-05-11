@@ -3,7 +3,6 @@
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/coding_list.dart';
-import 'package:fhir_client/models/planning_horizon.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/text.dart';
 import 'package:http/http.dart';
@@ -106,14 +105,4 @@ String _formatSchedule(Schedule schedule) =>
 extension ResultExtensions<T> on BundleEntries<T> {
   String formatResult(String Function(T) format) =>
       entries.map(format).join('\n');
-}
-
-extension Dadasd on Definable<PlanningHorizon> {
-  DateTime? get start => (this is Defined<PlanningHorizon>)
-      ? (this as Defined<PlanningHorizon>).value?.start
-      : null;
-
-  DateTime? get end => (this is Defined<PlanningHorizon>)
-      ? (this as Defined<PlanningHorizon>).value?.end
-      : null;
 }
