@@ -3,11 +3,10 @@ import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/tag.dart';
 import 'package:jayse/jayse.dart';
 
-/// The metadata about a resource. This is content in the resource that is 
-/// maintained by the infrastructure. Changes to the content might not always 
+/// The metadata about a resource. This is content in the resource that is
+/// maintained by the infrastructure. Changes to the content might not always
 /// be associated with version changes to the resource.
 class Meta {
-
   /// Constructs a new `Meta` with an optional last updated date, version ID
   Meta({
     DateTime? lastUpdated,
@@ -19,8 +18,7 @@ class Meta {
           JsonObject({
             if (lastUpdated != null)
               lastUpdatedField.name: JsonString(lastUpdated.toIso8601String()),
-            if (versionId != null)
-              versionIdField.name: JsonString(versionId),
+            if (versionId != null) versionIdField.name: JsonString(versionId),
             if (source != null) sourceField.name: JsonString(source),
             if (profile != null)
               profileField.name: JsonArray.unmodifiable(
@@ -32,6 +30,7 @@ class Meta {
               ),
           }),
         );
+
   /// Constructs a new `Meta` instance from the provided JSON object.
   Meta.fromJson(this._json);
 
@@ -46,14 +45,16 @@ class Meta {
   /// Identifies where the resource comes from.
   String? get source => sourceField.getValue(_json);
 
-  /// A list of profiles (references to StructureDefinition resources) that 
-  /// this resource claims to conform to. The URL is a reference to 
+  //TODO: Should be URIs
+
+  /// A list of profiles (references to StructureDefinition resources) that
+  /// this resource claims to conform to. The URL is a reference to
   /// StructureDefinition.url.
   FixedList<String>? get profile => profileField.getValue(_json);
 
-  /// Tags applied to this resource. Tags are intended to be used to identify 
-  /// and relate resources to process and workflow, and applications are 
-  /// not required to consider the tags when interpreting the meaning of a 
+  /// Tags applied to this resource. Tags are intended to be used to identify
+  /// and relate resources to process and workflow, and applications are
+  /// not required to consider the tags when interpreting the meaning of a
   /// resource.
   FixedList<Tag>? get tag => tagField.getValue(_json);
 
@@ -105,10 +106,13 @@ class Meta {
   static String? _getSource(JsonObject jo) =>
       jo.getValue(sourceField.name).stringValue;
 
+
   static FixedList<String>? _getProfile(JsonObject jo) =>
       switch (jo['profile']) {
-        (final JsonArray jsonArray) =>
-          FixedList(jsonArray.value.whereType<String>()),
+        (final JsonArray jsonArray)
+          // TODO: Reassess how to handle this
+            when jsonArray.value.every((jv) => jv is JsonString) =>
+          FixedList(jsonArray.value.cast<JsonString>().map((js) => js.value)),
         _ => null,
       };
 

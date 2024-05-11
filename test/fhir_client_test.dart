@@ -79,9 +79,9 @@ void main() {
       expect(org.identifier!.first.type!.text, 'SNO');
 
       final map = org.json;
-      expect(map['resourceType'], 'Organization');
+      expect(map['resourceType'].stringValue, 'Organization');
 
-      expect(map['id'], '2640211');
+      expect(map['id'].stringValue, '2640211');
     });
 
     test('Organization Search result', () async {
@@ -156,7 +156,7 @@ void main() {
       expect(org.address!.first.country, 'BANGLADESH');
 
       final map = org.json;
-      expect((map['address'] as JsonArray).value[0]['postalCode'], '23423');
+      expect((map['address'] as JsonArray).value[0]['postalCode'].stringValue, '23423');
     });
 
     test('Practitioner Search result', () async {
