@@ -75,21 +75,30 @@ sealed class Resource {
 
   factory Resource.fromJson(
     JsonObject json,
-  ) =>
-      switch (ResourceType.fromCode(json['resourceType'] as String? ?? '')) {
-        (ResourceType.appointment) => Appointment.fromJson(json),
-        (ResourceType.bundle) => Bundle.fromJson(json),
-        (ResourceType.encounter) => Encounter.fromJson(json),
-        (ResourceType.observation) => Observation.fromJson(json),
-        (ResourceType.organization) => Organization.fromJson(json),
-        (ResourceType.operationOutcome) =>
-          OperationOutcome<String>.fromJson(json),
-        (ResourceType.patient) => Patient.fromJson(json),
-        (ResourceType.practitioner) => Practitioner.fromJson(json),
-        (ResourceType.practitionerRole) => PractitionerRole.fromJson(json),
-        (ResourceType.schedule) => Schedule.fromJson(json),
-        (ResourceType.slot) => Slot.fromJson(json),
-      };
+  ) {
+    final resourceTypeString = json['resourceType'].stringValue;
+
+    if (resourceTypeString == null) {
+      return OperationOutcome<String>(
+        text: Text(status: 'Invalid Resource. resourceType not specified'),
+      );
+    }
+
+    return switch (ResourceType.fromCode(resourceTypeString)) {
+      (ResourceType.appointment) => Appointment.fromJson(json),
+      (ResourceType.bundle) => Bundle.fromJson(json),
+      (ResourceType.encounter) => Encounter.fromJson(json),
+      (ResourceType.observation) => Observation.fromJson(json),
+      (ResourceType.organization) => Organization.fromJson(json),
+      (ResourceType.operationOutcome) =>
+        OperationOutcome<String>.fromJson(json),
+      (ResourceType.patient) => Patient.fromJson(json),
+      (ResourceType.practitioner) => Practitioner.fromJson(json),
+      (ResourceType.practitionerRole) => PractitionerRole.fromJson(json),
+      (ResourceType.schedule) => Schedule.fromJson(json),
+      (ResourceType.slot) => Slot.fromJson(json),
+    };
+  }
 
   final JsonObject json;
 
