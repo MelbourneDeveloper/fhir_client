@@ -98,17 +98,10 @@ class AvailableTime {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is AvailableTime &&
-          other.daysOfWeek == daysOfWeek &&
-          other.availableStartTime == availableStartTime &&
-          other.availableEndTime == availableEndTime);
+      identical(this, other) || (other is AvailableTime && json == other.json);
 
   @override
-  int get hashCode =>
-      daysOfWeek.hashCode ^
-      availableStartTime.hashCode ^
-      availableEndTime.hashCode;
+  int get hashCode => Object.hash(runtimeType.hashCode, json.hashCode);
 
   /// Creates a copy of the [AvailableTime] instance and allows
   /// for non-destructive mutation.
