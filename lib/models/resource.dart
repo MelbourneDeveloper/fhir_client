@@ -29,7 +29,7 @@ import 'package:fhir_client/models/range.dart';
 import 'package:fhir_client/models/ratio.dart';
 import 'package:fhir_client/models/reference.dart';
 import 'package:fhir_client/models/sampled_data.dart';
-import 'package:fhir_client/models/telecom.dart';
+import 'package:fhir_client/models/contact_point.dart';
 import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/timing.dart';
 import 'package:fhir_client/models/type.dart' as t;
@@ -129,23 +129,19 @@ sealed class Resource {
 extension ResourceExtensions<T extends Resource> on T {
   /// Creates a clone of the resource with the provided field updated with
   /// another resource
-  UpdateResult<T> withFieldResource<T extends Resource, T2 extends Resource>(
+  T withFieldResource<T2 extends Resource>(
     FieldDefinition<T2> field,
     T2 resource, {
     required T Function(JsonObject) constructor,
   }) =>
-      switch (this.json[field.name]) {
-        Undefined() => UpdateFailure<T>('${field.name} is undefined'),
-        (final JsonValue fieldValue) => UpdateSuccess(
-            constructor(this.json.withUpdate(field.name, resource.json))),
-      };
+      constructor(json.withUpdate(field.name, resource.json));
 
   UpdateResult<T> withNullField<T2>(
     FieldDefinition<T2> field, {
     required T Function(JsonObject) constructor,
   }) =>
       UpdateSuccess(
-        constructor(this.json.withUpdate(field.name, JsonNull())),
+        constructor(json.withUpdate(field.name, const JsonNull())),
       );
 
   UpdateResult<T> withUndefinedField<T2>(
@@ -153,7 +149,7 @@ extension ResourceExtensions<T extends Resource> on T {
     required T Function(JsonObject) constructor,
   }) =>
       UpdateSuccess(
-        constructor(this.json.withUpdate(field.name, Undefined())),
+        constructor(json.withUpdate(field.name, const Undefined())),
       );
 }
 
@@ -1649,7 +1645,8 @@ class Observation extends Resource {
       switch (jo['referenceRange']) {
         (final JsonArray jsonArray) => FixedList(
             jsonArray.value.map(
-                (e) => ObservationReferenceRange.fromJson(e as JsonObject)),
+              (e) => ObservationReferenceRange.fromJson(e as JsonObject),
+            ),
           ),
         _ => null,
       };
@@ -1845,7 +1842,8 @@ class OperationOutcome<T> extends Resource implements Result<T> {
   static FixedList<Issue>? _getIssue(JsonObject jo) =>
       switch (jo[issueField.name]) {
         (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) => Issue.fromJson(e as JsonObject))),
+            jsonArray.value.map((e) => Issue.fromJson(e as JsonObject)),
+          ),
         _ => null,
       };
 
@@ -1875,67 +1873,83 @@ class OperationOutcome<T> extends Resource implements Result<T> {
         issue: issue ?? this.issue,
       );
 }
+
+/// A formally or informally recognized grouping of people or organizations formed for the purpose of achieving some form of collective action. Includes companies, institutions, corporations, departments, community groups, healthcare practice groups, payer/insurer, etc.
 class Organization extends Resource {
   /// Constructs a new [Organization].
   Organization({
-    Definable<String> id = const Undefined(),
-    Definable<Meta> meta = const Undefined(),
-    Definable<FixedList<Identifier>> identifier = const Undefined(),
-    Definable<FixedList<t.Type>> type = const Undefined(),
-    Definable<String> name = const Undefined(),
-    Definable<int> total = const Undefined(),
-    Definable<FixedList<Link>> link = const Undefined(),
-    Definable<FixedList<Entry>> entry = const Undefined(),
-    Definable<bool> active = const Undefined(),
-    Definable<FixedList<Telecom>> telecom = const Undefined(),
-    Definable<FixedList<Address>> address = const Undefined(),
+    String? id,
+    Meta? meta,
+    FixedList<Identifier>? identifier,
+    FixedList<CodeableConcept>? type,
+    String? name,
+    String? alias,
+    FixedList<ContactPoint>? telecom,
+    FixedList<Address>? address,
+    Reference? partOf,
+    FixedList<Reference>? contact,
+    FixedList<Reference>? endpoint,
+    bool? active,
   }) : super._internal(
-          Map<String, dynamic>.fromEntries([
-            if (id is Defined<String>) id.toMapEntry(),
-            if (meta is Defined<Meta>) meta.toMapEntry(),
-            if (identifier is Defined<FixedList<Identifier>>)
-              identifier.toMapEntry(),
-            if (type is Defined<FixedList<t.Type>>) type.toMapEntry(),
-            if (name is Defined<String>) name.toMapEntry(),
-            if (total is Defined<int>) total.toMapEntry(),
-            if (link is Defined<FixedList<Link>>) link.toMapEntry(),
-            if (entry is Defined<FixedList<Entry>>) entry.toMapEntry(),
-            if (active is Defined<bool>) active.toMapEntry(),
-            if (telecom is Defined<FixedList<Telecom>>) telecom.toMapEntry(),
-            if (address is Defined<FixedList<Address>>) address.toMapEntry(),
-          ]),
+          JsonObject({
+            if (id != null) Resource.idField.name: JsonString(id),
+            if (meta != null) Resource.metaField.name: meta.json,
+            if (identifier != null)
+              identifierField.name:
+                  JsonArray.unmodifiable(identifier.map((e) => e.json)),
+            if (type != null)
+              typeField.name: JsonArray.unmodifiable(type.map((e) => e.json)),
+            if (name != null) nameField.name: JsonString(name),
+            if (alias != null) aliasField.name: JsonString(alias),
+            if (telecom != null)
+              telecomField.name:
+                  JsonArray.unmodifiable(telecom.map((e) => e.json)),
+            if (address != null)
+              addressField.name:
+                  JsonArray.unmodifiable(address.map((e) => e.json)),
+            if (partOf != null) partOfField.name: partOf.json,
+            if (contact != null)
+              contactField.name:
+                  JsonArray.unmodifiable(contact.map((e) => e.json)),
+            if (endpoint != null)
+              endpointField.name:
+                  JsonArray.unmodifiable(endpoint.map((e) => e.json)),
+            if (active != null) activeField.name: JsonBoolean(active),
+          }),
         );
 
   /// Creates an [Organization] instance from the provided JSON object.
-  Organization.fromJson(super.json) : super._internal();
+  Organization.fromJson(JsonObject json) : super._internal(json);
 
   /// Identifier for the organization that is used to identify the organization across multiple disparate systems.
-  Definable<FixedList<Identifier>> get identifier =>
-      identifierField.getValue(this);
+  FixedList<Identifier>? get identifier => identifierField.getValue(json);
 
   /// The kind(s) of organization that this is.
-  Definable<FixedList<t.Type>> get type => typeField.getValue(this);
+  FixedList<CodeableConcept>? get type => typeField.getValue(json);
 
   /// A name associated with the organization.
-  Definable<String> get name => nameField.getValue(this);
+  String? get name => nameField.getValue(json);
 
-  /// The total number of entries.
-  Definable<int> get total => totalField.getValue(this);
-
-  /// A reference to a link.
-  Definable<FixedList<Link>> get link => linkField.getValue(this);
-
-  /// An entry in the organization.
-  Definable<FixedList<Entry>> get entry => entryField.getValue(this);
-
-  /// Whether the organization's record is still in active use.
-  Definable<bool> get active => activeField.getValue(this);
+  /// A list of alternate names that the organization is known as, or was known as in the past.
+  String? get alias => aliasField.getValue(json);
 
   /// A contact detail for the organization.
-  Definable<FixedList<Telecom>> get telecom => telecomField.getValue(this);
+  FixedList<ContactPoint>? get telecom => telecomField.getValue(json);
 
   /// An address for the organization.
-  Definable<FixedList<Address>> get address => addressField.getValue(this);
+  FixedList<Address>? get address => addressField.getValue(json);
+
+  /// The organization of which this organization forms a part.
+  Reference? get partOf => partOfField.getValue(json);
+
+  /// Contact for the organization for a certain purpose.
+  FixedList<Reference>? get contact => contactField.getValue(json);
+
+  /// Technical endpoints providing access to services operated for the organization.
+  FixedList<Reference>? get endpoint => endpointField.getValue(json);
+
+  /// Whether the organization's record is still in active use.
+  bool? get active => activeField.getValue(json);
 
   /// Field definition for [identifier].
   static const identifierField = FieldDefinition(
@@ -1950,33 +1964,15 @@ class Organization extends Resource {
   );
 
   /// Field definition for [name].
-  static final nameField = FieldDefinition(
+  static const nameField = FieldDefinition(
     name: 'name',
-    getValue: (jo) => jo.getValue<String>('name'),
+    getValue: _getName,
   );
 
-  /// Field definition for [total].
-  static final totalField = FieldDefinition(
-    name: 'total',
-    getValue: (jo) => jo.getValue<int>('total'),
-  );
-
-  /// Field definition for [link].
-  static const linkField = FieldDefinition(
-    name: 'link',
-    getValue: _getLink,
-  );
-
-  /// Field definition for [entry].
-  static const entryField = FieldDefinition(
-    name: 'entry',
-    getValue: _getEntry,
-  );
-
-  /// Field definition for [active].
-  static final activeField = FieldDefinition(
-    name: 'active',
-    getValue: (jo) => jo.getValue<bool>('active'),
+  /// Field definition for [alias].
+  static const aliasField = FieldDefinition(
+    name: 'alias',
+    getValue: _getAlias,
   );
 
   /// Field definition for [telecom].
@@ -1991,114 +1987,119 @@ class Organization extends Resource {
     getValue: _getAddress,
   );
 
-  //Note: not all const...
+  /// Field definition for [partOf].
+  static const partOfField = FieldDefinition(
+    name: 'partOf',
+    getValue: _getPartOf,
+  );
+
+  /// Field definition for [contact].
+  static const contactField = FieldDefinition(
+    name: 'contact',
+    getValue: _getContact,
+  );
+
+  /// Field definition for [endpoint].
+  static const endpointField = FieldDefinition(
+    name: 'endpoint',
+    getValue: _getEndpoint,
+  );
+
+  /// Field definition for [active].
+  static const activeField = FieldDefinition(
+    name: 'active',
+    getValue: _getActive,
+  );
 
   /// All field definitions for [Organization].
-  static final fieldDefinitions = [
+  static const fieldDefinitions = [
     ...Resource.fieldDefinitions,
     identifierField,
     typeField,
     nameField,
-    totalField,
-    linkField,
-    entryField,
-    activeField,
+    aliasField,
     telecomField,
     addressField,
+    partOfField,
+    contactField,
+    endpointField,
+    activeField,
   ];
 
-  static Definable<FixedList<Identifier>> _getIdentifier(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'identifier',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Identifier.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static FixedList<Identifier>? _getIdentifier(JsonObject jo) =>
+      switch (jo[identifierField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Identifier.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
 
-  static Definable<FixedList<t.Type>> _getType(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'type',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => t.Type.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static FixedList<CodeableConcept>? _getType(JsonObject jo) =>
+      switch (jo[typeField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => CodeableConcept.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
 
-  static Definable<FixedList<Link>> _getLink(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'link',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Link.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static String? _getName(JsonObject jo) => jo[nameField.name].stringValue;
 
-  static Definable<FixedList<Entry>> _getEntry(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'entry',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Entry.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static String? _getAlias(JsonObject jo) => jo[aliasField.name].stringValue;
 
-  static Definable<FixedList<Telecom>> _getTelecom(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'telecom',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Telecom.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static FixedList<ContactPoint>? _getTelecom(JsonObject jo) =>
+      switch (jo[telecomField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => ContactPoint.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
 
-  static Definable<FixedList<Address>> _getAddress(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'address',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Address.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static FixedList<Address>? _getAddress(JsonObject jo) =>
+      switch (jo[addressField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Address.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Organization &&
-          other.id == id &&
-          other.meta == meta &&
-          other.identifier == identifier &&
-          other.type == type &&
-          other.name == name &&
-          other.total == total &&
-          other.link == link &&
-          other.entry == entry &&
-          other.active == active &&
-          other.telecom == telecom &&
-          other.address == address);
+  static Reference? _getPartOf(JsonObject jo) => switch (jo[partOfField.name]) {
+        (final JsonObject jsonObject) => Reference.fromJson(jsonObject),
+        _ => null,
+      };
 
-  @override
-  int get hashCode => Object.hash(
-        id,
-        meta,
-        identifier,
-        type,
-        name,
-        total,
-        link,
-        entry,
-        active,
-        telecom,
-        address,
-      );
+  static FixedList<Reference>? _getContact(JsonObject jo) =>
+      switch (jo[contactField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static FixedList<Reference>? _getEndpoint(JsonObject jo) =>
+      switch (jo[endpointField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static bool? _getActive(JsonObject jo) => jo[activeField.name].booleanValue;
 
   /// Creates a copy of the [Organization] instance and allows for non-destructive mutation.
   Organization copyWith({
-    Definable<String>? id,
-    Definable<Meta>? meta,
-    Definable<FixedList<Identifier>>? identifier,
-    Definable<FixedList<t.Type>>? type,
-    Definable<String>? name,
-    Definable<int>? total,
-    Definable<FixedList<Link>>? link,
-    Definable<FixedList<Entry>>? entry,
-    Definable<bool>? active,
-    Definable<FixedList<Telecom>>? telecom,
-    Definable<FixedList<Address>>? address,
+    String? id,
+    Meta? meta,
+    FixedList<Identifier>? identifier,
+    FixedList<CodeableConcept>? type,
+    String? name,
+    String? alias,
+    FixedList<ContactPoint>? telecom,
+    FixedList<Address>? address,
+    Reference? partOf,
+    FixedList<Reference>? contact,
+    FixedList<Reference>? endpoint,
+    bool? active,
   }) =>
       Organization(
         id: id ?? this.id,
@@ -2106,12 +2107,13 @@ class Organization extends Resource {
         identifier: identifier ?? this.identifier,
         type: type ?? this.type,
         name: name ?? this.name,
-        total: total ?? this.total,
-        link: link ?? this.link,
-        entry: entry ?? this.entry,
-        active: active ?? this.active,
+        alias: alias ?? this.alias,
         telecom: telecom ?? this.telecom,
         address: address ?? this.address,
+        partOf: partOf ?? this.partOf,
+        contact: contact ?? this.contact,
+        endpoint: endpoint ?? this.endpoint,
+        active: active ?? this.active,
       );
 }
 
@@ -2124,7 +2126,7 @@ class Patient extends Resource {
     Definable<FixedList<Identifier>> identifier = const Undefined(),
     Definable<bool> active = const Undefined(),
     Definable<FixedList<Name>> name = const Undefined(),
-    Definable<FixedList<Telecom>> telecom = const Undefined(),
+    Definable<FixedList<ContactPoint>> telecom = const Undefined(),
     Definable<AdministrativeGender> gender = const Undefined(),
     Definable<DateTime> birthDate = const Undefined(),
     Definable<FixedList<Address>> address = const Undefined(),
@@ -2136,7 +2138,8 @@ class Patient extends Resource {
               identifier.toMapEntry(),
             if (active is Defined<bool>) active.toMapEntry(),
             if (name is Defined<FixedList<Name>>) name.toMapEntry(),
-            if (telecom is Defined<FixedList<Telecom>>) telecom.toMapEntry(),
+            if (telecom is Defined<FixedList<ContactPoint>>)
+              telecom.toMapEntry(),
             if (gender is Defined<AdministrativeGender>) gender.toMapEntry(),
             if (birthDate is Defined<DateTime>) birthDate.toMapEntry(),
             if (address is Defined<FixedList<Address>>) address.toMapEntry(),
@@ -2157,7 +2160,7 @@ class Patient extends Resource {
   Definable<FixedList<Name>> get name => nameField.getValue(this);
 
   /// A contact detail (e.g. a telephone number or an email address) by which the individual may be contacted.
-  Definable<FixedList<Telecom>> get telecom => telecomField.getValue(this);
+  Definable<FixedList<ContactPoint>> get telecom => telecomField.getValue(this);
 
   /// Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes.
   Definable<AdministrativeGender> get gender => genderField.getValue(this);
@@ -2238,11 +2241,11 @@ class Patient extends Resource {
             .toFixedList(),
       );
 
-  static Definable<FixedList<Telecom>> _getTelecom(JsonObject jo) =>
+  static Definable<FixedList<ContactPoint>> _getTelecom(JsonObject jo) =>
       jo.getValueFromObjectArray(
         'telecom',
         fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Telecom.fromJson(dm as Map<String, dynamic>))
+            ?.map((dm) => ContactPoint.fromJson(dm as Map<String, dynamic>))
             .toFixedList(),
       );
 
@@ -2301,7 +2304,7 @@ class Patient extends Resource {
     Definable<FixedList<Identifier>>? identifier,
     Definable<bool>? active,
     Definable<FixedList<Name>>? name,
-    Definable<FixedList<Telecom>>? telecom,
+    Definable<FixedList<ContactPoint>>? telecom,
     Definable<AdministrativeGender>? gender,
     Definable<DateTime>? birthDate,
     Definable<FixedList<Address>>? address,
@@ -2332,7 +2335,7 @@ class Practitioner extends Resource {
     Definable<FixedList<Link>> link = const Undefined(),
     Definable<FixedList<Entry>> entry = const Undefined(),
     Definable<bool> active = const Undefined(),
-    Definable<FixedList<Telecom>> telecom = const Undefined(),
+    Definable<FixedList<ContactPoint>> telecom = const Undefined(),
     Definable<FixedList<Address>> address = const Undefined(),
     Definable<AdministrativeGender> gender = const Undefined(),
   }) : super._internal(
@@ -2347,7 +2350,8 @@ class Practitioner extends Resource {
             if (link is Defined<FixedList<Link>>) link.toMapEntry(),
             if (entry is Defined<FixedList<Entry>>) entry.toMapEntry(),
             if (active is Defined<bool>) active.toMapEntry(),
-            if (telecom is Defined<FixedList<Telecom>>) telecom.toMapEntry(),
+            if (telecom is Defined<FixedList<ContactPoint>>)
+              telecom.toMapEntry(),
             if (address is Defined<FixedList<Address>>) address.toMapEntry(),
             if (gender is Defined<AdministrativeGender>) gender.toMapEntry(),
           ]),
@@ -2379,7 +2383,7 @@ class Practitioner extends Resource {
   Definable<bool> get active => activeField.getValue(this);
 
   /// A contact detail for the practitioner, e.g. a telephone number or an email address.
-  Definable<FixedList<Telecom>> get telecom => telecomField.getValue(this);
+  Definable<FixedList<ContactPoint>> get telecom => telecomField.getValue(this);
 
   /// Address(es) of the practitioner that are not role specific (typically home address).
   Definable<FixedList<Address>> get address => addressField.getValue(this);
@@ -2502,11 +2506,11 @@ class Practitioner extends Resource {
             .toFixedList(),
       );
 
-  static Definable<FixedList<Telecom>> _getTelecom(JsonObject jo) =>
+  static Definable<FixedList<ContactPoint>> _getTelecom(JsonObject jo) =>
       jo.getValueFromObjectArray(
         'telecom',
         fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Telecom.fromJson(dm as Map<String, dynamic>))
+            ?.map((dm) => ContactPoint.fromJson(dm as Map<String, dynamic>))
             .toFixedList(),
       );
 
@@ -2570,7 +2574,7 @@ class Practitioner extends Resource {
     Definable<FixedList<Link>>? link,
     Definable<FixedList<Entry>>? entry,
     Definable<bool>? active,
-    Definable<FixedList<Telecom>>? telecom,
+    Definable<FixedList<ContactPoint>>? telecom,
     Definable<FixedList<Address>>? address,
     Definable<AdministrativeGender>? gender,
   }) =>

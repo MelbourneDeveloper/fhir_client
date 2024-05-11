@@ -6,9 +6,9 @@ import 'package:fhir_client/models/extension.dart';
 import 'package:jayse/jayse.dart';
 
 /// Details for all kinds of technology-mediated contact points for a person or organization, including telephone, email, etc.
-class Telecom {
-  /// Constructs a new [Telecom] with optional extension, system, value and use.
-  Telecom({
+class ContactPoint {
+  /// Constructs a new [ContactPoint] with optional extension, system, value and use.
+  ContactPoint({
     FixedList<Extension>? extension,
     String? system,
     String? value,
@@ -24,8 +24,8 @@ class Telecom {
           }),
         );
 
-  /// Constructs a new [Telecom] instance from the provided JSON object.
-  Telecom.fromJson(this._json);
+  /// Constructs a new [ContactPoint] instance from the provided JSON object.
+  ContactPoint.fromJson(this._json);
 
   final JsonObject _json;
 
@@ -65,7 +65,7 @@ class Telecom {
     getValue: _getUse,
   );
 
-  /// All field definitions for [Telecom]
+  /// All field definitions for [ContactPoint]
   static const fieldDefinitions = [
     extensionField,
     systemField,
@@ -90,13 +90,13 @@ class Telecom {
   static String? _getUse(JsonObject jo) =>
       jo.getValue(useField.name).stringValue;
 
-  /// Converts this [Telecom] instance to a JSON object.
+  /// Converts this [ContactPoint] instance to a JSON object.
   JsonObject get json => _json;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Telecom &&
+      (other is ContactPoint &&
           other.extension == extension &&
           other.system == system &&
           other.value == value &&
@@ -106,14 +106,14 @@ class Telecom {
   int get hashCode =>
       extension.hashCode ^ system.hashCode ^ value.hashCode ^ use.hashCode;
 
-  /// Creates a deep copy of this [Telecom].
-  Telecom copyWith({
+  /// Creates a deep copy of this [ContactPoint].
+  ContactPoint copyWith({
     FixedList<Extension>? extension,
     String? system,
     String? value,
     String? use,
   }) =>
-      Telecom(
+      ContactPoint(
         extension: extension ?? this.extension,
         system: system ?? this.system,
         value: value ?? this.value,
