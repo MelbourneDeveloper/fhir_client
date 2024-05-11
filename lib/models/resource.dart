@@ -97,6 +97,16 @@ sealed class Resource {
   static JsonValue _getId(JsonObject jo) => jo.getValue(idField.name);
 
   static JsonValue _getMeta(JsonObject jo) => jo.getValue(metaField.name);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      ((other is Resource) &&
+          (other.runtimeType == runtimeType) &&
+          (json == other.json));
+
+  @override
+  int get hashCode => Object.hash(runtimeType.hashCode, json.hashCode);
 }
 
 /// Represents a booking of a healthcare event among patient(s), practitioner(s),
@@ -378,13 +388,6 @@ class Bundle extends Resource {
             .toList(),
         _ => null,
       };
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) || (other is Bundle && json == other.json);
-
-  @override
-  int get hashCode => Object.hash(runtimeType.hashCode, json.hashCode);
 
   /// Creates a copy of the [Bundle] instance and allows for non-destructive mutation.
   Bundle copyWith({
@@ -959,7 +962,7 @@ class Observation extends Resource {
     FixedList<ObservationComponent>? component,
     FixedList<CodeableReference>? complicatedBy,
     FixedList<CodeableReference>? contextOfUse,
-  }) : super.fromJson(
+  }) : super._internal(
           JsonObject({
             if (id != null) Resource.idField.name: JsonString(id),
             if (meta != null) Resource.metaField.name: meta.json,
@@ -1044,7 +1047,7 @@ class Observation extends Resource {
         );
 
   /// Creates an [Observation] instance from the provided JSON object.
-  Observation.fromJson(JsonObject jsonObject) : super.fromJson(jsonObject);
+  Observation.fromJson(JsonObject jsonObject) : super._internal(jsonObject);
 
   /// Business identifier for this observation.
   FixedList<Identifier>? get identifier => identifierField.getValue(json);
@@ -1646,87 +1649,6 @@ class Observation extends Resource {
         _ => null,
       };
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Observation &&
-          other.identifier == identifier &&
-          other.basedOn == basedOn &&
-          other.partOf == partOf &&
-          other.status == status &&
-          other.category == category &&
-          other.code == code &&
-          other.subject == subject &&
-          other.encounter == encounter &&
-          other.effectiveDateTime == effectiveDateTime &&
-          other.effectivePeriod == effectivePeriod &&
-          other.effectiveTiming == effectiveTiming &&
-          other.effectiveInstant == effectiveInstant &&
-          other.issued == issued &&
-          other.valueQuantity == valueQuantity &&
-          other.valueCodeableConcept == valueCodeableConcept &&
-          other.valueString == valueString &&
-          other.valueBoolean == valueBoolean &&
-          other.valueInteger == valueInteger &&
-          other.valueRange == valueRange &&
-          other.valueRatio == valueRatio &&
-          other.valueSampledData == valueSampledData &&
-          other.valueTime == valueTime &&
-          other.valueDateTime == valueDateTime &&
-          other.valuePeriod == valuePeriod &&
-          other.dataAbsentReason == dataAbsentReason &&
-          other.interpretation == interpretation &&
-          other.note == note &&
-          other.bodySite == bodySite &&
-          other.method == method &&
-          other.specimen == specimen &&
-          other.device == device &&
-          other.referenceRange == referenceRange &&
-          other.hasMember == hasMember &&
-          other.derivedFrom == derivedFrom &&
-          other.component == component &&
-          other.complicatedBy == complicatedBy &&
-          other.contextOfUse == contextOfUse);
-  @override
-  int get hashCode =>
-      identifier.hashCode ^
-      basedOn.hashCode ^
-      partOf.hashCode ^
-      status.hashCode ^
-      category.hashCode ^
-      code.hashCode ^
-      subject.hashCode ^
-      encounter.hashCode ^
-      effectiveDateTime.hashCode ^
-      effectivePeriod.hashCode ^
-      effectiveTiming.hashCode ^
-      effectiveInstant.hashCode ^
-      issued.hashCode ^
-      valueQuantity.hashCode ^
-      valueCodeableConcept.hashCode ^
-      valueString.hashCode ^
-      valueBoolean.hashCode ^
-      valueInteger.hashCode ^
-      valueRange.hashCode ^
-      valueRatio.hashCode ^
-      valueSampledData.hashCode ^
-      valueTime.hashCode ^
-      valueDateTime.hashCode ^
-      valuePeriod.hashCode ^
-      dataAbsentReason.hashCode ^
-      interpretation.hashCode ^
-      note.hashCode ^
-      bodySite.hashCode ^
-      method.hashCode ^
-      specimen.hashCode ^
-      device.hashCode ^
-      referenceRange.hashCode ^
-      hasMember.hashCode ^
-      derivedFrom.hashCode ^
-      component.hashCode ^
-      complicatedBy.hashCode ^
-      contextOfUse.hashCode;
-
   /// Creates a copy of the [Observation] instance and allows
   /// for non-destructive mutation.
   Observation copyWith({
@@ -1817,38 +1739,36 @@ class Observation extends Resource {
 class OperationOutcome<T> extends Resource implements Result<T> {
   /// Constructs a new [OperationOutcome].
   OperationOutcome({
-    Definable<String> id = const Undefined(),
-    Definable<Meta> meta = const Undefined(),
-    Definable<Text> text = const Undefined(),
-    Definable<FixedList<Issue>> issue = const Undefined(),
+    String? id,
+    Meta? meta,
+    Text? text,
+    FixedList<Issue>? issue,
   }) : super._internal(
-          Map<String, dynamic>.fromEntries([
-            if (id is Defined<String>) id.toMapEntry(),
-            if (meta is Defined<Meta>) meta.toMapEntry(),
-            if (text is Defined<Text>) text.toMapEntry(),
-            if (issue is Defined<FixedList<Issue>>) issue.toMapEntry(),
-          ]),
+          JsonObject({
+            if (id != null) Resource.idField.name: JsonString(id),
+            if (meta != null) Resource.metaField.name: meta.json,
+            if (text != null) textField.name: text.json,
+            if (issue != null)
+              issueField.name: JsonArray.unmodifiable(issue.map((e) => e.json)),
+          }),
         );
 
   /// Creates an [OperationOutcome] instance from the provided JSON object.
-  OperationOutcome.fromJson(super.json) : super._internal();
+  OperationOutcome.fromJson(JsonObject json) : super._internal(json);
 
   OperationOutcome.error({required String message, required String details})
       : this(
-          text: Defined(
-            Text(
-              status: message,
-              div: details,
-            ),
-            textField.name,
+          text: Text(
+            status: message,
+            div: details,
           ),
         );
 
   /// A human-readable narrative that contains a summary of the resource and can be used to represent the content of the resource to a human.
-  Definable<Text> get text => textField.getValue(this);
+  Text? get text => textField.getValue(json);
 
   /// A single issue associated with the action.
-  Definable<FixedList<Issue>> get issue => issueField.getValue(this);
+  FixedList<Issue>? get issue => issueField.getValue(json);
 
   /// Field definition for [text].
   static const textField = FieldDefinition(
@@ -1869,20 +1789,17 @@ class OperationOutcome<T> extends Resource implements Result<T> {
     issueField,
   ];
 
-  static Definable<Text> _getText(JsonObject jo) => jo.getValueFromObjectArray(
-        'text',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Text.fromJson(dm as Map<String, dynamic>))
-            .first,
-      );
+  static Text? _getText(JsonObject jo) => switch (jo[textField.name]) {
+        (final JsonObject jsonObject) => Text.fromJson(jsonObject),
+        _ => null,
+      };
 
-  static Definable<FixedList<Issue>> _getIssue(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'issue',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Issue.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static FixedList<Issue>? _getIssue(JsonObject jo) =>
+      switch (jo[issueField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Issue.fromJson(e as JsonObject))),
+        _ => null,
+      };
 
   @override
   bool operator ==(Object other) =>
@@ -1898,10 +1815,10 @@ class OperationOutcome<T> extends Resource implements Result<T> {
 
   /// Creates a copy of the [OperationOutcome] instance and allows for non-destructive mutation.
   OperationOutcome<T> copyWith({
-    Definable<String>? id,
-    Definable<Meta>? meta,
-    Definable<Text>? text,
-    Definable<FixedList<Issue>>? issue,
+    String? id,
+    Meta? meta,
+    Text? text,
+    FixedList<Issue>? issue,
   }) =>
       OperationOutcome<T>(
         id: id ?? this.id,
@@ -1910,7 +1827,6 @@ class OperationOutcome<T> extends Resource implements Result<T> {
         issue: issue ?? this.issue,
       );
 }
-
 class Organization extends Resource {
   /// Constructs a new [Organization].
   Organization({
