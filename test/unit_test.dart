@@ -63,6 +63,8 @@ void main() {
         availableEndTime: Time.tryParse('17:00'),
       );
       expect(availableTime1, equals(availableTime2));
+      expect(availableTime2.json.toString(), availableTime2.json.toString());
+      expect(availableTime2.json.hashCode, availableTime2.json.hashCode);
       expect(availableTime1.hashCode, equals(availableTime2.hashCode));
 
       // Test case 2: Unequal objects (different daysOfWeek)

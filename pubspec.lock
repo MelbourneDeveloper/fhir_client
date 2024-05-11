@@ -141,10 +141,10 @@ packages:
     dependency: "direct main"
     description:
       name: jayse
-      sha256: "2733194972921e6f621bd002254ee8cc2d0675451120abc1c545e9f16a2f27ac"
+      sha256: "77f69492691fac86862f98a4a31299e3c3903a2720633251c7f8256d9580a636"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.3-alpha"
+    version: "0.0.4-beta"
   js:
     dependency: transitive
     description:
