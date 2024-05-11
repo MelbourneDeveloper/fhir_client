@@ -1,5 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars, comment_references, use_super_parameters
 
+import 'package:fhir_client/attachment.dart';
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/address.dart';
 import 'package:fhir_client/models/admit_source.dart';
@@ -2125,7 +2126,7 @@ class Patient extends Resource {
     Meta? meta,
     FixedList<Identifier>? identifier,
     bool? active,
-    FixedList<Name>? name,
+    FixedList<HumanName>? name,
     FixedList<ContactPoint>? telecom,
     AdministrativeGender? gender,
     DateTime? birthDate,
@@ -2162,7 +2163,7 @@ class Patient extends Resource {
   bool? get active => activeField.getValue(json);
 
   /// A name associated with the patient.
-  FixedList<Name>? get name => nameField.getValue(json);
+  FixedList<HumanName>? get name => nameField.getValue(json);
 
   /// A contact detail (e.g. a telephone number or an email address) by which the individual may be contacted.
   FixedList<ContactPoint>? get telecom => telecomField.getValue(json);
@@ -2240,10 +2241,10 @@ class Patient extends Resource {
 
   static bool? _getActive(JsonObject jo) => jo[activeField.name].booleanValue;
 
-  static FixedList<Name>? _getName(JsonObject jo) =>
+  static FixedList<HumanName>? _getName(JsonObject jo) =>
       switch (jo[nameField.name]) {
         (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) => Name.fromJson(e as JsonObject)),
+            jsonArray.value.map((e) => HumanName.fromJson(e as JsonObject)),
           ),
         _ => null,
       };
@@ -2281,7 +2282,7 @@ class Patient extends Resource {
     Meta? meta,
     FixedList<Identifier>? identifier,
     bool? active,
-    FixedList<Name>? name,
+    FixedList<HumanName>? name,
     FixedList<ContactPoint>? telecom,
     AdministrativeGender? gender,
     DateTime? birthDate,
@@ -2304,70 +2305,80 @@ class Patient extends Resource {
 class Practitioner extends Resource {
   /// Constructs a new [Practitioner].
   Practitioner({
-    Definable<String> id = const Undefined(),
-    Definable<Meta> meta = const Undefined(),
-    Definable<FixedList<Identifier>> identifier = const Undefined(),
-    Definable<FixedList<t.Type>> type = const Undefined(),
-    Definable<FixedList<Name>> name = const Undefined(),
-    Definable<int> total = const Undefined(),
-    Definable<FixedList<Link>> link = const Undefined(),
-    Definable<FixedList<Entry>> entry = const Undefined(),
-    Definable<bool> active = const Undefined(),
-    Definable<FixedList<ContactPoint>> telecom = const Undefined(),
-    Definable<FixedList<Address>> address = const Undefined(),
-    Definable<AdministrativeGender> gender = const Undefined(),
+    String? id,
+    Meta? meta,
+    FixedList<Identifier>? identifier,
+    bool? active,
+    FixedList<HumanName>? name,
+    FixedList<ContactPoint>? telecom,
+    FixedList<Address>? address,
+    AdministrativeGender? gender,
+    DateTime? birthDate,
+    List<Attachment>? photo,
+    List<CodeableConcept>? qualification,
+    List<CodeableConcept>? communication,
   }) : super._internal(
-          Map<String, dynamic>.fromEntries([
-            if (id is Defined<String>) id.toMapEntry(),
-            if (meta is Defined<Meta>) meta.toMapEntry(),
-            if (identifier is Defined<FixedList<Identifier>>)
-              identifier.toMapEntry(),
-            if (type is Defined<FixedList<t.Type>>) type.toMapEntry(),
-            if (name is Defined<FixedList<Name>>) name.toMapEntry(),
-            if (total is Defined<int>) total.toMapEntry(),
-            if (link is Defined<FixedList<Link>>) link.toMapEntry(),
-            if (entry is Defined<FixedList<Entry>>) entry.toMapEntry(),
-            if (active is Defined<bool>) active.toMapEntry(),
-            if (telecom is Defined<FixedList<ContactPoint>>)
-              telecom.toMapEntry(),
-            if (address is Defined<FixedList<Address>>) address.toMapEntry(),
-            if (gender is Defined<AdministrativeGender>) gender.toMapEntry(),
-          ]),
+          JsonObject({
+            if (id != null) Resource.idField.name: JsonString(id),
+            if (meta != null) Resource.metaField.name: meta.json,
+            if (identifier != null)
+              identifierField.name:
+                  JsonArray.unmodifiable(identifier.map((e) => e.json)),
+            if (active != null) activeField.name: JsonBoolean(active),
+            if (name != null)
+              nameField.name: JsonArray.unmodifiable(name.map((e) => e.json)),
+            if (telecom != null)
+              telecomField.name:
+                  JsonArray.unmodifiable(telecom.map((e) => e.json)),
+            if (address != null)
+              addressField.name:
+                  JsonArray.unmodifiable(address.map((e) => e.json)),
+            if (gender != null) genderField.name: JsonString(gender.code),
+            if (birthDate != null)
+              birthDateField.name: JsonString(birthDate.toIso8601String()),
+            if (photo != null)
+              photoField.name: JsonArray.unmodifiable(photo.map((e) => e.json)),
+            if (qualification != null)
+              qualificationField.name:
+                  JsonArray.unmodifiable(qualification.map((e) => e.json)),
+            if (communication != null)
+              communicationField.name:
+                  JsonArray.unmodifiable(communication.map((e) => e.json)),
+          }),
         );
 
   /// Creates a [Practitioner] instance from the provided JSON object.
-  Practitioner.fromJson(super.json) : super._internal();
+  Practitioner.fromJson(JsonObject json) : super._internal(json);
 
   /// An identifier that applies to this person in this role.
-  Definable<FixedList<Identifier>> get identifier =>
-      identifierField.getValue(this);
-
-  /// The kind(s) of roles the practitioner plays.
-  Definable<FixedList<t.Type>> get type => typeField.getValue(this);
-
-  /// The name(s) associated with the practitioner.
-  Definable<FixedList<Name>> get name => nameField.getValue(this);
-
-  /// The total number of entries.
-  Definable<int> get total => totalField.getValue(this);
-
-  /// A reference to a link.
-  Definable<FixedList<Link>> get link => linkField.getValue(this);
-
-  /// An entry in the practitioner's record.
-  Definable<FixedList<Entry>> get entry => entryField.getValue(this);
+  FixedList<Identifier>? get identifier => identifierField.getValue(json);
 
   /// Whether this practitioner's record is in active use.
-  Definable<bool> get active => activeField.getValue(this);
+  bool? get active => activeField.getValue(json);
+
+  /// The name(s) associated with the practitioner.
+  FixedList<HumanName>? get name => nameField.getValue(json);
 
   /// A contact detail for the practitioner, e.g. a telephone number or an email address.
-  Definable<FixedList<ContactPoint>> get telecom => telecomField.getValue(this);
+  FixedList<ContactPoint>? get telecom => telecomField.getValue(json);
 
   /// Address(es) of the practitioner that are not role specific (typically home address).
-  Definable<FixedList<Address>> get address => addressField.getValue(this);
+  FixedList<Address>? get address => addressField.getValue(json);
 
   /// Administrative Gender - the gender that the practitioner is considered to have for administration and record keeping purposes.
-  Definable<AdministrativeGender> get gender => genderField.getValue(this);
+  AdministrativeGender? get gender => genderField.getValue(json);
+
+  /// The date of birth for the practitioner.
+  DateTime? get birthDate => birthDateField.getValue(json);
+
+  /// Image of the practitioner.
+  List<Attachment>? get photo => photoField.getValue(json);
+
+  /// Qualifications obtained by the practitioner.
+  List<CodeableConcept>? get qualification => qualificationField.getValue(json);
+
+  /// A language the practitioner is able to use in patient communication.
+  List<CodeableConcept>? get communication => communicationField.getValue(json);
 
   /// Field definition for [identifier].
   static const identifierField = FieldDefinition(
@@ -2375,40 +2386,16 @@ class Practitioner extends Resource {
     getValue: _getIdentifier,
   );
 
-  /// Field definition for [type].
-  static const typeField = FieldDefinition(
-    name: 'type',
-    getValue: _getType,
+  /// Field definition for [active].
+  static const activeField = FieldDefinition(
+    name: 'active',
+    getValue: _getActive,
   );
 
   /// Field definition for [name].
   static const nameField = FieldDefinition(
     name: 'name',
     getValue: _getName,
-  );
-
-  /// Field definition for [total].
-  static final totalField = FieldDefinition(
-    name: 'total',
-    getValue: (jo) => jo.getValue<int>('total'),
-  );
-
-  /// Field definition for [link].
-  static const linkField = FieldDefinition(
-    name: 'link',
-    getValue: _getLink,
-  );
-
-  /// Field definition for [entry].
-  static const entryField = FieldDefinition(
-    name: 'entry',
-    getValue: _getEntry,
-  );
-
-  /// Field definition for [active].
-  static final activeField = FieldDefinition(
-    name: 'active',
-    getValue: (jo) => jo.getValue<bool>('active'),
   );
 
   /// Field definition for [telecom].
@@ -2429,146 +2416,144 @@ class Practitioner extends Resource {
     getValue: _getGender,
   );
 
+  /// Field definition for [birthDate].
+  static const birthDateField = FieldDefinition(
+    name: 'birthDate',
+    getValue: _getBirthDate,
+  );
+
+  /// Field definition for [photo].
+  static const photoField = FieldDefinition(
+    name: 'photo',
+    getValue: _getPhoto,
+  );
+
+  /// Field definition for [qualification].
+  static const qualificationField = FieldDefinition(
+    name: 'qualification',
+    getValue: _getQualification,
+  );
+
+  /// Field definition for [communication].
+  static const communicationField = FieldDefinition(
+    name: 'communication',
+    getValue: _getCommunication,
+  );
+
   /// All field definitions for [Practitioner].
-  static final fieldDefinitions = [
+  static const fieldDefinitions = [
     ...Resource.fieldDefinitions,
     identifierField,
-    typeField,
-    nameField,
-    totalField,
-    linkField,
-    entryField,
     activeField,
+    nameField,
     telecomField,
     addressField,
     genderField,
+    birthDateField,
+    photoField,
+    qualificationField,
+    communicationField,
   ];
 
-  static Definable<FixedList<Identifier>> _getIdentifier(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'identifier',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Identifier.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static FixedList<Identifier>? _getIdentifier(JsonObject jo) =>
+      switch (jo[identifierField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Identifier.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
 
-  static Definable<FixedList<t.Type>> _getType(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'type',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => t.Type.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static bool? _getActive(JsonObject jo) => jo[activeField.name].booleanValue;
 
-  static Definable<FixedList<Name>> _getName(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'name',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Name.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static FixedList<HumanName>? _getName(JsonObject jo) =>
+      switch (jo[nameField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => HumanName.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
 
-  static Definable<FixedList<Link>> _getLink(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'link',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Link.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static FixedList<ContactPoint>? _getTelecom(JsonObject jo) =>
+      switch (jo[telecomField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => ContactPoint.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
 
-  static Definable<FixedList<Entry>> _getEntry(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'entry',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Entry.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static FixedList<Address>? _getAddress(JsonObject jo) =>
+      switch (jo[addressField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Address.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
 
-  static Definable<FixedList<ContactPoint>> _getTelecom(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'telecom',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => ContactPoint.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static AdministrativeGender? _getGender(JsonObject jo) =>
+      switch (jo[genderField.name]) {
+        (final JsonString jsonString) =>
+          AdministrativeGender.fromCode(jsonString.value),
+        _ => null,
+      };
 
-  static Definable<FixedList<Address>> _getAddress(JsonObject jo) =>
-      jo.getValueFromObjectArray(
-        'address',
-        fromObjectArray: (jsonTags) => jsonTags
-            ?.map((dm) => Address.fromJson(dm as Map<String, dynamic>))
-            .toFixedList(),
-      );
+  static DateTime? _getBirthDate(JsonObject jo) =>
+      switch (jo[birthDateField.name]) {
+        (final JsonString jsonString) => DateTime.parse(jsonString.value),
+        _ => null,
+      };
 
-  static Definable<AdministrativeGender> _getGender(JsonObject jo) =>
-      jo.getValueFromString(
-        'gender',
-        tryParse: (value) => value != null
-            ? AdministrativeGender.fromCode(value)
-            : AdministrativeGender.unknown,
-      );
+  static List<Attachment>? _getPhoto(JsonObject jo) =>
+      switch (jo[photoField.name]) {
+        (final JsonArray jsonArray) => jsonArray.value
+            .map((e) => Attachment.fromJson(e as JsonObject))
+            .toList(),
+        _ => null,
+      };
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Practitioner &&
-          other.id == id &&
-          other.meta == meta &&
-          other.identifier == identifier &&
-          other.type == type &&
-          other.name == name &&
-          other.total == total &&
-          other.link == link &&
-          other.entry == entry &&
-          other.active == active &&
-          other.telecom == telecom &&
-          other.address == address &&
-          other.gender == gender);
+  static List<CodeableConcept>? _getQualification(JsonObject jo) =>
+      switch (jo[qualificationField.name]) {
+        (final JsonArray jsonArray) => jsonArray.value
+            .map((e) => CodeableConcept.fromJson(e as JsonObject))
+            .toList(),
+        _ => null,
+      };
 
-  @override
-  int get hashCode => Object.hash(
-        id,
-        meta,
-        identifier,
-        type,
-        name,
-        total,
-        link,
-        entry,
-        active,
-        telecom,
-        address,
-        gender,
-      );
+  static List<CodeableConcept>? _getCommunication(JsonObject jo) =>
+      switch (jo[communicationField.name]) {
+        (final JsonArray jsonArray) => jsonArray.value
+            .map((e) => CodeableConcept.fromJson(e as JsonObject))
+            .toList(),
+        _ => null,
+      };
 
   /// Creates a copy of the [Practitioner] instance and allows for non-destructive mutation.
   Practitioner copyWith({
-    Definable<String>? id,
-    Definable<Meta>? meta,
-    Definable<FixedList<Identifier>>? identifier,
-    Definable<FixedList<t.Type>>? type,
-    Definable<FixedList<Name>>? name,
-    Definable<int>? total,
-    Definable<FixedList<Link>>? link,
-    Definable<FixedList<Entry>>? entry,
-    Definable<bool>? active,
-    Definable<FixedList<ContactPoint>>? telecom,
-    Definable<FixedList<Address>>? address,
-    Definable<AdministrativeGender>? gender,
+    String? id,
+    Meta? meta,
+    FixedList<Identifier>? identifier,
+    bool? active,
+    FixedList<HumanName>? name,
+    FixedList<ContactPoint>? telecom,
+    FixedList<Address>? address,
+    AdministrativeGender? gender,
+    DateTime? birthDate,
+    List<Attachment>? photo,
+    List<CodeableConcept>? qualification,
+    List<CodeableConcept>? communication,
   }) =>
       Practitioner(
         id: id ?? this.id,
         meta: meta ?? this.meta,
         identifier: identifier ?? this.identifier,
-        type: type ?? this.type,
-        name: name ?? this.name,
-        total: total ?? this.total,
-        link: link ?? this.link,
-        entry: entry ?? this.entry,
         active: active ?? this.active,
+        name: name ?? this.name,
         telecom: telecom ?? this.telecom,
         address: address ?? this.address,
         gender: gender ?? this.gender,
+        birthDate: birthDate ?? this.birthDate,
+        photo: photo ?? this.photo,
+        qualification: qualification ?? this.qualification,
+        communication: communication ?? this.communication,
       );
 }
 

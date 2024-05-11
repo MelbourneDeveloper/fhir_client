@@ -3,9 +3,9 @@ import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:jayse/jayse.dart';
 
 /// A name of a human with text, parts and usage information.
-class Name {
-  /// Constructs a new [Name] with optional family, use, given and prefix.
-  Name({
+class HumanName {
+  /// Constructs a new [HumanName] with optional family, use, given and prefix.
+  HumanName({
     String? family,
     String? use,
     FixedList<String>? given,
@@ -23,8 +23,8 @@ class Name {
           }),
         );
 
-  /// Constructs a new [Name] instance from the provided JSON object.
-  Name.fromJson(this._json);
+  /// Constructs a new [HumanName] instance from the provided JSON object.
+  HumanName.fromJson(this._json);
 
   final JsonObject _json;
 
@@ -84,7 +84,7 @@ class Name {
     getValue: _getPrefix,
   );
 
-  /// All field definitions for [Name]
+  /// All field definitions for [HumanName]
   static const fieldDefinitions = [
     familyField,
     useField,
@@ -110,13 +110,13 @@ class Name {
         _ => null,
       };
 
-  /// Converts this [Name] instance to a JSON object.
+  /// Converts this [HumanName] instance to a JSON object.
   JsonObject get json => _json;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Name &&
+      (other is HumanName &&
           other.family == family &&
           other.use == use &&
           other.given == given &&
@@ -126,14 +126,14 @@ class Name {
   int get hashCode =>
       family.hashCode ^ use.hashCode ^ given.hashCode ^ prefix.hashCode;
 
-  /// Makes a copy of this [Name] but with the given fields updated.
-  Name copyWith({
+  /// Makes a copy of this [HumanName] but with the given fields updated.
+  HumanName copyWith({
     String? family,
     String? use,
     FixedList<String>? given,
     FixedList<String>? prefix,
   }) =>
-      Name(
+      HumanName(
         family: family ?? this.family,
         use: use ?? this.use,
         given: given ?? this.given,
