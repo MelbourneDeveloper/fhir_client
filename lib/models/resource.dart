@@ -127,7 +127,7 @@ sealed class Resource {
 }
 
 extension ResourceExtensions<T extends Resource> on T {
-  /// Creates a clone of the resource with the provided field updated with 
+  /// Creates a clone of the resource with the provided field updated with
   /// another resource
   UpdateResult<T> withFieldResource<T extends Resource, T2 extends Resource>(
     FieldDefinition<T2> field,
@@ -139,6 +139,22 @@ extension ResourceExtensions<T extends Resource> on T {
         (final JsonValue fieldValue) => UpdateSuccess(
             constructor(this.json.withUpdate(field.name, resource.json))),
       };
+
+  UpdateResult<T> withNullField<T2>(
+    FieldDefinition<T2> field, {
+    required T Function(JsonObject) constructor,
+  }) =>
+      UpdateSuccess(
+        constructor(this.json.withUpdate(field.name, JsonNull())),
+      );
+
+  UpdateResult<T> withUndefinedField<T2>(
+    FieldDefinition<T2> field, {
+    required T Function(JsonObject) constructor,
+  }) =>
+      UpdateSuccess(
+        constructor(this.json.withUpdate(field.name, Undefined())),
+      );
 }
 
 /// Represents a booking of a healthcare event among patient(s), practitioner(s),
