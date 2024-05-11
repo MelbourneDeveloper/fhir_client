@@ -3,15 +3,15 @@ import 'package:jayse/jayse.dart';
 
 /// A time period defined by a start and end date/time.
 class Period {
-
   /// Creates a new [Period] instance.
   Period({
-    String? start,
-    String? end,
+    DateTime? start,
+    DateTime? end,
   }) : this.fromJson(
           JsonObject({
-            if (start != null) startField.name: JsonString(start),
-            if (end != null) endField.name: JsonString(end),
+            if (start != null)
+              startField.name: JsonString(start.toIso8601String()),
+            if (end != null) endField.name: JsonString(end.toIso8601String()),
           }),
         );
 
@@ -21,10 +21,10 @@ class Period {
   final JsonObject _json;
 
   /// The start of the period. The boundary is inclusive.
-  String? get start => startField.getValue(_json);
+  DateTime? get start => startField.getValue(_json);
 
   /// The end of the period. If the end of the period is missing, it means that the period is ongoing. The start may be in the past, and the end date in the future, which means that period is expected/planned to end at that time.
-  String? get end => endField.getValue(_json);
+  DateTime? get end => endField.getValue(_json);
 
   /// Field definition for [start]
   static const startField = FieldDefinition(
@@ -44,11 +44,11 @@ class Period {
     endField,
   ];
 
-  static String? _getStart(JsonObject jo) =>
-      jo.getValue(startField.name).stringValue;
+  static DateTime? _getStart(JsonObject jo) =>
+      jo.getValue(startField.name).dateTimeValue;
 
-  static String? _getEnd(JsonObject jo) =>
-      jo.getValue(endField.name).stringValue;
+  static DateTime? _getEnd(JsonObject jo) =>
+      jo.getValue(endField.name).dateTimeValue;
 
   /// Converts this [Period] instance to a JSON object.
   JsonObject get json => _json;
@@ -63,8 +63,8 @@ class Period {
 
   /// Makes a copy of this [Period]
   Period copyWith({
-    String? start,
-    String? end,
+    DateTime? start,
+    DateTime? end,
   }) =>
       Period(
         start: start ?? this.start,
