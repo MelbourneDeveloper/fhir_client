@@ -140,7 +140,7 @@ void main() {
       const system = 'sdfsdfsfd';
       final tag2 = Tag.fromJson(JsonObject.fromJson({'system': system}));
       final map = tag2.json;
-      expect(map['system'], system);
+      expect(map['system'].stringValue, system);
 
       final tag3 = tag2.copyWith(code: 'new code');
       expectEquals(tag3.code, 'new code');
@@ -150,7 +150,7 @@ void main() {
       final tag4 =
           Tag.fromJson(tag3.json.withUpdate('code', const Undefined()));
 
-      expectEquals(tag4.code, const Undefined());
+      expect(tag4.code, null);
     });
   });
 }
