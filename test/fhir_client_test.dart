@@ -484,9 +484,9 @@ void main() {
       // Assertions for each field in the JSON
       expect(first.id, '9391491');
       expectEquals(first.meta?.versionId, '1');
-      expectEquals(
+      expect(
         first.meta?.lastUpdated,
-        DateTime.parse('2023-04-10T10:33:32.673+00:00'),
+        DateTime.utc(2023,04,10,10,33,32,673),
       );
       expectEquals(first.meta?.source, '#nw7ecyTCXojBLbEq');
       expect(first.status, 'final');
@@ -506,8 +506,8 @@ void main() {
       expect(first.subject?.reference, 'Patient/9391475');
       expect(first.encounter?.reference, 'Encounter/9391490');
       expect(
-        first.effectiveDateTime == '2011-04-18T15:44:18-04:00',
-        true,
+        first.effectiveDateTime ,
+        DateTime.utc(2011,04,18,19,44,18),
       );
       expect(first.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
       expect(first.valueQuantity?.value, 179.30389202058845);
