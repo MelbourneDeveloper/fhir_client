@@ -98,15 +98,19 @@ class HumanName {
   static String? _getUse(JsonObject jo) =>
       jo.getValue(useField.name).stringValue;
 
+  //TODO: reassess casting
   static FixedList<String>? _getGiven(JsonObject jo) => switch (jo['given']) {
-        (final JsonArray jsonArray) =>
-          FixedList(jsonArray.value.whereType<String>()),
+        (final JsonArray jsonArray)
+            when jsonArray.value.every((jv) => jv is JsonString) =>
+          FixedList(jsonArray.value.map((e) => (e as JsonString).value)),
         _ => null,
       };
 
+  //TODO: reassess casting
   static FixedList<String>? _getPrefix(JsonObject jo) => switch (jo['prefix']) {
-        (final JsonArray jsonArray) =>
-          FixedList(jsonArray.value.whereType<String>()),
+        (final JsonArray jsonArray)
+            when jsonArray.value.every((jv) => jv is JsonString) =>
+          FixedList(jsonArray.value.map((e) => (e as JsonString).value)),
         _ => null,
       };
 

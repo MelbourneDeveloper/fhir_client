@@ -2473,7 +2473,9 @@ class Practitioner extends Resource {
 
   static FixedList<HumanName>? _getName(JsonObject jo) =>
       switch (jo[nameField.name]) {
-        (final JsonArray jsonArray) => FixedList(
+        (final JsonArray jsonArray)
+            when jsonArray.value.every((jv) => jv is JsonObject) =>
+          FixedList(
             //TODO: bad casting here
             jsonArray.value.map((jv) => HumanName.fromJson(jv as JsonObject)),
           ),
