@@ -1,5 +1,5 @@
-import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/quantity.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
 /// A series of measurements taken by a device, with upper and lower limits.

@@ -1,8 +1,8 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/search.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
 /// An entry in a bundle resource - will either contain a resource or information about a resource (transactions and history only).

@@ -1,5 +1,5 @@
-import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/quantity.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
 /// A relationship of two Quantity values - expressed as a numerator and a

@@ -1,5 +1,5 @@
-import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/period.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
 /// The practitioner is not available or performing this role during this 

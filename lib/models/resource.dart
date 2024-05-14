@@ -5,7 +5,6 @@ import 'package:fhir_client/models/address.dart';
 import 'package:fhir_client/models/admit_source.dart';
 import 'package:fhir_client/models/annotation.dart';
 import 'package:fhir_client/models/available_time.dart';
-import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
@@ -37,6 +36,7 @@ import 'package:fhir_client/models/value_sets/appointment_status.dart';
 import 'package:fhir_client/models/value_sets/encounter_status.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
 import 'package:fhir_client/models/value_sets/slot_status.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
 /// The result of an update operation
@@ -204,18 +204,27 @@ class Appointment extends Resource {
   static const statusField = FieldDefinition(
     name: 'status',
     getValue: _getStatus,
+    isRequired: true,
+    allowedValues: AppointmentStatus.values,
+    description: 'The overall status of the appointment.',
   );
 
   /// Field definition for [serviceCategory]
   static const serviceCategoryField = FieldDefinition(
     name: 'serviceCategory',
     getValue: _getServiceCategory,
+    min: 0,
+    max: 1,
+    description:
+        'A broad categorization of the service that is to be performed during this appointment.',
   );
 
   /// Field definition for [participant]
   static const participantField = FieldDefinition(
     name: 'participant',
     getValue: _getParticipant,
+    min: 1,
+    description: 'List of participants involved in the appointment.',
   );
 
   /// All field definitions for [Appointment].

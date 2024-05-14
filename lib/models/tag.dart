@@ -1,4 +1,4 @@
-import 'package:fhir_client/models/basic_types/field_definition.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
 /// A coding that represents a tag on a resource.

@@ -1,6 +1,6 @@
-import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/period.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
 /// An address expressed using postal conventions (as opposed to GPS or

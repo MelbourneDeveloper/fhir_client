@@ -1,6 +1,6 @@
-import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/tag.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
 /// The metadata about a resource. This is content in the resource that is

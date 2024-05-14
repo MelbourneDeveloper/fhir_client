@@ -1,4 +1,4 @@
-import 'package:fhir_client/models/basic_types/field_definition.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
 /// Information about the search process that lead to the creation of this 

@@ -1,7 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/type.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
 /// A numeric or alphanumeric string that is associated with a single object or entity within a given system.

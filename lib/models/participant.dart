@@ -1,6 +1,6 @@
 import 'package:fhir_client/models/actor.dart';
-import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/value_sets/participation_status.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
 /// Represents a participant in a clinical or administrative process,

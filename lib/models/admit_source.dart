@@ -1,6 +1,6 @@
-import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/reference.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
 /// The source of admission for a patient to a healthcare service.

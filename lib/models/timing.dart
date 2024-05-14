@@ -1,9 +1,9 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/repeat.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
 /// Specifies an event that may occur multiple times.
