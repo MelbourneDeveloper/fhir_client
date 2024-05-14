@@ -1,8 +1,9 @@
-// ignore_for_file: lines_longer_than_80_chars
-
-/// A time during the day, in the format hh:mm:ss (a subset of ISO8601 icon). There is no date specified. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored at receiver discretion. The time "24:00" SHALL NOT be used. A timezone offset SHALL NOT be present. Times can be converted to a Duration since midnight.
+/// A time during the day, in the format hh:mm:ss (a subset of ISO8601 icon).
+/// There is no date specified. Seconds must be provided due to schema type
+/// constraints but may be zero-filled and may be ignored at receiver 
+/// discretion. The time "24:00" SHALL NOT be used. A timezone offset SHALL 
+/// NOT be present. Times can be converted to a Duration since midnight.
 class Time {
-
   /// Creates a [Time] instance
   Time({
     required this.hour,

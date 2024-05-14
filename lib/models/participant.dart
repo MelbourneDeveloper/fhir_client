@@ -1,20 +1,20 @@
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/basic_types/field_definition.dart';
+import 'package:fhir_client/models/value_sets/participation_status.dart';
 import 'package:jayse/jayse.dart';
 
-/// Represents a participant in a clinical or administrative process, 
-/// potentially linked to a specific actor entity and with a status 
+/// Represents a participant in a clinical or administrative process,
+/// potentially linked to a specific actor entity and with a status
 /// reflecting their role or involvement.
 class Participant {
-
   /// Constructs a new [Participant].
   Participant({
     Actor? actor,
-    String? status,
+    ParticipationStatus? status,
   }) : this.fromJson(
           JsonObject({
             if (actor != null) actorField.name: actor.json,
-            if (status != null) statusField.name: JsonString(status),
+            if (status != null) statusField.name: JsonString(status.code),
           }),
         );
 
@@ -30,7 +30,7 @@ class Participant {
   Actor? get actor => actorField.getValue(_json);
 
   /// The status of participation (e.g., confirmed, declined).
-  String? get status => statusField.getValue(_json);
+  ParticipationStatus? get status => statusField.getValue(_json);
 
   /// Field definition for [actor].
   static const actorField = FieldDefinition(
@@ -54,8 +54,11 @@ class Participant {
       ? Actor.fromJson(jo['actor'] as JsonObject)
       : null;
 
-  static String? _getStatus(JsonObject jo) =>
-      jo.getValue(statusField.name).stringValue;
+  static ParticipationStatus? _getStatus(JsonObject jo) =>
+      switch (jo[statusField.name]) {
+        (final JsonString js) => ParticipationStatus.fromCode(js.value),
+        _ => null,
+      };
 
   @override
   bool operator ==(Object other) =>
@@ -69,7 +72,7 @@ class Participant {
   /// non-destructive mutation.
   Participant copyWith({
     Actor? actor,
-    String? status,
+    ParticipationStatus? status,
   }) =>
       Participant(
         actor: actor ?? this.actor,
