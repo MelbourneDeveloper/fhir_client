@@ -5,6 +5,7 @@ import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/reference.dart';
 import 'package:fhir_client/models/resource.dart';
+import 'package:fhir_client/models/value_sets/slot_status.dart';
 import 'package:http/http.dart';
 
 //The base HAPI API URI
@@ -22,7 +23,7 @@ Future<void> main() async {
     client.searchSlots(
       baseUri,
       count: 10,
-      status: 'free',
+      status: SlotStatus.free,
     ),
     client.searchSchedules(baseUri, count: 10),
     client.searchPractitionerRoles(baseUri, count: 10),

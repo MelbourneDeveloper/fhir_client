@@ -34,6 +34,7 @@ import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/timing.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
+import 'package:fhir_client/models/value_sets/slot_status.dart';
 import 'package:jayse/jayse.dart';
 
 /// The result of an update operation
@@ -2922,7 +2923,7 @@ class Slot extends Resource {
     List<CodeableConcept>? specialty,
     CodeableConcept? appointmentType,
     String? schedule,
-    String? status,
+    SlotStatus? status,
     DateTime? start,
     DateTime? end,
     bool? overbooked,
@@ -2946,7 +2947,7 @@ class Slot extends Resource {
             if (appointmentType != null)
               appointmentTypeField.name: appointmentType.json,
             if (schedule != null) scheduleField.name: JsonString(schedule),
-            if (status != null) statusField.name: JsonString(status),
+            if (status != null) statusField.name: JsonString(status.code),
             if (start != null)
               startField.name: JsonString(start.toIso8601String()),
             if (end != null) endField.name: JsonString(end.toIso8601String()),
@@ -2979,7 +2980,7 @@ class Slot extends Resource {
   String? get schedule => scheduleField.getValue(json);
 
   /// The status of the slot.
-  String? get status => statusField.getValue(json);
+  SlotStatus? get status => statusField.getValue(json);
 
   /// Date/Time that the slot is to begin.
   DateTime? get start => startField.getValue(json);
@@ -3116,7 +3117,11 @@ class Slot extends Resource {
   static String? _getSchedule(JsonObject jo) =>
       jo[scheduleField.name].stringValue;
 
-  static String? _getStatus(JsonObject jo) => jo[statusField.name].stringValue;
+  static SlotStatus? _getStatus(JsonObject jo) =>
+      switch (jo[statusField.name]) {
+        (final JsonString js) => SlotStatus.fromCode(js.value),
+        _ => null,
+      };
 
   static DateTime? _getStart(JsonObject jo) => DateTime.tryParse(
         jo[startField.name].stringValue ?? '',
@@ -3142,7 +3147,7 @@ class Slot extends Resource {
     List<CodeableConcept>? specialty,
     CodeableConcept? appointmentType,
     String? schedule,
-    String? status,
+    SlotStatus? status,
     DateTime? start,
     DateTime? end,
     bool? overbooked,

@@ -1,6 +1,7 @@
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
+import 'package:fhir_client/models/value_sets/slot_status.dart';
 import 'package:http/http.dart';
 import 'package:jayse/jayse.dart';
 
@@ -157,7 +158,7 @@ extension FhirExtensions on Client {
     String baseUri, {
     String version = 'baseR4',
     int? count,
-    String? status,
+    SlotStatus? status,
   }) async =>
       search(
         baseUri,
@@ -165,7 +166,7 @@ extension FhirExtensions on Client {
         version: version,
         queryString: _queryString([
           if (count != null) MapEntry('_count', count.toString()),
-          if (status != null) MapEntry('status', status),
+          if (status != null) MapEntry('status', status.code),
         ]),
       );
 

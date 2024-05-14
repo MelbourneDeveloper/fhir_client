@@ -13,6 +13,7 @@ import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/meta.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
+import 'package:fhir_client/models/value_sets/slot_status.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'package:jayse/jayse.dart';
@@ -714,7 +715,7 @@ void main() {
         (c) async => await c.searchSlots(
           baseUri,
           count: 10,
-          status: 'free',
+          status: SlotStatus.free,
         ) as BundleEntries<Slot>,
       );
 
