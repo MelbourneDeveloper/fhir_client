@@ -34,6 +34,7 @@ import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/timing.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 import 'package:fhir_client/models/value_sets/appointment_status.dart';
+import 'package:fhir_client/models/value_sets/encounter_status.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
 import 'package:fhir_client/models/value_sets/slot_status.dart';
 import 'package:jayse/jayse.dart';
@@ -462,7 +463,7 @@ class Encounter extends Resource {
     String? id,
     Meta? meta,
     FixedList<Identifier>? identifier,
-    String? status,
+    EncounterStatus? status,
     CodeableConcept? classCode,
     FixedList<CodeableConcept>? type,
     CodeableConcept? serviceType,
@@ -481,7 +482,7 @@ class Encounter extends Resource {
             if (identifier != null)
               identifierField.name:
                   JsonArray.unmodifiable(identifier.map((e) => e.json)),
-            if (status != null) statusField.name: JsonString(status),
+            if (status != null) statusField.name: JsonString(status.code),
             if (classCode != null) classField.name: classCode.json,
             if (type != null)
               typeField.name: JsonArray.unmodifiable(type.map((e) => e.json)),
@@ -511,7 +512,7 @@ class Encounter extends Resource {
   FixedList<Identifier>? get identifier => identifierField.getValue(json);
 
   /// The current status of the encounter.
-  String? get status => statusField.getValue(json);
+  EncounterStatus? get status => statusField.getValue(json);
 
   /// Classification of patient encounter context - e.g. Inpatient, outpatient.
   CodeableConcept? get classCode => classField.getValue(json);
@@ -650,7 +651,11 @@ class Encounter extends Resource {
         _ => null,
       };
 
-  static String? _getStatus(JsonObject jo) => jo[statusField.name].stringValue;
+  static EncounterStatus? _getStatus(JsonObject jo) =>
+      switch (jo[statusField.name]) {
+        (final JsonString js) => EncounterStatus.fromCode(js.value),
+        _ => null,
+      };
 
   static CodeableConcept? _getClassCode(JsonObject jo) =>
       switch (jo[classField.name]) {
@@ -764,7 +769,7 @@ class Encounter extends Resource {
   /// Creates a copy of the [Encounter] instance and allows for non-destructive mutation.
   Encounter copyWith({
     FixedList<Identifier>? identifier,
-    String? status,
+    EncounterStatus? status,
     CodeableConcept? classCode,
     FixedList<CodeableConcept>? type,
     CodeableConcept? serviceType,

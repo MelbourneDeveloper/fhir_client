@@ -14,6 +14,7 @@ import 'package:fhir_client/models/meta.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 import 'package:fhir_client/models/value_sets/appointment_status.dart';
+import 'package:fhir_client/models/value_sets/encounter_status.dart';
 import 'package:fhir_client/models/value_sets/slot_status.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
@@ -468,6 +469,8 @@ void main() {
         first.id,
         '8728249',
       );
+
+      expect(first.status, EncounterStatus.finished);
     });
 
     test('Observation Search', () async {
