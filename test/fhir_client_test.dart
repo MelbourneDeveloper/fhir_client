@@ -876,16 +876,16 @@ void main() {
       expect(patient.birthDate, DateTime.parse('1985-01-23'));
 
       final map = first.json;
-      expect(map['id'], '8728293');
-      expect(map['resourceType'], 'Patient');
+      expect(map['id'], const JsonString('8728293'));
+      expect(map['resourceType'], const JsonString('Patient'));
 
       // ignore_for_block: avoid_dynamic_calls
-      expect(map['meta']['versionId'], '1');
+      expect(map['meta']['versionId'], const JsonString('1'));
       expect(
         map['meta']['lastUpdated'],
-        '2023-03-21T10:42:21.276+00:00',
+        const JsonString('2023-03-21T10:42:21.276+00:00'),
       );
-      expect(map['meta']['source'], '#atCUOwuOCtijIb20');
+      expect(map['meta']['source'], const JsonString('#atCUOwuOCtijIb20'));
       // expect(map['text']['status'], 'generated');
       // expect(
       //   map['text']['div'],
@@ -894,20 +894,26 @@ void main() {
       expect((map['identifier'] as JsonArray).value.length, 1);
       expect(
         (map['identifier'] as JsonArray).value[0]['system'],
-        'http://clinfhir.com/fhir/NamingSystem/identifier',
+        const JsonString('http://clinfhir.com/fhir/NamingSystem/identifier'),
       );
-      expect((map['identifier'] as JsonArray).value[0]['value'], '0987654321');
+      expect(
+        (map['identifier'] as JsonArray).value[0]['value'],
+        const JsonString('0987654321'),
+      );
       final nameArray = (map['name'] as JsonArray).value;
       expect(nameArray.length, 1);
       final firstName = nameArray[0];
-      expect(firstName['use'], 'official');
+      expect(firstName['use'], const JsonString('official'));
       // expect(map['name'][0]['text'], 'Ruben Manzaneque');
-      expect(firstName['family'], 'Manzaneque');
+      expect(firstName['family'], const JsonString('Manzaneque'));
       expect((firstName['given'] as JsonArray).value.length, 1);
-      expect((firstName['given'] as JsonArray).value[0], 'Ruben');
+      expect(
+        (firstName['given'] as JsonArray).value[0],
+        const JsonString('Ruben'),
+      );
       // end of block to ignore rules
-      expect(map['gender'], 'male');
-      expect(map['birthDate'], '1992-10-12T00:00:00.000');
+      expect(map['gender'], const JsonString('male'));
+      expect(map['birthDate'], const JsonString('1992-10-12'));
     });
   });
 
