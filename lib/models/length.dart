@@ -1,14 +1,10 @@
 import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
-/// A measured amount (or an amount that can potentially be measured).
-/// Note that measured amounts include amounts that are not precisely
-/// quantified, including amounts involving arbitrary units and floating
-/// currencies.
-class Quantity {
-
-  /// Constructs a new [Quantity]
-  Quantity({
+/// The length of time the encounter lasted (less time absent).
+class Length {
+  /// Constructs a new [Length] with optional value, unit, system, and code.
+  Length({
     num? value,
     String? unit,
     Uri? system,
@@ -22,22 +18,21 @@ class Quantity {
           }),
         );
 
-  /// Constructs a new [Quantity] instance from the provided JSON object.
-  Quantity.fromJson(this._json);
+  /// Constructs a new [Length] instance from the provided JSON object.
+  Length.fromJson(this._json);
 
   final JsonObject _json;
 
-  /// The value of the measured amount. The value includes an implicit
-  /// precision in the presentation of the value.
+  /// The value of the length.
   num? get value => valueField.getValue(_json);
 
-  /// A human-readable form of the unit.
+  /// The unit representation of the length.
   String? get unit => unitField.getValue(_json);
 
-  /// The identification of the system that provides the coded form of the unit.
+  /// The system that defines the coded unit form.
   Uri? get system => systemField.getValue(_json);
 
-  /// A computer processable form of the unit in some unit representation
+  /// A computer processable form of the unit in some unit representation 
   /// system.
   String? get code => codeField.getValue(_json);
 
@@ -65,7 +60,7 @@ class Quantity {
     getValue: _getCode,
   );
 
-  /// All field definitions for [Quantity]
+  /// All field definitions for [Length]
   static const fieldDefinitions = [
     valueField,
     unitField,
@@ -87,13 +82,13 @@ class Quantity {
   static String? _getCode(JsonObject jo) =>
       jo.getValue(codeField.name).stringValue;
 
-  /// Converts this [Quantity] instance to a JSON object.
+  /// Converts this [Length] instance to a JSON object.
   JsonObject get json => _json;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Quantity &&
+      (other is Length &&
           other.value == value &&
           other.unit == unit &&
           other.system == system &&
@@ -103,14 +98,15 @@ class Quantity {
   int get hashCode =>
       value.hashCode ^ unit.hashCode ^ system.hashCode ^ code.hashCode;
 
-  /// Makes a deep copy of this [Quantity].
-  Quantity copyWith({
+  /// Creates a copy of the [Length] instance and allows for 
+  /// non-destructive mutation.
+  Length copyWith({
     num? value,
     String? unit,
     Uri? system,
     String? code,
   }) =>
-      Quantity(
+      Length(
         value: value ?? this.value,
         unit: unit ?? this.unit,
         system: system ?? this.system,

@@ -1,7 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
-import 'package:fhir_client/models/basic_types/string_backed_value.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/observation_reference_range.dart';
@@ -10,149 +9,176 @@ import 'package:fhir_client/models/quantity.dart';
 import 'package:fhir_client/models/range.dart';
 import 'package:fhir_client/models/ratio.dart';
 import 'package:fhir_client/models/sampled_data.dart';
+import 'package:jayse/jayse.dart';
 
-/// Some observations have multiple component observations.
-/// These component observations are expressed as separate code value pairs that share the same attributes.
-/// Examples include systolic and diastolic component observations for blood pressure measurement and multiple component observations for genetics observations.
+/// Represents a single observation component within a larger observation.
 class ObservationComponent {
+  /// Constructs a new [ObservationComponent] with various optional measurement values and attributes.
   ObservationComponent({
-    this.code,
-    this.valueQuantity,
-    this.valueCodeableConcept,
-    this.valueString,
-    this.valueBoolean,
-    this.valueInteger,
-    this.valueRange,
-    this.valueRatio,
-    this.valueSampledData,
-    this.valueTime,
-    this.valueDateTime,
-    this.valuePeriod,
-    this.dataAbsentReason,
-    this.interpretation,
-    this.referenceRange,
-  });
+    CodeableConcept? code,
+    Quantity? valueQuantity,
+    CodeableConcept? valueCodeableConcept,
+    String? valueString,
+    bool? valueBoolean,
+    int? valueInteger,
+    Range? valueRange,
+    Ratio? valueRatio,
+    SampledData? valueSampledData,
+    Time? valueTime,
+    DateTime? valueDateTime,
+    Period? valuePeriod,
+    CodeableConcept? dataAbsentReason,
+    FixedList<CodeableConcept>? interpretation,
+    FixedList<ObservationReferenceRange>? referenceRange,
+  }) : this.fromJson(
+          JsonObject({
+            if (code != null) 'code': code.json,
+            if (valueQuantity != null) 'valueQuantity': valueQuantity.json,
+            if (valueCodeableConcept != null)
+              'valueCodeableConcept': valueCodeableConcept.json,
+            if (valueString != null) 'valueString': JsonString(valueString),
+            if (valueBoolean != null) 'valueBoolean': JsonBoolean(valueBoolean),
+            if (valueInteger != null) 'valueInteger': JsonNumber(valueInteger),
+            if (valueRange != null) 'valueRange': valueRange.json,
+            if (valueRatio != null) 'valueRatio': valueRatio.json,
+            if (valueSampledData != null)
+              'valueSampledData': valueSampledData.json,
+            if (valueTime != null)
+              'valueTime': JsonString(valueTime.toString()),
+            if (valueDateTime != null)
+              'valueDateTime': JsonString(valueDateTime.toIso8601String()),
+            if (valuePeriod != null) 'valuePeriod': valuePeriod.json,
+            if (dataAbsentReason != null)
+              'dataAbsentReason': dataAbsentReason.json,
+            if (interpretation != null)
+              'interpretation':
+                  JsonArray(interpretation.map((e) => e.json).toList()),
+            if (referenceRange != null)
+              'referenceRange':
+                  JsonArray(referenceRange.map((e) => e.json).toList()),
+          }),
+        );
 
-  factory ObservationComponent.fromJson(Map<String, dynamic> json) =>
-      ObservationComponent(
-        code: json['code'] != null
-            ? CodeableConcept.fromJson(json['code'] as Map<String, dynamic>)
-            : null,
-        valueQuantity: json['valueQuantity'] != null
-            ? Quantity.fromJson(json['valueQuantity'] as Map<String, dynamic>)
-            : null,
-        valueCodeableConcept: json['valueCodeableConcept'] != null
-            ? CodeableConcept.fromJson(
-                json['valueCodeableConcept'] as Map<String, dynamic>,
-              )
-            : null,
-        valueString: json['valueString'] as String?,
-        valueBoolean: json['valueBoolean'] as bool?,
-        valueInteger: json['valueInteger'] as int?,
-        valueRange: json['valueRange'] != null
-            ? Range.fromJson(json['valueRange'] as Map<String, dynamic>)
-            : null,
-        valueRatio: json['valueRatio'] != null
-            ? Ratio.fromJson(json['valueRatio'] as Map<String, dynamic>)
-            : null,
-        valueSampledData: json['valueSampledData'] != null
-            ? SampledData.fromJson(
-                json['valueSampledData'] as Map<String, dynamic>,
-              )
-            : null,
-        valueTime: Time.tryParse(json['valueTime'] as String? ?? ''),
-        valueDateTime: StringBackedValue.fromJson(json, 'valueDateTime'),
-        valuePeriod: json['valuePeriod'] != null
-            ? Period.fromJson(json['valuePeriod'] as Map<String, dynamic>)
-            : null,
-        dataAbsentReason: json['dataAbsentReason'] != null
-            ? CodeableConcept.fromJson(
-                json['dataAbsentReason'] as Map<String, dynamic>,
-              )
-            : null,
-        interpretation: (json['interpretation'] as List<dynamic>?)
-            ?.map((e) => CodeableConcept.fromJson(e as Map<String, dynamic>))
-            .toFixedList(),
-        referenceRange: (json['referenceRange'] as List<dynamic>?)
-            ?.map(
-              (e) =>
-                  ObservationReferenceRange.fromJson(e as Map<String, dynamic>),
-            )
-            .toFixedList(),
-      );
+  /// Constructs a new [ObservationComponent] instance from the provided JSON object.
+  ObservationComponent.fromJson(this._json);
 
-  /// Describes what was observed. Sometimes this is called the observation "code".
-  final CodeableConcept? code;
+  final JsonObject _json;
 
-  /// The information determined as a result of making the observation,
-  /// if the information has a simple value.
-  final Quantity? valueQuantity;
+  /// Converts this [ObservationComponent] instance to a JSON object.
+  JsonObject get json => _json;
 
-  /// The information determined as a result of making the observation,
-  /// if the information has a simple value.
-  final CodeableConcept? valueCodeableConcept;
+  /// Returns the code that identifies what was observed.
+  CodeableConcept? get code => _getCodeableConcept(_json, 'code');
 
-  /// The information determined as a result of making the observation,
-  /// if the information has a simple value.
-  final String? valueString;
-
-  /// The information determined as a result of making the observation,
-  /// if the information has a simple value.
-  final bool? valueBoolean;
-
-  /// The information determined as a result of making the observation,
-  /// if the information has a simple value.
-  final int? valueInteger;
-
-  /// The information determined as a result of making the observation,
-  /// if the information has a simple value.
-  final Range? valueRange;
-
-  /// The information determined as a result of making the observation,
-  /// if the information has a simple value.
-  final Ratio? valueRatio;
-
-  /// The information determined as a result of making the observation,
-  /// if the information has a simple value.
-  final SampledData? valueSampledData;
-
-  /// The information determined as a result of making the observation,
-  /// if the information has a simple value.
-  final Time? valueTime;
-
-  /// The information determined as a result of making the observation,
-  /// if the information has a simple value.
-  final StringBackedValue<DateTime>? valueDateTime;
-
-  /// The information determined as a result of making the observation,
-  /// if the information has a simple value.
-  final Period? valuePeriod;
-
-  /// Provides a reason why the expected value in the element Observation.component.value[] is missing.
-  final CodeableConcept? dataAbsentReason;
-
-  /// A categorical assessment of an observation value.
-  /// This is often used to supply a "normal" range categorization for numeric values.
-  final FixedList<CodeableConcept>? interpretation;
-
-  /// Guidance on how to interpret the value by comparison to a normal or recommended range.
-  final FixedList<ObservationReferenceRange>? referenceRange;
-
-  Map<String, dynamic> toJson() => {
-        'code': code?.toJson(),
-        'valueQuantity': valueQuantity?.toJson(),
-        'valueCodeableConcept': valueCodeableConcept?.toJson(),
-        'valueString': valueString,
-        'valueBoolean': valueBoolean,
-        'valueInteger': valueInteger,
-        'valueRange': valueRange?.toJson(),
-        'valueRatio': valueRatio?.toJson(),
-        'valueSampledData': valueSampledData?.toJson(),
-        'valueTime': valueTime.toString(),
-        if (valueDateTime != null) 'valueDateTime': valueDateTime!.text,
-        'valuePeriod': valuePeriod?.toJson(),
-        'dataAbsentReason': dataAbsentReason?.toJson(),
-        'interpretation': interpretation?.map((e) => e.toJson()).toFixedList(),
-        'referenceRange': referenceRange?.map((e) => e.toJson()).toFixedList(),
+  CodeableConcept? _getCodeableConcept(JsonObject jo, String key) =>
+      switch (jo[key]) {
+        (final JsonObject jsonObject) => CodeableConcept.fromJson(jsonObject),
+        _ => null,
       };
+
+  /// Returns the value of the observation if it's a quantity.
+  Quantity? get valueQuantity => _getQuantity(_json, 'valueQuantity');
+
+  Quantity? _getQuantity(JsonObject jo, String key) => switch (jo[key]) {
+        (final JsonObject jsonObject) => Quantity.fromJson(jsonObject),
+        _ => null,
+      };
+
+  /// Returns the value of the observation if it's a codeable concept.
+  CodeableConcept? get valueCodeableConcept =>
+      _getCodeableConcept(_json, 'valueCodeableConcept');
+
+  /// Returns the value of the observation if it's a string.
+  String? get valueString => _json.getValue('valueString').stringValue;
+
+  /// Returns the value of the observation if it's a boolean.
+  bool? get valueBoolean => _json.getValue('valueBoolean').booleanValue;
+
+  /// Returns the value of the observation if it's an integer.
+  int? get valueInteger => _json.getValue('valueInteger').integerValue;
+
+  /// Returns the value of the observation if it's a range.
+  Range? get valueRange => _getRange(_json, 'valueRange');
+
+  Range? _getRange(JsonObject jo, String key) => switch (jo[key]) {
+        (final JsonObject jsonObject) => Range.fromJson(jsonObject),
+        _ => null,
+      };
+
+  /// Returns the value of the observation if it's a ratio.
+  Ratio? get valueRatio => _getRatio(_json, 'valueRatio');
+
+  Ratio? _getRatio(JsonObject jo, String key) => switch (jo[key]) {
+        (final JsonObject jsonObject) => Ratio.fromJson(jsonObject),
+        _ => null,
+      };
+
+  /// Returns the value of the observation if it's sampled data.
+  SampledData? get valueSampledData =>
+      _getSampledData(_json, 'valueSampledData');
+
+  SampledData? _getSampledData(JsonObject jo, String key) => switch (jo[key]) {
+        (final JsonObject jsonObject) => SampledData.fromJson(jsonObject),
+        _ => null,
+      };
+
+  /// Returns the value of the observation if it's a time.
+  Time? get valueTime => _getTime(_json, 'valueTime');
+  Time? _getTime(JsonObject jo, String key) =>
+      Time.tryParse(jo.getValue(key).stringValue ?? '');
+
+  /// Returns the value of the observation if it's a date-time.
+  DateTime? get valueDateTime => _json.getValue('valueDateTime').dateTimeValue;
+
+  /// Returns the value of the observation if it's a period.
+  Period? get valuePeriod => _getPeriod(_json, 'valuePeriod');
+  Period? _getPeriod(JsonObject jo, String key) => switch (jo[key]) {
+        (final JsonObject jsonObject) => Period.fromJson(jsonObject),
+        _ => null,
+      };
+
+  /// Returns the codeable concept if there's a reason data is absent.
+  CodeableConcept? get dataAbsentReason =>
+      _getCodeableConcept(_json, 'dataAbsentReason');
+
+  /// Returns the interpretation of the observation as a list of codeable concepts.
+  FixedList<CodeableConcept>? get interpretation =>
+      _getFixedListCodeableConcept(_json, 'interpretation');
+
+  FixedList<CodeableConcept>? _getFixedListCodeableConcept(
+    JsonObject jo,
+    String key,
+  ) =>
+      switch (jo[key]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => CodeableConcept.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  /// Returns the reference ranges applicable to this component.
+  FixedList<ObservationReferenceRange>? get referenceRange =>
+      _getFixedListReferenceRange(_json, 'referenceRange');
+
+  FixedList<ObservationReferenceRange>? _getFixedListReferenceRange(
+    JsonObject json,
+    String fieldName,
+  ) =>
+      switch (json[fieldName]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map(
+              (e) => ObservationReferenceRange.fromJson(e as JsonObject),
+            ),
+          ),
+        _ => null,
+      };
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ObservationComponent && other.json == _json);
+
+  @override
+  int get hashCode => _json.hashCode;
 }

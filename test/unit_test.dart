@@ -1,17 +1,12 @@
-// ignore_for_file: unused_import
-
-import 'dart:js_util';
-
 import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/available_time.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
-import 'package:fhir_client/models/basic_types/json_object.dart';
-import 'package:fhir_client/models/basic_types/string_backed_value.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/tag.dart';
 import 'package:http/testing.dart';
+import 'package:jayse/jayse.dart';
 import 'package:test/test.dart';
 
 import 'fhir_client_test.dart';
@@ -22,8 +17,8 @@ void main() {
       'Actor',
       () {
         expect(
-          Actor.primitives(reference: '1', display: 'a'),
-          equals(Actor.primitives(reference: '1', display: 'a')),
+          Actor(reference: '1', display: 'a'),
+          equals(Actor(reference: '1', display: 'a')),
         );
 
         expect(
@@ -32,17 +27,14 @@ void main() {
         );
 
         expect(
-          Actor.primitives(reference: '1', display: 'a') !=
-              Actor.primitives(reference: '1', display: 'b'),
+          Actor(reference: '1', display: 'a') !=
+              Actor(reference: '1', display: 'b'),
           true,
         );
 
-        final actor1 =
-            Actor.primitives(reference: 'reference1', display: 'Actor 1');
-        final actor2 =
-            Actor.primitives(reference: 'reference2', display: 'Actor 2');
-        final actor3 =
-            Actor.primitives(reference: 'reference3', display: 'Actor 3');
+        final actor1 = Actor(reference: 'reference1', display: 'Actor 1');
+        final actor2 = Actor(reference: 'reference2', display: 'Actor 2');
+        final actor3 = Actor(reference: 'reference3', display: 'Actor 3');
 
         final list1 = FixedList([actor1, actor2, actor3]);
         final list2 = FixedList([actor1, actor2, actor3]);
@@ -54,23 +46,25 @@ void main() {
     test('AvailableTime equality and hash code', () {
       //TODO More Time parsing and testing
 
-      final nineAM = StringBackedValue<Time>('09:00');
-      expect(nineAM.value!.hour, 9);
-      expect(nineAM.value!.minute, 0);
-      expect(nineAM.value!.second, 0);
+      final nineAM = Time.tryParse('09:00')!;
+      expect(nineAM.hour, 9);
+      expect(nineAM.minute, 0);
+      expect(nineAM.second, 0);
       // Test case 1: Equal objects
 
       final availableTime1 = AvailableTime(
         daysOfWeek: FixedList<String>(['Monday', 'Tuesday']),
-        availableStartTime: StringBackedValue('09:00'),
+        availableStartTime: Time.tryParse('09:00'),
         availableEndTime: Time.tryParse('17:00'),
       );
       final availableTime2 = AvailableTime(
         daysOfWeek: FixedList<String>(['Monday', 'Tuesday']),
-        availableStartTime: StringBackedValue('09:00'),
+        availableStartTime: Time.tryParse('09:00'),
         availableEndTime: Time.tryParse('17:00'),
       );
       expect(availableTime1, equals(availableTime2));
+      expect(availableTime2.json.toString(), availableTime2.json.toString());
+      expect(availableTime2.json.hashCode, availableTime2.json.hashCode);
       expect(availableTime1.hashCode, equals(availableTime2.hashCode));
 
       // Test case 2: Unequal objects (different daysOfWeek)
@@ -85,7 +79,7 @@ void main() {
       // Test case 3: Unequal objects (different availableStartTime)
       final availableTime4 = AvailableTime(
         daysOfWeek: FixedList<String>(['Monday', 'Tuesday']),
-        availableStartTime: StringBackedValue('10:00'),
+        availableStartTime: Time.tryParse('10:00'),
         availableEndTime: Time.tryParse('17:00'),
       );
       expect(availableTime1 == availableTime4, false);
@@ -101,10 +95,8 @@ void main() {
       expect(availableTime1.hashCode, isNot(equals(availableTime5.hashCode)));
 
       // Test case 5: Null values
-      final availableTime6 =
-          AvailableTime(availableStartTime: StringBackedValue(null));
-      final availableTime7 =
-          AvailableTime(availableStartTime: StringBackedValue(null));
+      final availableTime6 = AvailableTime();
+      final availableTime7 = AvailableTime();
       expect(availableTime6, equals(availableTime7));
       expect(availableTime6.hashCode, equals(availableTime7.hashCode));
     });
@@ -138,9 +130,27 @@ void main() {
 
   group('Json Object', () {
     test('Tag', () {
-      final tag = Tag(code: Defined('code'), system: Defined(Uri.parse('url')));
-      expect(tag.code, isA<Defined<String>>());
-      expectEquals(tag.code as Defined<String>, 'code');
+      final tag = Tag(
+        code: 'code',
+        system: Uri.parse('http://www.url.com'),
+      );
+      expect(tag.code, isA<String>());
+      expectEquals(tag.code, 'code');
+
+      const system = 'sdfsdfsfd';
+      final tag2 = Tag.fromJson(JsonObject.fromJson({'system': system}));
+      final map = tag2.json;
+      expect(map['system'].stringValue, system);
+
+      final tag3 = tag2.copyWith(code: 'new code');
+      expectEquals(tag3.code, 'new code');
+
+      //TODO: this is wrong
+      //Need a way to remove fields...
+      final tag4 =
+          Tag.fromJson(tag3.json.withUpdate('code', const Undefined()));
+
+      expect(tag4.code, null);
     });
   });
 }

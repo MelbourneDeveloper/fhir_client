@@ -52,6 +52,7 @@ enum ResourceType implements Comparable<ResourceType> {
   final String code;
   final String display;
 
+  /// Creates a [ResourceType] enum from [String]
   static ResourceType fromCode(String code) => switch (code) {
         ('Appointment') => appointment,
         ('Bundle') => bundle,

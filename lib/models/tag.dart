@@ -1,26 +1,27 @@
-// ignore_for_file: lines_longer_than_80_chars
-
-import 'package:fhir_client/models/basic_types/json_object.dart';
-
-const _codeField = 'code';
-const _systemField = 'system';
+import 'package:fhir_client/models/basic_types/field_definition.dart';
+import 'package:jayse/jayse.dart';
 
 /// A coding that represents a tag on a resource.
 ///
-/// Tags are used to relate resources to process and workflow. Applications are not
-/// required to consider the tags when interpreting the meaning of a resource.
-class Tag extends JsonObject {
+/// Tags are used to relate resources to process and workflow. Applications are 
+/// not required to consider the tags when interpreting the meaning of a 
+/// resource.
+class Tag {
   /// Constructs a new [Tag]
   Tag({
-    Definable<String> code = const Undefined(),
-    Definable<Uri> system = const Undefined(),
-  }) : super({
-          if (code is Defined<String>) _codeField: code.value,
-          if (system is Defined<Uri>) _systemField: system.value,
-        });
+    String? code,
+    Uri? system,
+  }) : this.fromJson(
+          JsonObject({
+            if (code != null) codeField.name: JsonString(code),
+            if (system != null) systemField.name: JsonString(system.toString()),
+          }),
+        );
 
-  /// Constructs a new `Tag` instance from the provided JSON object.
-  Tag.fromJson(super.json);
+  /// Constructs a new [Tag] instance from the provided JSON object.
+  Tag.fromJson(this._json);
+
+  final JsonObject _json;
 
   /// The machine-readable value of the tag.
   ///
@@ -28,7 +29,7 @@ class Tag extends JsonObject {
   /// Path: Tag.code
   /// Minimum Cardinality: 1
   /// Maximum Cardinality: 1
-  Definable<String> get code => getValue(_codeField);
+  String? get code => codeField.getValue(_json);
 
   /// The system that defines the meaning of the tag.
   ///
@@ -36,8 +37,35 @@ class Tag extends JsonObject {
   /// Path: Tag.system
   /// Minimum Cardinality: 1
   /// Maximum Cardinality: 1
-  Definable<Uri> get system =>
-      getValueFromString(_systemField, tryParse: (u) => Uri.tryParse(u ?? ''));
+  Uri? get system =>
+      Uri.tryParse(_json.getValue(systemField.name).stringValue ?? '');
+
+  /// Field definition for [code]
+  static const codeField = FieldDefinition(
+    name: 'code',
+    getValue: _getCode,
+  );
+
+  /// Field definition for [system]
+  static const systemField = FieldDefinition(
+    name: 'system',
+    getValue: _getSystem,
+  );
+
+  /// All field definitions for [Tag]
+  static const fieldDefinitions = [
+    codeField,
+    systemField,
+  ];
+
+  static String? _getCode(JsonObject jo) =>
+      jo.getValue(codeField.name).stringValue;
+
+  static Uri? _getSystem(JsonObject jo) =>
+      Uri.tryParse(jo.getValue(systemField.name).stringValue ?? '');
+
+  /// Converts this [Tag] instance to a JSON object.
+  JsonObject get json => _json;
 
   @override
   bool operator ==(Object other) =>
@@ -49,8 +77,8 @@ class Tag extends JsonObject {
 
   /// Makes a copy of the [Tag] for non-destructive mutation.
   Tag copyWith({
-    Definable<String>? code,
-    Definable<Uri>? system,
+    String? code,
+    Uri? system,
   }) =>
       Tag(
         code: code ?? this.code,

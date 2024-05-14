@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/resource.dart';
-import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
 import 'package:http/http.dart';
+import 'package:jayse/jayse.dart';
 
 /// Extension methods for the http package [Client] class
 extension FhirExtensions on Client {
@@ -19,25 +18,31 @@ extension FhirExtensions on Client {
       );
 
       try {
-        final json = response.body;
-        return Resource.fromJson(jsonDecode(json) as Map<String, dynamic>);
+        final jsonValue = jsonValueDecode(response.body);
+
+        if (jsonValue is JsonObject) {
+          return Resource.fromJson(jsonValue);
+        } else {
+          return OperationOutcome<T>.error(
+            message: 'Unexpected Result',
+            details:
+                'Expected a JSON object, but got a ${jsonValue.runtimeType}',
+          );
+        }
+
         // ignore: avoid_catches_without_on_clauses
       } catch (e) {
-        return OperationOutcome<T>(
-          text: Text(
-            status:
-                'Exception or Error occurred when converting JSON to Resource',
-            div: e.toString(),
-          ),
+        return OperationOutcome<T>.error(
+          message:
+              'Exception or Error occurred when converting JSON to Resource',
+          details: e.toString(),
         );
       }
       // ignore: avoid_catches_without_on_clauses
     } catch (e) {
-      return OperationOutcome<T>(
-        text: Text(
-          status: 'Exception or Error occurred when contacting the FHIR server',
-          div: e.toString(),
-        ),
+      return OperationOutcome<T>.error(
+        message: 'Exception or Error occurred when contacting the FHIR server',
+        details: e.toString(),
       );
     }
   }
@@ -181,26 +186,23 @@ extension FhirExtensions on Client {
         (final Bundle b)
             //Check all items are the correct type
             when b.entry != null &&
-                !b.entry!.any((entry) => entry.resource is! T) =>
+                b.entry!.every((entry) => entry.resource is T) =>
           BundleEntries<T>(
-            b.entry
-                    ?.map(
-                      (entry) =>
-                          //This is not very nice but we already checked
-                          //for null and type above
-                          entry.resource! as T,
-                    )
-                    .toFixedList() ??
-                <T>[].toFixedList(),
+            FixedList(
+              b.entry!.map(
+                (entry) =>
+                    //This is not very nice but we already checked
+                    //for null and type above
+                    entry.resource! as T,
+              ),
+            ),
             b,
           ),
         //Unexpected Result
-        (final Resource r) => OperationOutcome(
-            text: Text(
-              status: 'Unexpected Result',
-              div: 'Expected a list of ${resourceType.code}s, but '
-                  'got a ${r.runtimeType}',
-            ),
+        (final Resource r) => OperationOutcome.error(
+            message: 'Unexpected Result',
+            details: 'Expected a list of ${resourceType.code}s, but '
+                'got a ${r.runtimeType}',
           ),
       };
 }

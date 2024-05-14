@@ -1,62 +1,113 @@
+import 'package:fhir_client/models/basic_types/field_definition.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
-import 'package:fhir_client/models/basic_types/string_backed_value.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
+import 'package:jayse/jayse.dart';
 
 /// Represents the time during which the resource is available.
 class AvailableTime {
-  /// Creates an instance of [AvailableTime].
+  /// Constructs a new [AvailableTime].
   AvailableTime({
-    required this.availableStartTime,
-    this.daysOfWeek,
-    this.availableEndTime,
-  });
+    FixedList<String>? daysOfWeek,
+    Time? availableStartTime,
+    Time? availableEndTime,
+  }) : this.fromJson(
+          JsonObject({
+            if (daysOfWeek != null)
+              daysOfWeekField.name: JsonArray.unmodifiable(
+                daysOfWeek.map(JsonString.new),
+              ),
+            if (availableStartTime != null)
+              availableStartTimeField.name:
+                  JsonString(availableStartTime.toString()),
+            if (availableEndTime != null)
+              availableEndTimeField.name:
+                  JsonString(availableEndTime.toString()),
+          }),
+        );
 
-  /// Creates an instance of [AvailableTime] from a JSON map.
-  factory AvailableTime.fromJson(Map<String, dynamic> json) => AvailableTime(
-        daysOfWeek: (json['daysOfWeek'] as List<dynamic>?)
-            ?.cast<String>()
-            .toFixedList(),
-        availableStartTime:
-            StringBackedValue(json['availableStartTime'] as String?),
-        availableEndTime:
-            Time.tryParse(json['availableEndTime'] as String? ?? ''),
-      );
+  /// Creates an [AvailableTime] instance from the provided JSON object.
+  AvailableTime.fromJson(this._json);
+
+  final JsonObject _json;
 
   /// The days of the week when the resource is available.
-  final FixedList<String>? daysOfWeek;
+  ///
+  /// Type: List<CodeType>
+  /// Path: AvailableTime.daysOfWeek
+  /// Minimum Cardinality: 0
+  /// Maximum Cardinality: *
+  FixedList<String>? get daysOfWeek => daysOfWeekField.getValue(_json);
 
   /// The start time of availability.
-  final StringBackedValue<Time> availableStartTime;
+  ///
+  /// Type: TimeType
+  /// Path: AvailableTime.availableStartTime
+  /// Minimum Cardinality: 0
+  /// Maximum Cardinality: 1
+  Time? get availableStartTime => availableStartTimeField.getValue(_json);
 
   /// The end time of availability.
-  final Time? availableEndTime;
+  ///
+  /// Type: TimeType
+  /// Path: AvailableTime.availableEndTime
+  /// Minimum Cardinality: 0
+  /// Maximum Cardinality: 1
+  Time? get availableEndTime => availableEndTimeField.getValue(_json);
 
-  /// Converts this [AvailableTime] instance to a JSON map.
-  Map<String, dynamic> toJson() => {
-        'daysOfWeek': daysOfWeek?.cast<dynamic>().toList(),
-        'availableStartTime': availableStartTime.text,
-        'availableEndTime': availableEndTime.toString(),
+  /// Field definition for [daysOfWeek]
+  static const daysOfWeekField = FieldDefinition(
+    name: 'daysOfWeek',
+    getValue: _getDaysOfWeek,
+  );
+
+  /// Field definition for [availableStartTime]
+  static const availableStartTimeField = FieldDefinition(
+    name: 'availableStartTime',
+    getValue: _getAvailableStartTime,
+  );
+
+  /// Field definition for [availableEndTime]
+  static const availableEndTimeField = FieldDefinition(
+    name: 'availableEndTime',
+    getValue: _getAvailableEndTime,
+  );
+
+  /// All field definitions for [AvailableTime]
+  static const fieldDefinitions = [
+    daysOfWeekField,
+    availableStartTimeField,
+    availableEndTimeField,
+  ];
+
+  static FixedList<String>? _getDaysOfWeek(JsonObject jo) =>
+      switch (jo['daysOfWeek']) {
+        (final JsonArray jsonArray) =>
+          FixedList(jsonArray.value.whereType<String>()),
+        _ => null,
       };
+
+  static Time? _getAvailableStartTime(JsonObject jo) => Time.tryParse(
+        jo.getValue(availableStartTimeField.name).stringValue ?? '',
+      );
+
+  static Time? _getAvailableEndTime(JsonObject jo) =>
+      Time.tryParse(jo.getValue(availableEndTimeField.name).stringValue ?? '');
+
+  /// Converts this [AvailableTime] instance to a JSON object.
+  JsonObject get json => _json;
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is AvailableTime &&
-          other.daysOfWeek == daysOfWeek &&
-          other.availableStartTime == availableStartTime &&
-          other.availableEndTime == availableEndTime);
+      identical(this, other) || (other is AvailableTime && json == other.json);
 
   @override
-  int get hashCode =>
-      daysOfWeek.hashCode ^
-      availableStartTime.hashCode ^
-      availableEndTime.hashCode;
+  int get hashCode => Object.hash(runtimeType.hashCode, json.hashCode);
 
-  /// Makes a copy of this [AvailableTime] and allows for 
-  /// non-destructive mutation.
+  /// Creates a copy of the [AvailableTime] instance and allows
+  /// for non-destructive mutation.
   AvailableTime copyWith({
     FixedList<String>? daysOfWeek,
-    StringBackedValue<Time>? availableStartTime,
+    Time? availableStartTime,
     Time? availableEndTime,
   }) =>
       AvailableTime(
