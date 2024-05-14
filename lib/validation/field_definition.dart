@@ -155,6 +155,10 @@ class ValidationResult {
   ValidationResult(this.errorMessages);
   bool get isValid => errorMessages.isEmpty;
   final List<ValidationError> errorMessages;
+
+  @override
+  String toString() => 'Is Valid: $isValid\n'
+      '${errorMessages.map((e) => '${e.field} - ${e.message}').join('\n')}';
 }
 
 ValidationResult validate<T extends Resource>(
