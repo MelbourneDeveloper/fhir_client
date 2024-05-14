@@ -156,7 +156,10 @@ void main() {
       expect(org.address!.first.country, 'BANGLADESH');
 
       final map = org.json;
-      expect((map['address'] as JsonArray).value[0]['postalCode'].stringValue, '23423');
+      expect(
+        (map['address'] as JsonArray).value[0]['postalCode'].stringValue,
+        '23423',
+      );
     });
 
     test('Practitioner Search result', () async {
@@ -486,7 +489,7 @@ void main() {
       expectEquals(first.meta?.versionId, '1');
       expect(
         first.meta?.lastUpdated,
-        DateTime.utc(2023,04,10,10,33,32,673),
+        DateTime.utc(2023, 04, 10, 10, 33, 32, 673),
       );
       expectEquals(first.meta?.source, '#nw7ecyTCXojBLbEq');
       expect(first.status, 'final');
@@ -506,8 +509,8 @@ void main() {
       expect(first.subject?.reference, 'Patient/9391475');
       expect(first.encounter?.reference, 'Encounter/9391490');
       expect(
-        first.effectiveDateTime ,
-        DateTime.utc(2011,04,18,19,44,18),
+        first.effectiveDateTime,
+        DateTime.utc(2011, 04, 18, 19, 44, 18),
       );
       expect(first.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
       expect(first.valueQuantity?.value, 179.30389202058845);
@@ -548,8 +551,8 @@ void main() {
       expect(firstObs.subject?.reference, 'Patient/9391475');
       expect(firstObs.encounter?.reference, 'Encounter/9391490');
       expect(
-        firstObs.effectiveDateTime == '2011-04-18T15:44:18-04:00',
-        true,
+        firstObs.effectiveDateTime,
+        DateTime.utc(2011, 04, 18, 19, 44, 18),
       );
       expect(firstObs.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
       expect(firstObs.valueQuantity?.value, 179.30389202058845);
@@ -584,10 +587,7 @@ void main() {
       expect(entry.code?.text, 'Blood Pressure');
       expect(entry.subject?.reference, 'Patient/9391475');
       expect(entry.encounter?.reference, 'Encounter/9391490');
-      expect(
-        entry.effectiveDateTime == '2011-04-18T15:44:18-04:00',
-        true,
-      );
+      expect(entry.effectiveDateTime, DateTime.utc(2011, 04, 18, 19, 44, 18));
       expect(entry.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
       expect(entry.component?.length, 2);
 
@@ -659,9 +659,9 @@ void main() {
       expect(entry2.code?.text, 'Blood Pressure');
       expect(entry2.subject?.reference, 'Patient/9391475');
       expect(entry2.encounter?.reference, 'Encounter/9391490');
-      expectEquals(
+      expect(
         entry2.effectiveDateTime,
-        '2011-04-18T15:44:18-04:00',
+        DateTime.parse('2011-04-18T15:44:18-04:00'),
       );
       expect(entry2.issued, DateTime.parse('2011-04-18T15:44:18.249-04:00'));
       expect(entry2.component?.length, 2);
