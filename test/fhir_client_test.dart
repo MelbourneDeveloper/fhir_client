@@ -782,7 +782,7 @@ void main() {
         slot.appointmentType?.coding?.first.display,
         'A previously unscheduled walk-in visit',
       );
-      expect(slot.status, 'free');
+      expect(slot.status, SlotStatus.free);
       //TODO: investigate these...
       //Why is the datetime like this?
       expect(slot.start, DateTime.parse('2019-10-30T15:00:00-07:00'));

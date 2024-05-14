@@ -33,6 +33,7 @@ import 'package:fhir_client/models/sampled_data.dart';
 import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/timing.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
+import 'package:fhir_client/models/value_sets/appointment_status.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
 import 'package:fhir_client/models/value_sets/slot_status.dart';
 import 'package:jayse/jayse.dart';
@@ -162,21 +163,20 @@ extension ResourceExtensions<T extends Resource> on T {
       );
 }
 
-/// Represents a booking of a healthcare event among patient(s), practitioner(s),
-/// related person(s) and/or device(s) for a specific date/time.
+/// Represents a booking of a healthcare event among patient(s), practitioner(s), related person(s) and/or device(s) for a specific date/time.
 class Appointment extends Resource {
   /// Constructs a new [Appointment].
   Appointment({
     String? id,
     Meta? meta,
-    String? status,
+    AppointmentStatus? status,
     FixedList<CodeableConcept>? serviceCategory,
     FixedList<Participant>? participant,
   }) : super._internal(
           JsonObject({
             if (id != null) 'id': JsonString(id),
             if (meta != null) 'meta': meta.json,
-            if (status != null) statusField.name: JsonString(status),
+            if (status != null) statusField.name: JsonString(status.code),
             if (serviceCategory != null)
               serviceCategoryField.name:
                   JsonArray.unmodifiable(serviceCategory.map((e) => e.json)),
@@ -190,7 +190,7 @@ class Appointment extends Resource {
   Appointment.fromJson(JsonObject jsonObject) : super._internal(jsonObject);
 
   /// The overall status of the appointment.
-  String? get status => statusField.getValue(json);
+  AppointmentStatus? get status => statusField.getValue(json);
 
   /// A broad categorization of the service that is to be performed during this appointment.
   FixedList<CodeableConcept>? get serviceCategory =>
@@ -225,8 +225,11 @@ class Appointment extends Resource {
     participantField,
   ];
 
-  static String? _getStatus(JsonObject jo) =>
-      jo.getValue(statusField.name).stringValue;
+  static AppointmentStatus? _getStatus(JsonObject jo) =>
+      switch (jo[statusField.name]) {
+        (final JsonString js) => AppointmentStatus.fromCode(js.value),
+        _ => null,
+      };
 
   static FixedList<CodeableConcept>? _getServiceCategory(JsonObject jo) =>
       switch (jo['serviceCategory']) {
@@ -245,29 +248,11 @@ class Appointment extends Resource {
         _ => null,
       };
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Appointment &&
-          other.id == id &&
-          other.meta == meta &&
-          other.status == status &&
-          other.serviceCategory == serviceCategory &&
-          other.participant == participant);
-
-  @override
-  int get hashCode =>
-      id.hashCode ^
-      meta.hashCode ^
-      status.hashCode ^
-      serviceCategory.hashCode ^
-      participant.hashCode;
-
   /// Creates a copy of the [Appointment] instance and allows for non-destructive mutation.
   Appointment copyWith({
     String? id,
     Meta? meta,
-    String? status,
+    AppointmentStatus? status,
     FixedList<CodeableConcept>? serviceCategory,
     FixedList<Participant>? participant,
   }) =>
