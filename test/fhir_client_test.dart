@@ -13,6 +13,7 @@ import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/meta.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
+import 'package:fhir_client/models/value_sets/appointment_status.dart';
 import 'package:fhir_client/models/value_sets/slot_status.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
@@ -36,6 +37,7 @@ void main() {
           result.entry!.map((e) => e.resource! as Appointment).toFixedList();
 
       expect(appointments.first.id, '00f740554d7b1c5a');
+      expect(appointments.first.status, AppointmentStatus.proposed);
 
       // Get the 3rd appointment
       final appointment = appointments[2];
@@ -927,7 +929,7 @@ void main() {
         final result = await Client().searchAppointments(
           baseUri,
           count: 10,
-          status: 'booked',
+          status: AppointmentStatus.booked,
         );
 
         final bundleEntries = result as BundleEntries<Appointment>;
