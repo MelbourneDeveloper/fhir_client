@@ -63,7 +63,7 @@ String generateDartCode(
   static const ${fieldName}Field = FieldDefinition(
     name: '$fieldName',
     getValue: _get${fieldName.capitalize()},
-    description: '$description',
+    description: $description,
     isRequired: $isRequired == 1,
   );
 ''';
@@ -86,7 +86,7 @@ class $resourceName extends Resource {
             if (meta != null) Resource.metaField.name: meta.json,
             ${fields.map((field) {
     final fieldName = field.split(' ')[1].replaceAll('?', '');
-    return "if ($fieldName != null) ${fieldName}Field.name: ${fieldName}Field.toJson($fieldName),";
+    return "if ($fieldName != null) ${fieldName}Field.name: $fieldName.json,";
   }).join('\n            ')}
           }),
         );
@@ -128,34 +128,13 @@ class $resourceName extends Resource {
   return dartCode;
 }
 
-String mapFhirTypeToDartType(String fhirType) {
-  switch (fhirType) {
-    case 'string':
-      return 'String';
-    case 'boolean':
-      return 'bool';
-    case 'dateTime':
-      return 'DateTime';
-    case 'code':
-      return 'String';
-    case 'Address':
-      return 'Address';
-    case 'HumanName':
-      return 'HumanName';
-    case 'ContactPoint':
-      return 'ContactPoint';
-    case 'AdministrativeGender':
-      return 'AdministrativeGender';
-    case 'Attachment':
-      return 'Attachment';
-    case 'Reference':
-      return 'Reference';
-    case 'CodeableConcept':
-      return 'CodeableConcept';
-    default:
-      return 'dynamic';
-  }
-}
+String mapFhirTypeToDartType(String fhirType) => switch (fhirType) {
+      'string' => 'String',
+      'boolean' => 'bool',
+      'dateTime' => 'DateTime',
+      'code' => 'String',
+      _ => fhirType,
+    };
 
 extension StringExtensions on String {
   String capitalize() => '${this[0].toUpperCase()}${substring(1)}';
