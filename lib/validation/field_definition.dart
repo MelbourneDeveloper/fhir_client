@@ -1,13 +1,19 @@
 import 'package:fhir_client/models/resource.dart';
 import 'package:jayse/jayse.dart';
 
+/// A function that validates a field value.
+typedef ValidateResource = List<ValidationError> Function(
+  JsonValue value, {
+  bool isUpdate,
+});
+
 /// FHIR specific metadata about the field
 class FieldDefinition<T> {
   /// Creates a new instance of [FieldDefinition].
   const FieldDefinition({
     required this.name,
     required this.getValue,
-    this.validationRules = const [],
+    this.customValidationRules = const [],
     this.isRequired = false,
     this.isSummary = false,
     this.isModifier = false,
@@ -27,7 +33,7 @@ class FieldDefinition<T> {
 
   /// A list of validation rules for the field.
   // ignore: strict_raw_type
-  final List<ValidationRule> validationRules;
+  final List<ValidateResource> customValidationRules;
 
   /// Indicates whether the field is required.
   final bool isRequired;
@@ -53,10 +59,8 @@ class FieldDefinition<T> {
   /// A description of the field.
   final String? description;
 
+  /// A list of allowed string values.
   final List<String> allowedStringValues;
-
-  MapEntry<String, dynamic> toMapEntry(JsonValue definable) =>
-      MapEntry(name, definable);
 
   /// Validates the field value based on the defined validation rules.
   List<ValidationError> validate(
@@ -163,43 +167,30 @@ class FieldDefinition<T> {
   }
 }
 
-/// A validation rule for a field.
-sealed class ValidationRule<T> {
-  const ValidationRule();
-
-  /// Validates the field value.
-  void validate(T? value);
-}
-
-/// A validation rule that checks if the field value satisfies a
-/// custom condition.
-class CustomRule<T> extends ValidationRule<T> {
-  const CustomRule(this.condition, this.errorMessage);
-
-  /// The custom validation condition.
-  final bool Function(T? value) condition;
-  final String? errorMessage;
-
-  @override
-  void validate(T? value) {
-    if (!condition(value)) {
-      throw Exception('Field value does not satisfy the custom condition');
-    }
-  }
-}
-
+/// Represents a validation error.
 class ValidationError {
+  /// Creates a new instance of [ValidationError].
   const ValidationError({
     required this.message,
     required this.field,
   });
+
+  /// The error message.
   final String message;
+
+  /// The field that caused the error.
   final String field;
 }
 
+/// Represents the result of a validation.
 class ValidationResult {
+  /// Creates a new instance of [ValidationResult].
   ValidationResult(this.errorMessages);
+
+  /// Indicates whether the validation result is valid.
   bool get isValid => errorMessages.isEmpty;
+
+  /// A list of validation errors.
   final List<ValidationError> errorMessages;
 
   @override
@@ -207,7 +198,9 @@ class ValidationResult {
       '${errorMessages.map((e) => '${e.field} - ${e.message}').join('\n')}';
 }
 
-extension Adasd<T> on Resource {
+/// Validation extension methods for [Resource].
+extension ResourceValidationExtensions<T> on Resource {
+  /// Validates the resource based on the provided [fieldDefinitions].
   ValidationResult validate(
     // ignore: strict_raw_type
     List<FieldDefinition> fieldDefinitions,
