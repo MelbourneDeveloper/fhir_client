@@ -25,17 +25,35 @@ void main() {
 
         switch (appointment.id) {
           case '059200e9f1d3e606':
+            expect(validationResult.isValid, false);
+            expectFieldStatusError(validationResult);
+            expect(validationResult.errorMessages.length, 2);
+
+            expect(
+              validationResult.errorMessages
+                  .firstWhere((element) => element.field == 'participant')
+                  .message,
+              'Field participant must be an array',
+            );
+
           case '06a86ef2-fd0a-42cb-b2a6-e1076670bc3b':
           case '05fda0d9-7d96-4869-bccd-8976ed9f35d8':
           case '07b726df-aa16-471d-ac8d-a69c10f73ee8':
           case '0a391b16-653c-4281-9a55-ff14d1ac94bf':
             expect(validationResult.isValid, false);
             expectFieldStatusError(validationResult);
-            expect(validationResult.errorMessages.length, 1);
+            expect(validationResult.errorMessages.length, 2);
 
           case '0a391b16-653c-4281-9a55-ff14d1ac94ba':
             expect(validationResult.isValid, false);
-            expectFieldStatusError(validationResult);
+            expect(
+                validationResult.errorMessages
+                    .firstWhere((element) => element.field == 'status')
+                    .message,
+                'Field status value must be one of '
+                '[ proposed, booked, arrived, fulfilled, cancelled, '
+                'noshow, entered-in-error ]');
+
             expect(validationResult.errorMessages.length, 2);
 
           default:
@@ -50,8 +68,10 @@ void main() {
 
 void expectFieldStatusError(ValidationResult validationResult) {
   expect(
-    validationResult.errorMessages.first.message,
-    'Field status is required',
+    validationResult.errorMessages
+        .firstWhere((element) => element.field == 'status')
+        .message,
+    'Field status is required, but no value was specified',
   );
   expect(
     validationResult.errorMessages.first.field,

@@ -64,26 +64,28 @@ class FieldDefinition<T> {
   }) {
     final errors = <ValidationError>[];
 
-    //Check for null
-    if (isRequired && value is JsonNull) {
-      errors.add(
-        ValidationError(
-          message: 'Field $name is required, but null was specified',
-          field: name,
-        ),
-      );
+    if (isRequired) {
+      //Check for null
+      if (value is JsonNull) {
+        errors.add(
+          ValidationError(
+            message: 'Field $name is required, but null was specified',
+            field: name,
+          ),
+        );
+      } else {
+        if (!isUpdate && value is Undefined) {
+          errors.add(
+            ValidationError(
+              message: 'Field $name is required, but no value was specified',
+              field: name,
+            ),
+          );
+        }
+      }
     }
 
-    if (!isUpdate && isRequired && value is Undefined) {
-      errors.add(
-        ValidationError(
-          message: 'Field $name is required, but no value was specified',
-          field: name,
-        ),
-      );
-    }
-
-    if (min != null || max != null && value is! JsonArray) {
+    if ((min != null || max != null) && value is! JsonArray) {
       errors.add(
         ValidationError(
           message: 'Field $name must be an array',
@@ -112,13 +114,15 @@ class FieldDefinition<T> {
 
     if (regex != null) {
       if (value is! JsonString) {
-        errors.add(
-          ValidationError(
-            message: 'Field $name must be a string and '
-                'match the regex expression',
-            field: name,
-          ),
-        );
+        if (value.isSome) {
+          errors.add(
+            ValidationError(
+              message: 'Field $name must be a string and '
+                  'match the regex expression',
+              field: name,
+            ),
+          );
+        }
       } else {
         if (!RegExp(regex!).hasMatch(value.value)) {
           errors.add(
@@ -133,12 +137,14 @@ class FieldDefinition<T> {
 
     if (allowedStringValues.isNotEmpty) {
       if (value is! JsonString) {
-        errors.add(
-          ValidationError(
-            message: 'Field $name must be a string',
-            field: name,
-          ),
-        );
+        if (value.isSome) {
+          errors.add(
+            ValidationError(
+              message: 'Field $name must be a string',
+              field: name,
+            ),
+          );
+        }
       } else {
         if (!allowedStringValues.contains(value.value)) {
           errors.add(
