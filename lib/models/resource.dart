@@ -213,8 +213,6 @@ class Appointment extends Resource {
   static const serviceCategoryField = FieldDefinition(
     name: 'serviceCategory',
     getValue: _getServiceCategory,
-    min: 0,
-    max: 1,
     description:
         'A broad categorization of the service that is to be performed during this appointment.',
   );
