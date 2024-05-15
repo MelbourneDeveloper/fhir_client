@@ -458,6 +458,12 @@ void main() {
 
       expect(bundleEntries.entries.length, 11);
 
+      final appointment = bundleEntries.entries.firstWhere(
+        (element) => element.id == '06a86ef2-fd0a-42cb-b2a6-e1076670bc3b',
+      );
+
+      expect(appointment.description, 'dsgfds');
+
       //TODO: more assertions
     });
 

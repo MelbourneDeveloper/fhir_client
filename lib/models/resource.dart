@@ -173,6 +173,7 @@ class Appointment extends Resource {
     AppointmentStatus? status,
     FixedList<CodeableConcept>? serviceCategory,
     FixedList<Participant>? participant,
+    String? description,
   }) : super._internal(
           JsonObject({
             if (id != null) 'id': JsonString(id),
@@ -184,6 +185,8 @@ class Appointment extends Resource {
             if (participant != null)
               participantField.name:
                   JsonArray.unmodifiable(participant.map((e) => e.json)),
+            if (description != null)
+              descriptionField.name: JsonString(description),
           }),
         );
 
@@ -199,6 +202,9 @@ class Appointment extends Resource {
 
   /// List of participants involved in the appointment.
   FixedList<Participant>? get participant => participantField.getValue(json);
+
+  /// A description of the appointment.
+  String? get description => descriptionField.getValue(json);
 
   /// Field definition for [status]
   static const statusField = FieldDefinition(
@@ -233,12 +239,20 @@ class Appointment extends Resource {
     description: 'List of participants involved in the appointment.',
   );
 
-  /// All field definitions for [Appointment].
+  /// Field definition for [description]
+  static const descriptionField = FieldDefinition(
+    name: 'description',
+    getValue: _getDescription,
+    description: 'A description of the appointment.',
+  );
+
+  /// R4: All field definitions for [Appointment].
   static const fieldDefinitions = [
     ...Resource.fieldDefinitions,
     statusField,
     serviceCategoryField,
     participantField,
+    descriptionField,
   ];
 
   static AppointmentStatus? _getStatus(JsonObject jo) =>
@@ -264,6 +278,12 @@ class Appointment extends Resource {
         _ => null,
       };
 
+  static String? _getDescription(JsonObject jo) =>
+      switch (jo[descriptionField.name]) {
+        (final JsonString js) => js.value,
+        _ => null,
+      };
+
   /// Creates a copy of the [Appointment] instance and allows for non-destructive mutation.
   Appointment copyWith({
     String? id,
@@ -271,6 +291,7 @@ class Appointment extends Resource {
     AppointmentStatus? status,
     FixedList<CodeableConcept>? serviceCategory,
     FixedList<Participant>? participant,
+    String? description,
   }) =>
       Appointment(
         id: id ?? this.id,
@@ -278,6 +299,7 @@ class Appointment extends Resource {
         status: status ?? this.status,
         serviceCategory: serviceCategory ?? this.serviceCategory,
         participant: participant ?? this.participant,
+        description: description ?? this.description,
       );
 }
 
@@ -348,46 +370,55 @@ class Bundle extends Resource {
   /// Entries within the bundle
   List<Entry>? get entry => entryField.getValue(json);
 
+  /// Field definition for [extension].
   static const extensionField = FieldDefinition(
     name: 'extension',
     getValue: _getExtension,
   );
 
+  /// Field definition for [identifier].
   static const identifierField = FieldDefinition(
     name: 'identifier',
     getValue: _getIdentifier,
   );
 
+  /// Field definition for [active].
   static const activeField = FieldDefinition(
     name: 'active',
     getValue: _getActive,
   );
 
+  /// Field definition for [type].  
   static const typeField = FieldDefinition(
     name: 'type',
     getValue: _getType,
   );
 
+  /// Field definition for [name].
   static const nameField = FieldDefinition(
     name: 'name',
     getValue: _getName,
   );
 
+  /// Field definition for [code].
   static const codeField = FieldDefinition(
     name: 'code',
     getValue: _getCode,
   );
 
+  /// Field definition for [participant].
   static const participantField = FieldDefinition(
     name: 'participant',
     getValue: _getParticipant,
   );
 
+  /// Field definition for [link].
   static const linkField = FieldDefinition(
     name: 'link',
     getValue: _getLink,
   );
 
+  /// Field definition for [entry].
   static const entryField = FieldDefinition(
     name: 'entry',
     getValue: _getEntry,

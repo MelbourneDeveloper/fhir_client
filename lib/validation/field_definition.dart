@@ -219,8 +219,6 @@ extension ResourceValidationExtensions<T> on Resource {
       ...fieldDefinitions.map((field) => field.name),
       'resourceType',
       'extension',
-      //TODO: this doesn't look right...
-      'description',
     };
 
     // ignore: unused_local_variable
