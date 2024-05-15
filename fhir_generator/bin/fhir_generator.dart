@@ -39,49 +39,7 @@ String _generateResourceDataClass(
   String resourceDefinition,
   JsonArray element,
 ) {
-  final fields = <Field>[];
-
-  // Iterate through each of the "element" nodes
-  for (final elementItem in element.value) {
-    final path = elementItem['path'].stringValue;
-    if (path == null) throw Exception('Path is null or not a string');
-
-    final typeArray = elementItem['type'] as JsonArray;
-
-    if (path.split('.').length == 2) {
-      final fieldName = path.split('.')[1].replaceAll('[x]', '');
-      final isRequired = (elementItem['min'] as JsonNumber).integerValue == 1;
-
-      //Ignore fixedCode for now...
-      // final allowedStringValues = elementItem['fixedCode']
-      //     ?.jsonArray
-      //     .map((e) => e.stringValue)
-      //     .toList();
-
-      fields.add(
-        Field(
-          name: fieldName,
-          //TODO: deal with
-          type: fieldName == 'gender'
-              ? 'AdministrativeGender'
-              : _arrayToDartType(typeArray),
-          definitionText: '''
-  /// Field definition for [$fieldName].
-  static const ${fieldName}Field = FieldDefinition(
-    name: '$fieldName',
-    getValue: _get${fieldName.capitalize()},
-    description: ${_wrapDefinitionString(elementItem)},
-${isRequired ? '    isRequired: $isRequired, ' : ''});
-''',
-
-          isRequired: isRequired,
-          // Ignore fixedCode / Allowed Values for now...
-          //    ${allowedStringValues != null ? "allowedStringValues: ${allowedStringValues.toJson()}," : ''}
-          //allowedStringValues: allowedStringValues,
-        ),
-      );
-    }
-  }
+  final fields = _getFields(element);
 
   return '''
 /// $resourceDefinition
@@ -119,6 +77,54 @@ class $resourceName extends Resource {
       );
 }
 ''';
+}
+
+/// Convert all the fields in the JSON definition to a list of [Field] objects.
+List<Field> _getFields(JsonArray element) {
+  final fields = <Field>[];
+
+  // Iterate through each of the "element" nodes
+  for (final elementItem in element.value) {
+    final path = elementItem['path'].stringValue;
+    if (path == null) throw Exception('Path is null or not a string');
+
+    final typeArray = elementItem['type'] as JsonArray;
+
+    if (path.split('.').length == 2) {
+      final fieldName = path.split('.')[1].replaceAll('[x]', '');
+      final isRequired = (elementItem['min'] as JsonNumber).integerValue == 1;
+
+      //Ignore fixedCode for now...
+      // final allowedStringValues = elementItem['fixedCode']
+      //     ?.jsonArray
+      //     .map((e) => e.stringValue)
+      //     .toList();
+
+      fields.add(
+        Field(
+          name: fieldName,
+          //TODO: deal with
+          type: fieldName == 'gender'
+              ? 'AdministrativeGender'
+              : _arrayToDartType(typeArray),
+          definitionText: '''
+  /// Field definition for [$fieldName].
+  static const ${fieldName}Field = FieldDefinition(
+    name: '$fieldName',
+    getValue: _get${fieldName.capitalize()},
+    description: ${_wrapDefinitionString(elementItem)},
+  ${isRequired ? '    isRequired: $isRequired, ' : ''});
+  ''',
+
+          isRequired: isRequired,
+          // Ignore fixedCode / Allowed Values for now...
+          //    ${allowedStringValues != null ? "allowedStringValues: ${allowedStringValues.toJson()}," : ''}
+          //allowedStringValues: allowedStringValues,
+        ),
+      );
+    }
+  }
+  return fields;
 }
 
 String _staticGetMethods(List<Field> fields) => fields
