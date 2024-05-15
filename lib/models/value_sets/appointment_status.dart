@@ -78,7 +78,7 @@ enum AppointmentStatus implements Comparable<AppointmentStatus> {
   final String system;
 
   /// Returns the appointment status based on the string code, and returns entered-in-error if no match is found
-  static AppointmentStatus fromCode(String code) => switch (code) {
+  static AppointmentStatus? fromCode(String code) => switch (code) {
         ('proposed') => AppointmentStatus.proposed,
         ('booked') => AppointmentStatus.booked,
         ('arrived') => AppointmentStatus.arrived,
@@ -86,7 +86,7 @@ enum AppointmentStatus implements Comparable<AppointmentStatus> {
         ('cancelled') => AppointmentStatus.cancelled,
         ('noshow') => AppointmentStatus.noshow,
         ('entered-in-error') => AppointmentStatus.enteredInError,
-        _ => throw Exception('Unknown AppointmentStatus code $code'),
+        _ => null,
       };
 
   @override

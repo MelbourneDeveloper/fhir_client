@@ -15,7 +15,7 @@ class FieldDefinition<T> {
     this.max,
     this.regex,
     this.description,
-    this.allowedValues,
+    this.allowedValues = const [],
   });
 
   /// Returns the value of the field from the provided [JsonObject].
@@ -52,7 +52,7 @@ class FieldDefinition<T> {
   /// A description of the field.
   final String? description;
 
-  final List<Object>? allowedValues;
+  final List<Object> allowedValues;
 
   MapEntry<String, dynamic> toMapEntry(JsonValue definable) =>
       MapEntry(name, definable);
@@ -92,6 +92,17 @@ class FieldDefinition<T> {
       errors.add(
         ValidationError(
           message: 'Field $name must match the pattern $regex',
+          field: name,
+        ),
+      );
+    }
+
+    if (allowedValues.isNotEmpty &&
+        value != null &&
+        !allowedValues.contains(value)) {
+      errors.add(
+        ValidationError(
+          message: 'Field $name value must be one of $allowedValues',
           field: name,
         ),
       );

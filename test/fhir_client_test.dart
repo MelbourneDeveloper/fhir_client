@@ -456,7 +456,7 @@ void main() {
         ) as BundleEntries<Appointment>,
       );
 
-      expect(bundleEntries.length, 11);
+      expect(bundleEntries.entries.length, 11);
 
       //TODO: more assertions
     });

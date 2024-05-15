@@ -272,10 +272,11 @@
             }
         },
         {
-            "fullUrl": "https://hapi.fhir.org/baseR4/Appointment/0a391b16-653c-4281-9a55-ff14d1ac94bf",
+            "fullUrl": "https://hapi.fhir.org/baseR4/Appointment/0a391b16-653c-4281-9a55-ff14d1ac94ba",
             "resource": {
+                "status": "idunno",
                 "resourceType": "Appointment",
-                "id": "0a391b16-653c-4281-9a55-ff14d1ac94bf",
+                "id": "0a391b16-653c-4281-9a55-ff14d1ac94ba",
                 "meta": {
                     "versionId": "1",
                     "lastUpdated": "2023-08-04T09:17:41.161+00:00",

@@ -33,6 +33,11 @@ void main() {
             expectFieldStatusError(validationResult);
             expect(validationResult.errorMessages.length, 1);
 
+          case '0a391b16-653c-4281-9a55-ff14d1ac94ba':
+            expect(validationResult.isValid, false);
+            expectFieldStatusError(validationResult);
+            expect(validationResult.errorMessages.length, 2);
+
           default:
             expect(validationResult.isValid, isTrue);
         }
