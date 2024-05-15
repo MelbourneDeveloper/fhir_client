@@ -5,6 +5,7 @@ import 'package:fhir_client/models/address.dart';
 import 'package:fhir_client/models/admit_source.dart';
 import 'package:fhir_client/models/annotation.dart';
 import 'package:fhir_client/models/available_time.dart';
+import 'package:fhir_client/models/basic_types/choice_types.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
@@ -2187,6 +2188,7 @@ class Patient extends Resource {
     AdministrativeGender? gender,
     DateTime? birthDate,
     FixedList<Address>? address,
+    BoolOrDateTimeChoice? deceased,
   }) : super._internal(
           JsonObject({
             if (id != null) Resource.idField.name: JsonString(id),
@@ -2206,6 +2208,7 @@ class Patient extends Resource {
             if (address != null)
               addressField.name:
                   JsonArray.unmodifiable(address.map((e) => e.json)),
+            if (deceased != null) deceasedField.name: deceased.toJsonString(),
           }),
         );
 
@@ -2238,6 +2241,16 @@ class Patient extends Resource {
     name: 'identifier',
     getValue: _getIdentifier,
     description: 'An identifier for this patient.',
+  );
+
+  /// Whether or not the patient is deceased.
+  BoolOrDateTimeChoice? get deceased => deceasedField.getValue(json);
+
+  /// Field definition for [deceased[x]].
+  static const deceasedField = FieldDefinition(
+    name: 'deceased',
+    getValue: _getDeceased,
+    description: 'Indicates if the individual is deceased or not.',
   );
 
   /// Field definition for [active].
@@ -2299,6 +2312,7 @@ class Patient extends Resource {
     telecomField,
     genderField,
     birthDateField,
+    deceasedField,
     addressField,
   ];
 
@@ -2311,6 +2325,9 @@ class Patient extends Resource {
       };
 
   static bool? _getActive(JsonObject jo) => jo[activeField.name].booleanValue;
+
+  static BoolOrDateTimeChoice? _getDeceased(JsonObject jo) =>
+      BoolOrDateTimeChoice.fromJson(jo[deceasedField.name]);
 
   static FixedList<HumanName>? _getName(JsonObject jo) =>
       switch (jo[nameField.name]) {
@@ -2358,6 +2375,7 @@ class Patient extends Resource {
     AdministrativeGender? gender,
     DateTime? birthDate,
     FixedList<Address>? address,
+    BoolOrDateTimeChoice? deceased,
   }) =>
       Patient(
         id: id ?? this.id,
@@ -2368,6 +2386,7 @@ class Patient extends Resource {
         telecom: telecom ?? this.telecom,
         gender: gender ?? this.gender,
         birthDate: birthDate ?? this.birthDate,
+        deceased: deceased ?? this.deceased,
         address: address ?? this.address,
       );
 }
