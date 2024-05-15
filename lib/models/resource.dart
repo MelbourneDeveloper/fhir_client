@@ -205,7 +205,15 @@ class Appointment extends Resource {
     name: 'status',
     getValue: _getStatus,
     isRequired: true,
-    allowedValues: AppointmentStatus.values,
+    allowedStringValues: [
+      'proposed',
+      'booked',
+      'arrived',
+      'fulfilled',
+      'cancelled',
+      'noshow',
+      'entered-in-error',
+    ],
     description: 'The overall status of the appointment.',
   );
 

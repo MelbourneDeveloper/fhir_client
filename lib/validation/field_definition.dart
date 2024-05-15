@@ -15,7 +15,7 @@ class FieldDefinition<T> {
     this.max,
     this.regex,
     this.description,
-    this.allowedValues = const [],
+    this.allowedStringValues = const [],
   });
 
   /// Returns the value of the field from the provided [JsonObject].
@@ -52,25 +52,47 @@ class FieldDefinition<T> {
   /// A description of the field.
   final String? description;
 
-  final List<Object> allowedValues;
+  final List<String> allowedStringValues;
 
   MapEntry<String, dynamic> toMapEntry(JsonValue definable) =>
       MapEntry(name, definable);
 
   /// Validates the field value based on the defined validation rules.
-  List<ValidationError> validate(T? value) {
+  List<ValidationError> validate(
+    JsonValue value, {
+    bool isUpdate = false,
+  }) {
     final errors = <ValidationError>[];
 
-    if (isRequired && value == null) {
+    //Check for null
+    if (isRequired && value is JsonNull) {
       errors.add(
         ValidationError(
-          message: 'Field $name is required',
+          message: 'Field $name is required, but null was specified',
           field: name,
         ),
       );
     }
 
-    if (min != null && value is List && value.length < min!) {
+    if (!isUpdate && isRequired && value is Undefined) {
+      errors.add(
+        ValidationError(
+          message: 'Field $name is required, but no value was specified',
+          field: name,
+        ),
+      );
+    }
+
+    if (min != null || max != null && value is! JsonArray) {
+      errors.add(
+        ValidationError(
+          message: 'Field $name must be an array',
+          field: name,
+        ),
+      );
+    }
+
+    if (min != null && value is JsonArray && value.length < min!) {
       errors.add(
         ValidationError(
           message: 'Field $name must have at least $min items',
@@ -79,7 +101,7 @@ class FieldDefinition<T> {
       );
     }
 
-    if (max != null && value is List && value.length > max!) {
+    if (max != null && value is JsonArray && value.length > max!) {
       errors.add(
         ValidationError(
           message: 'Field $name must have at most $max items',
@@ -88,24 +110,46 @@ class FieldDefinition<T> {
       );
     }
 
-    if (regex != null && value is String && !RegExp(regex!).hasMatch(value)) {
-      errors.add(
-        ValidationError(
-          message: 'Field $name must match the pattern $regex',
-          field: name,
-        ),
-      );
+    if (regex != null) {
+      if (value is! JsonString) {
+        errors.add(
+          ValidationError(
+            message: 'Field $name must be a string and '
+                'match the regex expression',
+            field: name,
+          ),
+        );
+      } else {
+        if (!RegExp(regex!).hasMatch(value.value)) {
+          errors.add(
+            ValidationError(
+              message: 'Field $name must match the pattern $regex',
+              field: name,
+            ),
+          );
+        }
+      }
     }
 
-    if (allowedValues.isNotEmpty &&
-        value != null &&
-        !allowedValues.contains(value)) {
-      errors.add(
-        ValidationError(
-          message: 'Field $name value must be one of $allowedValues',
-          field: name,
-        ),
-      );
+    if (allowedStringValues.isNotEmpty) {
+      if (value is! JsonString) {
+        errors.add(
+          ValidationError(
+            message: 'Field $name must be a string',
+            field: name,
+          ),
+        );
+      } else {
+        if (!allowedStringValues.contains(value.value)) {
+          errors.add(
+            ValidationError(
+              message: 'Field $name value must be one of '
+                  '[ ${allowedStringValues.join(', ')} ]',
+              field: name,
+            ),
+          );
+        }
+      }
     }
 
     return errors;
@@ -180,8 +224,8 @@ ValidationResult validate<T extends Resource>(
   final errorMessages = <ValidationError>[];
 
   for (final fieldDefinition in fieldDefinitions) {
-    final value = fieldDefinition.getValue(resource.json);
-    final validationResult = fieldDefinition.validate(value);
+    final validationResult =
+        fieldDefinition.validate(resource.json[fieldDefinition.name]);
     if (validationResult.isNotEmpty) {
       errorMessages.addAll(validationResult);
     }
