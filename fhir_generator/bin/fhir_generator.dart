@@ -19,6 +19,7 @@ class Field {
 
 void main(List<String> args) {
   if (args.isEmpty) {
+    // http://hl7.org/fhir/R4/patient.profile.json
     // ignore: parameter_assignments
     args = ['patient.json'];
   }
@@ -60,16 +61,15 @@ String generateDartCode(
 
     if (path == null) throw Exception('Path is null or not a string');
 
-    final elementItemType = elementItem['type'] as JsonArray;
-    final type = elementItemType[0]['code'] as JsonString;
+    final typeArray = elementItem['type'] as JsonArray;
 
     if (path.split('.').length == 2) {
-      final fieldName = path.split('.')[1];
+      final fieldName = path.split('.')[1].replaceAll('[x]', '');
 
       fields.add(
         Field(
           name: fieldName,
-          type: mapFhirTypeToDartType(type.value),
+          type: arrayToToDartType(typeArray),
           definitionText: '''
   /// Field definition for [$fieldName].
   static const ${fieldName}Field = FieldDefinition(
@@ -94,7 +94,7 @@ class $resourceName extends Resource {
           JsonObject({
             if (id != null) Resource.idField.name: JsonString(id),
             if (meta != null) Resource.metaField.name: meta.json,
-            ${fields.map((field) => "if (${field.name} != null) ${field.name}Field.name: ${field.name}.json,").join('\n            ')}
+            ${fields.map((field) => field.type == 'BoolOrDateTimeChoice' ? "if (${field.name} != null) ${field.name}Field.name: ${field.name}.toJsonString()," : "if (${field.name} != null) ${field.name}Field.name: ${field.name}.json,").join('\n            ')}
           }),
         );
 
@@ -102,6 +102,28 @@ class $resourceName extends Resource {
   $resourceName.fromJson(JsonObject json) : super._internal(json);
 
   ${fields.map((field) => '/// ${field.name}\n  ${field.type}? get ${field.name} => ${field.name}Field.getValue(json);').join('\n\n  ')}
+
+  ${fields.map(
+            (field) => field.type == 'BoolOrDateTimeChoice'
+                ? '''
+  static ${field.type}? _get${field.name.capitalize()}(JsonObject jo) {
+    final value = jo['${field.name}Field'];
+    if (value != null) {
+      return BoolOrDateTimeChoice.fromJson(value);
+    }
+    return null;
+  }
+'''
+                : '''
+  static ${field.type}? _get${field.name.capitalize()}(JsonObject jo) {
+    final value = jo['${field.name}Field'];
+    if (value != null) {
+      return ${field.type}.fromJson(value as JsonObject);
+    }
+    return null;
+  }
+''',
+          ).join('\n')}
 
   ${fields.map((field) => field.definitionText).join('\n')}
 
@@ -128,15 +150,34 @@ class $resourceName extends Resource {
   return dartCode;
 }
 
+String arrayToToDartType(JsonArray array) => switch (array) {
+      (final JsonArray ja) when ja.length == 0 => throw Exception('Empty type'),
+      (final JsonArray ja) when ja.length == 1 && ja[0]['code'] is JsonString =>
+        mapFhirTypeToDartType((ja[0]['code'] as JsonString).value),
+      (final JsonArray ja)
+          when ja.length == 2 &&
+              ja[0]['code'].stringValue == 'boolean' &&
+              ja[1]['code'].stringValue == 'dateTime' =>
+        'BooleanOrDateTimeChoice',
+      (final JsonArray ja)
+          when ja.length == 2 &&
+              ja[0]['code'].stringValue == 'boolean' &&
+              ja[1]['code'].stringValue == 'integer' =>
+        'BooleanOrIntegerChoice',
+      _ => throw Exception('Type case not handled')
+    };
+
 String mapFhirTypeToDartType(String fhirType) => switch (fhirType) {
       'string' => 'String',
       'http://hl7.org/fhirpath/System.String' => 'String',
       'boolean' => 'bool',
-      //May need a Date data type in future...
+      'http://hl7.org/fhirpath/System.Boolean' => 'bool',
       'date' => 'DateTime',
       'dateTime' => 'DateTime',
+      'http://hl7.org/fhirpath/System.DateTime' => 'DateTime',
       'uri' => 'Uri',
       'code' => 'String',
+      'http://hl7.org/fhirpath/System.Integer' => 'int',
       _ => fhirType,
     };
 
