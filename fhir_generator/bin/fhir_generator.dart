@@ -14,6 +14,9 @@ class Field {
     required this.isRequired,
     //TODO: fill this in
     this.isList = false,
+    //TODO: get this from the "short" field in the JSON definition.
+    //It looks like this: "short": "male | female | other | unknown"
+    //This also needs to drive enums like AdministrativeGender
     this.allowedStringValues,
   });
 
@@ -104,6 +107,7 @@ String generateDartCode(
       fields.add(
         Field(
           name: fieldName,
+          //TODO: deal with
           type: fieldName == 'gender'
               ? 'AdministrativeGender'
               : arrayToDartType(typeArray),
@@ -113,8 +117,7 @@ String generateDartCode(
     name: '$fieldName',
     getValue: _get${fieldName.capitalize()},
     description: ${_wrapDefinitionString(elementItem)},
-${isRequired ? '    isRequired: $isRequired, ' : ''}
- );
+${isRequired ? '    isRequired: $isRequired, ' : ''});
 ''',
 
           isRequired: isRequired,
@@ -141,7 +144,7 @@ class $resourceName extends Resource {
   /// Creates a [$resourceName] instance from the provided JSON object.
   $resourceName.fromJson(JsonObject json) : super._internal(json);
 
-  ${getters(fields)}
+  ${_getters(fields)}
 
   ${fields.map(
             (field) => '''
@@ -176,7 +179,7 @@ String _wrapDefinitionString(JsonValue elementItem) {
   return "'''${value2.substring(1, value2.length - 1)}'''";
 }
 
-String getters(List<Field> fields) => fields
+String _getters(List<Field> fields) => fields
     .where(
       (element) => ![
         'meta',
