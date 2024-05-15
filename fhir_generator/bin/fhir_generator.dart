@@ -77,9 +77,7 @@ String generateDartCode(
 class $resourceName extends Resource {
   /// Constructs a new [$resourceName].
   $resourceName({
-    String? id,
-    Meta? meta,
-    ${fields.join(',\n    ')}
+    ${fields.join(',\n    ')},
   }) : super._internal(
           JsonObject({
             if (id != null) Resource.idField.name: JsonString(id),
