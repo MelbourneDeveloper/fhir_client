@@ -1,4 +1,5 @@
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/narrative.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/value_sets/appointment_status.dart';
 import 'package:fhir_client/models/value_sets/encounter_status.dart';
@@ -27,7 +28,7 @@ extension FhirExtensions on Client {
           return Resource.fromJson(jsonValue);
         } else {
           return OperationOutcome<T>.error(
-            message: 'Unexpected Result',
+            status: NarrativeStatus.empty,
             details:
                 'Expected a JSON object, but got a ${jsonValue.runtimeType}',
           );
@@ -36,15 +37,15 @@ extension FhirExtensions on Client {
         // ignore: avoid_catches_without_on_clauses
       } catch (e) {
         return OperationOutcome<T>.error(
-          message:
-              'Exception or Error occurred when converting JSON to Resource',
+          status:
+              NarrativeStatus.empty,
           details: e.toString(),
         );
       }
       // ignore: avoid_catches_without_on_clauses
     } catch (e) {
       return OperationOutcome<T>.error(
-        message: 'Exception or Error occurred when contacting the FHIR server',
+        status: NarrativeStatus.empty,
         details: e.toString(),
       );
     }
@@ -205,7 +206,7 @@ extension FhirExtensions on Client {
           ),
         //Unexpected Result
         (final Resource r) => OperationOutcome.error(
-            message: 'Unexpected Result',
+            status: NarrativeStatus.empty,
             details: 'Expected a list of ${resourceType.code}s, but '
                 'got a ${r.runtimeType}',
           ),

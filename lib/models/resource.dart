@@ -19,6 +19,7 @@ import 'package:fhir_client/models/link.dart';
 import 'package:fhir_client/models/location.dart';
 import 'package:fhir_client/models/meta.dart';
 import 'package:fhir_client/models/name.dart';
+import 'package:fhir_client/models/narrative.dart';
 import 'package:fhir_client/models/not_available.dart';
 import 'package:fhir_client/models/observation_component.dart';
 import 'package:fhir_client/models/observation_reference_range.dart';
@@ -29,7 +30,6 @@ import 'package:fhir_client/models/range.dart';
 import 'package:fhir_client/models/ratio.dart';
 import 'package:fhir_client/models/reference.dart';
 import 'package:fhir_client/models/sampled_data.dart';
-import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/timing.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 import 'package:fhir_client/models/value_sets/appointment_status.dart';
@@ -83,7 +83,7 @@ sealed class Resource {
 
     if (resourceTypeString == null) {
       return OperationOutcome<String>(
-        text: Text(status: 'Invalid Resource. resourceType not specified'),
+        text: Narrative(status: NarrativeStatus.empty),
       );
     }
 
@@ -1841,7 +1841,7 @@ class OperationOutcome<T> extends Resource implements Result<T> {
   OperationOutcome({
     String? id,
     Meta? meta,
-    Text? text,
+    Narrative? text,
     FixedList<Issue>? issue,
   }) : super._internal(
           JsonObject({
@@ -1856,16 +1856,18 @@ class OperationOutcome<T> extends Resource implements Result<T> {
   /// Creates an [OperationOutcome] instance from the provided JSON object.
   OperationOutcome.fromJson(JsonObject json) : super._internal(json);
 
-  OperationOutcome.error({required String message, required String details})
-      : this(
-          text: Text(
-            status: message,
+  OperationOutcome.error({
+    required NarrativeStatus status,
+    required String details,
+  }) : this(
+          text: Narrative(
+            status: status,
             div: details,
           ),
         );
 
   /// A human-readable narrative that contains a summary of the resource and can be used to represent the content of the resource to a human.
-  Text? get text => textField.getValue(json);
+  Narrative? get text => textField.getValue(json);
 
   /// A single issue associated with the action.
   FixedList<Issue>? get issue => issueField.getValue(json);
@@ -1889,8 +1891,8 @@ class OperationOutcome<T> extends Resource implements Result<T> {
     issueField,
   ];
 
-  static Text? _getText(JsonObject jo) => switch (jo[textField.name]) {
-        (final JsonObject jsonObject) => Text.fromJson(jsonObject),
+  static Narrative? _getText(JsonObject jo) => switch (jo[textField.name]) {
+        (final JsonObject jsonObject) => Narrative.fromJson(jsonObject),
         _ => null,
       };
 
@@ -1918,7 +1920,7 @@ class OperationOutcome<T> extends Resource implements Result<T> {
   OperationOutcome<T> copyWith({
     String? id,
     Meta? meta,
-    Text? text,
+    Narrative? text,
     FixedList<Issue>? issue,
   }) =>
       OperationOutcome<T>(

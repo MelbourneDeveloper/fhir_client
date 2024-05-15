@@ -130,8 +130,12 @@ class $resourceName extends Resource {
 
 String mapFhirTypeToDartType(String fhirType) => switch (fhirType) {
       'string' => 'String',
+      'http://hl7.org/fhirpath/System.String' => 'String',
       'boolean' => 'bool',
+      //May need a Date data type in future...
+      'date' => 'DateTime',
       'dateTime' => 'DateTime',
+      'uri' => 'Uri',
       'code' => 'String',
       _ => fhirType,
     };
