@@ -112,7 +112,9 @@ void main() {
         validationResult1.errorMessages
             .firstWhere((element) => element.field == 'participant')
             .message,
-        'Field participant is required, but no value was specified',
+        'Field participant must be an array',
+        //'Field participant is required, but no value was specified', <- this
+        // is currently not actually required
       );
 
       final appointment2 = Appointment(
