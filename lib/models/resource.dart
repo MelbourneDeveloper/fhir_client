@@ -164,6 +164,7 @@ extension ResourceExtensions<T extends Resource> on T {
       );
 }
 
+//TODO: this resource is not complete. Add fields...
 /// Represents a booking of a healthcare event among patient(s), practitioner(s), related person(s) and/or device(s) for a specific date/time.
 class Appointment extends Resource {
   /// Constructs a new [Appointment].
@@ -388,7 +389,7 @@ class Bundle extends Resource {
     getValue: _getActive,
   );
 
-  /// Field definition for [type].  
+  /// Field definition for [type].
   static const typeField = FieldDefinition(
     name: 'type',
     getValue: _getType,
@@ -2219,50 +2220,64 @@ class Patient extends Resource {
 
   /// An address for the individual.
   FixedList<Address>? get address => addressField.getValue(json);
-
-  /// Field definition for [identifier].
+/// Field definition for [identifier].
   static const identifierField = FieldDefinition(
     name: 'identifier',
     getValue: _getIdentifier,
+    description: 'An identifier for this patient.',
   );
 
   /// Field definition for [active].
   static const activeField = FieldDefinition(
     name: 'active',
     getValue: _getActive,
+    description: 'Whether this patient record is in active use.',
   );
 
   /// Field definition for [name].
   static const nameField = FieldDefinition(
     name: 'name',
     getValue: _getName,
+    description: 'A name associated with the patient.',
   );
 
   /// Field definition for [telecom].
   static const telecomField = FieldDefinition(
     name: 'telecom',
     getValue: _getTelecom,
+    description:
+        'A contact detail (e.g. a telephone number or an email address) by which the individual may be contacted.',
   );
 
   /// Field definition for [gender].
   static const genderField = FieldDefinition(
     name: 'gender',
     getValue: _getGender,
+    allowedStringValues: [
+      'male',
+      'female',
+      'other',
+      'unknown',
+    ],
+    description:
+        'Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes.',
   );
 
   /// Field definition for [birthDate].
   static const birthDateField = FieldDefinition(
     name: 'birthDate',
     getValue: _getBirthDate,
+    description: 'The date of birth for the individual.',
   );
 
   /// Field definition for [address].
   static const addressField = FieldDefinition(
     name: 'address',
     getValue: _getAddress,
+    description: 'An address for the individual.',
   );
 
-  /// All field definitions for [Patient].
+  /// R4: All field definitions for [Patient].
   static const fieldDefinitions = [
     ...Resource.fieldDefinitions,
     identifierField,

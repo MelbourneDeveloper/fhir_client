@@ -8,7 +8,7 @@ import 'package:jayse/jayse.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Appointment Validation', () {
+  group('Validate Search Results', () {
     test('Validate Appointment Search Results', () async {
       final json =
           await File('test/responses/appointmentsearch.json').readAsString();
@@ -60,6 +60,34 @@ void main() {
 
           default:
             expect(validationResult.isValid, isTrue);
+        }
+
+        print(validationResult);
+      }
+    });
+
+    test('Validate Patient Search Results', () async {
+      final json =
+          await File('test/responses/patientsearch.json').readAsString();
+      final result =
+          Resource.fromJson(jsonValueDecode(json) as JsonObject) as Bundle;
+
+      for (final entry in result.entry!) {
+        final patient = entry.resource! as Patient;
+        final validationResult = patient.validate(Patient.fieldDefinitions);
+
+        switch (patient.id) {
+          case '8728293':
+          case '8728374':
+            expect(validationResult.isValid, false);
+            expectMessage(
+              validationResult,
+              'text',
+              'Field text is not allowed',
+            );
+            expect(validationResult.errorMessages.length, 1);
+          default:
+            expect(validationResult.isValid, true);
         }
 
         print(validationResult);
