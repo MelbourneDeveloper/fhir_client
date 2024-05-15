@@ -34,7 +34,7 @@ packages:
     source: hosted
     version: "2.11.0"
   austerity:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: austerity
       sha256: "3b30f30b862762bbb8ec1c5c1c93684e500a51ce84aa2b4b5366eb5a9e0a7db0"

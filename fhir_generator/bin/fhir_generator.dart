@@ -4,10 +4,8 @@ import 'package:jayse/jayse.dart';
 
 void main(List<String> args) {
   if (args.isEmpty) {
+    // ignore: parameter_assignments
     args = ['patient.json'];
-    // print(
-    //     'Please provide the path to the JSON file as a command-line argument.');
-    // exit(1);
   }
 
   final jsonFilePath = args[0];
@@ -18,11 +16,11 @@ void main(List<String> args) {
 
   var element = snapshot['element'] as JsonArray;
 
-  var resourceelement = element[0];
-  final resourceName = resourceelement['id'].stringValue;
-  final resourceDefinition = resourceelement['definition'].stringValue;
+  final resourceElement = element[0];
+  final resourceName = resourceElement['id'].stringValue;
+  final resourceDefinition = resourceElement['definition'].stringValue;
 
-  //Remove the first element
+  // Remove the first element
   element = JsonArray(element.value.sublist(1));
 
   final dartCode = generateDartCode(
@@ -31,6 +29,7 @@ void main(List<String> args) {
     element,
   );
 
+  // ignore: avoid_print
   print(dartCode);
 }
 
@@ -47,10 +46,10 @@ String generateDartCode(
 
     if (path == null) throw Exception('Path is null or not a string');
 
-    var elementItemType = elementItem['type'] as JsonArray;
+    final elementItemType = elementItem['type'] as JsonArray;
     final type = elementItemType[0]['code'] as JsonString;
 
-    if (path.split('.').length == 2 && type != null) {
+    if (path.split('.').length == 2) {
       final fieldName = path.split('.')[1];
       final dartType = mapFhirTypeToDartType(type.value);
 
@@ -58,8 +57,6 @@ String generateDartCode(
 
       final description = elementItem['definition'] as JsonString;
       final isRequired = elementItem['min'] as JsonNumber;
-      // final allowedStringValues =
-      //     elementItem['fixedCode'] != null ? [elementItem['fixedCode']] : [];
 
       final fieldDefinition = '''
   /// Field definition for [$fieldName].
@@ -67,11 +64,9 @@ String generateDartCode(
     name: '$fieldName',
     getValue: _get${fieldName.capitalize()},
     description: '$description',
-    isRequired: $isRequired,
+    isRequired: $isRequired == 1,
   );
 ''';
-
-//    allowedStringValues: ${allowedStringValues.map((v) => "'$v'").toList()},
 
       fieldDefinitions.add(fieldDefinition);
     }
@@ -143,13 +138,25 @@ String mapFhirTypeToDartType(String fhirType) {
       return 'DateTime';
     case 'code':
       return 'String';
+    case 'Address':
+      return 'Address';
+    case 'HumanName':
+      return 'HumanName';
+    case 'ContactPoint':
+      return 'ContactPoint';
+    case 'AdministrativeGender':
+      return 'AdministrativeGender';
+    case 'Attachment':
+      return 'Attachment';
+    case 'Reference':
+      return 'Reference';
+    case 'CodeableConcept':
+      return 'CodeableConcept';
     default:
       return 'dynamic';
   }
 }
 
 extension StringExtensions on String {
-  String capitalize() {
-    return "${this[0].toUpperCase()}${substring(1)}";
-  }
+  String capitalize() => '${this[0].toUpperCase()}${substring(1)}';
 }
