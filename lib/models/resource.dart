@@ -140,6 +140,16 @@ sealed class Resource {
 extension ResourceExtensions<T extends Resource> on T {
   /// Creates a clone of the resource with the provided field updated with
   /// another resource
+  T withFieldValue(
+    // ignore: strict_raw_type
+    FieldDefinition field,
+    JsonValue value, {
+    required T Function(JsonObject) constructor,
+  }) =>
+      constructor(json.withUpdate(field.name, value));
+
+  /// Creates a clone of the resource with the provided field updated with
+  /// another resource
   T withFieldResource<T2 extends Resource>(
     FieldDefinition<T2> field,
     T2 resource, {
@@ -2220,7 +2230,8 @@ class Patient extends Resource {
 
   /// An address for the individual.
   FixedList<Address>? get address => addressField.getValue(json);
-/// Field definition for [identifier].
+
+  /// Field definition for [identifier].
   static const identifierField = FieldDefinition(
     name: 'identifier',
     getValue: _getIdentifier,

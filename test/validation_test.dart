@@ -2,7 +2,12 @@
 
 import 'dart:io';
 
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/participant.dart';
 import 'package:fhir_client/models/resource.dart';
+import 'package:fhir_client/models/value_sets/administrative_gender.dart';
+import 'package:fhir_client/models/value_sets/appointment_status.dart';
+import 'package:fhir_client/models/value_sets/participation_status.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 import 'package:test/test.dart';
@@ -92,6 +97,84 @@ void main() {
 
         print(validationResult);
       }
+    });
+  });
+
+  group('Validate Constructed Instances', () {
+    test('Validate Constructed Appointment Instances', () {
+      final appointment1 = Appointment(id: '123');
+      final validationResult1 =
+          appointment1.validate(Appointment.fieldDefinitions);
+      expect(validationResult1.isValid, false);
+      expectFieldStatusError(validationResult1);
+      expect(validationResult1.errorMessages.length, 2);
+      expect(
+        validationResult1.errorMessages
+            .firstWhere((element) => element.field == 'participant')
+            .message,
+        'Field participant must be an array',
+        //'Field participant is required, but no value was specified', <- this
+        // is currently not actually required
+      );
+
+      final appointment2 = Appointment(
+        id: '456',
+        status: AppointmentStatus.proposed,
+        participant:
+            FixedList([Participant(status: ParticipationStatus.accepted)]),
+      );
+      final validationResult2 =
+          appointment2.validate(Appointment.fieldDefinitions);
+      expect(validationResult2.isValid, true);
+
+      final appointment3 = Appointment(
+        id: '789',
+        status: AppointmentStatus.booked,
+        participant: FixedList([]),
+      );
+      final validationResult3 =
+          appointment3.validate(Appointment.fieldDefinitions);
+      expect(validationResult3.isValid, false);
+      expect(
+        validationResult3.errorMessages
+            .firstWhere((element) => element.field == 'participant')
+            .message,
+        'Field participant must have at least 1 items',
+      );
+    });
+
+    test('Validate Constructed Patient Instances', () {
+      final patient1 = Patient(id: '123');
+      final validationResult1 = patient1.validate(Patient.fieldDefinitions);
+      expect(validationResult1.isValid, true);
+
+      final patient2 = Patient(
+        id: '456',
+        gender: AdministrativeGender.male,
+        birthDate: DateTime(2000),
+        active: true,
+      );
+      final validationResult2 = patient2.validate(Patient.fieldDefinitions);
+      expect(validationResult2.isValid, true);
+
+      final patient3 = Patient(
+        id: '789',
+        gender: AdministrativeGender.unknown,
+        birthDate: DateTime(2000),
+        active: false,
+      ).withFieldValue(
+        FieldDefinition(name: 'superfluous', getValue: (a) => true),
+        const JsonString('field'),
+        constructor: Patient.fromJson,
+      );
+      final validationResult3 = patient3.validate(Patient.fieldDefinitions);
+      expect(validationResult3.isValid, false);
+      expectMessage(
+        validationResult3,
+        'superfluous',
+        'Field superfluous is not allowed',
+      );
+      expect(validationResult3.errorMessages.length, 1);
     });
   });
 }
