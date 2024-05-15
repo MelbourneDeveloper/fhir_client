@@ -107,7 +107,7 @@ class $resourceName extends Resource {
   /// R4: All field definitions for [$resourceName].
   static const fieldDefinitions = [
     ...Resource.fieldDefinitions,
-    ${fields.map((field) => '${field.name}Field').join(',\n    ')},
+    ${fields.whereNotInherited().map((field) => '${field.name}Field').join(',\n    ')},
   ];
 
   /// Creates a copy of the [$resourceName] instance and allows for non-destructive mutation.
@@ -136,12 +136,7 @@ String _wrapDefinitionString(JsonValue elementItem) =>
 
 /// Returns the getter methods for the fields.
 String _getters(List<Field> fields) => fields
-    .where(
-      (element) => ![
-        'meta',
-        'id',
-      ].contains(element.name),
-    )
+    .whereNotInherited()
     .map(
       (field) =>
           //TODO: include the fields documentation definition in the comments
@@ -258,4 +253,13 @@ class Field {
 
   @override
   String toString() => '$type${isRequired ? '' : '?'} $name';
+}
+
+extension Asfsdf on Iterable<Field> {
+  Iterable<Field> whereNotInherited() => where(
+        (field) => ![
+          'meta',
+          'id',
+        ].contains(field.name),
+      );
 }
