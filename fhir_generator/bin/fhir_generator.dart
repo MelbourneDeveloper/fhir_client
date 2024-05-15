@@ -112,8 +112,8 @@ String generateDartCode(
   static const ${fieldName}Field = FieldDefinition(
     name: '$fieldName',
     getValue: _get${fieldName.capitalize()},
-    description: ${elementItem['definition'] as JsonString},
-    isRequired: $isRequired,
+    description: ${_wrapDefinitionString(elementItem)},
+${isRequired ? '    isRequired: $isRequired' : ''},
  );
 ''',
 
@@ -173,6 +173,11 @@ class $resourceName extends Resource {
 ''';
 
   return dartCode;
+}
+
+String _wrapDefinitionString(JsonValue elementItem) {
+  final value2 = (elementItem['definition'] as JsonString).value;
+  return value2.substring(1, value2.length - 1);
 }
 
 String getters(List<Field> fields) => fields
