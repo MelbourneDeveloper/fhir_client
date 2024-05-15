@@ -70,11 +70,11 @@ class $resourceName extends Resource {
 
   /// Creates a copy of the [$resourceName] instance and allows for non-destructive mutation.
   $resourceName copyWith({
-    ${fields.map((field) => '${field.type}${field.isRequired ? '' : '?'} ${field.name}').join(',\n    ')}
+    ${fields.map((field) => '${field.type}${field.isRequired ? '' : '?'} ${field.name}').join(',\n    ')},
   }) =>
       $resourceName(
         ${fields.map((field) => '${field.name}: ${field.name} ?? this.${field.name}').join(',\n        ')}
-      );
+      ,);
 }
 ''';
 }
@@ -103,7 +103,7 @@ List<Field> _getFields(JsonArray element) {
       fields.add(
         Field(
           name: fieldName,
-          //TODO: deal with
+          //TODO: deal with the "short" values for enums
           type: fieldName == 'gender'
               ? 'AdministrativeGender'
               : _arrayToDartType(typeArray),
