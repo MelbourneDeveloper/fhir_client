@@ -3,6 +3,7 @@ import 'package:jayse/jayse.dart';
 
 /// FHIR specific metadata about the field
 class FieldDefinition<T> {
+  /// Creates a new instance of [FieldDefinition].
   const FieldDefinition({
     required this.name,
     required this.getValue,
@@ -170,22 +171,6 @@ sealed class ValidationRule<T> {
   void validate(T? value);
 }
 
-/// A validation rule that checks if the field value is one of the
-/// allowed values.
-class AllowedValuesRule<T> extends ValidationRule<T> {
-  const AllowedValuesRule(this.allowedValues);
-
-  /// The list of allowed values for the field.
-  final List<T> allowedValues;
-
-  @override
-  void validate(T? value) {
-    if (value != null && !allowedValues.contains(value)) {
-      throw Exception('Field value must be one of $allowedValues');
-    }
-  }
-}
-
 /// A validation rule that checks if the field value satisfies a
 /// custom condition.
 class CustomRule<T> extends ValidationRule<T> {
@@ -222,30 +207,47 @@ class ValidationResult {
       '${errorMessages.map((e) => '${e.field} - ${e.message}').join('\n')}';
 }
 
-ValidationResult validate<T extends Resource>(
-  // ignore: strict_raw_type
-  List<FieldDefinition> fieldDefinitions,
-  T resource,
-) {
-  final errorMessages = <ValidationError>[];
+extension Adasd<T> on Resource {
+  ValidationResult validate(
+    // ignore: strict_raw_type
+    List<FieldDefinition> fieldDefinitions,
+  ) {
+    final errorMessages = <ValidationError>[];
 
-  for (final fieldDefinition in fieldDefinitions) {
-    final validationResult =
-        fieldDefinition.validate(resource.json[fieldDefinition.name]);
-    if (validationResult.isNotEmpty) {
-      errorMessages.addAll(validationResult);
+    for (final fieldDefinition in fieldDefinitions) {
+      final validationResult =
+          fieldDefinition.validate(json[fieldDefinition.name]);
+      if (validationResult.isNotEmpty) {
+        errorMessages.addAll(validationResult);
+      }
     }
-  }
 
-  final allowedFields = fieldDefinitions.map((field) => field.name).toSet();
-  resource.json.fields.toSet().difference(allowedFields).map(
-        (name) => errorMessages.add(
-          ValidationError(
-            message: 'Field $name is not allowed',
-            field: name,
-          ),
+    final allowedFields = <String>{
+      ...fieldDefinitions.map((field) => field.name),
+      'resourceType',
+      'extension',
+      //TODO: this doesn't look right...
+      'description',
+    };
+
+    // ignore: unused_local_variable
+    final superfluousFields = json.fields
+        .toSet()
+        .difference(allowedFields)
+        .map(
+          (name) => name,
+        )
+        .toList();
+
+    errorMessages.addAll(
+      superfluousFields.map(
+        (name) => ValidationError(
+          message: 'Field $name is not allowed',
+          field: name,
         ),
-      );
+      ),
+    );
 
-  return ValidationResult(errorMessages);
+    return ValidationResult(errorMessages);
+  }
 }

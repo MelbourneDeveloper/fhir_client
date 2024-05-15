@@ -21,7 +21,7 @@ void main() {
 
         // ignore: unused_local_variable
         final validationResult =
-            validate(Appointment.fieldDefinitions, appointment);
+            appointment.validate(Appointment.fieldDefinitions);
 
         switch (appointment.id) {
           case '059200e9f1d3e606':
@@ -54,7 +54,9 @@ void main() {
                 '[ proposed, booked, arrived, fulfilled, cancelled, '
                 'noshow, entered-in-error ]');
 
-            expect(validationResult.errorMessages.length, 2);
+            expectMessage(validationResult, 'asd', 'Field asd is not allowed');
+
+            expect(validationResult.errorMessages.length, 3);
 
           default:
             expect(validationResult.isValid, isTrue);
@@ -67,10 +69,9 @@ void main() {
 }
 
 void expectFieldStatusError(ValidationResult validationResult) {
-  expect(
-    validationResult.errorMessages
-        .firstWhere((element) => element.field == 'status')
-        .message,
+  expectMessage(
+    validationResult,
+    'status',
     'Field status is required, but no value was specified',
   );
   expect(
@@ -78,3 +79,15 @@ void expectFieldStatusError(ValidationResult validationResult) {
     'status',
   );
 }
+
+void expectMessage(
+  ValidationResult validationResult,
+  String field,
+  String message,
+) =>
+    expect(
+      validationResult.errorMessages
+          .firstWhere((element) => element.field == field)
+          .message,
+      message,
+    );
