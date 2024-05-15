@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'dart:io';
 
 import 'package:jayse/jayse.dart';
@@ -7,19 +9,46 @@ class Field {
     required this.name,
     required this.type,
     required this.definitionText,
+    //TODO: include the field documentation definition and put this
+    //in the comments and the description of the field.
+    required this.isRequired,
+    //TODO: fill this in
+    this.isList = false,
+    this.allowedStringValues,
   });
 
   final String name;
   final String type;
   final String definitionText;
+  final bool isRequired;
+  final List<String>? allowedStringValues;
+  final bool isList;
+
+  bool get isPrimitive => switch (type) {
+        'String' => true,
+        'bool' => true,
+        'int' => true,
+        'DateTime' => true,
+        _ => false,
+      };
+
+  String get jsonValue => switch (type) {
+        'String' => allowedStringValues != null
+            ? 'switch (jo[${name}Field.name]) {(final JsonString jsonString) => jsonString.value, _ => null,}'
+            : 'jo[${name}Field.name].stringValue',
+        'bool' => 'jo[${name}Field.name].booleanValue',
+        'int' => 'jo[${name}Field.name].integerValue',
+        'DateTime' =>
+          "DateTime.tryParse(jo[${name}Field.name].stringValue ?? '')",
+        _ => '$type.fromJson(jo[${name}Field.name])',
+      };
 
   @override
-  String toString() => '$type? $name';
+  String toString() => '$type${isRequired ? '' : '?'} $name';
 }
 
 void main(List<String> args) {
   if (args.isEmpty) {
-    // http://hl7.org/fhir/R4/patient.profile.json
     // ignore: parameter_assignments
     args = ['patient.json'];
   }
@@ -36,7 +65,6 @@ void main(List<String> args) {
   final resourceName = resourceElement['id'].stringValue;
   final resourceDefinition = resourceElement['definition'].stringValue;
 
-  // Remove the first element
   element = JsonArray(element.value.sublist(1));
 
   final dartCode = generateDartCode(
@@ -65,22 +93,34 @@ String generateDartCode(
 
     if (path.split('.').length == 2) {
       final fieldName = path.split('.')[1].replaceAll('[x]', '');
+      final isRequired = (elementItem['min'] as JsonNumber).integerValue == 1;
+
+      //Ignore fixedCode for now...
+      // final allowedStringValues = elementItem['fixedCode']
+      //     ?.jsonArray
+      //     .map((e) => e.stringValue)
+      //     .toList();
 
       fields.add(
         Field(
           name: fieldName,
           type: fieldName == 'gender'
               ? 'AdministrativeGender'
-              : arrayToToDartType(typeArray),
+              : arrayToDartType(typeArray),
           definitionText: '''
   /// Field definition for [$fieldName].
   static const ${fieldName}Field = FieldDefinition(
     name: '$fieldName',
     getValue: _get${fieldName.capitalize()},
     description: ${elementItem['definition'] as JsonString},
-    isRequired: ${elementItem['min'] as JsonNumber} == 1,
-  );
+    isRequired: $isRequired,
+ );
 ''',
+
+          isRequired: isRequired,
+          // Ignore fixedCode / Allowed Values for now...
+          //    ${allowedStringValues != null ? "allowedStringValues: ${allowedStringValues.toJson()}," : ''}
+          //allowedStringValues: allowedStringValues,
         ),
       );
     }
@@ -94,7 +134,7 @@ class $resourceName extends Resource {
     ${fields.join(',\n    ')},
   }) : super._internal(
           JsonObject({
-            ${fields.map((field) => field.type == 'BoolOrDateTimeChoice' ? "if (${field.name} != null) ${field.name}Field.name: ${field.name}.toJsonString()," : "if (${field.name} != null) ${field.name}Field.name: ${field.name}.json,").join('\n            ')}
+            ${constructorLines(fields, resourceName)}  
           }),
         );
 
@@ -106,27 +146,12 @@ class $resourceName extends Resource {
               'meta',
               'id',
             ].contains(element.name),
-          ).map((field) => '/// ${field.name}\n  ${field.type}? get ${field.name} => ${field.name}Field.getValue(json);').join('\n\n  ')}
+          ).map((field) => '/// ${field.name}\n ${field.type} get ${field.name} => ${field.name}Field.getValue(json);').join('\n\n  ')}
 
   ${fields.map(
-            (field) => field.type == 'BoolOrDateTimeChoice'
-                ? '''
-  static ${field.type}? _get${field.name.capitalize()}(JsonObject jo) {
-    final value = jo['${field.name}Field'];
-    if (value != null) {
-      return BoolOrDateTimeChoice.fromJson(value);
-    }
-    return null;
-  }
-'''
-                : '''
-  static ${field.type}? _get${field.name.capitalize()}(JsonObject jo) {
-    final value = jo['${field.name}Field'];
-    if (value != null) {
-      return ${field.type}.fromJson(value as JsonObject);
-    }
-    return null;
-  }
+            (field) => '''
+  static ${field.type} _get${field.name.capitalize()}(JsonObject jo) =>
+      ${field.jsonValue};  
 ''',
           ).join('\n')}
 
@@ -142,7 +167,7 @@ class $resourceName extends Resource {
   $resourceName copyWith({
     String? id,
     Meta? meta,
-    ${fields.map((field) => '${field.type} ${field.name}').join(',\n    ')}
+    ${fields.map((field) => '${field.type}${field.isRequired ? '' : '?'} ${field.name}').join(',\n    ')}
   }) =>
       $resourceName(
         id: id ?? this.id,
@@ -155,7 +180,19 @@ class $resourceName extends Resource {
   return dartCode;
 }
 
-String arrayToToDartType(JsonArray array) => switch (array) {
+String constructorLines(List<Field> fields, String resourceName) => fields
+    .map(
+      (field) => field.type == 'BoolOrDateTimeChoice'
+          ? 'if (${field.name} != null) ${field.name}Field.name: ${field.name}.toJsonString(),'
+          : field.isPrimitive
+              ? "if (${field.name} != null) ${field.name}Field.name: ${field.type == 'String' ? 'JsonString(${field.name})' : field.type == 'bool' || field.type == 'int' ? 'JsonBoolean(${field.name})' : 'JsonString(${field.name}.toIso8601String())'}, "
+              : field.isList
+                  ? "if (${field.name} != null) ${field.name}Field.name: JsonArray.unmodifiable(${field.name}${field.type == 'FixedList<$resourceName>' ? '.map((e) => e.json)' : ''}),"
+                  : 'if (${field.name} != null) ${field.name}Field.name: ${field.name}.json,',
+    )
+    .join('\n            ');
+
+String arrayToDartType(JsonArray array) => switch (array) {
       (final JsonArray ja) when ja.length == 0 => throw Exception('Empty type'),
       (final JsonArray ja) when ja.length == 1 && ja[0]['code'] is JsonString =>
         mapFhirTypeToDartType((ja[0]['code'] as JsonString).value),
