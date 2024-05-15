@@ -448,6 +448,19 @@ void main() {
   });
 
   group('http Client Extension Calls - Mocked', () {
+    test('Appointment Search', () async {
+      final bundleEntries = await _mockSearch(
+        (c) async => await c.searchAppointments(
+          baseUri,
+          count: 11,
+        ) as BundleEntries<Appointment>,
+      );
+
+      expect(bundleEntries.length, 11);
+
+      //TODO: more assertions
+    });
+
     test('Encounter Search', () async {
       final bundleEntries = await _mockSearch<Encounter>(
         (c) async => await c.searchEncounters(

@@ -285,6 +285,21 @@
             "search": {
                 "mode": "match"
             }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Appointment/0a391b16-653c-4281-9a55-ff14d1ac94bf",
+            "resource": {
+                "resourceType": "Appointment",
+                "id": "0a391b16-653c-4281-9a55-ff14d1ac94bf",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2023-08-04T09:17:41.161+00:00",
+                    "source": "#aHnjLUHjpUOkfx4P"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
         }
     ]
 }
