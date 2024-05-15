@@ -94,11 +94,7 @@ List<Field> _getFields(JsonArray element) {
       final fieldName = path.split('.')[1].replaceAll('[x]', '');
       final isRequired = (elementItem['min'] as JsonNumber).integerValue == 1;
 
-      //Ignore fixedCode for now...
-      // final allowedStringValues = elementItem['fixedCode']
-      //     ?.jsonArray
-      //     .map((e) => e.stringValue)
-      //     .toList();
+      //TODO: handle allowedStringValues (maybe short)
 
       fields.add(
         Field(
@@ -117,8 +113,7 @@ List<Field> _getFields(JsonArray element) {
   ''',
 
           isRequired: isRequired,
-          // Ignore fixedCode / Allowed Values for now...
-          //    ${allowedStringValues != null ? "allowedStringValues: ${allowedStringValues.toJson()}," : ''}
+          // TODO: allowedStringValues - maybe short field
           //allowedStringValues: allowedStringValues,
         ),
       );
@@ -157,6 +152,7 @@ String _constructorMapInitializations(
     fields
         .map(
           (field) => switch (field) {
+            //TODO: deal with other kinds of choice types. Don't hard code the type
             (final Field f) when f.type == 'BoolOrDateTimeChoice' =>
               'if (${f.name} != null) ${f.name}Field.name: ${f.name}.toJsonString(),',
             (final Field f) when f.isPrimitive => _primitiveConstructorLine(f),
