@@ -1,5 +1,6 @@
-import 'dart:convert';
 import 'dart:io';
+
+import 'package:jayse/jayse.dart';
 
 void main(List<String> args) {
   if (args.isEmpty) {
@@ -11,38 +12,54 @@ void main(List<String> args) {
 
   final jsonFilePath = args[0];
   final jsonString = File(jsonFilePath).readAsStringSync();
-  final allData = json.decode(jsonString);
+  final allData = jsonValueDecode(jsonString) as JsonObject;
 
-  final snapshot = allData['snapshot'];
+  final snapshot = allData['snapshot'] as JsonObject;
 
-  final resourceName = snapshot['element'][0]['id'];
-  final resourceDefinition = snapshot['element'][0];
+  var element = snapshot['element'] as JsonArray;
 
-  final dartCode = generateDartCode(resourceName, resourceDefinition);
+  var resourceelement = element[0];
+  final resourceName = resourceelement['id'].stringValue;
+  final resourceDefinition = resourceelement['definition'].stringValue;
+
+  //Remove the first element
+  element = JsonArray(element.value.sublist(1));
+
+  final dartCode = generateDartCode(
+    resourceName ?? 'N/A',
+    resourceDefinition ?? 'N/A',
+    element,
+  );
+
   print(dartCode);
 }
 
 String generateDartCode(
   String resourceName,
-  Map<String, dynamic> resourceDefinition,
+  String resourceDefinition,
+  JsonArray element,
 ) {
   final fields = <String>[];
   final fieldDefinitions = <String>[];
 
-  for (final element in resourceDefinition['element']) {
-    final path = element['path'];
-    final type = element['type']?[0]['code'];
+  for (final elementItem in element.value) {
+    final path = elementItem['path'].stringValue;
+
+    if (path == null) throw Exception('Path is null or not a string');
+
+    var elementItemType = elementItem['type'] as JsonArray;
+    final type = elementItemType[0]['code'] as JsonString;
 
     if (path.split('.').length == 2 && type != null) {
       final fieldName = path.split('.')[1];
-      final dartType = mapFhirTypeToDartType(type);
+      final dartType = mapFhirTypeToDartType(type.value);
 
       fields.add('$dartType? $fieldName');
 
-      final description = element['definition'] ?? '';
-      final isRequired = element['min'] == 1;
-      final allowedStringValues =
-          element['fixedCode'] != null ? [element['fixedCode']] : [];
+      final description = elementItem['definition'] as JsonString;
+      final isRequired = elementItem['min'] as JsonNumber;
+      // final allowedStringValues =
+      //     elementItem['fixedCode'] != null ? [elementItem['fixedCode']] : [];
 
       final fieldDefinition = '''
   /// Field definition for [$fieldName].
@@ -51,16 +68,17 @@ String generateDartCode(
     getValue: _get${fieldName.capitalize()},
     description: '$description',
     isRequired: $isRequired,
-    allowedStringValues: ${allowedStringValues.map((v) => "'$v'").toList()},
   );
 ''';
+
+//    allowedStringValues: ${allowedStringValues.map((v) => "'$v'").toList()},
 
       fieldDefinitions.add(fieldDefinition);
     }
   }
 
   final dartCode = '''
-/// ${resourceDefinition['definition']}
+/// $resourceDefinition
 class $resourceName extends Resource {
   /// Constructs a new [$resourceName].
   $resourceName({
