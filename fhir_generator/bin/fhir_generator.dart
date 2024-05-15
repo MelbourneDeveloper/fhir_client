@@ -113,7 +113,7 @@ String generateDartCode(
     name: '$fieldName',
     getValue: _get${fieldName.capitalize()},
     description: ${_wrapDefinitionString(elementItem)},
-${isRequired ? '    isRequired: $isRequired' : ''},
+${isRequired ? '    isRequired: $isRequired, ' : ''}
  );
 ''',
 
@@ -160,13 +160,9 @@ class $resourceName extends Resource {
 
   /// Creates a copy of the [$resourceName] instance and allows for non-destructive mutation.
   $resourceName copyWith({
-    String? id,
-    Meta? meta,
     ${fields.map((field) => '${field.type}${field.isRequired ? '' : '?'} ${field.name}').join(',\n    ')}
   }) =>
       $resourceName(
-        id: id ?? this.id,
-        meta: meta ?? this.meta,
         ${fields.map((field) => '${field.name}: ${field.name} ?? this.${field.name}').join(',\n        ')}
       );
 }
@@ -177,7 +173,7 @@ class $resourceName extends Resource {
 
 String _wrapDefinitionString(JsonValue elementItem) {
   final value2 = (elementItem['definition'] as JsonString).value;
-  return value2.substring(1, value2.length - 1);
+  return "'''${value2.substring(1, value2.length - 1)}'''";
 }
 
 String getters(List<Field> fields) => fields
