@@ -141,12 +141,7 @@ class $resourceName extends Resource {
   /// Creates a [$resourceName] instance from the provided JSON object.
   $resourceName.fromJson(JsonObject json) : super._internal(json);
 
-  ${fields.where(
-            (element) => ![
-              'meta',
-              'id',
-            ].contains(element.name),
-          ).map((field) => '/// ${field.name}\n ${field.type} get ${field.name} => ${field.name}Field.getValue(json);').join('\n\n  ')}
+  ${getters(fields)}
 
   ${fields.map(
             (field) => '''
@@ -180,17 +175,45 @@ class $resourceName extends Resource {
   return dartCode;
 }
 
+String getters(List<Field> fields) => fields
+    .where(
+      (element) => ![
+        'meta',
+        'id',
+      ].contains(element.name),
+    )
+    .map(
+      (field) =>
+          //TODO: include the fields documentation definition in the comments
+          '/// ${field.name}\n ${field.type}? get ${field.name} => ${field.name}Field.getValue(json);',
+    )
+    .join('\n\n  ');
+
 String constructorLines(List<Field> fields, String resourceName) => fields
     .map(
-      (field) => field.type == 'BoolOrDateTimeChoice'
-          ? 'if (${field.name} != null) ${field.name}Field.name: ${field.name}.toJsonString(),'
-          : field.isPrimitive
-              ? "if (${field.name} != null) ${field.name}Field.name: ${field.type == 'String' ? 'JsonString(${field.name})' : field.type == 'bool' || field.type == 'int' ? 'JsonBoolean(${field.name})' : 'JsonString(${field.name}.toIso8601String())'}, "
-              : field.isList
-                  ? "if (${field.name} != null) ${field.name}Field.name: JsonArray.unmodifiable(${field.name}${field.type == 'FixedList<$resourceName>' ? '.map((e) => e.json)' : ''}),"
-                  : 'if (${field.name} != null) ${field.name}Field.name: ${field.name}.json,',
+      (field) => switch (field) {
+        (final Field f) when f.type == 'BoolOrDateTimeChoice' =>
+          'if (${f.name} != null) ${f.name}Field.name: ${f.name}.toJsonString(),',
+        (final Field f) when f.isPrimitive => _primitiveConstructorLine(f),
+        (final Field f) when f.isList =>
+          "if (${f.name} != null) ${f.name}Field.name: JsonArray.unmodifiable(${f.name}${f.type == 'FixedList<$resourceName>' ? '.map((e) => e.json)' : ''}),",
+        _ =>
+          'if (${field.name} != null) ${field.name}Field.name: ${field.name}.json,',
+      },
     )
     .join('\n            ');
+
+String _primitiveConstructorLine(Field field) => switch (field.type) {
+      'String' =>
+        'if (${field.name} != null) ${field.name}Field.name: JsonString(${field.name}),',
+      'bool' =>
+        'if (${field.name} != null) ${field.name}Field.name: JsonBoolean(${field.name}),',
+      'int' =>
+        'if (${field.name} != null) ${field.name}Field.name: JsonBoolean(${field.name}),',
+      'DateTime' =>
+        'if (${field.name} != null) ${field.name}Field.name: JsonString(${field.name}.toIso8601String()),',
+      _ => throw Exception('Invalid primitive type'),
+    };
 
 String arrayToDartType(JsonArray array) => switch (array) {
       (final JsonArray ja) when ja.length == 0 => throw Exception('Empty type'),
