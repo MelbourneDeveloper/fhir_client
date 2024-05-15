@@ -176,7 +176,7 @@ class $resourceName extends Resource {
 
 String _wrapDefinitionString(JsonValue elementItem) {
   final value2 = (elementItem['definition'] as JsonString).value;
-  return "'''${value2.substring(1, value2.length - 1)}'''";
+  return "'''\n$value2'''";
 }
 
 String _getters(List<Field> fields) => fields
