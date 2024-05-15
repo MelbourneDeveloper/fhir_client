@@ -69,7 +69,9 @@ String generateDartCode(
       fields.add(
         Field(
           name: fieldName,
-          type: arrayToToDartType(typeArray),
+          type: fieldName == 'gender'
+              ? 'AdministrativeGender'
+              : arrayToToDartType(typeArray),
           definitionText: '''
   /// Field definition for [$fieldName].
   static const ${fieldName}Field = FieldDefinition(
@@ -92,8 +94,6 @@ class $resourceName extends Resource {
     ${fields.join(',\n    ')},
   }) : super._internal(
           JsonObject({
-            if (id != null) Resource.idField.name: JsonString(id),
-            if (meta != null) Resource.metaField.name: meta.json,
             ${fields.map((field) => field.type == 'BoolOrDateTimeChoice' ? "if (${field.name} != null) ${field.name}Field.name: ${field.name}.toJsonString()," : "if (${field.name} != null) ${field.name}Field.name: ${field.name}.json,").join('\n            ')}
           }),
         );
@@ -101,7 +101,12 @@ class $resourceName extends Resource {
   /// Creates a [$resourceName] instance from the provided JSON object.
   $resourceName.fromJson(JsonObject json) : super._internal(json);
 
-  ${fields.map((field) => '/// ${field.name}\n  ${field.type}? get ${field.name} => ${field.name}Field.getValue(json);').join('\n\n  ')}
+  ${fields.where(
+            (element) => ![
+              'meta',
+              'id',
+            ].contains(element.name),
+          ).map((field) => '/// ${field.name}\n  ${field.type}? get ${field.name} => ${field.name}Field.getValue(json);').join('\n\n  ')}
 
   ${fields.map(
             (field) => field.type == 'BoolOrDateTimeChoice'
