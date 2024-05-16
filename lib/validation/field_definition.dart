@@ -5,10 +5,10 @@ import 'package:jayse/jayse.dart';
 /// Represents the FHIR concept of cardinality
 class Cardinality {
   /// Creates a new instance of [Cardinality].
-  const Cardinality({required this.min, required this.max});
+  const Cardinality({required this.min, this.max = const IntegerChoice(1)});
 
   /// Represents a cardinality of 0..1
-  static const singular = Cardinality(min: 0, max: IntegerChoice(1));
+  static const singular = Cardinality(min: 0);
 
   /// 0 = not required. 1 = at least one, etc.
   final int min;

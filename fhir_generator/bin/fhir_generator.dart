@@ -67,7 +67,7 @@ class $resourceName extends Resource {
     name: '${field.name}',
     getValue: _get${field.name.capitalize()},
     description: ${_wrapDefinitionString(field.definition)},
-    cardinality: Cardinality(min: ${field.min}, max: ${field.max != null ? 'IntegerChoice(${field.max})' : 'null'},),
+    ${_cardinalityLine(field)}
     ${field.allowedStringValues != null ? '\n    allowedStringValues: [${field.allowedStringValues!.map((e) => "'e'").join(',\n')}],' : ''}
   );
   ''',
@@ -83,6 +83,13 @@ class $resourceName extends Resource {
 }
 ''';
 }
+
+String _cardinalityLine(Field field) => field.min == 0 && field.max == 1
+    //Default cardinality
+    ? ''
+    //Need to specify cardinality
+    : 'cardinality: Cardinality(min: ${field.min}, '
+        '${field.max != null ? 'max: IntegerChoice(${field.max}),' : ''}),';
 
 String _copyWith(String resourceName, List<Field> fields) => '''
 /// Creates a copy of the [$resourceName] instance and allows for non-destructive mutation.
