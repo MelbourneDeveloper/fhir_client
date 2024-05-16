@@ -60,7 +60,18 @@ class $resourceName extends Resource {
 
   ${_staticGetMethods(fields)}
 
-  ${fields.map((field) => field.definitionText).join('\n')}
+  ${fields.map(
+            (field) => '''
+  /// Field definition for [${field.name}].
+  static const ${field.name}Field = FieldDefinition(
+    name: '${field.name}',
+    getValue: _get${field.name.capitalize()},
+    description: ${_wrapDefinitionString(field.definition)},
+    cardinality: Cardinality(min: ${field.min}, max: ${field.max != null ? 'IntegerChoice(${field.max})' : 'null'},),
+    ${field.allowedStringValues != null ? '\n    allowedStringValues: [${field.allowedStringValues!.map((e) => "'e'").join(',\n')}],' : ''}
+  );
+  ''',
+          ).join('\n')}
 
   /// R4: All field definitions for [$resourceName].
   static const fieldDefinitions = [
@@ -112,20 +123,11 @@ List<Field> _getFields(JsonArray element) {
           type: fieldName == 'gender'
               ? 'AdministrativeGender'
               : _arrayToDartType(typeArray),
-          definitionText: '''
-  /// Field definition for [$fieldName].
-  static const ${fieldName}Field = FieldDefinition(
-    name: '$fieldName',
-    getValue: _get${fieldName.capitalize()},
-    description: ${_wrapDefinitionString(elementItem)},
-    cardinality: Cardinality(min: $minCardinality, max: ${maxCardinality.integerValue != null ? 'IntegerChoice(${maxCardinality.integerValue})' : 'null'},),
-    ${allowedStringValues != null ? '\n    allowedStringValues: [${allowedStringValues.map((e) => "'e'").join(',\n')}],' : ''}
-  );
-  ''',
           allowedStringValues: allowedStringValues,
           min: minCardinality,
           max: maxCardinality.integerValue,
           isMaxStar: maxCardinality.stringValue == '*',
+          definition: elementItem['definition'].stringValue ?? '',
         ),
       );
     }
@@ -143,15 +145,14 @@ static ${field.type} _get${field.name.capitalize()}(JsonObject jo) =>
     .join('\n');
 
 /// Wraps the definition string in a multi-line string.
-String _wrapDefinitionString(JsonValue elementItem) =>
-    "'''\n${(elementItem['definition'] as JsonString).value}'''";
+String _wrapDefinitionString(String definition) => "'''\n$definition'''";
 
 /// Returns the getter methods for the fields.
 String _getters(List<Field> fields) => fields
     .whereNotInherited()
     .map(
       (field) =>
-          '/*\n${field.definitionText.split("description: '''")[1].split("''',")[0].trim()}\n*/\n ${field.type}? get ${field.name} => ${field.name}Field.getValue(json);',
+          '/*\n${field.definition}\n*/\n ${field.type}? get ${field.name} => ${field.name}Field.getValue(json);',
     )
     .join('\n\n  ');
 
@@ -226,22 +227,22 @@ class Field {
   Field({
     required this.name,
     required this.type,
-    required this.definitionText,
     required this.min,
     required this.max,
     required this.isMaxStar,
+    required this.definition,
     this.allowedStringValues,
   });
 
   final String name;
   final String type;
-  final String definitionText;
   // Buh?
   // ignore: unreachable_from_main
   final int min;
   final int? max;
   final bool isMaxStar;
   final List<String>? allowedStringValues;
+  final String definition;
 
   bool get isPrimitive => switch (type) {
         'String' => true,
