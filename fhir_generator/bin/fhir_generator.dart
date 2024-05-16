@@ -59,9 +59,15 @@ class $resourceName extends Resource {
   /// Creates a [$resourceName] instance from the provided JSON object.
   $resourceName.fromJson(JsonObject json) : super._internal(json);
 
+  // Getters
+
   ${_getters(fields)}
 
+  // Static Get Methods
+
   ${_staticGetMethods(fields)}
+
+  // Field Definitions
 
   ${_fieldDefinitions(fields)}
 
@@ -70,6 +76,8 @@ class $resourceName extends Resource {
     ...Resource.fieldDefinitions,
     ${fields.whereNotInherited().map((field) => '${field.name}Field').join(',\n    ')},
   ];
+
+  // Non-destructive mutation
 
   ${_copyWith(resourceName, fields)}  
 }
@@ -140,9 +148,7 @@ List<Field> _getFields(JsonArray element) {
               .where((t) => t != null)
               .cast<String>()
               .toList(),
-          dartType: fieldName == 'gender'
-              ? 'AdministrativeGender'
-              : _arrayToDartType(typeArray),
+          dartType: _wrapType(fieldName, typeArray, maxCardinality),
           allowedStringValues: allowedStringValues,
           min: minCardinality,
           max: maxCardinality.integerValue,
@@ -154,6 +160,27 @@ List<Field> _getFields(JsonArray element) {
   }
   return fields;
 }
+
+String _wrapType(
+  String fieldName,
+  JsonArray typeArray,
+  JsonValue maxCardinality,
+) {
+  final isList = _isList(maxCardinality);
+  final dartType =
+      //TODO: unhardcode
+      fieldName == 'gender'
+          ? 'AdministrativeGender'
+          : _arrayToDartType(
+              typeArray,
+              isList,
+            );
+
+  return isList ? 'FixedList<$dartType>' : dartType;
+}
+
+bool _isList(JsonValue maxCardinality) =>
+    maxCardinality.stringValue == '*' || (maxCardinality.integerValue ?? 0) > 1;
 
 String _staticGetMethods(List<Field> fields) => fields
     .map(
@@ -188,7 +215,7 @@ String _constructorMapInitializations(
               'if (${f.name} != null) ${f.name}Field.name: ${f.name}.toJsonString(),',
             (final Field f) when f.isPrimitive => _primitiveConstructorLine(f),
             (final Field f) when _isArray(f) =>
-              "if (${f.name} != null) ${f.name}Field.name: JsonArray.unmodifiable(${f.name}${f.dartType == 'FixedList<$resourceName>' ? '.map((e) => e.json)' : ''}),",
+              'if (${f.name} != null) ${f.name}Field.name: JsonArray.unmodifiable(${f.name}.map((e) => e.json)),',
             _ =>
               'if (${field.name} != null) ${field.name}Field.name: ${field.name}.json,',
           },
@@ -211,10 +238,13 @@ String _primitiveConstructorLine(Field field) =>
       _ => throw Exception('Invalid primitive type'),
     };
 
-String _arrayToDartType(JsonArray array) => switch (array) {
+String _arrayToDartType(JsonArray array, bool isArray) => switch (array) {
       (final JsonArray ja) when ja.length == 0 => throw Exception('Empty type'),
       (final JsonArray ja) when ja.length == 1 && ja[0]['code'] is JsonString =>
-        _mapFhirTypeToDartType((ja[0]['code'] as JsonString).value),
+        _mapFhirTypeToDartType(
+          (ja[0]['code'] as JsonString).value,
+          isArray,
+        ),
       (final JsonArray ja)
           when ja.length == 2 &&
               ja[0]['code'].stringValue == 'boolean' &&
@@ -228,7 +258,11 @@ String _arrayToDartType(JsonArray array) => switch (array) {
       _ => throw Exception('Type case not handled')
     };
 
-String _mapFhirTypeToDartType(String fhirType) => switch (fhirType) {
+String _mapFhirTypeToDartType(
+  String fhirType,
+  bool isArray,
+) =>
+    switch (fhirType) {
       'string' => 'String',
       'http://hl7.org/fhirpath/System.String' => 'String',
       'boolean' => 'bool',
