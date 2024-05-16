@@ -1,7 +1,7 @@
 import 'package:jayse/jayse.dart';
 
 sealed class BooleanOrDateTimeChoice {
-  BooleanOrDateTimeChoice._internal();
+  const BooleanOrDateTimeChoice._internal();
 
   static BooleanOrDateTimeChoice? fromJson(JsonValue json) {
     //TODO: clean this nastiness up. not dangerous, but nasty nonetheless
@@ -42,7 +42,7 @@ final class IntegerChoice extends BooleanOrIntegerChoice {
 
 final class BoolChoice extends BooleanOrDateTimeChoice
     implements BooleanOrIntegerChoice {
-  BoolChoice(this.value) : super._internal();
+  const BoolChoice(this.value) : super._internal();
 
   final bool value;
 

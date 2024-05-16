@@ -29,7 +29,7 @@ void main(List<String> args) {
   );
 
   // ignore: avoid_print
-  print(dataClassCode);
+  File('patient.dart').writeAsStringSync(dataClassCode);
 }
 
 // ignore: unused_element
@@ -91,13 +91,13 @@ static const ${field.name}Field = FieldDefinition(
     )
     .join('\n');
 
-String _cardinalityLine(Field field) =>
-    field.min == 0 && (field.max == null && !field.isMaxStar)
-        //Default cardinality
-        ? ''
-        //Need to specify cardinality
-        : 'cardinality: Cardinality(min: ${field.min}, '
-            '${field.max != null ? 'max: IntegerChoice(${field.max}),' : ''}),';
+String _cardinalityLine(Field field) => field.min == 0 &&
+        (field.max == null && !field.isMaxStar)
+    //Default cardinality
+    ? ''
+    //Need to specify cardinality
+    : 'cardinality: Cardinality(min: ${field.min}, '
+        '${field.max != null ? 'max: IntegerChoice(${field.max}),' : field.isMaxStar ? 'max: BoolChoice(true)' : ''}),';
 
 String _copyWith(String resourceName, List<Field> fields) => '''
 /// Creates a copy of the [$resourceName] instance and allows for non-destructive mutation.
