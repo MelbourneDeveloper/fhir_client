@@ -324,16 +324,21 @@ class Field {
       };
 
   String get jsonValue => types.length == 1
-      ? switch (types.first) {
+      ? switch (dartType) {
           'String' => allowedStringValues != null
               ? 'switch (jo[${name}Field.name]) {(final JsonString jsonString) => jsonString.value, _ => null,}'
               : 'jo[${name}Field.name].stringValue',
           'bool' => 'jo[${name}Field.name].booleanValue',
-          'boolean' => 'jo[${name}Field.name].booleanValue',
           'int' => 'jo[${name}Field.name].integerValue',
           'DateTime' =>
             "DateTime.tryParse(jo[${name}Field.name].stringValue ?? '')",
-          _ => '${types.first}.fromJson(jo[${name}Field.name])',
+          _ => '''
+  switch(jo[${name}Field.name])
+  {
+    (final JsonObject jsonObject) => MissingType.fromJson(jsonObject),
+    _ => null,
+  } 
+''',
         }
       : switch (types) {
           ['boolean', 'dateTime'] =>
