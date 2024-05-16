@@ -1,5 +1,31 @@
+import 'package:fhir_client/models/basic_types/choice_types.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:jayse/jayse.dart';
+
+/// Represents the FHIR concept of cardinality
+class Cardinality {
+  /// Creates a new instance of [Cardinality].
+  const Cardinality({required this.min, required this.max});
+
+  /// Represents a cardinality of 0..1
+  static const singular = Cardinality(min: 0, max: IntegerChoice(1));
+
+  /// 0 = not required. 1 = at least one, etc.
+  final int min;
+
+  /// True = Star | False = No Max | Int = Max
+  final BooleanOrIntegerChoice max;
+
+  /// Whether or not the data type is a list/array
+  bool get isArray => switch (max) {
+        (final IntegerChoice value) when value.value > 1 => true,
+        (final BoolChoice value) => value.value,
+        _ => false
+      };
+
+  /// Whether or not the field is required
+  bool get isRequired => min > 0;
+}
 
 /// A function that validates a field value.
 typedef ValidateResource = List<ValidationError> Function(
@@ -14,7 +40,8 @@ class FieldDefinition<T> {
     required this.name,
     required this.getValue,
     this.customValidationRules = const [],
-    this.isRequired = false,
+    //No min
+    this.cardinality = Cardinality.singular,
     this.isSummary = false,
     this.isModifier = false,
     this.isReadOnly = false,
@@ -35,8 +62,8 @@ class FieldDefinition<T> {
   // ignore: strict_raw_type
   final List<ValidateResource> customValidationRules;
 
-  /// Indicates whether the field is required.
-  final bool isRequired;
+  /// Field Cardinality
+  final Cardinality cardinality;
 
   /// Indicates whether the field is part of the resource summary.
   final bool isSummary;
@@ -69,7 +96,7 @@ class FieldDefinition<T> {
   }) {
     final errors = <ValidationError>[];
 
-    if (isRequired) {
+    if (cardinality.isRequired) {
       //Check for null
       if (value is JsonNull) {
         errors.add(

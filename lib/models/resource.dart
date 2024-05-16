@@ -222,7 +222,7 @@ class Appointment extends Resource {
   static const statusField = FieldDefinition(
     name: 'status',
     getValue: _getStatus,
-    isRequired: true,
+    cardinality: Cardinality(min: 1, max: IntegerChoice(1)),
     allowedStringValues: [
       'proposed',
       'booked',
@@ -2186,7 +2186,7 @@ class Patient extends Resource {
     AdministrativeGender? gender,
     DateTime? birthDate,
     FixedList<Address>? address,
-    BoolOrDateTimeChoice? deceased,
+    BooleanOrDateTimeChoice? deceased,
   }) : super._internal(
           JsonObject({
             if (id != null) Resource.idField.name: JsonString(id),
@@ -2242,7 +2242,7 @@ class Patient extends Resource {
   );
 
   /// Whether or not the patient is deceased.
-  BoolOrDateTimeChoice? get deceased => deceasedField.getValue(json);
+  BooleanOrDateTimeChoice? get deceased => deceasedField.getValue(json);
 
   /// Field definition for [deceased[x]].
   static const deceasedField = FieldDefinition(
@@ -2324,8 +2324,8 @@ class Patient extends Resource {
 
   static bool? _getActive(JsonObject jo) => jo[activeField.name].booleanValue;
 
-  static BoolOrDateTimeChoice? _getDeceased(JsonObject jo) =>
-      BoolOrDateTimeChoice.fromJson(jo[deceasedField.name]);
+  static BooleanOrDateTimeChoice? _getDeceased(JsonObject jo) =>
+      BooleanOrDateTimeChoice.fromJson(jo[deceasedField.name]);
 
   static FixedList<HumanName>? _getName(JsonObject jo) =>
       switch (jo[nameField.name]) {
@@ -2373,7 +2373,7 @@ class Patient extends Resource {
     AdministrativeGender? gender,
     DateTime? birthDate,
     FixedList<Address>? address,
-    BoolOrDateTimeChoice? deceased,
+    BooleanOrDateTimeChoice? deceased,
   }) =>
       Patient(
         id: id ?? this.id,
