@@ -68,16 +68,20 @@ class $resourceName extends Resource {
     ${fields.whereNotInherited().map((field) => '${field.name}Field').join(',\n    ')},
   ];
 
-  /// Creates a copy of the [$resourceName] instance and allows for non-destructive mutation.
+  ${_copyWith(resourceName, fields)}  
+}
+''';
+}
+
+String _copyWith(String resourceName, List<Field> fields) => '''
+/// Creates a copy of the [$resourceName] instance and allows for non-destructive mutation.
   $resourceName copyWith({
     ${fields.map((field) => '${field.type}? ${field.name}').join(',\n    ')},
   }) =>
       $resourceName(
         ${fields.map((field) => '${field.name}: ${field.name} ?? this.${field.name}').join(',\n        ')}
       ,);
-}
 ''';
-}
 
 /// Convert all the fields in the JSON definition to a list of [Field] objects.
 List<Field> _getFields(JsonArray element) {
