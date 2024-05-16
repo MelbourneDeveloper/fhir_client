@@ -2212,7 +2212,7 @@ class Patient extends Resource {
             if (address != null)
               addressField.name:
                   JsonArray.unmodifiable(address.map((e) => e.json)),
-            if (deceased != null) deceasedField.name: deceased.toJsonString(),
+            if (deceased != null) deceasedField.name: deceased.json,
           }),
         );
 
