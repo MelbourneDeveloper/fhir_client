@@ -202,12 +202,12 @@ String _staticGetMethods(List<Field> fields) => fields
     .map(
       (field) => '''
 static ${field.dartType}? _get${field.name.capitalize()}(JsonObject jo) =>
-    ${_isArray(field) ? _arraySwitch(field) : jsonValue(field)};  
+    ${_isArray(field) ? _getValueBodyArraySwitch(field) : jsonValue(field)};  
 ''',
     )
     .join('\n');
 
-String _arraySwitch(Field field) => '''
+String _getValueBodyArraySwitch(Field field) => '''
   switch(jo[${field.name}Field.name])
   {
     (final JsonArray jsonArray) => FixedList(
@@ -217,31 +217,34 @@ String _arraySwitch(Field field) => '''
   }
 ''';
 
-String jsonValue(Field field) => field.types.length == 1
-    ? switch (field.dartType) {
-        'String' => field.allowedStringValues != null
-            ? 'switch (jo[${field.name}Field.name]) {(final JsonString jsonString) => ${field.dartType}.fromString(jsonString.value), _ => null,}'
-            : 'jo[${field.name}Field.name].stringValue',
-        'bool' => 'jo[${field.name}Field.name].booleanValue',
-        'int' => 'jo[${field.name}Field.name].integerValue',
-        'Uri' => 'jo[${field.name}Field.name].uriValue',
-        'DateTime' =>
-          "DateTime.tryParse(jo[${field.name}Field.name].stringValue ?? '')",
-        _ => '''
-  switch(jo[${field.name}Field.name])
-  {
-    (final JsonObject jsonObject) => ${field.dartType}.fromJson(jsonObject),
-    _ => null,
-  } 
+String jsonValue(Field field) =>
+    field.types.length == 1 ? _getValueBody(field) : _getBodyChoiceFromJson(field);
+
+String _getValueBody(Field field) => switch (field.dartType) {
+      'String' => field.allowedStringValues != null
+          ? 'switch (jo[${field.name}Field.name]) {(final JsonString jsonString) => ${field.dartType}.fromString(jsonString.value), _ => null,}'
+          : 'jo[${field.name}Field.name].stringValue',
+      'bool' => 'jo[${field.name}Field.name].booleanValue',
+      'int' => 'jo[${field.name}Field.name].integerValue',
+      'Uri' => 'jo[${field.name}Field.name].uriValue',
+      'DateTime' =>
+        "DateTime.tryParse(jo[${field.name}Field.name].stringValue ?? '')",
+      _ => '''
+switch(jo[${field.name}Field.name])
+{
+  (final JsonObject jsonObject) => ${field.dartType}.fromJson(jsonObject),
+  _ => null,
+} 
 ''',
-      }
-    : switch (field.types) {
-        ['boolean', 'dateTime'] =>
-          'BooleanOrDateTimeChoice.fromJson(jo[${field.name}Field.name])',
-        ['boolean', 'integer'] =>
-          'BooleanOrIntegerChoice.fromJson(jo[${field.name}Field.name])',
-        _ => throw Exception('Invalid type'),
-      };
+    };
+
+String _getBodyChoiceFromJson(Field field) => switch (field.types) {
+      ['boolean', 'dateTime'] =>
+        'BooleanOrDateTimeChoice.fromJson(jo[${field.name}Field.name])',
+      ['boolean', 'integer'] =>
+        'BooleanOrIntegerChoice.fromJson(jo[${field.name}Field.name])',
+      _ => throw Exception('Invalid type'),
+    };
 
 /// Wraps the definition string in a multi-line string.
 String _wrapDefinitionString(String definition) => "'''\n$definition'''";
