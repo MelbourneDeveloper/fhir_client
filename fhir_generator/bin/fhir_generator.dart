@@ -60,18 +60,7 @@ class $resourceName extends Resource {
 
   ${_staticGetMethods(fields)}
 
-  ${fields.map(
-            (field) => '''
-  /// Field definition for [${field.name}].
-  static const ${field.name}Field = FieldDefinition(
-    name: '${field.name}',
-    getValue: _get${field.name.capitalize()},
-    description: ${_wrapDefinitionString(field.definition)},
-    ${_cardinalityLine(field)}
-    ${field.allowedStringValues != null ? '\n    allowedStringValues: [${field.allowedStringValues!.map((e) => "'e'").join(',\n')}],' : ''}
-  );
-  ''',
-          ).join('\n')}
+  ${_fieldDefinitions(fields)}
 
   /// R4: All field definitions for [$resourceName].
   static const fieldDefinitions = [
@@ -83,6 +72,21 @@ class $resourceName extends Resource {
 }
 ''';
 }
+
+String _fieldDefinitions(List<Field> fields) => fields
+    .map(
+      (field) => '''
+/// Field definition for [${field.name}].
+static const ${field.name}Field = FieldDefinition(
+  name: '${field.name}',
+  getValue: _get${field.name.capitalize()},
+  description: ${_wrapDefinitionString(field.definition)},
+  ${_cardinalityLine(field)}
+  ${field.allowedStringValues != null ? '\n    allowedStringValues: [${field.allowedStringValues!.map((e) => "'e'").join(',\n')}],' : ''}
+);
+''',
+    )
+    .join('\n');
 
 String _cardinalityLine(Field field) => field.min == 0 && field.max == 1
     //Default cardinality
