@@ -202,7 +202,7 @@ String _staticGetMethods(List<Field> fields) => fields
     .map(
       (field) => '''
 static ${field.dartType}? _get${field.name.capitalize()}(JsonObject jo) =>
-    ${_isArray(field) ? _arraySwitch(field) : field.jsonValue};  
+    ${_isArray(field) ? _arraySwitch(field) : jsonValue(field)};  
 ''',
     )
     .join('\n');
@@ -216,6 +216,32 @@ String _arraySwitch(Field field) => '''
       _ => null,
   }
 ''';
+
+String jsonValue(Field field) => field.types.length == 1
+    ? switch (field.dartType) {
+        'String' => field.allowedStringValues != null
+            ? 'switch (jo[${field.name}Field.name]) {(final JsonString jsonString) => ${field.dartType}.fromString(jsonString.value), _ => null,}'
+            : 'jo[${field.name}Field.name].stringValue',
+        'bool' => 'jo[${field.name}Field.name].booleanValue',
+        'int' => 'jo[${field.name}Field.name].integerValue',
+        'Uri' => 'jo[${field.name}Field.name].uriValue',
+        'DateTime' =>
+          "DateTime.tryParse(jo[${field.name}Field.name].stringValue ?? '')",
+        _ => '''
+  switch(jo[${field.name}Field.name])
+  {
+    (final JsonObject jsonObject) => ${field.dartType}.fromJson(jsonObject),
+    _ => null,
+  } 
+''',
+      }
+    : switch (field.types) {
+        ['boolean', 'dateTime'] =>
+          'BooleanOrDateTimeChoice.fromJson(jo[${field.name}Field.name])',
+        ['boolean', 'integer'] =>
+          'BooleanOrIntegerChoice.fromJson(jo[${field.name}Field.name])',
+        _ => throw Exception('Invalid type'),
+      };
 
 /// Wraps the definition string in a multi-line string.
 String _wrapDefinitionString(String definition) => "'''\n$definition'''";
@@ -251,7 +277,7 @@ String _constructorMapInitializations(
 bool _isArray(Field field) => field.isMaxStar || ((field.max ?? 0) > 1);
 
 String _primitiveConstructorLine(Field field) => switch (field.dartType) {
-    //Switching on the dart type here, but we might need more detail about the FHIR type...
+      //Switching on the dart type here, but we might need more detail about the FHIR type...
       'String' =>
         'if (${field.name} != null) ${field.name}Field.name: JsonString(${field.name}),',
       'bool' =>
@@ -350,32 +376,6 @@ class Field {
         'Uri' => true,
         _ => false,
       };
-
-  String get jsonValue => types.length == 1
-      ? switch (dartType) {
-          'String' => allowedStringValues != null
-              ? 'switch (jo[${name}Field.name]) {(final JsonString jsonString) => $dartType.fromString(jsonString.value), _ => null,}'
-              : 'jo[${name}Field.name].stringValue',
-          'bool' => 'jo[${name}Field.name].booleanValue',
-          'int' => 'jo[${name}Field.name].integerValue',
-          'Uri' => 'jo[${name}Field.name].uriValue',
-          'DateTime' =>
-            "DateTime.tryParse(jo[${name}Field.name].stringValue ?? '')",
-          _ => '''
-  switch(jo[${name}Field.name])
-  {
-    (final JsonObject jsonObject) => ${types.first}.fromJson(jsonObject),
-    _ => null,
-  } 
-''',
-        }
-      : switch (types) {
-          ['boolean', 'dateTime'] =>
-            'BooleanOrDateTimeChoice.fromJson(jo[${name}Field.name])',
-          ['boolean', 'integer'] =>
-            'BooleanOrIntegerChoice.fromJson(jo[${name}Field.name])',
-          _ => throw Exception('Invalid type'),
-        };
 
   @override
   @Deprecated('Asdf')
