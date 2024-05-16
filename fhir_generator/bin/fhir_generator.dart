@@ -330,6 +330,7 @@ class Field {
               : 'jo[${name}Field.name].stringValue',
           'bool' => 'jo[${name}Field.name].booleanValue',
           'int' => 'jo[${name}Field.name].integerValue',
+          'Uri' => 'jo[${name}Field.name].uriValue',
           'DateTime' =>
             "DateTime.tryParse(jo[${name}Field.name].stringValue ?? '')",
           _ => '''
