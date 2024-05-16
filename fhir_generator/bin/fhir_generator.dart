@@ -245,6 +245,8 @@ String _primitiveConstructorLine(Field field) =>
         'if (${field.name} != null) ${field.name}Field.name: JsonNumber(${field.name}),',
       'DateTime' =>
         'if (${field.name} != null) ${field.name}Field.name: JsonString(${field.name}.toIso8601String()),',
+      'Uri' =>
+        'if (${field.name} != null) ${field.name}Field.name: JsonString(${field.name}),',
       _ => throw Exception('Invalid primitive type'),
     };
 
@@ -320,6 +322,7 @@ class Field {
         'bool' => true,
         'int' => true,
         'DateTime' => true,
+        'Uri' => true,
         _ => false,
       };
 
