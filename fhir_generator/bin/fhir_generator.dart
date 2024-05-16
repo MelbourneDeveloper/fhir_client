@@ -84,6 +84,19 @@ class $resourceName extends Resource {
 ''';
 }
 
+/// Dead code for now. Don't use.
+// ignore: unused_element
+String _generateEnums(List<Field> fields) => fields
+    .where((field) => field.allowedStringValues != null)
+    .map(
+      (field) => '''
+enum ${field.dartType} {
+  ${field.allowedStringValues!.map((value) => value.toLowerCase()).join(',\n  ')},
+}
+''',
+    )
+    .join('\n');
+
 String _fieldDefinitions(List<Field> fields) => fields
     .map(
       (field) => '''
@@ -148,7 +161,12 @@ List<Field> _getFields(JsonArray element) {
               .where((t) => t != null)
               .cast<String>()
               .toList(),
-          dartType: _wrapType(fieldName, typeArray, maxCardinality),
+          dartType: _wrapType(
+            fieldName,
+            typeArray,
+            maxCardinality,
+            allowedStringValues,
+          ),
           allowedStringValues: allowedStringValues,
           min: minCardinality,
           max: maxCardinality.integerValue,
@@ -165,16 +183,14 @@ String _wrapType(
   String fieldName,
   JsonArray typeArray,
   JsonValue maxCardinality,
+  List<String>? allowedStringValues,
 ) {
   final isList = _isList(maxCardinality);
-  final dartType =
-      //TODO: unhardcode
-      fieldName == 'gender'
-          ? 'AdministrativeGender'
-          : _arrayToDartType(
-              typeArray,
-              isList,
-            );
+  final dartType = _arrayToDartType(
+    typeArray,
+    isList,
+    allowedStringValues,
+  );
 
   return isList ? 'FixedList<$dartType>' : dartType;
 }
@@ -195,7 +211,7 @@ String _arraySwitch(Field field) => '''
   switch(jo[${field.name}Field.name])
   {
     (final JsonArray jsonArray) => FixedList(
-        jsonArray.value.map((e) => MissingType.fromJson(e as JsonObject)),
+        jsonArray.value.map((e) => ${field.types.first}.fromJson(e as JsonObject)),
       ),
       _ => null,
   }
@@ -234,9 +250,8 @@ String _constructorMapInitializations(
 
 bool _isArray(Field field) => field.isMaxStar || ((field.max ?? 0) > 1);
 
-String _primitiveConstructorLine(Field field) =>
+String _primitiveConstructorLine(Field field) => switch (field.dartType) {
     //Switching on the dart type here, but we might need more detail about the FHIR type...
-    switch (field.dartType) {
       'String' =>
         'if (${field.name} != null) ${field.name}Field.name: JsonString(${field.name}),',
       'bool' =>
@@ -250,13 +265,20 @@ String _primitiveConstructorLine(Field field) =>
       _ => throw Exception('Invalid primitive type'),
     };
 
-String _arrayToDartType(JsonArray array, bool isArray) => switch (array) {
+String _arrayToDartType(
+  JsonArray array,
+  bool isArray,
+  List<String>? allowedStringValues,
+) =>
+    switch (array) {
       (final JsonArray ja) when ja.length == 0 => throw Exception('Empty type'),
       (final JsonArray ja) when ja.length == 1 && ja[0]['code'] is JsonString =>
-        _mapFhirTypeToDartType(
-          (ja[0]['code'] as JsonString).value,
-          isArray,
-        ),
+        allowedStringValues != null
+            ? _enumName(allowedStringValues.first)
+            : _mapFhirTypeToDartType(
+                (ja[0]['code'] as JsonString).value,
+                isArray,
+              ),
       (final JsonArray ja)
           when ja.length == 2 &&
               ja[0]['code'].stringValue == 'boolean' &&
@@ -267,8 +289,11 @@ String _arrayToDartType(JsonArray array, bool isArray) => switch (array) {
               ja[0]['code'].stringValue == 'boolean' &&
               ja[1]['code'].stringValue == 'integer' =>
         'BooleanOrIntegerChoice',
-      _ => throw Exception('Type case not handled')
+      (final JsonArray ja) => ja[0]['code'].stringValue!,
     };
+
+String _enumName(String valueSet) =>
+    valueSet.split('/').last.split('-').map((e) => e.capitalize()).join();
 
 String _mapFhirTypeToDartType(
   String fhirType,
@@ -329,7 +354,7 @@ class Field {
   String get jsonValue => types.length == 1
       ? switch (dartType) {
           'String' => allowedStringValues != null
-              ? 'switch (jo[${name}Field.name]) {(final JsonString jsonString) => jsonString.value, _ => null,}'
+              ? 'switch (jo[${name}Field.name]) {(final JsonString jsonString) => $dartType.fromString(jsonString.value), _ => null,}'
               : 'jo[${name}Field.name].stringValue',
           'bool' => 'jo[${name}Field.name].booleanValue',
           'int' => 'jo[${name}Field.name].integerValue',
@@ -339,7 +364,7 @@ class Field {
           _ => '''
   switch(jo[${name}Field.name])
   {
-    (final JsonObject jsonObject) => MissingType.fromJson(jsonObject),
+    (final JsonObject jsonObject) => ${types.first}.fromJson(jsonObject),
     _ => null,
   } 
 ''',
