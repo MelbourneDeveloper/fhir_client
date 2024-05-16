@@ -5,6 +5,7 @@ import 'package:fhir_client/models/address.dart';
 import 'package:fhir_client/models/admit_source.dart';
 import 'package:fhir_client/models/annotation.dart';
 import 'package:fhir_client/models/available_time.dart';
+import 'package:fhir_client/models/backbone_element.dart';
 import 'package:fhir_client/models/basic_types/choice_types.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/basic_types/time.dart';

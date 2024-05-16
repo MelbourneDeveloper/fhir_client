@@ -70,7 +70,7 @@ class $resourceName extends Resource {
 
   /// Creates a copy of the [$resourceName] instance and allows for non-destructive mutation.
   $resourceName copyWith({
-    ${fields.map((field) => '${field.type}${field.isRequired ? '' : '?'} ${field.name}').join(',\n    ')},
+    ${fields.map((field) => '${field.type}? ${field.name}').join(',\n    ')},
   }) =>
       $resourceName(
         ${fields.map((field) => '${field.name}: ${field.name} ?? this.${field.name}').join(',\n        ')}
@@ -92,14 +92,19 @@ List<Field> _getFields(JsonArray element) {
 
     if (path.split('.').length == 2) {
       final fieldName = path.split('.')[1].replaceAll('[x]', '');
-      final isRequired = (elementItem['min'] as JsonNumber).integerValue == 1;
+      final allowedStringValues = elementItem['binding']
+          .objectValue?['valueSet']
+          .stringValue
+          ?.split('|')
+          .map((e) => e.trim())
+          .toList();
 
-      //TODO: handle allowedStringValues (maybe short)
+      final maxCardinality = elementItem['max'];
+      final minCardinality = elementItem['min'].integerValue!;
 
       fields.add(
         Field(
           name: fieldName,
-          //TODO: deal with the "short" values for enums
           type: fieldName == 'gender'
               ? 'AdministrativeGender'
               : _arrayToDartType(typeArray),
@@ -109,12 +114,14 @@ List<Field> _getFields(JsonArray element) {
     name: '$fieldName',
     getValue: _get${fieldName.capitalize()},
     description: ${_wrapDefinitionString(elementItem)},
-  ${isRequired ? '    isRequired: $isRequired, ' : ''});
+    cardinality: Cardinality(min: $minCardinality, max: ${maxCardinality.integerValue != null ? 'IntegerChoice(${maxCardinality.integerValue})' : 'null'},),
+    ${allowedStringValues != null ? '\n    allowedStringValues: [${allowedStringValues.map((e) => "'e'").join(',\n')}],' : ''}
+  );
   ''',
-
-          isRequired: isRequired,
-          // TODO: allowedStringValues - maybe short field
-          //allowedStringValues: allowedStringValues,
+          allowedStringValues: allowedStringValues,
+          min: minCardinality,
+          max: maxCardinality.integerValue,
+          isMaxStar: maxCardinality.stringValue == '*',
         ),
       );
     }
@@ -140,8 +147,7 @@ String _getters(List<Field> fields) => fields
     .whereNotInherited()
     .map(
       (field) =>
-          //TODO: include the fields documentation definition in the comments
-          '/// ${field.name}\n ${field.type}? get ${field.name} => ${field.name}Field.getValue(json);',
+          '/*\n${field.definitionText.split("description: '''")[1].split("''',")[0].trim()}\n*/\n ${field.type}? get ${field.name} => ${field.name}Field.getValue(json);',
     )
     .join('\n\n  ');
 
@@ -152,11 +158,10 @@ String _constructorMapInitializations(
     fields
         .map(
           (field) => switch (field) {
-            //TODO: deal with other kinds of choice types. Don't hard code the type
-            (final Field f) when f.type == 'BoolOrDateTimeChoice' =>
+            (final Field f) when f.type.startsWith('BoolOr') =>
               'if (${f.name} != null) ${f.name}Field.name: ${f.name}.toJsonString(),',
             (final Field f) when f.isPrimitive => _primitiveConstructorLine(f),
-            (final Field f) when f.isList =>
+            (final Field f) when _isArray(f) =>
               "if (${f.name} != null) ${f.name}Field.name: JsonArray.unmodifiable(${f.name}${f.type == 'FixedList<$resourceName>' ? '.map((e) => e.json)' : ''}),",
             _ =>
               'if (${field.name} != null) ${field.name}Field.name: ${field.name}.json,',
@@ -164,13 +169,15 @@ String _constructorMapInitializations(
         )
         .join('\n            ');
 
+bool _isArray(Field field) => field.isMaxStar || ((field.max ?? 0) > 1);
+
 String _primitiveConstructorLine(Field field) => switch (field.type) {
       'String' =>
         'if (${field.name} != null) ${field.name}Field.name: JsonString(${field.name}),',
       'bool' =>
         'if (${field.name} != null) ${field.name}Field.name: JsonBoolean(${field.name}),',
       'int' =>
-        'if (${field.name} != null) ${field.name}Field.name: JsonBoolean(${field.name}),',
+        'if (${field.name} != null) ${field.name}Field.name: JsonNumber(${field.name}),',
       'DateTime' =>
         'if (${field.name} != null) ${field.name}Field.name: JsonString(${field.name}.toIso8601String()),',
       _ => throw Exception('Invalid primitive type'),
@@ -216,23 +223,21 @@ class Field {
     required this.name,
     required this.type,
     required this.definitionText,
-    //TODO: include the field documentation definition and put this
-    //in the comments and the description of the field.
-    required this.isRequired,
-    //TODO: fill this in
-    this.isList = false,
-    //TODO: get this from the "short" field in the JSON definition.
-    //It looks like this: "short": "male | female | other | unknown"
-    //This also needs to drive enums like AdministrativeGender
+    required this.min,
+    required this.max,
+    required this.isMaxStar,
     this.allowedStringValues,
   });
 
   final String name;
   final String type;
   final String definitionText;
-  final bool isRequired;
+  // Buh?
+  // ignore: unreachable_from_main
+  final int min;
+  final int? max;
+  final bool isMaxStar;
   final List<String>? allowedStringValues;
-  final bool isList;
 
   bool get isPrimitive => switch (type) {
         'String' => true,
@@ -254,7 +259,7 @@ class Field {
       };
 
   @override
-  String toString() => '$type${isRequired ? '' : '?'} $name';
+  String toString() => '$type? $name';
 }
 
 extension Asfsdf on Iterable<Field> {
