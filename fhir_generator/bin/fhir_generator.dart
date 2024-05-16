@@ -32,6 +32,9 @@ void main(List<String> args) {
   print(dataClassCode);
 }
 
+// ignore: unused_element
+String _typeAndName(Field field) => '${field.dartType}? ${field.name}';
+
 /// Generates a data class for the resource based on the
 /// JSON definition
 String _generateResourceDataClass(
@@ -46,7 +49,7 @@ String _generateResourceDataClass(
 class $resourceName extends Resource {
   /// Constructs a new [$resourceName].
   $resourceName({
-    ${fields.join(',\n    ')},
+    ${fields.map(_typeAndName).join(',\n    ')},
   }) : super._internal(
           JsonObject({
             ${_constructorMapInitializations(fields, resourceName)}  
@@ -82,23 +85,24 @@ static const ${field.name}Field = FieldDefinition(
   getValue: _get${field.name.capitalize()},
   description: ${_wrapDefinitionString(field.definition)},
   ${_cardinalityLine(field)}
-  ${field.allowedStringValues != null ? '\n    allowedStringValues: [${field.allowedStringValues!.map((e) => "'e'").join(',\n')}],' : ''}
+  ${field.allowedStringValues != null ? '\n    allowedStringValues: [${field.allowedStringValues!.map((e) => "'$e'").join(',\n')},],' : ''}
 );
 ''',
     )
     .join('\n');
 
-String _cardinalityLine(Field field) => field.min == 0 && field.max == 1
-    //Default cardinality
-    ? ''
-    //Need to specify cardinality
-    : 'cardinality: Cardinality(min: ${field.min}, '
-        '${field.max != null ? 'max: IntegerChoice(${field.max}),' : ''}),';
+String _cardinalityLine(Field field) =>
+    field.min == 0 && (field.max == null && !field.isMaxStar)
+        //Default cardinality
+        ? ''
+        //Need to specify cardinality
+        : 'cardinality: Cardinality(min: ${field.min}, '
+            '${field.max != null ? 'max: IntegerChoice(${field.max}),' : ''}),';
 
 String _copyWith(String resourceName, List<Field> fields) => '''
 /// Creates a copy of the [$resourceName] instance and allows for non-destructive mutation.
   $resourceName copyWith({
-    ${fields.map((field) => '${field.type}? ${field.name}').join(',\n    ')},
+    ${fields.map((field) => '${field.dartType}? ${field.name}').join(',\n    ')},
   }) =>
       $resourceName(
         ${fields.map((field) => '${field.name}: ${field.name} ?? this.${field.name}').join(',\n        ')}
@@ -131,7 +135,12 @@ List<Field> _getFields(JsonArray element) {
       fields.add(
         Field(
           name: fieldName,
-          type: fieldName == 'gender'
+          types: typeArray.value
+              .map((e) => e['code'].stringValue)
+              .where((t) => t != null)
+              .cast<String>()
+              .toList(),
+          dartType: fieldName == 'gender'
               ? 'AdministrativeGender'
               : _arrayToDartType(typeArray),
           allowedStringValues: allowedStringValues,
@@ -149,7 +158,7 @@ List<Field> _getFields(JsonArray element) {
 String _staticGetMethods(List<Field> fields) => fields
     .map(
       (field) => '''
-static ${field.type} _get${field.name.capitalize()}(JsonObject jo) =>
+static ${field.dartType} _get${field.name.capitalize()}(JsonObject jo) =>
     ${field.jsonValue};  
 ''',
     )
@@ -163,7 +172,7 @@ String _getters(List<Field> fields) => fields
     .whereNotInherited()
     .map(
       (field) =>
-          '/*\n${field.definition}\n*/\n ${field.type}? get ${field.name} => ${field.name}Field.getValue(json);',
+          '/*\n${field.definition}\n*/\n ${field.dartType}? get ${field.name} => ${field.name}Field.getValue(json);',
     )
     .join('\n\n  ');
 
@@ -174,11 +183,12 @@ String _constructorMapInitializations(
     fields
         .map(
           (field) => switch (field) {
-            (final Field f) when f.type.startsWith('BoolOr') =>
+            //TODO: this is nasty... Need a flag to indicate that this is a choice type
+            (final Field f) when f.dartType.startsWith('BoolOr') =>
               'if (${f.name} != null) ${f.name}Field.name: ${f.name}.toJsonString(),',
             (final Field f) when f.isPrimitive => _primitiveConstructorLine(f),
             (final Field f) when _isArray(f) =>
-              "if (${f.name} != null) ${f.name}Field.name: JsonArray.unmodifiable(${f.name}${f.type == 'FixedList<$resourceName>' ? '.map((e) => e.json)' : ''}),",
+              "if (${f.name} != null) ${f.name}Field.name: JsonArray.unmodifiable(${f.name}${f.dartType == 'FixedList<$resourceName>' ? '.map((e) => e.json)' : ''}),",
             _ =>
               'if (${field.name} != null) ${field.name}Field.name: ${field.name}.json,',
           },
@@ -187,7 +197,9 @@ String _constructorMapInitializations(
 
 bool _isArray(Field field) => field.isMaxStar || ((field.max ?? 0) > 1);
 
-String _primitiveConstructorLine(Field field) => switch (field.type) {
+String _primitiveConstructorLine(Field field) =>
+    //Switching on the dart type here, but we might need more detail about the FHIR type...
+    switch (field.dartType) {
       'String' =>
         'if (${field.name} != null) ${field.name}Field.name: JsonString(${field.name}),',
       'bool' =>
@@ -237,7 +249,8 @@ extension StringExtensions on String {
 class Field {
   Field({
     required this.name,
-    required this.type,
+    required this.types,
+    required this.dartType,
     required this.min,
     required this.max,
     required this.isMaxStar,
@@ -246,7 +259,8 @@ class Field {
   });
 
   final String name;
-  final String type;
+  final String dartType;
+  final List<String> types;
   // Buh?
   // ignore: unreachable_from_main
   final int min;
@@ -255,7 +269,9 @@ class Field {
   final List<String>? allowedStringValues;
   final String definition;
 
-  bool get isPrimitive => switch (type) {
+  bool get isPrimitive =>
+      types.length == 1 &&
+      switch (types[0]) {
         'String' => true,
         'bool' => true,
         'int' => true,
@@ -263,22 +279,32 @@ class Field {
         _ => false,
       };
 
-  String get jsonValue => switch (type) {
-        'String' => allowedStringValues != null
-            ? 'switch (jo[${name}Field.name]) {(final JsonString jsonString) => jsonString.value, _ => null,}'
-            : 'jo[${name}Field.name].stringValue',
-        'bool' => 'jo[${name}Field.name].booleanValue',
-        'int' => 'jo[${name}Field.name].integerValue',
-        'DateTime' =>
-          "DateTime.tryParse(jo[${name}Field.name].stringValue ?? '')",
-        _ => '$type.fromJson(jo[${name}Field.name])',
-      };
+  String get jsonValue => types.length == 1
+      ? switch (types.first) {
+          'String' => allowedStringValues != null
+              ? 'switch (jo[${name}Field.name]) {(final JsonString jsonString) => jsonString.value, _ => null,}'
+              : 'jo[${name}Field.name].stringValue',
+          'bool' => 'jo[${name}Field.name].booleanValue',
+          'boolean' => 'jo[${name}Field.name].booleanValue',
+          'int' => 'jo[${name}Field.name].integerValue',
+          'DateTime' =>
+            "DateTime.tryParse(jo[${name}Field.name].stringValue ?? '')",
+          _ => '${types.first}.fromJson(jo[${name}Field.name])',
+        }
+      : switch (types) {
+          ['boolean', 'dateTime'] =>
+            'BooleanOrDateTimeChoice.fromJson(jo[${name}Field.name])',
+          ['boolean', 'integer'] =>
+            'BooleanOrIntegerChoice.fromJson(jo[${name}Field.name])',
+          _ => throw Exception('Invalid type'),
+        };
 
   @override
-  String toString() => '$type? $name';
+  @Deprecated('Asdf')
+  String toString() => throw UnimplementedError();
 }
 
-extension Asfsdf on Iterable<Field> {
+extension FieldListExtensions on Iterable<Field> {
   Iterable<Field> whereNotInherited() => where(
         (field) => ![
           'meta',
