@@ -271,7 +271,7 @@ class Field {
 
   bool get isPrimitive =>
       types.length == 1 &&
-      switch (types[0]) {
+      switch (dartType) {
         'String' => true,
         'bool' => true,
         'int' => true,
