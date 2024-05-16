@@ -20,7 +20,7 @@ sealed class BooleanOrDateTimeChoice {
 }
 
 sealed class BooleanOrIntegerChoice {
-  BooleanOrIntegerChoice._internal();
+  const BooleanOrIntegerChoice._internal();
 
   static BooleanOrIntegerChoice? fromJson(JsonValue json) {
     if (json is JsonBoolean) {
@@ -33,7 +33,7 @@ sealed class BooleanOrIntegerChoice {
 }
 
 final class IntegerChoice extends BooleanOrIntegerChoice {
-  IntegerChoice(this.value) : super._internal();
+  const IntegerChoice(this.value) : super._internal();
 
   final int value;
 

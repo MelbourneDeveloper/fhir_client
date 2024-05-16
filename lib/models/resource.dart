@@ -222,7 +222,7 @@ class Appointment extends Resource {
   static const statusField = FieldDefinition(
     name: 'status',
     getValue: _getStatus,
-    isRequired: true,
+    cardinality: Cardinality(min: 1, max: IntegerChoice(1)),
     allowedStringValues: [
       'proposed',
       'booked',
