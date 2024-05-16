@@ -185,11 +185,21 @@ bool _isList(JsonValue maxCardinality) =>
 String _staticGetMethods(List<Field> fields) => fields
     .map(
       (field) => '''
-static ${field.dartType} _get${field.name.capitalize()}(JsonObject jo) =>
-    ${field.jsonValue};  
+static ${field.dartType}? _get${field.name.capitalize()}(JsonObject jo) =>
+    ${_isArray(field) ? _arraySwitch(field) : field.jsonValue};  
 ''',
     )
     .join('\n');
+
+String _arraySwitch(Field field) => '''
+  switch(jo[${field.name}Field.name])
+  {
+    (final JsonArray jsonArray) => FixedList(
+        jsonArray.value.map((e) => MissingType.fromJson(e as JsonObject)),
+      ),
+      _ => null,
+  }
+''';
 
 /// Wraps the definition string in a multi-line string.
 String _wrapDefinitionString(String definition) => "'''\n$definition'''";
