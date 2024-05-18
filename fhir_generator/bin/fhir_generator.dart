@@ -9,15 +9,13 @@ void main(List<String> args) {
     args = ['patient.json'];
   }
 
-  final profileRoot = jsonValueDecode(_getProfileJson(args)) as JsonObject;
-  var elementArray = profileRoot['snapshot']['element'] as JsonArray;
-  final resourceElement = elementArray[0];
+  final profileRoot = jsonValueDecode(_getProfileJson(args[0])) as JsonObject;
 
-  elementArray = JsonArray(elementArray.value.sublist(1));
+  final elementArray = JsonArray(getElementArray(profileRoot).value.sublist(1));
 
   final dataClassCode = _generateResourceDataClass(
-    resourceElement['id'].stringValue ?? 'N/A',
-    resourceElement['definition'].stringValue ?? 'N/A',
+    elementArray[0]['id'].stringValue ?? 'N/A',
+    elementArray[0]['definition'].stringValue ?? 'N/A',
     elementArray,
   );
 
@@ -25,7 +23,60 @@ void main(List<String> args) {
   File('patient.dart').writeAsStringSync(dataClassCode);
 }
 
-String _getProfileJson(List<String> args) => File(args[0]).readAsStringSync();
+/// Gets the most important array for field definitions.
+JsonArray getElementArray(JsonObject profileRoot) =>
+    profileRoot['snapshot']['element'] as JsonArray;
+
+/// Convert all the fields in the JSON definition to a list of [Field] objects.
+List<Field> getFields(JsonArray element) {
+  final fields = <Field>[];
+
+  // Iterate through each of the "element" nodes
+  for (final elementItem in element.value) {
+    final path = elementItem['path'].stringValue;
+    if (path == null) throw Exception('Path is null or not a string');
+
+    final typeArray = elementItem['type'] as JsonArray;
+
+    if (path.split('.').length == 2) {
+      final fieldName = path.split('.')[1].replaceAll('[x]', '');
+      final allowedStringValues = elementItem['binding']
+          .objectValue?['valueSet']
+          .stringValue
+          ?.split('|')
+          .map((e) => e.trim())
+          .toList();
+
+      final maxCardinality = elementItem['max'];
+      final minCardinality = elementItem['min'].integerValue!;
+
+      fields.add(
+        Field(
+          name: fieldName,
+          types: typeArray.value
+              .map((e) => e['code'].stringValue)
+              .where((t) => t != null)
+              .cast<String>()
+              .toList(),
+          dartType: _wrapType(
+            fieldName,
+            typeArray,
+            maxCardinality,
+            allowedStringValues,
+          ),
+          allowedStringValues: allowedStringValues,
+          min: minCardinality,
+          max: maxCardinality.integerValue,
+          isMaxStar: maxCardinality.stringValue == '*',
+          definition: elementItem['definition'].stringValue ?? '',
+        ),
+      );
+    }
+  }
+  return fields;
+}
+
+String _getProfileJson(String filePath) => File(filePath).readAsStringSync();
 
 String _typeAndName(Field field) => '${field.dartType}? ${field.name}';
 
@@ -36,7 +87,7 @@ String _generateResourceDataClass(
   String resourceDefinition,
   JsonArray element,
 ) {
-  final fields = _getFields(element);
+  final fields = getFields(element);
 
   return '''
 ${_classAndConstructor(resourceName, resourceDefinition, fields)}
@@ -132,55 +183,6 @@ String _copyWith(String resourceName, List<Field> fields) => '''
         ${fields.map((field) => '${field.name}: ${field.name} ?? this.${field.name}').join(',\n        ')}
       ,);
 ''';
-
-/// Convert all the fields in the JSON definition to a list of [Field] objects.
-List<Field> _getFields(JsonArray element) {
-  final fields = <Field>[];
-
-  // Iterate through each of the "element" nodes
-  for (final elementItem in element.value) {
-    final path = elementItem['path'].stringValue;
-    if (path == null) throw Exception('Path is null or not a string');
-
-    final typeArray = elementItem['type'] as JsonArray;
-
-    if (path.split('.').length == 2) {
-      final fieldName = path.split('.')[1].replaceAll('[x]', '');
-      final allowedStringValues = elementItem['binding']
-          .objectValue?['valueSet']
-          .stringValue
-          ?.split('|')
-          .map((e) => e.trim())
-          .toList();
-
-      final maxCardinality = elementItem['max'];
-      final minCardinality = elementItem['min'].integerValue!;
-
-      fields.add(
-        Field(
-          name: fieldName,
-          types: typeArray.value
-              .map((e) => e['code'].stringValue)
-              .where((t) => t != null)
-              .cast<String>()
-              .toList(),
-          dartType: _wrapType(
-            fieldName,
-            typeArray,
-            maxCardinality,
-            allowedStringValues,
-          ),
-          allowedStringValues: allowedStringValues,
-          min: minCardinality,
-          max: maxCardinality.integerValue,
-          isMaxStar: maxCardinality.stringValue == '*',
-          definition: elementItem['definition'].stringValue ?? '',
-        ),
-      );
-    }
-  }
-  return fields;
-}
 
 String _wrapType(
   String fieldName,
