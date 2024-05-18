@@ -45,16 +45,7 @@ String _generateResourceDataClass(
   final fields = _getFields(element);
 
   return '''
-/// $resourceDefinition
-class $resourceName extends Resource {
-  /// Constructs a new [$resourceName].
-  $resourceName({
-    ${fields.map(_typeAndName).join(',\n    ')},
-  }) : super._internal(
-          JsonObject({
-            ${_constructorMapInitializations(fields, resourceName)}  
-          }),
-        );
+${_classAndConstructor(resourceName, resourceDefinition, fields)}
 
   /// Creates a [$resourceName] instance from the provided JSON object.
   $resourceName.fromJson(JsonObject json) : super._internal(json);
@@ -83,6 +74,24 @@ class $resourceName extends Resource {
 }
 ''';
 }
+
+String _classAndConstructor(
+  String resourceName,
+  String resourceDefinition,
+  List<Field> fields,
+) =>
+    '''
+/// $resourceDefinition
+class $resourceName extends Resource {
+  /// Constructs a new [$resourceName].
+  $resourceName({
+    ${fields.map(_typeAndName).join(',\n    ')},
+  }) : super._internal(
+          JsonObject({
+            ${_constructorMapInitializations(fields, resourceName)}  
+          }),
+        );
+''';
 
 /// Dead code for now. Don't use.
 // ignore: unused_element
