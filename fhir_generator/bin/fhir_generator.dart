@@ -9,12 +9,7 @@ void main(List<String> args) {
     args = ['patient.json'];
   }
 
-  final profileRoot = jsonValueDecode(getProfileJson(args[0])) as JsonObject;
-
-  final elementArray = getElementArray(profileRoot);
-
-  //Strip the first element because that is for the resource itself
-  final fields = getFields(JsonArray(elementArray.value.sublist(1)));
+  final (elementArray, fields) = processProfile(args[0]);
 
   final dataClassCode = _generateResourceDataClass(
     elementArray[0]['id'].stringValue ?? 'N/A',
@@ -26,12 +21,29 @@ void main(List<String> args) {
   File('patient.dart').writeAsStringSync(dataClassCode);
 }
 
+(
+  JsonArray,
+  List<Field>,
+) processProfile(String fileName) {
+  final profileRoot = jsonValueDecode(getProfileJson(fileName)) as JsonObject;
+
+  final elementArray = _getElementArray(profileRoot);
+
+  //Strip the first element because that is for the resource itself
+  final fields = _getFields(JsonArray(elementArray.value.sublist(1)));
+
+  return (
+    elementArray,
+    fields,
+  );
+}
+
 /// Gets the most important array for field definitions.
-JsonArray getElementArray(JsonObject profileRoot) =>
+JsonArray _getElementArray(JsonObject profileRoot) =>
     profileRoot['snapshot']['element'] as JsonArray;
 
 /// Convert all the fields in the JSON definition to a list of [Field] objects.
-List<Field> getFields(JsonArray element) {
+List<Field> _getFields(JsonArray element) {
   final fields = <Field>[];
 
   // Iterate through each of the "element" nodes
