@@ -9,14 +9,17 @@ void main(List<String> args) {
     args = ['patient.json'];
   }
 
-  final profileRoot = jsonValueDecode(_getProfileJson(args[0])) as JsonObject;
+  final profileRoot = jsonValueDecode(getProfileJson(args[0])) as JsonObject;
 
-  final elementArray = JsonArray(getElementArray(profileRoot).value.sublist(1));
+  final elementArray = getElementArray(profileRoot);
+
+  //Strip the first element because that is for the resource itself
+  final fields = getFields(JsonArray(elementArray.value.sublist(1)));
 
   final dataClassCode = _generateResourceDataClass(
     elementArray[0]['id'].stringValue ?? 'N/A',
     elementArray[0]['definition'].stringValue ?? 'N/A',
-    elementArray,
+    fields,
   );
 
   // ignore: avoid_print
@@ -76,7 +79,7 @@ List<Field> getFields(JsonArray element) {
   return fields;
 }
 
-String _getProfileJson(String filePath) => File(filePath).readAsStringSync();
+String getProfileJson(String filePath) => File(filePath).readAsStringSync();
 
 String _typeAndName(Field field) => '${field.dartType}? ${field.name}';
 
@@ -85,11 +88,9 @@ String _typeAndName(Field field) => '${field.dartType}? ${field.name}';
 String _generateResourceDataClass(
   String resourceName,
   String resourceDefinition,
-  JsonArray element,
-) {
-  final fields = getFields(element);
-
-  return '''
+  List<Field> fields,
+) =>
+    '''
 ${_classAndConstructor(resourceName, resourceDefinition, fields)}
 
   /// Creates a [$resourceName] instance from the provided JSON object.
@@ -118,7 +119,6 @@ ${_classAndConstructor(resourceName, resourceDefinition, fields)}
   ${_copyWith(resourceName, fields)}  
 }
 ''';
-}
 
 String _classAndConstructor(
   String resourceName,
