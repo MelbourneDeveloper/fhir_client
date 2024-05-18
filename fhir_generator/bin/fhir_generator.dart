@@ -9,22 +9,15 @@ void main(List<String> args) {
     args = ['patient.json'];
   }
 
-  final jsonFilePath = args[0];
-  final jsonString = File(jsonFilePath).readAsStringSync();
-  final allData = jsonValueDecode(jsonString) as JsonObject;
-
-  final snapshot = allData['snapshot'] as JsonObject;
-  var elementArray = snapshot['element'] as JsonArray;
-
+  final profileRoot = jsonValueDecode(_getProfileJson(args)) as JsonObject;
+  var elementArray = profileRoot['snapshot']['element'] as JsonArray;
   final resourceElement = elementArray[0];
-  final resourceName = resourceElement['id'].stringValue;
-  final resourceDefinition = resourceElement['definition'].stringValue;
 
   elementArray = JsonArray(elementArray.value.sublist(1));
 
   final dataClassCode = _generateResourceDataClass(
-    resourceName ?? 'N/A',
-    resourceDefinition ?? 'N/A',
+    resourceElement['id'].stringValue ?? 'N/A',
+    resourceElement['definition'].stringValue ?? 'N/A',
     elementArray,
   );
 
@@ -32,7 +25,8 @@ void main(List<String> args) {
   File('patient.dart').writeAsStringSync(dataClassCode);
 }
 
-// ignore: unused_element
+String _getProfileJson(List<String> args) => File(args[0]).readAsStringSync();
+
 String _typeAndName(Field field) => '${field.dartType}? ${field.name}';
 
 /// Generates a data class for the resource based on the
