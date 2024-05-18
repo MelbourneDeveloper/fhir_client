@@ -202,10 +202,17 @@ String _staticGetMethods(List<Field> fields) => fields
     .map(
       (field) => '''
 static ${field.dartType}? _get${field.name.capitalize()}(JsonObject jo) =>
-    ${_isArray(field) ? _getValueBodyArraySwitch(field) : jsonValue(field)};  
+    ${_getterBody(field)};  
 ''',
     )
     .join('\n');
+
+String _getterBody(Field field) => _isArray(field)
+    ? (field.allowedStringValues?.length ?? 0) > 0
+        //TODO: this doesn't currently get hit
+        ? _getValueSetBodySwitch(field)
+        : _getValueBodyArraySwitch(field)
+    : jsonValue(field);
 
 String _getValueBodyArraySwitch(Field field) => '''
   switch(jo[${field.name}Field.name])
@@ -215,6 +222,13 @@ String _getValueBodyArraySwitch(Field field) => '''
       ),
       _ => null,
   }
+''';
+
+String _getValueSetBodySwitch(Field field) => '''
+switch (jo[${field.name}Field.name]) {
+        (final JsonString js) => ${field.dartType}.fromCode(js.value),
+        _ => null,
+      }
 ''';
 
 String jsonValue(Field field) => field.types.length == 1
@@ -312,7 +326,9 @@ String _arrayToDartType(
               ),
       (final JsonArray ja) when ja.length == 2 =>
         //Choice Type with 2 choices
-        _choiceTypeSwitch([ja[0]['code'].stringValue!, ja[1]['code'].stringValue!]),
+        _choiceTypeSwitch(
+          [ja[0]['code'].stringValue!, ja[1]['code'].stringValue!],
+        ),
       _ => throw Exception('Type unknown'),
     };
 
@@ -356,6 +372,7 @@ class Field {
     required this.max,
     required this.isMaxStar,
     required this.definition,
+    //required this.isValueSet,
     this.allowedStringValues,
   });
 
@@ -369,6 +386,7 @@ class Field {
   final bool isMaxStar;
   final List<String>? allowedStringValues;
   final String definition;
+  //final bool isValueSet;
 
   bool get isPrimitive =>
       types.length == 1 &&
@@ -394,3 +412,10 @@ extension FieldListExtensions on Iterable<Field> {
         ].contains(field.name),
       );
 }
+
+// const valueSets = {
+//   'http://hl7.org/fhir/ValueSet/administrative-gender|4.0.1': {
+//     (name: 'AdministrativeGender',),
+//   },
+//   'http://hl7.org/fhir/ValueSet/marital-status': {(name: 'MaritalStatus',)},
+// };
