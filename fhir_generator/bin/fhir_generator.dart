@@ -217,8 +217,9 @@ String _getValueBodyArraySwitch(Field field) => '''
   }
 ''';
 
-String jsonValue(Field field) =>
-    field.types.length == 1 ? _getValueBody(field) : _getBodyChoiceFromJson(field);
+String jsonValue(Field field) => field.types.length == 1
+    ? _getValueBody(field)
+    : _getBodyChoiceFromJson(field);
 
 String _getValueBody(Field field) => switch (field.dartType) {
       'String' => field.allowedStringValues != null
@@ -303,22 +304,22 @@ String _arrayToDartType(
       (final JsonArray ja) when ja.length == 0 => throw Exception('Empty type'),
       (final JsonArray ja) when ja.length == 1 && ja[0]['code'] is JsonString =>
         allowedStringValues != null
+            //ValueSet / Enum
             ? _enumName(allowedStringValues.first)
             : _mapFhirTypeToDartType(
                 (ja[0]['code'] as JsonString).value,
                 isArray,
               ),
-      (final JsonArray ja)
-          when ja.length == 2 &&
-              ja[0]['code'].stringValue == 'boolean' &&
-              ja[1]['code'].stringValue == 'dateTime' =>
-        'BooleanOrDateTimeChoice',
-      (final JsonArray ja)
-          when ja.length == 2 &&
-              ja[0]['code'].stringValue == 'boolean' &&
-              ja[1]['code'].stringValue == 'integer' =>
-        'BooleanOrIntegerChoice',
-      (final JsonArray ja) => ja[0]['code'].stringValue!,
+      (final JsonArray ja) when ja.length == 2 =>
+        //Choice Type with 2 choices
+        _choiceTypeSwitch([ja[0]['code'].stringValue!, ja[1]['code'].stringValue!]),
+      _ => throw Exception('Type unknown'),
+    };
+
+String _choiceTypeSwitch(List<String> types) => switch (types) {
+      ['boolean', 'dateTime'] => 'BooleanOrDateTimeChoice',
+      ['boolean', 'integer'] => 'BooleanOrIntegerChoice',
+      _ => throw Exception('Invalid choice type'),
     };
 
 String _enumName(String valueSet) =>
