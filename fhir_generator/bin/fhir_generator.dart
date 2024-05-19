@@ -50,11 +50,12 @@ void main(List<String> args) {
 String getProfileJson(String filePath) => File(filePath).readAsStringSync();
 
 /// Generates the static getter body for the field.
-String staticGetterBody(Field field) => field.isValueSet
-    ? _getValueSetBodySwitch(field)
-    : _isArray(field)
-        ? _getValueBodyArraySwitch(field)
-        : _defaultStaticGetterBody(field);
+String staticGetterBody(Field field) => switch (field) {
+      (final Field f) when f.isValueSet => _getValueSetBodySwitch(f),
+      (final Field f) when _isArray(f) => _getValueBodyArraySwitch(f),
+      (final Field f) when f.types.length == 1 => _getValueBody(f),
+      _ => _getBodyChoiceFromJson(field),
+    };
 
 /// Generates the field definition list for the Resource
 String fieldDefinitionList(String resourceName, List<Field> fields) => '''
@@ -255,14 +256,8 @@ switch (jo[${field.name}Field.name]) {
       }
 ''';
 
-String _defaultStaticGetterBody(Field field) => field.types.length == 1
-    ? _getValueBody(field)
-    : _getBodyChoiceFromJson(field);
-
 String _getValueBody(Field field) => switch (field.dartType) {
-      'String' => field.allowedStringValues != null
-          ? 'switch (jo[${field.name}Field.name]) {(final JsonString jsonString) => ${field.dartType}.fromString(jsonString.value), _ => null,}'
-          : 'jo[${field.name}Field.name].stringValue',
+      'String' => 'jo[${field.name}Field.name].stringValue',
       'bool' => 'jo[${field.name}Field.name].booleanValue',
       'int' => 'jo[${field.name}Field.name].integerValue',
       'Uri' => 'jo[${field.name}Field.name].uriValue',
