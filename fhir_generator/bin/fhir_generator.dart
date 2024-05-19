@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:jayse/jayse.dart';
 
 import 'field.dart';
-import 'field_list_extensions.dart';
+import 'field_extensions.dart';
 import 'string_extensions.dart';
 import 'value_sets.dart';
 
@@ -64,6 +64,15 @@ String fieldDefinitionList(String resourceName, List<Field> fields) => '''
     ...Resource.fieldDefinitions,
     ${fields.whereNotInherited().map((field) => '${field.name}Field').join(',\n    ')},
   ];''';
+
+String fieldDefinition(Field field) => '''
+/// Field definition for [${field.name}].
+  static const ${field.name}Field = FieldDefinition(
+    name: '${field.name}',
+    getValue: _get${field.name.capitalize()},
+    description: ${_wrapDefinitionString(field.definition)},
+    ${_cardinalityLine(field)}
+${field.allowedStringValues != null ? '   allowedStringValues: [${field.allowedStringValues!.map((e) => "'$e'").join(',\n')},],\n' : ''}  );''';
 
 /// Gets the most important array for field definitions.
 JsonArray _getElementArray(JsonObject profileRoot) =>
@@ -129,8 +138,6 @@ List<Field> _getFields(JsonArray element) {
   return fields;
 }
 
-String _typeAndName(Field field) => '${field.dartType}? ${field.name}';
-
 /// Generates a data class for the resource based on the
 /// JSON definition
 String _generateResourceDataClass(
@@ -174,7 +181,7 @@ String classAndConstructor(
 class $resourceName extends Resource {
   /// Constructs a new [$resourceName].
   $resourceName({
-    ${fields.map(_typeAndName).join(',\n    ')},
+    ${fields.map((f) => f.typeAndName()).join(',\n    ')},
   }) : super._internal(
           JsonObject({
             ${_constructorMapInitializations(fields, resourceName)}  
@@ -200,15 +207,6 @@ String _fieldDefinitions(List<Field> fields) => fields
       fieldDefinition,
     )
     .join('\n\n');
-
-String fieldDefinition(Field field) => '''
-/// Field definition for [${field.name}].
-  static const ${field.name}Field = FieldDefinition(
-    name: '${field.name}',
-    getValue: _get${field.name.capitalize()},
-    description: ${_wrapDefinitionString(field.definition)},
-    ${_cardinalityLine(field)}
-${field.allowedStringValues != null ? '   allowedStringValues: [${field.allowedStringValues!.map((e) => "'$e'").join(',\n')},],\n' : ''}  );''';
 
 String _cardinalityLine(Field field) => field.min == 0 &&
         (field.max == null && !field.isMaxStar)

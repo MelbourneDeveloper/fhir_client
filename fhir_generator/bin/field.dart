@@ -23,14 +23,5 @@ class Field {
   final String definition;
   final bool isValueSet;
 
-  bool get isPrimitive =>
-      types.length == 1 &&
-      switch (dartType) {
-        'String' => true,
-        'bool' => true,
-        'int' => true,
-        'DateTime' => true,
-        'Uri' => true,
-        _ => false,
-      };
+  
 }
