@@ -256,7 +256,7 @@ const expectedFields = [
 
 void main() {
   test('Get Fields', () {
-    final (_, fields) = processProfile('patient.json');
+    final (_, _, fields) = processProfile('patient.json');
 
     expect(fields.length, 24);
 
