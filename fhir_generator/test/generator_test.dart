@@ -3,6 +3,7 @@
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import '../bin/fhir_generator.dart';
+import '../bin/field.dart';
 
 const addressField = Field(
   name: 'address',
