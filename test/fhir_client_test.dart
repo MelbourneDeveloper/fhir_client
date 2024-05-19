@@ -11,6 +11,7 @@ import 'dart:io';
 import 'package:fhir_client/fhir_extensions.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/meta.dart';
+import 'package:fhir_client/models/narrative.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 import 'package:fhir_client/models/value_sets/appointment_status.dart';
@@ -822,11 +823,11 @@ void main() {
       final bundleEntries = await _mockSearch<Patient>(
         (c) async => await c.searchPatients(
           baseUri,
-          count: 2,
+          count: 10,
         ) as BundleEntries<Patient>,
       );
 
-      expect(bundleEntries.length, 2);
+      expect(bundleEntries.length, 10);
 
       expect(
         bundleEntries.bundle.entry!.first.fullUrl,
@@ -939,6 +940,11 @@ void main() {
       // end of block to ignore rules
       expect(map['gender'], const JsonString('male'));
       expect(map['birthDate'], const JsonString('1992-10-12'));
+
+      final patient2 =
+          bundleEntries.entries.firstWhere((element) => element.id == '593189');
+
+      expect(patient2.text?.status, NarrativeStatus.generated);
     });
   });
 

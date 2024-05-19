@@ -3,6 +3,7 @@ import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/available_time.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
+import 'package:fhir_client/models/narrative.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/tag.dart';
 import 'package:http/testing.dart';
@@ -119,7 +120,7 @@ void main() {
       expect(result, isA<OperationOutcome<Patient>>());
       expect(
         (result as OperationOutcome).text!.status,
-        'Exception or Error occurred when contacting the FHIR server',
+        NarrativeStatus.empty,
       );
       expect(
         result.text!.div,

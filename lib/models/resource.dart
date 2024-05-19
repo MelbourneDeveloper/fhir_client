@@ -5,8 +5,10 @@ import 'package:fhir_client/models/address.dart';
 import 'package:fhir_client/models/admit_source.dart';
 import 'package:fhir_client/models/annotation.dart';
 import 'package:fhir_client/models/available_time.dart';
+import 'package:fhir_client/models/backbone_element.dart';
 import 'package:fhir_client/models/basic_types/choice_types.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/basic_types/jayse_extensions.dart';
 import 'package:fhir_client/models/basic_types/time.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/codeable_reference.dart';
@@ -20,6 +22,7 @@ import 'package:fhir_client/models/link.dart';
 import 'package:fhir_client/models/location.dart';
 import 'package:fhir_client/models/meta.dart';
 import 'package:fhir_client/models/name.dart';
+import 'package:fhir_client/models/narrative.dart';
 import 'package:fhir_client/models/not_available.dart';
 import 'package:fhir_client/models/observation_component.dart';
 import 'package:fhir_client/models/observation_reference_range.dart';
@@ -30,11 +33,12 @@ import 'package:fhir_client/models/range.dart';
 import 'package:fhir_client/models/ratio.dart';
 import 'package:fhir_client/models/reference.dart';
 import 'package:fhir_client/models/sampled_data.dart';
-import 'package:fhir_client/models/text.dart';
 import 'package:fhir_client/models/timing.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 import 'package:fhir_client/models/value_sets/appointment_status.dart';
 import 'package:fhir_client/models/value_sets/encounter_status.dart';
+import 'package:fhir_client/models/value_sets/language.dart';
+import 'package:fhir_client/models/value_sets/marital_status.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
 import 'package:fhir_client/models/value_sets/slot_status.dart';
 import 'package:fhir_client/validation/field_definition.dart';
@@ -84,7 +88,7 @@ sealed class Resource {
 
     if (resourceTypeString == null) {
       return OperationOutcome<String>(
-        text: Text(status: 'Invalid Resource. resourceType not specified'),
+        text: Narrative(status: NarrativeStatus.empty),
       );
     }
 
@@ -222,7 +226,7 @@ class Appointment extends Resource {
   static const statusField = FieldDefinition(
     name: 'status',
     getValue: _getStatus,
-    cardinality: Cardinality(min: 1, max: IntegerChoice(1)),
+    cardinality: Cardinality(min: 1),
     allowedStringValues: [
       'proposed',
       'booked',
@@ -1842,7 +1846,7 @@ class OperationOutcome<T> extends Resource implements Result<T> {
   OperationOutcome({
     String? id,
     Meta? meta,
-    Text? text,
+    Narrative? text,
     FixedList<Issue>? issue,
   }) : super._internal(
           JsonObject({
@@ -1857,16 +1861,18 @@ class OperationOutcome<T> extends Resource implements Result<T> {
   /// Creates an [OperationOutcome] instance from the provided JSON object.
   OperationOutcome.fromJson(JsonObject json) : super._internal(json);
 
-  OperationOutcome.error({required String message, required String details})
-      : this(
-          text: Text(
-            status: message,
+  OperationOutcome.error({
+    required NarrativeStatus status,
+    required String details,
+  }) : this(
+          text: Narrative(
+            status: status,
             div: details,
           ),
         );
 
   /// A human-readable narrative that contains a summary of the resource and can be used to represent the content of the resource to a human.
-  Text? get text => textField.getValue(json);
+  Narrative? get text => textField.getValue(json);
 
   /// A single issue associated with the action.
   FixedList<Issue>? get issue => issueField.getValue(json);
@@ -1890,8 +1896,8 @@ class OperationOutcome<T> extends Resource implements Result<T> {
     issueField,
   ];
 
-  static Text? _getText(JsonObject jo) => switch (jo[textField.name]) {
-        (final JsonObject jsonObject) => Text.fromJson(jsonObject),
+  static Narrative? _getText(JsonObject jo) => switch (jo[textField.name]) {
+        (final JsonObject jsonObject) => Narrative.fromJson(jsonObject),
         _ => null,
       };
 
@@ -1919,7 +1925,7 @@ class OperationOutcome<T> extends Resource implements Result<T> {
   OperationOutcome<T> copyWith({
     String? id,
     Meta? meta,
-    Text? text,
+    Narrative? text,
     FixedList<Issue>? issue,
   }) =>
       OperationOutcome<T>(
@@ -2179,140 +2185,271 @@ class Patient extends Resource {
   Patient({
     String? id,
     Meta? meta,
+    Uri? implicitRules,
+    Language? language,
+    Narrative? text,
+    FixedList<Resource>? contained,
+    FixedList<Extension>? extension,
+    FixedList<Extension>? modifierExtension,
     FixedList<Identifier>? identifier,
     bool? active,
     FixedList<HumanName>? name,
     FixedList<ContactPoint>? telecom,
     AdministrativeGender? gender,
     DateTime? birthDate,
-    FixedList<Address>? address,
     BooleanOrDateTimeChoice? deceased,
+    FixedList<Address>? address,
+    MaritalStatus? maritalStatus,
+    BooleanOrIntegerChoice? multipleBirth,
+    FixedList<Attachment>? photo,
+    FixedList<BackboneElement>? contact,
+    FixedList<BackboneElement>? communication,
+    FixedList<Reference>? generalPractitioner,
+    Reference? managingOrganization,
+    FixedList<BackboneElement>? link,
   }) : super._internal(
           JsonObject({
-            if (id != null) Resource.idField.name: JsonString(id),
-            if (meta != null) Resource.metaField.name: meta.json,
+            if (id != null) idField.name: JsonString(id),
+            if (meta != null) metaField.name: meta.json,
+            if (implicitRules != null)
+              implicitRulesField.name: JsonString(implicitRules.toString()),
+            if (language != null) languageField.name: language.json,
+            if (text != null) textField.name: text.json,
+            if (contained != null)
+              containedField.name: JsonArray.unmodifiable(
+                contained.map((e) => e.json),
+              ),
+            if (extension != null)
+              extensionField.name: JsonArray.unmodifiable(
+                extension.map((e) => e.json),
+              ),
+            if (modifierExtension != null)
+              modifierExtensionField.name: JsonArray.unmodifiable(
+                modifierExtension.map((e) => e.json),
+              ),
             if (identifier != null)
-              identifierField.name:
-                  JsonArray.unmodifiable(identifier.map((e) => e.json)),
+              identifierField.name: JsonArray.unmodifiable(
+                identifier.map((e) => e.json),
+              ),
             if (active != null) activeField.name: JsonBoolean(active),
             if (name != null)
-              nameField.name: JsonArray.unmodifiable(name.map((e) => e.json)),
+              nameField.name: JsonArray.unmodifiable(
+                name.map((e) => e.json),
+              ),
             if (telecom != null)
-              telecomField.name:
-                  JsonArray.unmodifiable(telecom.map((e) => e.json)),
-            if (gender != null) genderField.name: JsonString(gender.code),
+              telecomField.name: JsonArray.unmodifiable(
+                telecom.map((e) => e.json),
+              ),
+            if (gender != null) genderField.name: gender.json,
             if (birthDate != null)
               birthDateField.name: JsonString(birthDate.toIso8601String()),
+            if (deceased != null) deceasedField.name: deceased.json,
             if (address != null)
-              addressField.name:
-                  JsonArray.unmodifiable(address.map((e) => e.json)),
-            if (deceased != null) deceasedField.name: deceased.toJsonString(),
+              addressField.name: JsonArray.unmodifiable(
+                address.map((e) => e.json),
+              ),
+            if (maritalStatus != null)
+              maritalStatusField.name: maritalStatus.json,
+            if (multipleBirth != null)
+              multipleBirthField.name: multipleBirth.json,
+            if (photo != null)
+              photoField.name: JsonArray.unmodifiable(
+                photo.map((e) => e.json),
+              ),
+            if (contact != null)
+              contactField.name: JsonArray.unmodifiable(
+                contact.map((e) => e.json),
+              ),
+            if (communication != null)
+              communicationField.name: JsonArray.unmodifiable(
+                communication.map((e) => e.json),
+              ),
+            if (generalPractitioner != null)
+              generalPractitionerField.name: JsonArray.unmodifiable(
+                generalPractitioner.map((e) => e.json),
+              ),
+            if (managingOrganization != null)
+              managingOrganizationField.name: managingOrganization.json,
+            if (link != null)
+              linkField.name: JsonArray.unmodifiable(
+                link.map((e) => e.json),
+              ),
           }),
         );
 
   /// Creates a [Patient] instance from the provided JSON object.
   Patient.fromJson(JsonObject json) : super._internal(json);
 
-  /// An identifier for this patient.
+  // Getters
+
+  /*
+A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc.
+*/
+  Uri? get implicitRules => implicitRulesField.getValue(json);
+
+  /*
+The base language in which the resource is written.
+*/
+  Language? get language => languageField.getValue(json);
+
+  /*
+A human-readable narrative that contains a summary of the resource and can be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it "clinically safe" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety.
+*/
+  Narrative? get text => textField.getValue(json);
+
+  /*
+These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope.
+*/
+  FixedList<Resource>? get contained => containedField.getValue(json);
+
+  /*
+May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+*/
+  FixedList<Extension>? get extension => extensionField.getValue(json);
+
+  /*
+May be used to represent additional information that is not part of the basic definition of the resource and that modifies the understanding of the element that contains it and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
+
+Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
+*/
+  FixedList<Extension>? get modifierExtension =>
+      modifierExtensionField.getValue(json);
+
+  /*
+An identifier for this patient.
+*/
   FixedList<Identifier>? get identifier => identifierField.getValue(json);
 
-  /// Whether this patient record is in active use.
+  /*
+Whether this patient record is in active use. 
+Many systems use this property to mark as non-current patients, such as those that have not been seen for a period of time based on an organization's business rules.
+
+It is often used to filter patient lists to exclude inactive patients
+
+Deceased patients may also be marked as inactive for the same reasons, but may be active for some time after death.
+*/
   bool? get active => activeField.getValue(json);
 
-  /// A name associated with the patient.
+  /*
+A name associated with the individual.
+*/
   FixedList<HumanName>? get name => nameField.getValue(json);
 
-  /// A contact detail (e.g. a telephone number or an email address) by which the individual may be contacted.
+  /*
+A contact detail (e.g. a telephone number or an email address) by which the individual may be contacted.
+*/
   FixedList<ContactPoint>? get telecom => telecomField.getValue(json);
 
-  /// Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes.
+  /*
+Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes.
+*/
   AdministrativeGender? get gender => genderField.getValue(json);
 
-  /// The date of birth for the individual.
+  /*
+The date of birth for the individual.
+*/
   DateTime? get birthDate => birthDateField.getValue(json);
 
-  /// An address for the individual.
-  FixedList<Address>? get address => addressField.getValue(json);
-
-  /// Field definition for [identifier].
-  static const identifierField = FieldDefinition(
-    name: 'identifier',
-    getValue: _getIdentifier,
-    description: 'An identifier for this patient.',
-  );
-
-  /// Whether or not the patient is deceased.
+  /*
+Indicates if the individual is deceased or not.
+*/
   BooleanOrDateTimeChoice? get deceased => deceasedField.getValue(json);
 
-  /// Field definition for [deceased[x]].
-  static const deceasedField = FieldDefinition(
-    name: 'deceased',
-    getValue: _getDeceased,
-    description: 'Indicates if the individual is deceased or not.',
-  );
+  /*
+An address for the individual.
+*/
+  FixedList<Address>? get address => addressField.getValue(json);
 
-  /// Field definition for [active].
-  static const activeField = FieldDefinition(
-    name: 'active',
-    getValue: _getActive,
-    description: 'Whether this patient record is in active use.',
-  );
+  /*
+This field contains a patient's most recent marital (civil) status.
+*/
+  MaritalStatus? get maritalStatus => maritalStatusField.getValue(json);
 
-  /// Field definition for [name].
-  static const nameField = FieldDefinition(
-    name: 'name',
-    getValue: _getName,
-    description: 'A name associated with the patient.',
-  );
+  /*
+Indicates whether the patient is part of a multiple (boolean) or indicates the actual birth order (integer).
+*/
+  BooleanOrIntegerChoice? get multipleBirth =>
+      multipleBirthField.getValue(json);
 
-  /// Field definition for [telecom].
-  static const telecomField = FieldDefinition(
-    name: 'telecom',
-    getValue: _getTelecom,
-    description:
-        'A contact detail (e.g. a telephone number or an email address) by which the individual may be contacted.',
-  );
+  /*
+Image of the patient.
+*/
+  FixedList<Attachment>? get photo => photoField.getValue(json);
 
-  /// Field definition for [gender].
-  static const genderField = FieldDefinition(
-    name: 'gender',
-    getValue: _getGender,
-    allowedStringValues: [
-      'male',
-      'female',
-      'other',
-      'unknown',
-    ],
-    description:
-        'Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes.',
-  );
+  /*
+A contact party (e.g. guardian, partner, friend) for the patient.
+*/
+  FixedList<BackboneElement>? get contact => contactField.getValue(json);
 
-  /// Field definition for [birthDate].
-  static const birthDateField = FieldDefinition(
-    name: 'birthDate',
-    getValue: _getBirthDate,
-    description: 'The date of birth for the individual.',
-  );
+  /*
+A language which may be used to communicate with the patient about his or her health.
+*/
+  FixedList<BackboneElement>? get communication =>
+      communicationField.getValue(json);
 
-  /// Field definition for [address].
-  static const addressField = FieldDefinition(
-    name: 'address',
-    getValue: _getAddress,
-    description: 'An address for the individual.',
-  );
+  /*
+Patient's nominated care provider.
+*/
+  FixedList<Reference>? get generalPractitioner =>
+      generalPractitionerField.getValue(json);
 
-  /// R4: All field definitions for [Patient].
-  static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
-    identifierField,
-    activeField,
-    nameField,
-    telecomField,
-    genderField,
-    birthDateField,
-    deceasedField,
-    addressField,
-  ];
+  /*
+Organization that is the custodian of the patient record.
+*/
+  Reference? get managingOrganization =>
+      managingOrganizationField.getValue(json);
+
+  /*
+Link to another patient resource that concerns the same actual patient.
+*/
+  FixedList<BackboneElement>? get link => linkField.getValue(json);
+
+  // Static Get Methods
+
+  static String? _getId(JsonObject jo) => jo[idField.name].stringValue;
+
+  static Meta? _getMeta(JsonObject jo) => switch (jo[metaField.name]) {
+        (final JsonObject jsonObject) => Meta.fromJson(jsonObject),
+        _ => null,
+      };
+
+  static Uri? _getImplicitRules(JsonObject jo) =>
+      jo[implicitRulesField.name].uriValue;
+
+  static Language? _getLanguage(JsonObject jo) =>
+      switch (jo[languageField.name]) {
+        (final JsonString js) => Language.fromCode(js.value),
+        _ => null,
+      };
+
+  static Narrative? _getText(JsonObject jo) => switch (jo[textField.name]) {
+        (final JsonObject jsonObject) => Narrative.fromJson(jsonObject),
+        _ => null,
+      };
+
+  static FixedList<Resource>? _getContained(JsonObject jo) =>
+      switch (jo[containedField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Resource.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static FixedList<Extension>? _getExtension(JsonObject jo) =>
+      switch (jo[extensionField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Extension.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static FixedList<Extension>? _getModifierExtension(JsonObject jo) =>
+      switch (jo[modifierExtensionField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Extension.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
 
   static FixedList<Identifier>? _getIdentifier(JsonObject jo) =>
       switch (jo[identifierField.name]) {
@@ -2323,9 +2460,6 @@ class Patient extends Resource {
       };
 
   static bool? _getActive(JsonObject jo) => jo[activeField.name].booleanValue;
-
-  static BooleanOrDateTimeChoice? _getDeceased(JsonObject jo) =>
-      BooleanOrDateTimeChoice.fromJson(jo[deceasedField.name]);
 
   static FixedList<HumanName>? _getName(JsonObject jo) =>
       switch (jo[nameField.name]) {
@@ -2345,14 +2479,15 @@ class Patient extends Resource {
 
   static AdministrativeGender? _getGender(JsonObject jo) =>
       switch (jo[genderField.name]) {
-        (final JsonString jsonString) =>
-          AdministrativeGender.fromCode(jsonString.value),
+        (final JsonString js) => AdministrativeGender.fromCode(js.value),
         _ => null,
       };
 
-  static DateTime? _getBirthDate(JsonObject jo) => DateTime.tryParse(
-        jo[birthDateField.name].stringValue ?? '',
-      );
+  static DateTime? _getBirthDate(JsonObject jo) =>
+      DateTime.tryParse(jo[birthDateField.name].stringValue ?? '');
+
+  static BooleanOrDateTimeChoice? _getDeceased(JsonObject jo) =>
+      BooleanOrDateTimeChoice.fromJson(jo[deceasedField.name]);
 
   static FixedList<Address>? _getAddress(JsonObject jo) =>
       switch (jo[addressField.name]) {
@@ -2362,22 +2497,493 @@ class Patient extends Resource {
         _ => null,
       };
 
+  static MaritalStatus? _getMaritalStatus(JsonObject jo) =>
+      switch (jo[maritalStatusField.name]) {
+        (final JsonString js) => MaritalStatus.fromCode(js.value),
+        _ => null,
+      };
+
+  static BooleanOrIntegerChoice? _getMultipleBirth(JsonObject jo) =>
+      BooleanOrIntegerChoice.fromJson(jo[multipleBirthField.name]);
+
+  static FixedList<Attachment>? _getPhoto(JsonObject jo) =>
+      switch (jo[photoField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Attachment.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static FixedList<BackboneElement>? _getContact(JsonObject jo) =>
+      switch (jo[contactField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => BackboneElement.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static FixedList<BackboneElement>? _getCommunication(JsonObject jo) =>
+      switch (jo[communicationField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => BackboneElement.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static FixedList<Reference>? _getGeneralPractitioner(JsonObject jo) =>
+      switch (jo[generalPractitionerField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static Reference? _getManagingOrganization(JsonObject jo) =>
+      switch (jo[managingOrganizationField.name]) {
+        (final JsonObject jsonObject) => Reference.fromJson(jsonObject),
+        _ => null,
+      };
+
+  static FixedList<BackboneElement>? _getLink(JsonObject jo) =>
+      switch (jo[linkField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => BackboneElement.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  // Field Definitions
+
+  /// Field definition for [id].
+  static const idField = FieldDefinition(
+    name: 'id',
+    getValue: _getId,
+    description: '''
+The logical id of the resource, as used in the URL for the resource. Once assigned, this value never changes.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [meta].
+  static const metaField = FieldDefinition(
+    name: 'meta',
+    getValue: _getMeta,
+    description: '''
+The metadata about the resource. This is content that is maintained by the infrastructure. Changes to the content might not always be associated with version changes to the resource.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [implicitRules].
+  static const implicitRulesField = FieldDefinition(
+    name: 'implicitRules',
+    getValue: _getImplicitRules,
+    description: '''
+A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [language].
+  static const languageField = FieldDefinition(
+    name: 'language',
+    getValue: _getLanguage,
+    description: '''
+The base language in which the resource is written.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+    allowedStringValues: [
+      'ar',
+      'bg',
+      'bg-BG',
+      'bn',
+      'cs',
+      'cs-CZ',
+      'bs',
+      'bs-BA',
+      'da',
+      'da-DK',
+      'de',
+      'de-AT',
+      'de-CH',
+      'de-DE',
+      'el',
+      'el-GR',
+      'en',
+      'en-AU',
+      'en-CA',
+      'en-GB',
+      'en-IN',
+      'en-NZ',
+      'en-SG',
+      'en-US',
+      'es',
+      'es-AR',
+      'es-ES',
+      'es-UY',
+      'et',
+      'et-EE',
+      'fi',
+      'fr',
+      'fr-BE',
+      'fr-CH',
+      'fr-FR',
+      'fi-FI',
+      'fr-CA',
+      'fy',
+      'fy-NL',
+      'hi',
+      'hr',
+      'hr-HR',
+      'is',
+      'is-IS',
+      'it',
+      'it-CH',
+      'it-IT',
+      'ja',
+      'ko',
+      'lt',
+      'lt-LT',
+      'lv',
+      'lv-LV',
+      'nl',
+      'nl-BE',
+      'nl-NL',
+      'no',
+      'no-NO',
+      'pa',
+      'pl',
+      'pl-PL',
+      'pt',
+      'pt-PT',
+      'pt-BR',
+      'ro',
+      'ro-RO',
+      'ru',
+      'ru-RU',
+      'sk',
+      'sk-SK',
+      'sl',
+      'sl-SI',
+      'sr',
+      'sr-RS',
+      'sv',
+      'sv-SE',
+      'te',
+      'zh',
+      'zh-CN',
+      'zh-HK',
+      'zh-SG',
+      'zh-TW',
+    ],
+  );
+
+  /// Field definition for [text].
+  static const textField = FieldDefinition(
+    name: 'text',
+    getValue: _getText,
+    description: '''
+A human-readable narrative that contains a summary of the resource and can be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it "clinically safe" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [contained].
+  static const containedField = FieldDefinition(
+    name: 'contained',
+    getValue: _getContained,
+    description: '''
+These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [extension].
+  static const extensionField = FieldDefinition(
+    name: 'extension',
+    getValue: _getExtension,
+    description: '''
+May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [modifierExtension].
+  static const modifierExtensionField = FieldDefinition(
+    name: 'modifierExtension',
+    getValue: _getModifierExtension,
+    description: '''
+May be used to represent additional information that is not part of the basic definition of the resource and that modifies the understanding of the element that contains it and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
+
+Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [identifier].
+  static const identifierField = FieldDefinition(
+    name: 'identifier',
+    getValue: _getIdentifier,
+    description: '''
+An identifier for this patient.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [active].
+  static const activeField = FieldDefinition(
+    name: 'active',
+    getValue: _getActive,
+    description: '''
+Whether this patient record is in active use. 
+Many systems use this property to mark as non-current patients, such as those that have not been seen for a period of time based on an organization's business rules.
+
+It is often used to filter patient lists to exclude inactive patients
+
+Deceased patients may also be marked as inactive for the same reasons, but may be active for some time after death.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [name].
+  static const nameField = FieldDefinition(
+    name: 'name',
+    getValue: _getName,
+    description: '''
+A name associated with the individual.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [telecom].
+  static const telecomField = FieldDefinition(
+    name: 'telecom',
+    getValue: _getTelecom,
+    description: '''
+A contact detail (e.g. a telephone number or an email address) by which the individual may be contacted.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [gender].
+  static const genderField = FieldDefinition(
+    name: 'gender',
+    getValue: _getGender,
+    description: '''
+Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+    allowedStringValues: [
+      'male',
+      'female',
+      'other',
+      'unknown',
+    ],
+  );
+
+  /// Field definition for [birthDate].
+  static const birthDateField = FieldDefinition(
+    name: 'birthDate',
+    getValue: _getBirthDate,
+    description: '''
+The date of birth for the individual.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [deceased].
+  static const deceasedField = FieldDefinition(
+    name: 'deceased',
+    getValue: _getDeceased,
+    description: '''
+Indicates if the individual is deceased or not.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [address].
+  static const addressField = FieldDefinition(
+    name: 'address',
+    getValue: _getAddress,
+    description: '''
+An address for the individual.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [maritalStatus].
+  static const maritalStatusField = FieldDefinition(
+    name: 'maritalStatus',
+    getValue: _getMaritalStatus,
+    description: '''
+This field contains a patient's most recent marital (civil) status.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+    allowedStringValues: [
+      'A',
+      'D',
+      'I',
+      'L',
+      'M',
+      'P',
+      'S',
+      'T',
+      'U',
+      'W',
+      'UNK',
+    ],
+  );
+
+  /// Field definition for [multipleBirth].
+  static const multipleBirthField = FieldDefinition(
+    name: 'multipleBirth',
+    getValue: _getMultipleBirth,
+    description: '''
+Indicates whether the patient is part of a multiple (boolean) or indicates the actual birth order (integer).''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [photo].
+  static const photoField = FieldDefinition(
+    name: 'photo',
+    getValue: _getPhoto,
+    description: '''
+Image of the patient.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [contact].
+  static const contactField = FieldDefinition(
+    name: 'contact',
+    getValue: _getContact,
+    description: '''
+A contact party (e.g. guardian, partner, friend) for the patient.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [communication].
+  static const communicationField = FieldDefinition(
+    name: 'communication',
+    getValue: _getCommunication,
+    description: '''
+A language which may be used to communicate with the patient about his or her health.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [generalPractitioner].
+  static const generalPractitionerField = FieldDefinition(
+    name: 'generalPractitioner',
+    getValue: _getGeneralPractitioner,
+    description: '''
+Patient's nominated care provider.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [managingOrganization].
+  static const managingOrganizationField = FieldDefinition(
+    name: 'managingOrganization',
+    getValue: _getManagingOrganization,
+    description: '''
+Organization that is the custodian of the patient record.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [link].
+  static const linkField = FieldDefinition(
+    name: 'link',
+    getValue: _getLink,
+    description: '''
+Link to another patient resource that concerns the same actual patient.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// R4: All field definitions for [Patient].
+  static const fieldDefinitions = [
+    ...Resource.fieldDefinitions,
+    implicitRulesField,
+    languageField,
+    textField,
+    containedField,
+    extensionField,
+    modifierExtensionField,
+    identifierField,
+    activeField,
+    nameField,
+    telecomField,
+    genderField,
+    birthDateField,
+    deceasedField,
+    addressField,
+    maritalStatusField,
+    multipleBirthField,
+    photoField,
+    contactField,
+    communicationField,
+    generalPractitionerField,
+    managingOrganizationField,
+    linkField,
+  ];
+
+  // Non-destructive mutation
+
   /// Creates a copy of the [Patient] instance and allows for non-destructive mutation.
   Patient copyWith({
     String? id,
     Meta? meta,
+    Uri? implicitRules,
+    Language? language,
+    Narrative? text,
+    FixedList<Resource>? contained,
+    FixedList<Extension>? extension,
+    FixedList<Extension>? modifierExtension,
     FixedList<Identifier>? identifier,
     bool? active,
     FixedList<HumanName>? name,
     FixedList<ContactPoint>? telecom,
     AdministrativeGender? gender,
     DateTime? birthDate,
-    FixedList<Address>? address,
     BooleanOrDateTimeChoice? deceased,
+    FixedList<Address>? address,
+    MaritalStatus? maritalStatus,
+    BooleanOrIntegerChoice? multipleBirth,
+    FixedList<Attachment>? photo,
+    FixedList<BackboneElement>? contact,
+    FixedList<BackboneElement>? communication,
+    FixedList<Reference>? generalPractitioner,
+    Reference? managingOrganization,
+    FixedList<BackboneElement>? link,
   }) =>
       Patient(
         id: id ?? this.id,
         meta: meta ?? this.meta,
+        implicitRules: implicitRules ?? this.implicitRules,
+        language: language ?? this.language,
+        text: text ?? this.text,
+        contained: contained ?? this.contained,
+        extension: extension ?? this.extension,
+        modifierExtension: modifierExtension ?? this.modifierExtension,
         identifier: identifier ?? this.identifier,
         active: active ?? this.active,
         name: name ?? this.name,
@@ -2386,6 +2992,14 @@ class Patient extends Resource {
         birthDate: birthDate ?? this.birthDate,
         deceased: deceased ?? this.deceased,
         address: address ?? this.address,
+        maritalStatus: maritalStatus ?? this.maritalStatus,
+        multipleBirth: multipleBirth ?? this.multipleBirth,
+        photo: photo ?? this.photo,
+        contact: contact ?? this.contact,
+        communication: communication ?? this.communication,
+        generalPractitioner: generalPractitioner ?? this.generalPractitioner,
+        managingOrganization: managingOrganization ?? this.managingOrganization,
+        link: link ?? this.link,
       );
 }
 

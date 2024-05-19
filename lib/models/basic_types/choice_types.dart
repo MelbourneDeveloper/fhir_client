@@ -1,7 +1,7 @@
 import 'package:jayse/jayse.dart';
 
 sealed class BooleanOrDateTimeChoice {
-  BooleanOrDateTimeChoice._internal();
+  const BooleanOrDateTimeChoice._internal();
 
   static BooleanOrDateTimeChoice? fromJson(JsonValue json) {
     //TODO: clean this nastiness up. not dangerous, but nasty nonetheless
@@ -16,7 +16,7 @@ sealed class BooleanOrDateTimeChoice {
     }
   }
 
-  JsonString toJsonString();
+  JsonValue get json;
 }
 
 sealed class BooleanOrIntegerChoice {
@@ -30,6 +30,8 @@ sealed class BooleanOrIntegerChoice {
     }
     return null;
   }
+
+  JsonValue get json;
 }
 
 final class IntegerChoice extends BooleanOrIntegerChoice {
@@ -37,17 +39,18 @@ final class IntegerChoice extends BooleanOrIntegerChoice {
 
   final int value;
 
-  JsonValue toJson() => JsonNumber(value);
+  @override
+  JsonValue get json => JsonNumber(value);
 }
 
 final class BoolChoice extends BooleanOrDateTimeChoice
     implements BooleanOrIntegerChoice {
-  BoolChoice(this.value) : super._internal();
+  const BoolChoice(this.value) : super._internal();
 
   final bool value;
 
   @override
-  JsonString toJsonString() => JsonString(value.toString());
+  JsonValue get json => JsonString(value.toString());
 }
 
 final class DateTimeChoice extends BooleanOrDateTimeChoice {
@@ -56,5 +59,5 @@ final class DateTimeChoice extends BooleanOrDateTimeChoice {
   final DateTime value;
 
   @override
-  JsonString toJsonString() => JsonString(value.toIso8601String());
+  JsonValue get json => JsonString(value.toIso8601String());
 }
