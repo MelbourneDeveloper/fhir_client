@@ -51,7 +51,7 @@ String getProfileJson(String filePath) => File(filePath).readAsStringSync();
 
 /// Generates the static getter body for the field.
 String staticGetterBody(Field field) => _isArray(field)
-    ? (field.allowedStringValues?.length ?? 0) > 0
+    ? field.isValueSet
         //TODO: this doesn't currently get hit
         ? _getValueSetBodySwitch(field)
         : _getValueBodyArraySwitch(field)
@@ -109,6 +109,7 @@ List<Field> _getFields(JsonArray element) {
 
       fields.add(
         Field(
+          isValueSet: valueSetName != null,
           name: fieldName,
           types: typeArray.value
               .map((e) => e['code'].stringValue)
@@ -265,7 +266,7 @@ switch (jo[${field.name}Field.name]) {
 
 String _getValueSetBodySwitch(Field field) => '''
 switch (jo[${field.name}Field.name]) {
-        (final JsonString js) => ${field.dartType}.fromCode(js.value),
+        (final JsonString js) => Language.fromCode(js.value),
         _ => null,
       }
 ''';

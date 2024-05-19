@@ -9,21 +9,19 @@ class Field {
     required this.max,
     required this.isMaxStar,
     required this.definition,
-    //required this.isValueSet,
+    this.isValueSet = false,
     this.allowedStringValues,
   });
 
   final String name;
   final String dartType;
   final List<String> types;
-  // Buh?
-  // ignore: unreachable_from_main
   final int min;
   final int? max;
   final bool isMaxStar;
   final List<String>? allowedStringValues;
   final String definition;
-  //final bool isValueSet;
+  final bool isValueSet;
 
   bool get isPrimitive =>
       types.length == 1 &&
