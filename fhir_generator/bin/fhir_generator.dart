@@ -9,11 +9,11 @@ void main(List<String> args) {
     args = ['patient.json'];
   }
 
-  final (elementArray, fields) = processProfile(args[0]);
+  final (resourceName, resourceDefinition, fields) = processProfile(args[0]);
 
   final dataClassCode = _generateResourceDataClass(
-    elementArray[0]['id'].stringValue ?? 'N/A',
-    elementArray[0]['definition'].stringValue ?? 'N/A',
+    resourceName,
+    resourceDefinition,
     fields,
   );
 
@@ -23,7 +23,8 @@ void main(List<String> args) {
 
 /// Processes the profile JSON and returns the element array and fields.
 (
-  JsonArray,
+  String resourceName,
+  String rsourceDefinition,
   List<Field>,
 ) processProfile(String fileName) {
   final profileRoot = jsonValueDecode(getProfileJson(fileName)) as JsonObject;
@@ -34,8 +35,9 @@ void main(List<String> args) {
   final fields = _getFields(JsonArray(elementArray.value.sublist(1)));
 
   return (
-    elementArray,
-    fields,
+    elementArray[0]['id'].stringValue ?? 'N/A',
+    elementArray[0]['definition'].stringValue ?? 'N/A',
+    fields
   );
 }
 
