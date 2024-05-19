@@ -415,10 +415,6 @@ class Field {
         'Uri' => true,
         _ => false,
       };
-
-  @override
-  @Deprecated('Asdf')
-  String toString() => throw UnimplementedError();
 }
 
 extension FieldListExtensions on Iterable<Field> {
