@@ -443,5 +443,9 @@ const valueSets = <String,
     values: ['male', 'female', 'other', 'unknown'],
     uri: 'http://hl7.org/fhir/ValueSet/administrative-gender|4.0.1',
   ),
-  //'http://hl7.org/fhir/ValueSet/marital-status': {(name: 'MaritalStatus',)},
+  'MaritalStatus': (
+    name: 'MaritalStatus',
+    values: ['A', 'D', 'I', 'L', 'M', 'P', 'S', 'T', 'U', 'W', 'UNK'],
+    uri: 'http://hl7.org/fhir/ValueSet/marital-status',
+  ),
 };
