@@ -72,23 +72,16 @@ void main() {
     });
 
     test('Validate Patient Search Results', () async {
-      final json =
-          await File('test/responses/patientsearch.json').readAsString();
-      final result =
-          Resource.fromJson(jsonValueDecode(json) as JsonObject) as Bundle;
-
-      for (final entry in result.entry!) {
-        final patient = entry.resource! as Patient;
+      for (final patient in await getResources<Patient>()) {
         final validationResult = patient.validate(Patient.fieldDefinitions);
 
         switch (patient.id) {
-          case '8728293':
           case '8728374':
             expect(validationResult.isValid, false);
             expectMessage(
               validationResult,
-              'text',
-              'Field text is not allowed',
+              'texty',
+              'Field texty is not allowed',
             );
             expect(validationResult.errorMessages.length, 1);
           default:
@@ -177,6 +170,18 @@ void main() {
       expect(validationResult3.errorMessages.length, 1);
     });
   });
+}
+
+Future<FixedList<T>> getResources<T>() async {
+  final json =
+      await File('test/responses/${T.toString().toLowerCase()}search.json')
+          .readAsString();
+  final result =
+      Resource.fromJson(jsonValueDecode(json) as JsonObject) as Bundle;
+
+  return FixedList(
+    result.entry!.map((e) => e.resource! as T),
+  );
 }
 
 void expectFieldStatusError(ValidationResult validationResult) {
