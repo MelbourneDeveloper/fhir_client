@@ -129,7 +129,7 @@ String _generateResourceDataClass(
   List<Field> fields,
 ) =>
     '''
-${_classAndConstructor(resourceName, resourceDefinition, fields)}
+${classAndConstructor(resourceName, resourceDefinition, fields)}
 
   /// Creates a [$resourceName] instance from the provided JSON object.
   $resourceName.fromJson(JsonObject json) : super._internal(json);
@@ -154,7 +154,7 @@ ${_classAndConstructor(resourceName, resourceDefinition, fields)}
 }
 ''';
 
-String _classAndConstructor(
+String classAndConstructor(
   String resourceName,
   String resourceDefinition,
   List<Field> fields,
@@ -187,18 +187,18 @@ enum ${field.dartType} {
 
 String _fieldDefinitions(List<Field> fields) => fields
     .map(
-      (field) => '''
-/// Field definition for [${field.name}].
-static const ${field.name}Field = FieldDefinition(
-  name: '${field.name}',
-  getValue: _get${field.name.capitalize()},
-  description: ${_wrapDefinitionString(field.definition)},
-  ${_cardinalityLine(field)}
-  ${field.allowedStringValues != null ? '\n    allowedStringValues: [${field.allowedStringValues!.map((e) => "'$e'").join(',\n')},],' : ''}
-);
-''',
+      fieldDefinition,
     )
-    .join('\n');
+    .join('\n\n');
+
+String fieldDefinition(Field field) => '''
+/// Field definition for [${field.name}].
+  static const ${field.name}Field = FieldDefinition(
+    name: '${field.name}',
+    getValue: _get${field.name.capitalize()},
+    description: ${_wrapDefinitionString(field.definition)},
+    ${_cardinalityLine(field)}
+${field.allowedStringValues != null ? '   allowedStringValues: [${field.allowedStringValues!.map((e) => "'$e'").join(',\n')},],\n' : ''}  );''';
 
 String _cardinalityLine(Field field) => field.min == 0 &&
         (field.max == null && !field.isMaxStar)

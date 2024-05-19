@@ -285,14 +285,23 @@ void main() {
   });
 
   test('List of Components (Address)', () {
-    final getter = staticGetterBody(addressField);
-    expect(getter, '''
+    expect(staticGetterBody(addressField), '''
 switch (jo[addressField.name]) {
         (final JsonArray jsonArray) => FixedList(
             jsonArray.value.map((e) => Address.fromJson(e as JsonObject)),
           ),
         _ => null,
       }''');
+
+    expect(fieldDefinition(addressField), """
+/// Field definition for [address].
+  static const addressField = FieldDefinition(
+    name: 'address',
+    getValue: _getAddress,
+    description: '''
+An address for the individual.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );""");
   });
 
   test('Field Definition List', () {
