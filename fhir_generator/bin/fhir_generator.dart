@@ -47,6 +47,13 @@ String staticGetterBody(Field field) => _isArray(field)
         : _getValueBodyArraySwitch(field)
     : jsonValue(field);
 
+String fieldDefinitionList(String resourceName, List<Field> fields) => '''
+/// R4: All field definitions for [$resourceName].
+  static const fieldDefinitions = [
+    ...Resource.fieldDefinitions,
+    ${fields.whereNotInherited().map((field) => '${field.name}Field').join(',\n    ')},
+  ];''';
+
 /// Gets the most important array for field definitions.
 JsonArray _getElementArray(JsonObject profileRoot) =>
     profileRoot['snapshot']['element'] as JsonArray;
@@ -133,11 +140,7 @@ ${_classAndConstructor(resourceName, resourceDefinition, fields)}
 
   ${_fieldDefinitions(fields)}
 
-  /// R4: All field definitions for [$resourceName].
-  static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
-    ${fields.whereNotInherited().map((field) => '${field.name}Field').join(',\n    ')},
-  ];
+  ${fieldDefinitionList(resourceName, fields)}
 
   // Non-destructive mutation
 

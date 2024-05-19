@@ -294,4 +294,35 @@ switch (jo[addressField.name]) {
         _ => null,
       }''');
   });
+
+  test('Field Definition List', () {
+    final fieldDefinitions = fieldDefinitionList('Patient', expectedFields);
+    expect(fieldDefinitions, '''
+/// R4: All field definitions for [Patient].
+  static const fieldDefinitions = [
+    ...Resource.fieldDefinitions,
+    implicitRulesField,
+    languageField,
+    textField,
+    containedField,
+    extensionField,
+    modifierExtensionField,
+    identifierField,
+    activeField,
+    nameField,
+    telecomField,
+    genderField,
+    birthDateField,
+    deceasedField,
+    addressField,
+    maritalStatusField,
+    multipleBirthField,
+    photoField,
+    contactField,
+    communicationField,
+    generalPractitionerField,
+    managingOrganizationField,
+    linkField,
+  ];''');
+  });
 }
