@@ -169,7 +169,7 @@ void main() {
       Field(
         name: 'maritalStatus',
         types: ['CodeableConcept'],
-        dartType: 'CodeableConcept',
+        dartType: 'MaritalStatus',
         min: 0,
         max: 1,
         isMaxStar: false,
