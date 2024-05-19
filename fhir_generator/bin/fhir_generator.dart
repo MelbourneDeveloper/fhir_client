@@ -81,7 +81,7 @@ List<Field> _getFields(JsonArray element) {
           ),
           allowedStringValues: allowedStringValues,
           min: minCardinality,
-          max: maxCardinality.integerValue,
+          max: int.tryParse(maxCardinality.stringValue ?? ''),
           isMaxStar: maxCardinality.stringValue == '*',
           definition: elementItem['definition'].stringValue ?? '',
         ),
