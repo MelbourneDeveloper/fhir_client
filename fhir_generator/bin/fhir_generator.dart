@@ -302,9 +302,9 @@ String _constructorMapInitializations(
             //TODO: this is nasty... Need a flag to indicate that this is a choice type
             (final Field f) when f.dartType.startsWith('BoolOr') =>
               'if (${f.name} != null) ${f.name}Field.name: ${f.name}.toJsonString(),',
-            (final Field f) when f.isPrimitive => _primitiveConstructorLine(f),
             (final Field f) when _isArray(f) =>
               'if (${f.name} != null) ${f.name}Field.name: JsonArray.unmodifiable(${f.name}.map((e) => e.json),),',
+            (final Field f) when f.isPrimitive => _primitiveConstructorLine(f),
             _ =>
               'if (${field.name} != null) ${field.name}Field.name: ${field.name}.json,',
           },
@@ -324,7 +324,7 @@ String _primitiveConstructorLine(Field field) => switch (field.dartType) {
       'DateTime' =>
         'if (${field.name} != null) ${field.name}Field.name: JsonString(${field.name}.toIso8601String()),',
       'Uri' =>
-        'if (${field.name} != null) ${field.name}Field.name: JsonString(${field.name}),',
+        'if (${field.name} != null) ${field.name}Field.name: JsonString(${field.name}.toString()),',
       _ => throw Exception('Invalid primitive type'),
     };
 
