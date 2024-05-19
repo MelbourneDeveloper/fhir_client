@@ -50,12 +50,11 @@ void main(List<String> args) {
 String getProfileJson(String filePath) => File(filePath).readAsStringSync();
 
 /// Generates the static getter body for the field.
-String staticGetterBody(Field field) => _isArray(field)
-    ? field.isValueSet
-        //TODO: this doesn't currently get hit
-        ? _getValueSetBodySwitch(field)
-        : _getValueBodyArraySwitch(field)
-    : jsonValue(field);
+String staticGetterBody(Field field) => field.isValueSet
+    ? _getValueSetBodySwitch(field)
+    : _isArray(field)
+        ? _getValueBodyArraySwitch(field)
+        : _defaultStaticGetterBody(field);
 
 /// Generates the field definition list for the Resource
 String fieldDefinitionList(String resourceName, List<Field> fields) => '''
@@ -189,19 +188,6 @@ class $resourceName extends Resource {
         );
 ''';
 
-/// Dead code for now. Don't use.
-// ignore: unused_element
-String _generateEnums(List<Field> fields) => fields
-    .where((field) => field.allowedStringValues != null)
-    .map(
-      (field) => '''
-enum ${field.dartType} {
-  ${field.allowedStringValues!.map((value) => value.toLowerCase()).join(',\n  ')},
-}
-''',
-    )
-    .join('\n');
-
 String _fieldDefinitions(List<Field> fields) => fields
     .map(
       fieldDefinition,
@@ -264,12 +250,12 @@ switch (jo[${field.name}Field.name]) {
 
 String _getValueSetBodySwitch(Field field) => '''
 switch (jo[${field.name}Field.name]) {
-        (final JsonString js) => Language.fromCode(js.value),
+        (final JsonString js) => ${field.dartType}.fromCode(js.value),
         _ => null,
       }
 ''';
 
-String jsonValue(Field field) => field.types.length == 1
+String _defaultStaticGetterBody(Field field) => field.types.length == 1
     ? _getValueBody(field)
     : _getBodyChoiceFromJson(field);
 
