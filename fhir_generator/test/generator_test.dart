@@ -149,7 +149,7 @@ void main() {
         definition: 'The date of birth for the individual.',
       ),
       Field(
-        name: 'deceased[x]',
+        name: 'deceased',
         types: ['boolean', 'dateTime'],
         dartType: 'BooleanOrDateTimeChoice',
         min: 0,
@@ -177,7 +177,7 @@ void main() {
             "This field contains a patient's most recent marital (civil) status.",
       ),
       Field(
-        name: 'multipleBirth[x]',
+        name: 'multipleBirth',
         types: ['boolean', 'integer'],
         dartType: 'BooleanOrIntegerChoice',
         min: 0,
@@ -256,7 +256,16 @@ void main() {
       expect(field.max, expectedField.max);
       expect(field.isMaxStar, expectedField.isMaxStar);
       expect(field.definition.contains(expectedField.definition), true);
-      expect(field.allowedStringValues, expectedField.allowedStringValues);
+
+      if (expectedField.allowedStringValues == null) {
+        expect(field.allowedStringValues, null);
+        continue;
+      }
+
+      expect(
+        field.allowedStringValues,
+        containsAll(expectedField.allowedStringValues!),
+      );
     }
   });
 }

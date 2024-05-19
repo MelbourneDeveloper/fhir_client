@@ -432,10 +432,16 @@ extension FieldListExtensions on Iterable<Field> {
       );
 }
 
-const valueSets = <String, ({String name, List<String> values})>{
-  'http://hl7.org/fhir/ValueSet/administrative-gender|4.0.1': (
+const valueSets = <String,
+    ({
+  String name,
+  List<String> values,
+  String uri,
+})>{
+  'AdministrativeGender': (
     name: 'AdministrativeGender',
     values: ['male', 'female', 'other', 'unknown'],
+    uri: 'http://hl7.org/fhir/ValueSet/administrative-gender|4.0.1',
   ),
   //'http://hl7.org/fhir/ValueSet/marital-status': {(name: 'MaritalStatus',)},
 };
