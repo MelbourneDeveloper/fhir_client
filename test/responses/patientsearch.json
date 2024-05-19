@@ -89,6 +89,245 @@
             "search": {
                 "mode": "match"
             }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Patient/593175",
+            "resource": {
+                "resourceType": "Patient",
+                "id": "593175",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-01-29T17:32:16.773+00:00",
+                    "source": "#vsZgz5k9aXCIQYKo"
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\">Sabrina <b>SPELLMAN </b></div><table class=\"hapiPropertyTable\"><tbody></tbody></table></div>"
+                },
+                "name": [
+                    {
+                        "family": "Spellman",
+                        "given": [
+                            "Sabrina"
+                        ]
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Patient/593176",
+            "resource": {
+                "resourceType": "Patient",
+                "id": "593176",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-01-29T17:34:21.092+00:00",
+                    "source": "#Jc1iB1XPxkkPrlCE"
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\">Sabrina <b>SPELLMAN </b></div><table class=\"hapiPropertyTable\"><tbody/></table></div>"
+                },
+                "name": [
+                    {
+                        "family": "Spellman",
+                        "given": [
+                            "Sabrina"
+                        ]
+                    }
+                ],
+                "telecom": [
+                    {
+                        "system": "phone",
+                        "value": "1(845)443-7666",
+                        "use": "home"
+                    }
+                ],
+                "gender": "female",
+                "birthDate": "2000-10-31",
+                "address": [
+                    {
+                        "line": [
+                            "1138 Decario Lane"
+                        ],
+                        "city": "Greendale",
+                        "state": "New York",
+                        "postalCode": "11199",
+                        "country": "United States"
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Patient/593180",
+            "resource": {
+                "resourceType": "Patient",
+                "id": "593180",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-01-29T17:46:28.330+00:00",
+                    "source": "#Um4idkqWOUClXi0e"
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\">Karen <b>VAN </b></div><table class=\"hapiPropertyTable\"><tbody></tbody></table></div>"
+                },
+                "name": [
+                    {
+                        "id": "f2",
+                        "use": "official",
+                        "family": "Van",
+                        "given": [
+                            "Karen"
+                        ]
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Patient/593181",
+            "resource": {
+                "resourceType": "Patient",
+                "id": "593181",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-01-29T17:46:33.844+00:00",
+                    "source": "#85ZgSznz0wDItb2i"
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\">Karen <b>VAN </b></div><table class=\"hapiPropertyTable\"><tbody></tbody></table></div>"
+                },
+                "name": [
+                    {
+                        "id": "f2",
+                        "use": "official",
+                        "family": "Van",
+                        "given": [
+                            "Karen"
+                        ]
+                    }
+                ]
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Patient/593185",
+            "resource": {
+                "resourceType": "Patient",
+                "id": "593185",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-01-29T17:50:22.986+00:00",
+                    "source": "#WY2U8r6bI3qBTaGw"
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\">Benjamin <b>COOK </b></div><table class=\"hapiPropertyTable\"><tbody></tbody></table></div>"
+                },
+                "name": [
+                    {
+                        "id": "bcook74",
+                        "family": "Cook",
+                        "given": [
+                            "Benjamin"
+                        ]
+                    }
+                ],
+                "gender": "male"
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Patient/593186",
+            "resource": {
+                "resourceType": "Patient",
+                "id": "593186",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-01-29T17:50:51.617+00:00",
+                    "source": "#hUVWgcUbHMuIgq4T"
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\">Benjamin <b>COOK </b></div><table class=\"hapiPropertyTable\"><tbody></tbody></table></div>"
+                },
+                "name": [
+                    {
+                        "family": "Cook",
+                        "given": [
+                            "Benjamin"
+                        ]
+                    }
+                ],
+                "gender": "male"
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Patient/593188",
+            "resource": {
+                "resourceType": "Patient",
+                "id": "593188",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-01-29T17:55:26.070+00:00",
+                    "source": "#UhGXfwMM105AVBJe"
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Identifier</td><td></td></tr></tbody></table></div>"
+                },
+                "identifier": [
+                    {
+                        "id": "bcook74"
+                    }
+                ],
+                "gender": "male"
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "https://hapi.fhir.org/baseR4/Patient/593189",
+            "resource": {
+                "resourceType": "Patient",
+                "id": "593189",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2020-01-29T17:55:46.397+00:00",
+                    "source": "#sCERGpHSJLeL5dtI"
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Identifier</td><td></td></tr></tbody></table></div>"
+                },
+                "identifier": [
+                    {
+                        "id": "bcook74"
+                    }
+                ],
+                "gender": "male"
+            },
+            "search": {
+                "mode": "match"
+            }
         }
     ]
 }
