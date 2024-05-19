@@ -2,6 +2,8 @@ import 'package:jayse/jayse.dart';
 
 const languageUri = 'urn:ietf:bcp:47';
 
+//TODO: languages are missing here
+
 /// A human language.
 enum Language implements Comparable<Language> {
   /// Arabic
