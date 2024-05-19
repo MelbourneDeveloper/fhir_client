@@ -21,6 +21,7 @@ void main(List<String> args) {
   File('patient.dart').writeAsStringSync(dataClassCode);
 }
 
+/// Processes the profile JSON and returns the element array and fields.
 (
   JsonArray,
   List<Field>,
@@ -38,8 +39,10 @@ void main(List<String> args) {
   );
 }
 
+/// Reads the profile JSON file and returns the contents as a string.
 String getProfileJson(String filePath) => File(filePath).readAsStringSync();
 
+/// Generates the static getter body for the field.
 String staticGetterBody(Field field) => _isArray(field)
     ? (field.allowedStringValues?.length ?? 0) > 0
         //TODO: this doesn't currently get hit
@@ -47,6 +50,7 @@ String staticGetterBody(Field field) => _isArray(field)
         : _getValueBodyArraySwitch(field)
     : jsonValue(field);
 
+/// Generates the field definition list for the Resource
 String fieldDefinitionList(String resourceName, List<Field> fields) => '''
 /// R4: All field definitions for [$resourceName].
   static const fieldDefinitions = [
