@@ -392,6 +392,64 @@ An address for the individual.''',
   );""");
   });
 
+  test('copyWith', () {
+    expect(copyWith('Patient', expectedFields), '''
+/// Creates a copy of the [Patient] instance and allows for non-destructive mutation.
+  Patient copyWith({
+    String? id,
+    Meta? meta,
+    Uri? implicitRules,
+    Language? language,
+    Narrative? text,
+    FixedList<Resource>? contained,
+    FixedList<Extension>? extension,
+    FixedList<Extension>? modifierExtension,
+    FixedList<Identifier>? identifier,
+    bool? active,
+    FixedList<HumanName>? name,
+    FixedList<ContactPoint>? telecom,
+    AdministrativeGender? gender,
+    DateTime? birthDate,
+    BooleanOrDateTimeChoice? deceased,
+    FixedList<Address>? address,
+    MaritalStatus? maritalStatus,
+    BooleanOrIntegerChoice? multipleBirth,
+    FixedList<Attachment>? photo,
+    FixedList<BackboneElement>? contact,
+    FixedList<BackboneElement>? communication,
+    FixedList<Reference>? generalPractitioner,
+    Reference? managingOrganization,
+    FixedList<BackboneElement>? link,
+  }) =>
+      Patient(
+        id: id ?? this.id,
+        meta: meta ?? this.meta,
+        implicitRules: implicitRules ?? this.implicitRules,
+        language: language ?? this.language,
+        text: text ?? this.text,
+        contained: contained ?? this.contained,
+        extension: extension ?? this.extension,
+        modifierExtension: modifierExtension ?? this.modifierExtension,
+        identifier: identifier ?? this.identifier,
+        active: active ?? this.active,
+        name: name ?? this.name,
+        telecom: telecom ?? this.telecom,
+        gender: gender ?? this.gender,
+        birthDate: birthDate ?? this.birthDate,
+        deceased: deceased ?? this.deceased,
+        address: address ?? this.address,
+        maritalStatus: maritalStatus ?? this.maritalStatus,
+        multipleBirth: multipleBirth ?? this.multipleBirth,
+        photo: photo ?? this.photo,
+        contact: contact ?? this.contact,
+        communication: communication ?? this.communication,
+        generalPractitioner: generalPractitioner ?? this.generalPractitioner,
+        managingOrganization: managingOrganization ?? this.managingOrganization,
+        link: link ?? this.link,
+      );
+''');
+  });
+
   test('Field Definition List', () {
     final fieldDefinitions = fieldDefinitionList('Patient', expectedFields);
     expect(fieldDefinitions, '''

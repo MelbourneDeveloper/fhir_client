@@ -74,6 +74,34 @@ String fieldDefinition(Field field) => '''
     ${_cardinalityLine(field)}
 ${field.allowedStringValues != null ? '   allowedStringValues: [${field.allowedStringValues!.map((e) => "'$e'").join(',\n')},],\n' : ''}  );''';
 
+String classAndConstructor(
+  String resourceName,
+  String resourceDefinition,
+  List<Field> fields,
+) =>
+    '''
+/// $resourceDefinition
+class $resourceName extends Resource {
+  /// Constructs a new [$resourceName].
+  $resourceName({
+    ${fields.map((f) => f.typeAndName()).join(',\n    ')},
+  }) : super._internal(
+          JsonObject({
+            ${_constructorMapInitializations(fields, resourceName)}  
+          }),
+        );
+''';
+
+String copyWith(String resourceName, List<Field> fields) => '''
+/// Creates a copy of the [$resourceName] instance and allows for non-destructive mutation.
+  $resourceName copyWith({
+${fields.map((field) => '    ${field.dartType}? ${field.name}').join(',\n')},
+  }) =>
+      $resourceName(
+${fields.map((field) => '        ${field.name}: ${field.name} ?? this.${field.name},').join('\n')}
+      );
+''';
+
 /// Gets the most important array for field definitions.
 JsonArray _getElementArray(JsonObject profileRoot) =>
     profileRoot['snapshot']['element'] as JsonArray;
@@ -167,26 +195,8 @@ ${classAndConstructor(resourceName, resourceDefinition, fields)}
 
   // Non-destructive mutation
 
-  ${_copyWith(resourceName, fields)}  
+  ${copyWith(resourceName, fields)}  
 }
-''';
-
-String classAndConstructor(
-  String resourceName,
-  String resourceDefinition,
-  List<Field> fields,
-) =>
-    '''
-/// $resourceDefinition
-class $resourceName extends Resource {
-  /// Constructs a new [$resourceName].
-  $resourceName({
-    ${fields.map((f) => f.typeAndName()).join(',\n    ')},
-  }) : super._internal(
-          JsonObject({
-            ${_constructorMapInitializations(fields, resourceName)}  
-          }),
-        );
 ''';
 
 String _fieldDefinitions(List<Field> fields) => fields
@@ -203,16 +213,6 @@ String _cardinalityLine(Field field) => field.min == 0 &&
     : 'cardinality: Cardinality(min: ${field.min}, '
         '${field.max != null ? 'max: IntegerChoice(${field.max}),' : field.isMaxStar ? 'max: BoolChoice(true)' : ''}),';
 
-String _copyWith(String resourceName, List<Field> fields) => '''
-/// Creates a copy of the [$resourceName] instance and allows for non-destructive mutation.
-  $resourceName copyWith({
-    ${fields.map((field) => '${field.dartType}? ${field.name}').join(',\n    ')},
-  }) =>
-      $resourceName(
-        ${fields.map((field) => '${field.name}: ${field.name} ?? this.${field.name}').join(',\n        ')}
-      ,);
-''';
-
 String _wrapType(
   String fieldName,
   JsonArray typeArray,
@@ -220,11 +220,11 @@ String _wrapType(
   String? valueSetName,
 ) {
   final isList = _isList(maxCardinality);
-  final dartType = _arrayToDartType(
-    typeArray,
-    isList,
-    valueSetName,
-  );
+  final dartType = valueSetName ??
+      _arrayToDartType(
+        typeArray,
+        isList,
+      );
 
   return isList ? 'FixedList<$dartType>' : dartType;
 }
@@ -331,18 +331,14 @@ String _primitiveConstructorLine(Field field) => switch (field.dartType) {
 String _arrayToDartType(
   JsonArray array,
   bool isArray,
-  String? valueSetName,
 ) =>
     switch (array) {
       (final JsonArray ja) when ja.length == 0 => throw Exception('Empty type'),
       (final JsonArray ja) when ja.length == 1 && ja[0]['code'] is JsonString =>
-        valueSetName != null
-            //ValueSet / Enum
-            ? _enumName(valueSetName)
-            : _mapFhirTypeToDartType(
-                (ja[0]['code'] as JsonString).value,
-                isArray,
-              ),
+        _mapFhirTypeToDartType(
+          (ja[0]['code'] as JsonString).value,
+          isArray,
+        ),
       (final JsonArray ja) when ja.length == 2 =>
         //Choice Type with 2 choices
         _choiceTypeSwitch(
@@ -356,9 +352,6 @@ String _choiceTypeSwitch(List<String> types) => switch (types) {
       ['boolean', 'integer'] => 'BooleanOrIntegerChoice',
       _ => throw Exception('Invalid choice type'),
     };
-
-String _enumName(String valueSet) =>
-    valueSet.split('/').last.split('-').map((e) => e.capitalize()).join();
 
 String _mapFhirTypeToDartType(
   String fhirType,
