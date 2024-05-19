@@ -55,15 +55,26 @@ List<Field> _getFields(JsonArray element) {
 
     if (path.split('.').length == 2) {
       final fieldName = path.split('.')[1].replaceAll('[x]', '');
-      final allowedStringValues = elementItem['binding']
-          .objectValue?['valueSet']
-          .stringValue
-          ?.split('|')
-          .map((e) => e.trim())
-          .toList();
 
       final maxCardinality = elementItem['max'];
       final minCardinality = elementItem['min'].integerValue!;
+
+      final valueSetName = elementItem
+          .whereFromPath(
+            r'$.binding.extension',
+            (p0) => p0['valueString'] is JsonString,
+          )
+          .firstOrNull?['valueString']
+          .stringValue;
+
+      final dartType = _wrapType(
+        fieldName,
+        typeArray,
+        maxCardinality,
+        valueSetName,
+      );
+
+      final valueSet = valueSets[dartType];
 
       fields.add(
         Field(
@@ -73,13 +84,8 @@ List<Field> _getFields(JsonArray element) {
               .where((t) => t != null)
               .cast<String>()
               .toList(),
-          dartType: _wrapType(
-            fieldName,
-            typeArray,
-            maxCardinality,
-            allowedStringValues,
-          ),
-          allowedStringValues: allowedStringValues,
+          dartType: dartType,
+          allowedStringValues: valueSet?.values,
           min: minCardinality,
           max: int.tryParse(maxCardinality.stringValue ?? ''),
           isMaxStar: maxCardinality.stringValue == '*',
@@ -200,13 +206,13 @@ String _wrapType(
   String fieldName,
   JsonArray typeArray,
   JsonValue maxCardinality,
-  List<String>? allowedStringValues,
+  String? valueSetName,
 ) {
   final isList = _isList(maxCardinality);
   final dartType = _arrayToDartType(
     typeArray,
     isList,
-    allowedStringValues,
+    valueSetName,
   );
 
   return isList ? 'FixedList<$dartType>' : dartType;
@@ -329,14 +335,14 @@ String _primitiveConstructorLine(Field field) => switch (field.dartType) {
 String _arrayToDartType(
   JsonArray array,
   bool isArray,
-  List<String>? allowedStringValues,
+  String? valueSetName,
 ) =>
     switch (array) {
       (final JsonArray ja) when ja.length == 0 => throw Exception('Empty type'),
       (final JsonArray ja) when ja.length == 1 && ja[0]['code'] is JsonString =>
-        allowedStringValues != null
+        valueSetName != null
             //ValueSet / Enum
-            ? _enumName(allowedStringValues.first)
+            ? _enumName(valueSetName)
             : _mapFhirTypeToDartType(
                 (ja[0]['code'] as JsonString).value,
                 isArray,
@@ -426,9 +432,10 @@ extension FieldListExtensions on Iterable<Field> {
       );
 }
 
-// const valueSets = {
-//   'http://hl7.org/fhir/ValueSet/administrative-gender|4.0.1': {
-//     (name: 'AdministrativeGender',),
-//   },
-//   'http://hl7.org/fhir/ValueSet/marital-status': {(name: 'MaritalStatus',)},
-// };
+const valueSets = <String, ({String name, List<String> values})>{
+  'http://hl7.org/fhir/ValueSet/administrative-gender|4.0.1': (
+    name: 'AdministrativeGender',
+    values: ['male', 'female', 'other', 'unknown'],
+  ),
+  //'http://hl7.org/fhir/ValueSet/marital-status': {(name: 'MaritalStatus',)},
+};

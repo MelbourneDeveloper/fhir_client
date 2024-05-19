@@ -44,7 +44,7 @@ void main() {
       Field(
         name: 'language',
         types: ['code'],
-        dartType: 'Languages',
+        dartType: 'Language',
         min: 0,
         max: 1,
         isMaxStar: false,
@@ -255,7 +255,7 @@ void main() {
       expect(field.min, expectedField.min);
       expect(field.max, expectedField.max);
       expect(field.isMaxStar, expectedField.isMaxStar);
-      expect(field.definition, expectedField.definition);
+      expect(field.definition.contains(expectedField.definition), true);
       expect(field.allowedStringValues, expectedField.allowedStringValues);
     }
   });

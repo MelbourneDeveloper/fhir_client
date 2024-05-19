@@ -3,7 +3,7 @@ import 'package:jayse/jayse.dart';
 const languageUri = 'urn:ietf:bcp:47';
 
 /// A human language.
-enum Languages implements Comparable<Languages> {
+enum Language implements Comparable<Language> {
   /// Arabic
   ar(
     code: 'ar',
@@ -179,7 +179,7 @@ enum Languages implements Comparable<Languages> {
     system: languageUri,
   );
 
-  const Languages({
+  const Language({
     required this.code,
     required this.display,
     required this.system,
@@ -191,37 +191,37 @@ enum Languages implements Comparable<Languages> {
 
   /// Returns the language based on the string code, and returns null if
   /// no match is found
-  static Languages? fromCode(String code) => switch (code) {
-        ('ar') => Languages.ar,
-        ('bn') => Languages.bn,
-        ('cs') => Languages.cs,
-        ('da') => Languages.da,
-        ('de') => Languages.de,
-        ('el') => Languages.el,
-        ('en') => Languages.en,
-        ('es') => Languages.es,
-        ('fi') => Languages.fi,
-        ('fr') => Languages.fr,
-        ('gu') => Languages.gu,
-        ('hi') => Languages.hi,
-        ('hr') => Languages.hr,
-        ('it') => Languages.it,
-        ('ja') => Languages.ja,
-        ('ko') => Languages.ko,
-        ('nl') => Languages.nl,
-        ('no') => Languages.no,
-        ('pa') => Languages.pa,
-        ('pl') => Languages.pl,
-        ('pt') => Languages.pt,
-        ('ru') => Languages.ru,
-        ('sv') => Languages.sv,
-        ('te') => Languages.te,
-        ('zh') => Languages.zh,
+  static Language? fromCode(String code) => switch (code) {
+        ('ar') => Language.ar,
+        ('bn') => Language.bn,
+        ('cs') => Language.cs,
+        ('da') => Language.da,
+        ('de') => Language.de,
+        ('el') => Language.el,
+        ('en') => Language.en,
+        ('es') => Language.es,
+        ('fi') => Language.fi,
+        ('fr') => Language.fr,
+        ('gu') => Language.gu,
+        ('hi') => Language.hi,
+        ('hr') => Language.hr,
+        ('it') => Language.it,
+        ('ja') => Language.ja,
+        ('ko') => Language.ko,
+        ('nl') => Language.nl,
+        ('no') => Language.no,
+        ('pa') => Language.pa,
+        ('pl') => Language.pl,
+        ('pt') => Language.pt,
+        ('ru') => Language.ru,
+        ('sv') => Language.sv,
+        ('te') => Language.te,
+        ('zh') => Language.zh,
         (_) => null,
       };
 
   JsonValue get json => JsonString(code);
 
   @override
-  int compareTo(Languages other) => code == other.code ? 0 : 1;
+  int compareTo(Language other) => code == other.code ? 0 : 1;
 }
