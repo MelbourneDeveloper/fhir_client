@@ -8,6 +8,8 @@ The source generator generates the resource model code from the FHIR® definitio
 
 It offers straightforward methods for various FHIR operations such as searching for resources with a basic Dart `http` client. An extensive test suite proves the robustness so you can be sure that the library provides reliable and efficient development for interoperable healthcare applications. 
 
+`fhir_client` goes further than just serializing and deserializing FHIR® messages. It provides resource metadata in the form of Field Definitions, which are used to validate the data. This allows you to receive any resource JSON, and validate it for a particular FHIR® version. It is also toolkit for working with, and improving FHIR® data quality.
+
 #### Disclaimer
 
 <small>FHIR® is a registered trademark of Health Level Seven International (HL7®). This project is not affiliated with, endorsed, sponsored, or specifically approved by HL7® and does not purport to have any endorsement from HL7®. For more information, please visit https://www.hl7.org/fhir/. All copyrights © in FHIR® specifications are owned by HL7®.</small>
