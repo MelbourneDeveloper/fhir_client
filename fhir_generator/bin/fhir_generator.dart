@@ -38,6 +38,15 @@ void main(List<String> args) {
   );
 }
 
+String getProfileJson(String filePath) => File(filePath).readAsStringSync();
+
+String staticGetterBody(Field field) => _isArray(field)
+    ? (field.allowedStringValues?.length ?? 0) > 0
+        //TODO: this doesn't currently get hit
+        ? _getValueSetBodySwitch(field)
+        : _getValueBodyArraySwitch(field)
+    : jsonValue(field);
+
 /// Gets the most important array for field definitions.
 JsonArray _getElementArray(JsonObject profileRoot) =>
     profileRoot['snapshot']['element'] as JsonArray;
@@ -96,8 +105,6 @@ List<Field> _getFields(JsonArray element) {
   }
   return fields;
 }
-
-String getProfileJson(String filePath) => File(filePath).readAsStringSync();
 
 String _typeAndName(Field field) => '${field.dartType}? ${field.name}';
 
@@ -225,27 +232,18 @@ String _staticGetMethods(List<Field> fields) => fields
     .map(
       (field) => '''
 static ${field.dartType}? _get${field.name.capitalize()}(JsonObject jo) =>
-    ${_getterBody(field)};  
+      ${staticGetterBody(field)};  
 ''',
     )
     .join('\n');
 
-String _getterBody(Field field) => _isArray(field)
-    ? (field.allowedStringValues?.length ?? 0) > 0
-        //TODO: this doesn't currently get hit
-        ? _getValueSetBodySwitch(field)
-        : _getValueBodyArraySwitch(field)
-    : jsonValue(field);
-
 String _getValueBodyArraySwitch(Field field) => '''
-  switch(jo[${field.name}Field.name])
-  {
-    (final JsonArray jsonArray) => FixedList(
-        jsonArray.value.map((e) => ${field.types.first}.fromJson(e as JsonObject)),
-      ),
-      _ => null,
-  }
-''';
+switch (jo[${field.name}Field.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => ${field.types.first}.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      }''';
 
 String _getValueSetBodySwitch(Field field) => '''
 switch (jo[${field.name}Field.name]) {
@@ -387,7 +385,7 @@ extension StringExtensions on String {
 }
 
 class Field {
-  Field({
+  const Field({
     required this.name,
     required this.types,
     required this.dartType,
