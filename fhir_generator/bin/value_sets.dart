@@ -1,4 +1,8 @@
-const valueSets = <String,
+//https://hl7.org/fhir/R4/terminologies-valuesets.html
+
+import 'package:fhir_client/models/value_sets/service_type.dart';
+
+final valueSets = <String,
     ({
   String name,
   List<String> values,
@@ -164,5 +168,10 @@ const valueSets = <String,
       '33',
     ],
     uri: 'http://terminology.hl7.org/CodeSystem/service-category',
+  ),
+  'service-type': (
+    name: 'ServiceType',
+    values: ServiceType.values.map((e) => e.code).toList(),
+    uri: 'https://hl7.org/fhir/R4/valueset-service-type.html'
   ),
 };

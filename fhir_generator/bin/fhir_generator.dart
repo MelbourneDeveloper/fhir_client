@@ -131,7 +131,7 @@ List<Field> _getFields(JsonArray element) {
         valueSetName,
       );
 
-      final valueSet = valueSets[dartType];
+      final valueSet = valueSets[valueSetName];
 
       if (valueSetName != null && valueSet == null) {
         throw Exception('Value set not found for $valueSetName');
