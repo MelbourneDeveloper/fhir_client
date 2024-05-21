@@ -8,6 +8,9 @@ import 'package:path/path.dart' as path;
 import 'fhir_generator.dart';
 
 void main() {
+
+  //TODO: generate the enum file for this https://hl7.org/fhir/r4/codesystem-administrative-gender.json
+
   final definitionFiles = Directory('./definitions/')
       .listSync()
       .where((file) => file is File && path.extension(file.path) == '.json');
