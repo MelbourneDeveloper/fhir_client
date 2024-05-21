@@ -1,26 +1,28 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'dart:io';
+
 import 'package:jayse/jayse.dart';
+import 'package:path/path.dart' as path;
 
 import 'field.dart';
 import 'field_extensions.dart';
 import 'string_extensions.dart';
 import 'value_sets.dart';
-
 // Currently generates for R4.
 // The patient.json file URL is https://hl7.org/fhir/R4/patient.profile.json
 // However, V5 will most likely be the better version to run with
 
 void main() {
-  for (final file in Directory('.').listSync()) {
-    if (file is File && file.path.endsWith('.json')) {
-      final filename = file.path;
-      final dataClassCode = generateFromJson(filename);
+  final definitionFiles = Directory('./definitions/')
+      .listSync()
+      .where((file) => file is File && path.extension(file.path) == '.json');
 
-      final outputFilename = '${filename.split('.')[0]}.dart';
-      File(outputFilename).writeAsStringSync(dataClassCode);
-    }
+  for (final definitionFile in definitionFiles) {
+    final filename = definitionFile.path;
+    final dataClassCode = generateFromJson(filename);
+    final outputFilename = '${path.basenameWithoutExtension(filename)}.dart';
+    File(outputFilename).writeAsStringSync(dataClassCode);
   }
 }
 
