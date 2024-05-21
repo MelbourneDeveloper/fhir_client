@@ -16,6 +16,6 @@ void main() {
     final filename = definitionFile.path;
     final dataClassCode = generateFromJson(filename);
     final outputFilename = '${path.basenameWithoutExtension(filename)}.dart';
-    File(outputFilename).writeAsStringSync(dataClassCode);
+    File(path.join('output', outputFilename)).writeAsStringSync(dataClassCode);
   }
 }
