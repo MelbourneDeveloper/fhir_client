@@ -12,22 +12,26 @@ import 'value_sets.dart';
 // The patient.json file URL is https://hl7.org/fhir/R4/patient.profile.json
 // However, V5 will most likely be the better version to run with
 
-void main(List<String> args) {
-  if (args.isEmpty) {
-    // ignore: parameter_assignments
-    args = ['patient.json'];
+void main() {
+  for (final file in Directory('.').listSync()) {
+    if (file is File && file.path.endsWith('.json')) {
+      final filename = file.path;
+      final dataClassCode = generateFromJson(filename);
+
+      final outputFilename = '${filename.split('.')[0]}.dart';
+      File(outputFilename).writeAsStringSync(dataClassCode);
+    }
   }
+}
 
-  final (resourceName, resourceDefinition, fields) = processProfile(args[0]);
+String generateFromJson(String filename) {
+  final (resourceName, resourceDefinition, fields) = processProfile(filename);
 
-  final dataClassCode = _generateResourceDataClass(
+  return _generateResourceDataClass(
     resourceName,
     resourceDefinition,
     fields,
   );
-
-  // ignore: avoid_print
-  File('patient.dart').writeAsStringSync(dataClassCode);
 }
 
 /// Processes the profile JSON and returns the element array and fields.
