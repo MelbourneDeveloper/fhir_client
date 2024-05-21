@@ -22,6 +22,12 @@ const valueSets = <String,
     values: ['male', 'female', 'other', 'unknown'],
     uri: 'http://hl7.org/fhir/ValueSet/administrative-gender|4.0.1',
   ),
+  'cancelation-reason': (
+    name: 'CancelationReason',
+    values: ['pat', 'prac', 'loc', 'org', 'maint', 'nosh'],
+    uri:
+        'http://terminology.hl7.org/CodeSystem/appointment-cancellation-reason',
+  ),
   'MaritalStatus': (
     name: 'MaritalStatus',
     values: ['A', 'D', 'I', 'L', 'M', 'P', 'S', 'T', 'U', 'W', 'UNK'],
