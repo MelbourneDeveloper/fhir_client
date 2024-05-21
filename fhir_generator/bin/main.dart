@@ -14,8 +14,8 @@ void main() {
 
   for (final definitionFile in definitionFiles) {
     final filename = definitionFile.path;
-    final dataClassCode = generateFromJson(filename);
-    final outputFilename = '${path.basenameWithoutExtension(filename)}.dart';
-    File(path.join('output', outputFilename)).writeAsStringSync(dataClassCode);
+
+    File(path.join('output', '${path.basenameWithoutExtension(filename)}.dart'))
+        .writeAsStringSync(generateFromJson(filename));
   }
 }
