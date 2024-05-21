@@ -4,6 +4,19 @@ const valueSets = <String,
   List<String> values,
   String uri,
 })>{
+  'AppointmentStatus': (
+    name: 'AppointmentStatus',
+    values: [
+      'proposed',
+      'booked',
+      'arrived',
+      'fulfilled',
+      'cancelled',
+      'noshow',
+      'entered-in-error',
+    ],
+    uri: 'https://hl7.org/fhir/R4/valueset-appointmentstatus.html',
+  ),
   'AdministrativeGender': (
     name: 'AdministrativeGender',
     values: ['male', 'female', 'other', 'unknown'],
