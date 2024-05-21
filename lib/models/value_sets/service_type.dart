@@ -1,5 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'package:fhir_client/misc.dart';
 import 'package:jayse/jayse.dart';
 
 //https://hl7.org/fhir/R4/valueset-service-type.html
@@ -4795,9 +4796,9 @@ enum ServiceType implements Comparable<ServiceType> {
 
   /// Returns the service type based on the string code, and returns null if
   /// no match is found
-  static ServiceType? fromCode(String code) => ServiceType.values.firstWhere(
+  static ServiceType? fromCode(String code) =>
+      ServiceType.values.firstWhereOrNull(
         (serviceType) => serviceType.code == code,
-        orElse: () => null,
       );
 
   JsonValue get json => JsonString(code);
