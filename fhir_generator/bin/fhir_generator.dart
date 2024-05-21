@@ -8,6 +8,10 @@ import 'field_extensions.dart';
 import 'string_extensions.dart';
 import 'value_sets.dart';
 
+// Currently generates for R4.
+// The patient.json file URL is https://hl7.org/fhir/R4/patient.profile.json
+// However, V5 will most likely be the better version to run with
+
 void main(List<String> args) {
   if (args.isEmpty) {
     // ignore: parameter_assignments
