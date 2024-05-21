@@ -3,6 +3,8 @@ include: package:austerity/analysis_options.yaml
 
 analyzer:
   errors:
+    unrelated_type_equality_checks: error
+    avoid_equals_and_hash_code_on_mutable_classes: ignore
     unused_element: error
     unused_local_variable: error
     unused_field: error
@@ -72,7 +74,6 @@ analyzer:
     unnecessary_string_concatenation: error
     unnecessary_type_check: error
     unnecessary_use_of_this: error
-    unrelated_type_equality_checks: error
     unused_catch_clause: error
     use_rethrow_when_possible: error
     valid_regexps: error
@@ -98,3 +99,4 @@ analyzer:
     prefer_double_quotes: ignore
     prefer_for_elements_to_map_fromIterable: error
     prefer_generic_function_type_aliases: error
+    pattern_never_matches_value_type: error 

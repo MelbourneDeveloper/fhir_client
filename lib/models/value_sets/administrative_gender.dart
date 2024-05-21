@@ -1,3 +1,5 @@
+import 'package:jayse/jayse.dart';
+
 const administrativeGenderUri = 'http://hl7.org/fhir/administrative-gender';
 
 /// The gender of a person used for administrative purposes.
@@ -41,6 +43,8 @@ enum AdministrativeGender implements Comparable<AdministrativeGender> {
         ('other') => AdministrativeGender.other,
         (_) => AdministrativeGender.unknown,
       };
+
+  JsonValue get json => JsonString(code);
 
   @override
   int compareTo(AdministrativeGender other) => code == other.code ? 0 : 1;

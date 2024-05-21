@@ -1,8 +1,12 @@
-import 'dart:convert';
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/narrative.dart';
 import 'package:fhir_client/models/resource.dart';
-import 'package:fhir_client/models/text.dart';
+import 'package:fhir_client/models/value_sets/appointment_status.dart';
+import 'package:fhir_client/models/value_sets/encounter_status.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
+import 'package:fhir_client/models/value_sets/slot_status.dart';
 import 'package:http/http.dart';
+import 'package:jayse/jayse.dart';
 
 /// Extension methods for the http package [Client] class
 extension FhirExtensions on Client {
@@ -18,25 +22,31 @@ extension FhirExtensions on Client {
       );
 
       try {
-        final json = response.body;
-        return Resource.fromJson(jsonDecode(json) as Map<String, dynamic>);
+        final jsonValue = jsonValueDecode(response.body);
+
+        if (jsonValue is JsonObject) {
+          return Resource.fromJson(jsonValue);
+        } else {
+          return OperationOutcome<T>.error(
+            status: NarrativeStatus.empty,
+            details:
+                'Expected a JSON object, but got a ${jsonValue.runtimeType}',
+          );
+        }
+
         // ignore: avoid_catches_without_on_clauses
       } catch (e) {
-        return OperationOutcome<T>(
-          text: Text(
-            status:
-                'Exception or Error occurred when converting JSON to Resource',
-            div: e.toString(),
-          ),
+        return OperationOutcome<T>.error(
+          status:
+              NarrativeStatus.empty,
+          details: e.toString(),
         );
       }
       // ignore: avoid_catches_without_on_clauses
     } catch (e) {
-      return OperationOutcome<T>(
-        text: Text(
-          status: 'Exception or Error occurred when contacting the FHIR server',
-          div: e.toString(),
-        ),
+      return OperationOutcome<T>.error(
+        status: NarrativeStatus.empty,
+        details: e.toString(),
       );
     }
   }
@@ -57,7 +67,7 @@ extension FhirExtensions on Client {
     String baseUri, {
     String version = 'baseR4',
     int? count,
-    String? status,
+    AppointmentStatus? status,
   }) async =>
       search(
         baseUri,
@@ -65,7 +75,7 @@ extension FhirExtensions on Client {
         version: version,
         queryString: _queryString([
           if (count != null) MapEntry('_count', count.toString()),
-          if (status != null) MapEntry('status', status),
+          if (status != null) MapEntry('status', status.code),
         ]),
       );
 
@@ -73,11 +83,28 @@ extension FhirExtensions on Client {
   Future<Result<Encounter>> searchEncounters(
     String baseUri, {
     String version = 'baseR4',
+    EncounterStatus? status,
     int? count,
   }) async =>
       search(
         baseUri,
         resourceType: ResourceType.encounter,
+        version: version,
+        queryString: _queryString([
+          if (count != null) MapEntry('_count', count.toString()),
+          if (status != null) MapEntry('status', status.code),
+        ]),
+      );
+
+  /// Search for [Observation]s
+  Future<Result<Observation>> searchObservations(
+    String baseUri, {
+    String version = 'baseR4',
+    int? count,
+  }) async =>
+      search(
+        baseUri,
+        resourceType: ResourceType.observation,
         version: version,
         queryString: _queryString([
           if (count != null) MapEntry('_count', count.toString()),
@@ -92,7 +119,7 @@ extension FhirExtensions on Client {
   }) async =>
       search(
         baseUri,
-        resourceType: Patient.resourceType,
+        resourceType: ResourceType.patient,
         version: version,
         queryString: _queryString([
           if (count != null) MapEntry('_count', count.toString()),
@@ -136,7 +163,7 @@ extension FhirExtensions on Client {
     String baseUri, {
     String version = 'baseR4',
     int? count,
-    String? status,
+    SlotStatus? status,
   }) async =>
       search(
         baseUri,
@@ -144,7 +171,7 @@ extension FhirExtensions on Client {
         version: version,
         queryString: _queryString([
           if (count != null) MapEntry('_count', count.toString()),
-          if (status != null) MapEntry('status', status),
+          if (status != null) MapEntry('status', status.code),
         ]),
       );
 
@@ -165,26 +192,23 @@ extension FhirExtensions on Client {
         (final Bundle b)
             //Check all items are the correct type
             when b.entry != null &&
-                !b.entry!.any((entry) => entry.resource is! T) =>
+                b.entry!.every((entry) => entry.resource is T) =>
           BundleEntries<T>(
-            b.entry
-                    ?.map(
-                      (entry) =>
-                          //This is not very nice but we already checked
-                          //for null and type above
-                          entry.resource! as T,
-                    )
-                    .toList() ??
-                [],
+            FixedList(
+              b.entry!.map(
+                (entry) =>
+                    //This is not very nice but we already checked
+                    //for null and type above
+                    entry.resource! as T,
+              ),
+            ),
             b,
           ),
         //Unexpected Result
-        (final Resource r) => OperationOutcome(
-            text: Text(
-              status: 'Unexpected Result',
-              div: 'Expected a list of ${resourceType.code}s, but '
-                  'got a ${r.runtimeType}',
-            ),
+        (final Resource r) => OperationOutcome.error(
+            status: NarrativeStatus.empty,
+            details: 'Expected a list of ${resourceType.code}s, but '
+                'got a ${r.runtimeType}',
           ),
       };
 }

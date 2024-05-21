@@ -1,18 +1,74 @@
+import 'package:fhir_client/validation/field_definition.dart';
+import 'package:jayse/jayse.dart';
+
+/// Represents a hyperlink from the containing resource to a URI.
 class Link {
+  /// Constructs a new [Link] with an optional relation type and URL.
   Link({
-    this.relation,
-    this.url,
-  });
+    String? relation,
+    Uri? url,
+  }) : this.fromJson(
+          JsonObject({
+            if (relation != null) relationField.name: JsonString(relation),
+            if (url != null) urlField.name: JsonString(url.toString()),
+          }),
+        );
 
-  factory Link.fromJson(Map<String, dynamic> json) => Link(
-        relation: json['relation'] != null ? json['relation'] as String? : null,
-        url: Uri.tryParse(json['url'] as String? ?? ''),
+  /// Constructs a new [Link] instance from the provided JSON object.
+  Link.fromJson(this._json);
+
+  final JsonObject _json;
+
+  /// The type of relationship this link represents (e.g., 'next', 'previous').
+  String? get relation => relationField.getValue(_json);
+
+  /// The URL that this link points to.
+  Uri? get url => urlField.getValue(_json);
+
+  /// Field definition for [relation]
+  static const relationField = FieldDefinition(
+    name: 'relation',
+    getValue: _getRelation,
+  );
+
+  /// Field definition for [url]
+  static const urlField = FieldDefinition(
+    name: 'url',
+    getValue: _getUrl,
+  );
+
+  /// All field definitions for [Link]
+  static const fieldDefinitions = [
+    relationField,
+    urlField,
+  ];
+
+  static String? _getRelation(JsonObject jo) =>
+      jo.getValue(relationField.name).stringValue;
+
+  static Uri? _getUrl(JsonObject jo) {
+    final value = jo.getValue(urlField.name).stringValue;
+    return value != null ? Uri.parse(value) : null;
+  }
+
+  /// Converts this [Link] instance to a JSON object.
+  JsonObject get json => _json;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Link && other.relation == relation && other.url == url);
+
+  @override
+  int get hashCode => Object.hash(relation, url);
+
+  /// Makes a deep copy of this [Link].
+  Link copyWith({
+    String? relation,
+    Uri? url,
+  }) =>
+      Link(
+        relation: relation ?? this.relation,
+        url: url ?? this.url,
       );
-  final String? relation;
-  final Uri? url;
-
-  Map<String, dynamic> toJson() => {
-        'relation': relation,
-        'url': url.toString(),
-      };
 }
