@@ -1,5 +1,6 @@
 // Currently generates for R4.
 // The patient.json file URL is https://hl7.org/fhir/R4/patient.profile.json
+// Version history: http://hl7.org/fhir/directory.html
 // However, V5 will most likely be the better version to run with
 
 import 'dart:io';
