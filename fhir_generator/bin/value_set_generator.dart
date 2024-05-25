@@ -60,7 +60,7 @@ void main() {
     throw ArgumentError('Expected a JSON array');
   }
 
-  final name = (root['name'] as JsonString).value;
+  final name = (root['name'] as JsonString).value.replaceAll('ValueSet', '');
   final enumCode = generateValueSetEnum(
     name,
     (root['description'] as JsonString).value,
