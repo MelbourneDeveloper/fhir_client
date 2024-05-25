@@ -30,7 +30,29 @@ void main() {
 (String, String) _processValueSet(String json) {
   final root = jsonValueDecode(json);
 
-  if (root['concept'] is! JsonArray) {
+  var concept = root['concept'];
+
+  if (concept is Undefined) {
+    //Concept is not defined at the root level
+    //This JSON file might be a composition of multiple value sets
+
+    final include = root['compose']['include'];
+
+    if (include is! JsonArray) {
+      throw ArgumentError("'concept' is not a JSON array, and "
+          "'compose' -> 'include' is not a JSON Array");
+    }
+
+    concept = include[0]['concept'];
+
+    if (concept is! JsonArray) {
+      throw ArgumentError(
+        "'compose' -> 'include' -> [0] -> 'concept'  is not a JSON Array",
+      );
+    }
+  }
+
+  if (concept is! JsonArray) {
     throw ArgumentError('Expected a JSON array');
   }
 
@@ -38,7 +60,7 @@ void main() {
   final enumCode = generateValueSetEnum(
     name,
     (root['description'] as JsonString).value,
-    root['concept'] as JsonArray,
+    concept,
   );
 
   return (name, enumCode);
@@ -98,14 +120,17 @@ int compareTo($name other) => code == other.code ? 0 : 1;
 String _generateEnumCase(JsonObject concept) {
   final code = concept['code'] as JsonString;
   final display = concept['display'] as JsonString;
-  final definition = concept['definition'] as JsonString;
+  final definition = switch (concept['definition']) {
+    (final JsonString js) => js.value,
+    (_) => null,
+  };
 
   return '''
-/// ${definition.value}
+/// ${definition ?? display.value}
 ${_safeName(code.value)}(
   code: '${code.value}',
   display: ${_safeQuoteWrap(display.value)},
-  definition: ${_safeQuoteWrap(definition.value)},
+  definition: ${_safeQuoteWrap(definition ?? '')},
 )''';
 }
 
