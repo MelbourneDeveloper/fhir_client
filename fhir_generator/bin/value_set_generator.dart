@@ -5,6 +5,8 @@ import 'package:path/path.dart' as path;
 // Example JSON: https://hl7.org/fhir/r4/codesystem-activity-definition-category.json
 // List of value sets: https://fhir-ru.github.io/terminologies-valuesets.html
 
+// Actually: perhaps this is correct: https://hl7.org/fhir/r4/valueset-c80-practice-codes.canonical.json
+
 void main() {
   final definitionFiles = Directory('./valuesets/')
       .listSync()
@@ -78,7 +80,7 @@ final String definition;
 static $name? fromCode(String code) => switch (code) {
   ${concepts.value.map((concept) {
       final code = (concept['code'] as JsonString).value;
-      return "('$code') => $name.$code,";
+      return "('$code') =>  $name.${_safeName(code)},";
     }).join('\n  ')}
   (_) => null,
 };
@@ -100,9 +102,19 @@ String _generateEnumCase(JsonObject concept) {
 
   return '''
 /// ${definition.value}
-${code.value}(
+${_safeName(code.value)}(
   code: '${code.value}',
-  display: '${display.value}',
-  definition: '${definition.value}',
+  display: ${_safeQuoteWrap(display.value)},
+  definition: ${_safeQuoteWrap(definition.value)},
 )''';
 }
+
+bool _isValidDartIdentifier(String identifier) {
+  final identifierRegex = RegExp(r'^[a-zA-Z_][a-zA-Z0-9_]*$');
+  return identifierRegex.hasMatch(identifier);
+}
+
+String _safeName(String code) => _isValidDartIdentifier(code) ? code : 'n$code';
+
+String _safeQuoteWrap(String value) =>
+    value.contains("'") ? '"$value"' : "'$value'";
