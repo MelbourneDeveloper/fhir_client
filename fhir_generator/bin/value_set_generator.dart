@@ -74,16 +74,21 @@ void main() {
 String generateValueSetEnum(
   String name,
   String description,
-  JsonArray concepts,
-) =>
-    '''
+  JsonArray conceptsArray,
+) {
+  final concepts = conceptsArray.value.cast<JsonObject>().toList()
+    ..sort(
+      (a, b) => a['code'].stringValue!.compareTo(b['code'].stringValue!),
+    );
+
+  return '''
 // ignore_for_file: lines_longer_than_80_chars
 import 'package:jayse/jayse.dart';
 
 /// $description
 enum $name implements Comparable<$name> {
 
-${concepts.value.map((concept) => _generateEnumCase(concept as JsonObject)).join(',\n\n')};
+${concepts.map(_generateEnumCase).join(',\n\n')};
 
 const $name({
   required this.code,
@@ -104,10 +109,10 @@ final String definition;
 /// Returns the enum value based on the string code, and returns null if
 /// no match is found
 static $name? fromCode(String code) => switch (code) {
-  ${concepts.value.map((concept) {
-      final code = (concept['code'] as JsonString).value;
-      return "('$code') =>  $name.${_safeName(code)},";
-    }).join('\n  ')}
+  ${concepts.map((concept) {
+    final code = (concept['code'] as JsonString).value;
+    return "('$code') =>  $name.${_safeName(code)},";
+  }).join('\n  ')}
   (_) => null,
 };
 
@@ -119,6 +124,7 @@ JsonValue get json => JsonString(code);
 int compareTo($name other) => code == other.code ? 0 : 1;
 }
 ''';
+}
 
 /// Generate the enum case
 String _generateEnumCase(JsonObject concept) {

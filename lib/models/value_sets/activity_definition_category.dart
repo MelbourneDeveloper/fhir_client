@@ -4,12 +4,12 @@ import 'package:jayse/jayse.dart';
 /// High-level categorization of the type of activity.
 enum ActivityDefinitionCategory
     implements Comparable<ActivityDefinitionCategory> {
-  /// The activity is intended to provide or is related to treatment of the patient.
-  treatment(
-    code: 'treatment',
-    display: 'Treatment',
+  /// The activity is intended to perform or is related to assessment of the patient.
+  assessment(
+    code: 'assessment',
+    display: 'Assessment',
     definition:
-        'The activity is intended to provide or is related to treatment of the patient.',
+        'The activity is intended to perform or is related to assessment of the patient.',
   ),
 
   /// The activity is intended to provide or is related to education of the patient.
@@ -20,12 +20,12 @@ enum ActivityDefinitionCategory
         'The activity is intended to provide or is related to education of the patient.',
   ),
 
-  /// The activity is intended to perform or is related to assessment of the patient.
-  assessment(
-    code: 'assessment',
-    display: 'Assessment',
+  /// The activity is intended to provide or is related to treatment of the patient.
+  treatment(
+    code: 'treatment',
+    display: 'Treatment',
     definition:
-        'The activity is intended to perform or is related to assessment of the patient.',
+        'The activity is intended to provide or is related to treatment of the patient.',
   );
 
   const ActivityDefinitionCategory({
@@ -47,9 +47,9 @@ enum ActivityDefinitionCategory
   /// Returns the enum value based on the string code, and returns null if
   /// no match is found
   static ActivityDefinitionCategory? fromCode(String code) => switch (code) {
-        ('treatment') => ActivityDefinitionCategory.treatment,
-        ('education') => ActivityDefinitionCategory.education,
         ('assessment') => ActivityDefinitionCategory.assessment,
+        ('education') => ActivityDefinitionCategory.education,
+        ('treatment') => ActivityDefinitionCategory.treatment,
         (_) => null,
       };
 
