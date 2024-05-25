@@ -50,6 +50,10 @@ void main() {
         "'compose' -> 'include' -> [0] -> 'concept'  is not a JSON Array",
       );
     }
+
+    final sortedUniqueCodes = _getSortedUniqueCodes(concept);
+
+    concept = JsonArray(sortedUniqueCodes);
   }
 
   if (concept is! JsonArray) {
@@ -143,3 +147,25 @@ String _safeName(String code) => _isValidDartIdentifier(code) ? code : 'n$code';
 
 String _safeQuoteWrap(String value) =>
     value.contains("'") ? '"$value"' : "'$value'";
+
+List<JsonObject> _getSortedUniqueCodes(JsonArray concept) {
+  //List of concepts, where code may not be unique
+  final list = concept.value.cast<JsonObject>().toList()
+    ..sort(
+      (a, b) => int.parse(a['code'].stringValue!)
+          .compareTo(int.parse(b['code'].stringValue!)),
+    );
+
+  final uniqueList = <JsonObject>[];
+  final seenCodes = <String>{};
+
+  for (final item in list) {
+    final code = item['code'].stringValue!;
+    if (!seenCodes.contains(code)) {
+      uniqueList.add(item);
+      seenCodes.add(code);
+    }
+  }
+
+  return uniqueList;
+}
