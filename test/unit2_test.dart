@@ -1,5 +1,8 @@
 import 'package:fhir_client/models/actor.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/value_sets/activity_definition_category.dart';
+import 'package:fhir_client/models/value_sets/value_set_concept.dart';
+import 'package:jayse/jayse.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -33,5 +36,18 @@ void main() {
         expect(list1.hashCode, equals(list2.hashCode));
       },
     );
+  });
+
+  group('Value Sets', () {
+    test('Activity Definition', () {
+      final assessment = ActivityDefinitionCategory.fromCode('assessment');
+      expect(assessment, equals(ActivityDefinitionCategory.assessment));
+      expect(assessment!.code, equals('assessment'));
+
+      final asValueSet = assessment as ValueSetConcept;
+      expect(asValueSet.code, equals('assessment'));
+      expect(asValueSet.compareTo(ActivityDefinitionCategory.assessment), 0);
+      expect(asValueSet.json, const JsonString('assessment'));
+    });
   });
 }

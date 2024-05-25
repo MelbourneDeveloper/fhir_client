@@ -1,9 +1,9 @@
 // ignore_for_file: lines_longer_than_80_chars
-import 'package:jayse/jayse.dart';
+import 'package:fhir_client/models/value_sets/value_set_concept.dart';
 
 /// High-level categorization of the type of activity.
 enum ActivityDefinitionCategory
-    implements Comparable<ActivityDefinitionCategory> {
+    with ValueSetConcept<ActivityDefinitionCategory> {
   /// The activity is intended to perform or is related to assessment of the patient.
   assessment(
     code: 'assessment',
@@ -36,12 +36,15 @@ enum ActivityDefinitionCategory
 
   /// The property that represents the unique identifier
   /// for a specific concept within the value set.
+  @override
   final String code;
 
   /// A human-readable string to display to the user.
+  @override
   final String display;
 
   /// Provides a more detailed explanation or description of the concept
+  @override
   final String definition;
 
   /// Returns the enum value based on the string code, and returns null if
@@ -52,11 +55,4 @@ enum ActivityDefinitionCategory
         ('treatment') => ActivityDefinitionCategory.treatment,
         (_) => null,
       };
-
-  /// Converts the code to a JsonString for the purpose of JSON
-  /// serialization
-  JsonValue get json => JsonString(code);
-
-  @override
-  int compareTo(ActivityDefinitionCategory other) => code == other.code ? 0 : 1;
 }
