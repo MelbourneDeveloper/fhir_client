@@ -4,6 +4,8 @@ import 'package:fhir_client/models/value_sets/language.dart';
 import 'package:fhir_client/models/value_sets/practice_setting_code.dart';
 import 'package:fhir_client/models/value_sets/service_type.dart';
 
+import '../output/appointmentreason.dart';
+
 final valueSets = <String,
     ({
   String name,
@@ -87,5 +89,9 @@ final valueSets = <String,
   'specialty': (
     name: 'PraticeSettingCode',
     values: PracticeSettingCode.values.map((e) => e.code).toList(),
+  ),
+  'appointment-type': (
+    name: 'AppointmentReason',
+    values: AppointmentReason.values.map((e) => e.code).toList(),
   ),
 };

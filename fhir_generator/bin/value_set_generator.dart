@@ -7,6 +7,10 @@ import 'package:path/path.dart' as path;
 
 // Actually: perhaps this is correct: https://hl7.org/fhir/r4/valueset-c80-practice-codes.canonical.json
 
+// Yet another example:
+// https://terminology.hl7.org/5.5.0/CodeSystem-v2-0276.json.html
+// https://terminology.hl7.org/5.5.0/CodeSystem-v2-0276.json
+
 void main() {
   final definitionFiles = Directory('./valuesets/')
       .listSync()
@@ -82,7 +86,7 @@ String generateValueSetEnum(
     );
 
   return '''
-// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars, constant_identifier_names
 import 'package:jayse/jayse.dart';
 
 /// $description
