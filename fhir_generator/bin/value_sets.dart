@@ -1,13 +1,13 @@
 //https://hl7.org/fhir/R4/terminologies-valuesets.html
 
 import 'package:fhir_client/models/value_sets/language.dart';
+import 'package:fhir_client/models/value_sets/practice_setting_code.dart';
 import 'package:fhir_client/models/value_sets/service_type.dart';
 
 final valueSets = <String,
     ({
   String name,
   List<String> values,
-  String uri,
 })>{
   'AppointmentStatus': (
     name: 'AppointmentStatus',
@@ -20,28 +20,22 @@ final valueSets = <String,
       'noshow',
       'entered-in-error',
     ],
-    uri: 'https://hl7.org/fhir/R4/valueset-appointmentstatus.html',
   ),
   'AdministrativeGender': (
     name: 'AdministrativeGender',
     values: ['male', 'female', 'other', 'unknown'],
-    uri: 'http://hl7.org/fhir/ValueSet/administrative-gender|4.0.1',
   ),
   'cancelation-reason': (
     name: 'CancelationReason',
     values: ['pat', 'prac', 'loc', 'org', 'maint', 'nosh'],
-    uri:
-        'http://terminology.hl7.org/CodeSystem/appointment-cancellation-reason',
   ),
   'MaritalStatus': (
     name: 'MaritalStatus',
     values: ['A', 'D', 'I', 'L', 'M', 'P', 'S', 'T', 'U', 'W', 'UNK'],
-    uri: 'http://hl7.org/fhir/ValueSet/marital-status',
   ),
   'Language': (
     name: 'Language',
     values: Language.values.map((e) => e.code).toList(),
-    uri: 'http://hl7.org/fhir/ValueSet/languages',
   ),
   'service-category': (
     name: 'ServiceCategory',
@@ -85,11 +79,13 @@ final valueSets = <String,
       '37',
       '33',
     ],
-    uri: 'http://terminology.hl7.org/CodeSystem/service-category',
   ),
   'service-type': (
     name: 'ServiceType',
     values: ServiceType.values.map((e) => e.code).toList(),
-    uri: 'https://hl7.org/fhir/R4/valueset-service-type.html'
+  ),
+  'specialty': (
+    name: 'PraticeSettingCode',
+    values: PracticeSettingCode.values.map((e) => e.code).toList(),
   ),
 };
