@@ -3,22 +3,28 @@ import 'package:jayse/jayse.dart';
 
 void main() {
   final json = File('valuesets/administrativegender.json').readAsStringSync();
+  _processValueSet(json);
+}
+
+/// Process the value set JSON
+void _processValueSet(String json) {
   final root = jsonValueDecode(json);
 
   if (root['concept'] is! JsonArray) {
     throw ArgumentError('Expected a JSON array');
   }
 
+  final name = (root['name'] as JsonString).value;
   final enumCode = generateValueSetEnum(
-    (root['name'] as JsonString).value,
+    name,
     (root['description'] as JsonString).value,
     root['concept'] as JsonArray,
   );
 
-  // ignore: avoid_print
-  print(enumCode);
+  File('output/${name.toLowerCase()}.dart').writeAsStringSync(enumCode);
 }
 
+/// Generate the enum code
 String generateValueSetEnum(
   String name,
   String description,
@@ -67,6 +73,7 @@ int compareTo($name other) => code == other.code ? 0 : 1;
 }
 ''';
 
+/// Generate the enum case
 String _generateEnumCase(JsonObject concept) {
   final code = concept['code'] as JsonString;
   final display = concept['display'] as JsonString;
