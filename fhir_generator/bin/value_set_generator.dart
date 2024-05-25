@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:jayse/jayse.dart';
 import 'package:path/path.dart' as path;
 
+// Example JSON: https://hl7.org/fhir/r4/codesystem-activity-definition-category.json
+// List of value sets: https://fhir-ru.github.io/terminologies-valuesets.html
+
 void main() {
   final definitionFiles = Directory('./valuesets/')
       .listSync()
