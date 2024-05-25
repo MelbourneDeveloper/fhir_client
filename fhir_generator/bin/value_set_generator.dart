@@ -1,13 +1,28 @@
 import 'dart:io';
 import 'package:jayse/jayse.dart';
+import 'package:path/path.dart' as path;
 
 void main() {
-  final json = File('valuesets/administrativegender.json').readAsStringSync();
-  _processValueSet(json);
+  final definitionFiles = Directory('./valuesets/')
+      .listSync()
+      .where((file) => file is File && path.extension(file.path) == '.json');
+
+  for (final definitionFile in definitionFiles) {
+    final file = File(definitionFile.path);
+
+    final (name, code) = _processValueSet(file.readAsStringSync());
+
+    File(
+      path.join(
+        'output',
+        '${path.basenameWithoutExtension(name.toLowerCase())}.dart',
+      ),
+    ).writeAsStringSync(code);
+  }
 }
 
 /// Process the value set JSON
-void _processValueSet(String json) {
+(String, String) _processValueSet(String json) {
   final root = jsonValueDecode(json);
 
   if (root['concept'] is! JsonArray) {
@@ -21,7 +36,7 @@ void _processValueSet(String json) {
     root['concept'] as JsonArray,
   );
 
-  File('output/${name.toLowerCase()}.dart').writeAsStringSync(enumCode);
+  return (name, enumCode);
 }
 
 /// Generate the enum code
