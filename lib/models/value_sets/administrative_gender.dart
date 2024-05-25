@@ -2,28 +2,28 @@ import 'package:jayse/jayse.dart';
 
 /// The gender of a person used for administrative purposes.
 enum AdministrativeGender implements Comparable<AdministrativeGender> {
-  /// 'Male.'
+  /// Male.
   male(
     code: 'male',
     display: 'Male',
     definition: 'Male.',
   ),
 
-  /// 'Female.'
+  /// Female.
   female(
     code: 'female',
     display: 'Female',
     definition: 'Female.',
   ),
 
-  /// 'Other.'
+  /// Other.
   other(
     code: 'other',
     display: 'Other',
     definition: 'Other.',
   ),
 
-  /// 'Unknown.'
+  /// Unknown.
   unknown(
     code: 'unknown',
     display: 'Unknown',
@@ -56,6 +56,8 @@ enum AdministrativeGender implements Comparable<AdministrativeGender> {
         (_) => null,
       };
 
+  /// Converts the code to a JsonString for the purpose of JSON
+  /// serialization
   JsonValue get json => JsonString(code);
 
   @override

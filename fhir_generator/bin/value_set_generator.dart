@@ -58,6 +58,8 @@ static $name? fromCode(String code) => switch (code) {
   (_) => null,
 };
 
+/// Converts the code to a JsonString for the purpose of JSON
+/// serialization
 JsonValue get json => JsonString(code);
 
 @override
@@ -71,7 +73,7 @@ String _generateEnumCase(JsonObject concept) {
   final definition = concept['definition'] as JsonString;
 
   return '''
-/// $definition
+/// ${definition.value}
 ${code.value}(
   code: '${code.value}',
   display: '${display.value}',
