@@ -10,7 +10,8 @@ void main() {
   }
 
   final enumCode = generateValueSetEnum(
-    'AdministrativeGender',
+    (root['name'] as JsonString).value,
+    (root['description'] as JsonString).value,
     root['concept'] as JsonArray,
   );
 
@@ -19,38 +20,48 @@ void main() {
 }
 
 String generateValueSetEnum(
-  String enumName,
+  String name,
+  String description,
   JsonArray concepts,
 ) =>
     '''
 import 'package:jayse/jayse.dart';
 
-/// ${concepts.first['definition']}
-enum $enumName implements Comparable<$enumName> {
+/// $description
+enum $name implements Comparable<$name> {
 
-${concepts.value.map((concept) => _generateEnumCase(concept as JsonObject)).join('\n')}
+${concepts.value.map((concept) => _generateEnumCase(concept as JsonObject)).join(',\n\n')};
 
-const $enumName({
+const $name({
   required this.code,
   required this.display,
   required this.definition,
 });
 
+/// The property that represents the unique identifier 
+/// for a specific concept within the value set.
 final String code;
+
+/// A human-readable string to display to the user.
 final String display;
+
+/// Provides a more detailed explanation or description of the concept
 final String definition;
 
 /// Returns the enum value based on the string code, and returns null if
 /// no match is found
-static $enumName? fromCode(String code) => switch (code) {
-  ${concepts.value.map((concept) => "('${concept['code']}') => $enumName.${concept['code']},").join('\n  ')}
+static $name? fromCode(String code) => switch (code) {
+  ${concepts.value.map((concept) {
+      final code = (concept['code'] as JsonString).value;
+      return "('$code') => $name.$code,";
+    }).join('\n  ')}
   (_) => null,
 };
 
 JsonValue get json => JsonString(code);
 
 @override
-int compareTo($enumName other) => code == other.code ? 0 : 1;
+int compareTo($name other) => code == other.code ? 0 : 1;
 }
 ''';
 
@@ -65,6 +76,5 @@ ${code.value}(
   code: '${code.value}',
   display: '${display.value}',
   definition: '${definition.value}',
-),
-''';
+)''';
 }

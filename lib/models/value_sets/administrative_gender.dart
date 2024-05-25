@@ -1,49 +1,59 @@
 import 'package:jayse/jayse.dart';
 
-//https://hl7.org/fhir/r4/codesystem-administrative-gender.json
-
-const administrativeGenderUri = 'http://hl7.org/fhir/administrative-gender';
-
 /// The gender of a person used for administrative purposes.
 enum AdministrativeGender implements Comparable<AdministrativeGender> {
+  /// 'Male.'
   male(
     code: 'male',
     display: 'Male',
-    system: administrativeGenderUri,
+    definition: 'Male.',
   ),
+
+  /// 'Female.'
   female(
     code: 'female',
     display: 'Female',
-    system: administrativeGenderUri,
+    definition: 'Female.',
   ),
+
+  /// 'Other.'
   other(
     code: 'other',
     display: 'Other',
-    system: administrativeGenderUri,
+    definition: 'Other.',
   ),
+
+  /// 'Unknown.'
   unknown(
     code: 'unknown',
     display: 'Unknown',
-    system: administrativeGenderUri,
+    definition: 'Unknown.',
   );
 
   const AdministrativeGender({
     required this.code,
     required this.display,
-    required this.system,
+    required this.definition,
   });
 
+  /// The property that represents the unique identifier
+  /// for a specific concept within the value set.
   final String code;
-  final String display;
-  final String system;
 
-  /// Returns the gender based on the string code, and returns unknown if
+  /// A human-readable string to display to the user.
+  final String display;
+
+  /// Provides a more detailed explanation or description of the concept
+  final String definition;
+
+  /// Returns the enum value based on the string code, and returns null if
   /// no match is found
-  static AdministrativeGender fromCode(String code) => switch (code) {
+  static AdministrativeGender? fromCode(String code) => switch (code) {
         ('male') => AdministrativeGender.male,
         ('female') => AdministrativeGender.female,
         ('other') => AdministrativeGender.other,
-        (_) => AdministrativeGender.unknown,
+        ('unknown') => AdministrativeGender.unknown,
+        (_) => null,
       };
 
   JsonValue get json => JsonString(code);
