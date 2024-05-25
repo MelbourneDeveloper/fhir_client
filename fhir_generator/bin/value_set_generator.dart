@@ -46,6 +46,7 @@ String generateValueSetEnum(
   JsonArray concepts,
 ) =>
     '''
+// ignore_for_file: lines_longer_than_80_chars
 import 'package:jayse/jayse.dart';
 
 /// $description
