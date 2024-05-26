@@ -139,12 +139,17 @@ List<Field> _getFields(JsonArray element) {
         throw Exception('Value set not found for $valueSetName');
       }
 
-      final dartType = _wrapType(
-        fieldName,
-        typeArray,
-        maxCardinality,
-        valueSetName != null && valueSet == null ? 'String' : valueSetName,
-      );
+      String dartType;
+      if (valueSetName != null && valueSet != null) {
+        dartType = valueSet.name;
+      } else {
+        dartType = _wrapType(
+          fieldName,
+          typeArray,
+          maxCardinality,
+          null,
+        );
+      }
 
       fields.add(
         Field(
