@@ -124,22 +124,31 @@ List<Field> _getFields(JsonArray element) {
           .firstOrNull?['valueString']
           .stringValue;
 
+      final valueSetStrength = switch (elementItem.fromPath(
+        r'$.binding.strength',
+      )) {
+        (final JsonString js) => ValueSetStrength.fromCode(js.value),
+        _ => null,
+      };
+
+      final valueSet = valueSets[valueSetName];
+
+      if (valueSetName != null &&
+          valueSet == null &&
+          valueSetStrength == ValueSetStrength.required) {
+        throw Exception('Value set not found for $valueSetName');
+      }
+
       final dartType = _wrapType(
         fieldName,
         typeArray,
         maxCardinality,
-        valueSetName,
+        valueSetName != null && valueSet == null ? 'String' : valueSetName,
       );
-
-      final valueSet = valueSets[valueSetName];
-
-      if (valueSetName != null && valueSet == null) {
-        throw Exception('Value set not found for $valueSetName');
-      }
 
       fields.add(
         Field(
-          isValueSet: valueSetName != null,
+          isValueSet: valueSet != null,
           name: fieldName,
           types: typeArray.value
               .map((e) => e['code'].stringValue)
@@ -152,6 +161,7 @@ List<Field> _getFields(JsonArray element) {
           max: int.tryParse(maxCardinality.stringValue ?? ''),
           isMaxStar: maxCardinality.stringValue == '*',
           definition: elementItem['definition'].stringValue ?? '',
+          valueSetStrength: valueSetStrength,
         ),
       );
     }

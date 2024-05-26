@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:jayse/jayse.dart';
 import 'package:path/path.dart' as path;
 
-// Example JSON: https://hl7.org/fhir/r4/codesystem-activity-definition-category.json
+// Example JSON: 
+// https://hl7.org/fhir/r4/codesystem-activity-definition-category.json
+// https://hl7.org/fhir/r4/valueset-encounter-reason.json
 // List of value sets: https://fhir-ru.github.io/terminologies-valuesets.html
 
 // Actually: perhaps this is correct: https://hl7.org/fhir/r4/valueset-c80-practice-codes.canonical.json
