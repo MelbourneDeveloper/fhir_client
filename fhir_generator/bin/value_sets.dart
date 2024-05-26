@@ -87,7 +87,7 @@ final valueSets = <String,
     values: ServiceType.values.map((e) => e.code).toList(),
   ),
   'specialty': (
-    name: 'PraticeSettingCode',
+    name: 'PracticeSettingCode',
     values: PracticeSettingCode.values.map((e) => e.code).toList(),
   ),
   'appointment-type': (
