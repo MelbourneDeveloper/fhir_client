@@ -51,6 +51,7 @@ const expectedFields = [
     types: ['code'],
     dartType: 'Language',
     isValueSet: true,
+    valueSetStrength: ValueSetStrength.preferred,
     min: 0,
     max: 1,
     isMaxStar: false,
@@ -169,6 +170,7 @@ const expectedFields = [
     max: 1,
     isMaxStar: false,
     isValueSet: true,
+    valueSetStrength: ValueSetStrength.required,
     definition:
         'Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes.',
     allowedStringValues: ['male', 'female', 'other', 'unknown'],
@@ -196,6 +198,7 @@ const expectedFields = [
     name: 'maritalStatus',
     types: ['CodeableConcept'],
     dartType: 'MaritalStatus',
+    valueSetStrength: ValueSetStrength.extensible,
     min: 0,
     max: 1,
     isValueSet: true,

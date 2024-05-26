@@ -368,10 +368,16 @@ String _mapFhirTypeToDartType(
       'boolean' => 'bool',
       'http://hl7.org/fhirpath/System.Boolean' => 'bool',
       'date' => 'DateTime',
+      'instant' => 'DateTime',
       'dateTime' => 'DateTime',
       'http://hl7.org/fhirpath/System.DateTime' => 'DateTime',
       'uri' => 'Uri',
       'code' => 'String',
       'http://hl7.org/fhirpath/System.Integer' => 'int',
+      //Dart does not have datatypes to represent these FHIR types in a way
+      //that's different to integer without throwing exceptions. However,
+      //these values should get validated. TODO: validation
+      'unsignedInt' => 'int',
+      'positiveInt' => 'int',
       _ => fhirType,
     };

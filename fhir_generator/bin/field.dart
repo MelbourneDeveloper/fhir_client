@@ -6,20 +6,13 @@ enum ValueSetStrength {
   extensible,
   required;
 
-  static ValueSetStrength fromCode(String value) {
-    switch (value) {
-      case 'example':
-        return ValueSetStrength.example;
-      case 'preferred':
-        return ValueSetStrength.preferred;
-      case 'extensible':
-        return ValueSetStrength.extensible;
-      case 'required':
-        return ValueSetStrength.required;
-      default:
-        throw ArgumentError('Unknown value: $value');
-    }
-  }
+  static ValueSetStrength? fromCode(String value) => switch (value) {
+        'example' => ValueSetStrength.example,
+        'preferred' => ValueSetStrength.preferred,
+        'extensible' => ValueSetStrength.extensible,
+        'required' => ValueSetStrength.required,
+        _ => null,
+      };
 }
 
 class Field {
@@ -31,7 +24,7 @@ class Field {
     required this.max,
     required this.isMaxStar,
     required this.definition,
-     this.valueSetStrength,
+    this.valueSetStrength,
     this.isValueSet = false,
     this.allowedStringValues,
   });
