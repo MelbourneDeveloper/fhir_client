@@ -147,7 +147,6 @@ List<Field> _getFields(JsonArray element) {
           fieldName,
           typeArray,
           maxCardinality,
-          null,
         );
       }
 
@@ -225,14 +224,12 @@ String _wrapType(
   String fieldName,
   JsonArray typeArray,
   JsonValue maxCardinality,
-  String? valueSetName,
 ) {
   final isList = _isList(maxCardinality);
-  final dartType = valueSetName ??
-      _arrayToDartType(
-        typeArray,
-        isList,
-      );
+  final dartType = _arrayToDartType(
+    typeArray,
+    isList,
+  );
 
   return isList ? 'FixedList<$dartType>' : dartType;
 }
