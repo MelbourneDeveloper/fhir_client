@@ -139,15 +139,16 @@ List<Field> _getFields(JsonArray element) {
         throw Exception('Value set not found for $valueSetName');
       }
 
-      String dartType;
+      String singularDartType;
       if (valueSetName != null && valueSet != null) {
-        dartType = valueSet.name;
+        singularDartType = valueSet.name;
       } else {
-        final singularDartType = _typeJsonArrayToDartType(typeJsonArray);
-        dartType = _isList(maxCardinality)
-            ? 'FixedList<$singularDartType>'
-            : singularDartType;
+        singularDartType = _typeJsonArrayToDartType(typeJsonArray);
       }
+
+      final dartType = _isList(maxCardinality)
+          ? 'FixedList<$singularDartType>'
+          : singularDartType;
 
       fields.add(
         Field(
