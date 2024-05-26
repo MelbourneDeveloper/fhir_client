@@ -143,11 +143,10 @@ List<Field> _getFields(JsonArray element) {
       if (valueSetName != null && valueSet != null) {
         dartType = valueSet.name;
       } else {
-        dartType = _wrapType(
-          fieldName,
-          typeJsonArray,
-          maxCardinality,
-        );
+        final singularDartType = _typeJsonArrayToDartType(typeJsonArray);
+        dartType = _isList(maxCardinality)
+            ? 'FixedList<$singularDartType>'
+            : singularDartType;
       }
 
       fields.add(
@@ -219,20 +218,6 @@ String _cardinalityLine(Field field) => field.min == 0 &&
     //Need to specify cardinality
     : 'cardinality: Cardinality(min: ${field.min}, '
         '${field.max != null ? 'max: IntegerChoice(${field.max}),' : field.isMaxStar ? 'max: BoolChoice(true)' : ''}),';
-
-String _wrapType(
-  String fieldName,
-  JsonArray typeJsonArray,
-  JsonValue maxCardinality,
-) {
-  final isList = _isList(maxCardinality);
-  final dartType = _typeJsonArrayToDartType(
-    typeJsonArray,
-    isList,
-  );
-
-  return isList ? 'FixedList<$dartType>' : dartType;
-}
 
 bool _isList(JsonValue maxCardinality) =>
     maxCardinality.stringValue == '*' || (maxCardinality.integerValue ?? 0) > 1;
@@ -335,7 +320,6 @@ String _primitiveConstructorLine(Field field) => switch (field.dartType) {
 
 String _typeJsonArrayToDartType(
   JsonArray array,
-  bool isArray,
 ) =>
     switch (array) {
       (final JsonArray ja) when ja.length == 0 => throw Exception('Empty type'),
@@ -343,7 +327,6 @@ String _typeJsonArrayToDartType(
         //Single type so map from code string to Dart type
         _fhirTypeToDartType(
           (ja[0]['code'] as JsonString).value,
-          isArray,
         ),
       (final JsonArray ja) when ja.length == 2 =>
         //Choice Type with 2 choices
@@ -362,7 +345,6 @@ String _fhirChoiceTypeToDartType(List<String> types) => switch (types) {
 /// Returns a Dart type from an FHIR type code string
 String _fhirTypeToDartType(
   String fhirType,
-  bool isArray,
 ) =>
     switch (fhirType) {
       'string' => 'String',
