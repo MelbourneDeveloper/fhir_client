@@ -108,7 +108,7 @@ List<Field> _getFields(JsonArray element) {
     final path = elementItem['path'].stringValue;
     if (path == null) throw Exception('Path is null or not a string');
 
-    final typeArray = elementItem['type'] as JsonArray;
+    final typeJsonArray = elementItem['type'] as JsonArray;
 
     if (path.split('.').length == 2) {
       final fieldName = path.split('.')[1].replaceAll('[x]', '');
@@ -145,7 +145,7 @@ List<Field> _getFields(JsonArray element) {
       } else {
         dartType = _wrapType(
           fieldName,
-          typeArray,
+          typeJsonArray,
           maxCardinality,
         );
       }
@@ -154,7 +154,7 @@ List<Field> _getFields(JsonArray element) {
         Field(
           isValueSet: valueSet != null,
           name: fieldName,
-          types: typeArray.value
+          types: typeJsonArray.value
               .map((e) => e['code'].stringValue)
               .where((t) => t != null)
               .cast<String>()
@@ -222,12 +222,12 @@ String _cardinalityLine(Field field) => field.min == 0 &&
 
 String _wrapType(
   String fieldName,
-  JsonArray typeArray,
+  JsonArray typeJsonArray,
   JsonValue maxCardinality,
 ) {
   final isList = _isList(maxCardinality);
-  final dartType = _arrayToDartType(
-    typeArray,
+  final dartType = _typeJsonArrayToDartType(
+    typeJsonArray,
     isList,
   );
 
@@ -333,32 +333,34 @@ String _primitiveConstructorLine(Field field) => switch (field.dartType) {
       _ => throw Exception('Invalid primitive type'),
     };
 
-String _arrayToDartType(
+String _typeJsonArrayToDartType(
   JsonArray array,
   bool isArray,
 ) =>
     switch (array) {
       (final JsonArray ja) when ja.length == 0 => throw Exception('Empty type'),
       (final JsonArray ja) when ja.length == 1 && ja[0]['code'] is JsonString =>
-        _mapFhirTypeToDartType(
+        //Single type so map from code string to Dart type
+        _fhirTypeToDartType(
           (ja[0]['code'] as JsonString).value,
           isArray,
         ),
       (final JsonArray ja) when ja.length == 2 =>
         //Choice Type with 2 choices
-        _choiceTypeSwitch(
+        _fhirChoiceTypeToDartType(
           [ja[0]['code'].stringValue!, ja[1]['code'].stringValue!],
         ),
       _ => throw Exception('Type unknown'),
     };
 
-String _choiceTypeSwitch(List<String> types) => switch (types) {
+String _fhirChoiceTypeToDartType(List<String> types) => switch (types) {
       ['boolean', 'dateTime'] => 'BooleanOrDateTimeChoice',
       ['boolean', 'integer'] => 'BooleanOrIntegerChoice',
       _ => throw Exception('Invalid choice type'),
     };
 
-String _mapFhirTypeToDartType(
+/// Returns a Dart type from an FHIR type code string
+String _fhirTypeToDartType(
   String fhirType,
   bool isArray,
 ) =>
