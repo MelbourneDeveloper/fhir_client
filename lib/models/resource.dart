@@ -81,9 +81,67 @@ final class BundleEntries<T> implements Result<T> {
   int get length => entries.length;
 }
 
+/// The basic building block for all FHIR resources
+sealed class Element {
+  Element._internal(this.json);
+
+  /// The JSON representation
+  final JsonObject json;
+
+  /// The id of the resource
+  String? get id => json[idField.name].stringValue;
+
+  /// The metadata of the resource
+  Meta? get meta => switch (json[metaField.name]) {
+        (final JsonObject jo) => Meta.fromJson(jo),
+        _ => null,
+      };
+
+  /// The id of the resource
+  static const idField = FieldDefinition(
+    name: 'id',
+    display: 'Id',
+    getValue: _getId,
+    description: 'The resource ID',
+  );
+
+  /// The metadata of the resource
+  static const metaField = FieldDefinition(
+    name: 'meta',
+    display: 'Meta',
+    getValue: _getMeta,
+    description: 'The metadata of the resource',
+  );
+
+  static const fieldDefinitions = [
+    idField,
+    metaField,
+  ];
+
+  static String? _getId(JsonObject jo) => switch (jo[idField.name]) {
+        (final JsonString js) => js.value,
+        _ => null,
+      };
+
+  static Meta? _getMeta(JsonObject jo) => switch (jo[metaField.name]) {
+        (final JsonObject jsonObject) => Meta.fromJson(jsonObject),
+        _ => null,
+      };
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      ((other is Resource) &&
+          (other.runtimeType == runtimeType) &&
+          (json == other.json));
+
+  @override
+  int get hashCode => Object.hash(runtimeType.hashCode, json.hashCode);
+}
+
 /// Any of the FHIR resources
-sealed class Resource {
-  Resource._internal(this.json);
+sealed class Resource extends Element {
+  Resource._internal(JsonObject json) : super._internal(json);
 
   factory Resource.fromJson(
     JsonObject json,
@@ -111,58 +169,6 @@ sealed class Resource {
       (ResourceType.slot) => Slot.fromJson(json),
     };
   }
-
-  final JsonObject json;
-
-  /// The id of the resource
-  String? get id => json[Resource.idField.name].stringValue;
-
-  /// The metadata of the resource
-  Meta? get meta => switch (json[Resource.metaField.name]) {
-        (final JsonObject jo) => Meta.fromJson(jo),
-        _ => null,
-      };
-
-  /// The id of the resource
-  static const idField = FieldDefinition(
-    name: 'id',
-    display: 'Id',
-    getValue: _getId,
-    description: 'The resource ID',
-  );
-
-  /// The metadata of the resource
-  static const metaField = FieldDefinition(
-    name: 'meta',
-    display: 'Meta',
-    getValue: _getMeta,
-    description: 'The metadata of the resource',
-  );
-
-  static const fieldDefinitions = [
-    idField,
-    metaField,
-  ];
-
-  static String? _getId(JsonObject jo) => switch (jo[Resource.idField.name]) {
-        (final JsonString js) => js.value,
-        _ => null,
-      };
-
-  static Meta? _getMeta(JsonObject jo) => switch (jo[Resource.metaField.name]) {
-        (final JsonObject jsonObject) => Meta.fromJson(jsonObject),
-        _ => null,
-      };
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      ((other is Resource) &&
-          (other.runtimeType == runtimeType) &&
-          (json == other.json));
-
-  @override
-  int get hashCode => Object.hash(runtimeType.hashCode, json.hashCode);
 }
 
 extension ResourceExtensions<T extends Resource> on T {
@@ -1694,7 +1700,7 @@ The duration (usually in minutes) could also be provided to indicate the length 
 
   /// R4: All field definitions for [Appointment].
   static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
+    ...Element.fieldDefinitions,
     implicitRulesField,
     languageField,
     textField,
@@ -2165,7 +2171,7 @@ class Encounter extends Resource {
 
   /// All field definitions for [Encounter].
   static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
+    ...Element.fieldDefinitions,
     identifierField,
     statusField,
     classField,
@@ -2544,8 +2550,8 @@ class Observation extends Resource {
     FixedList<CodeableReference>? contextOfUse,
   }) : super._internal(
           JsonObject({
-            if (id != null) Resource.idField.name: JsonString(id),
-            if (meta != null) Resource.metaField.name: meta.json,
+            if (id != null) Element.idField.name: JsonString(id),
+            if (meta != null) Element.metaField.name: meta.json,
             if (identifier != null)
               identifierField.name:
                   JsonArray.unmodifiable(identifier.map((e) => e.json)),
@@ -2970,7 +2976,7 @@ class Observation extends Resource {
 
   /// All field definitions for [Observation].
   static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
+    ...Element.fieldDefinitions,
     identifierField,
     basedOnField,
     partOfField,
@@ -3326,8 +3332,8 @@ class OperationOutcome<T> extends Resource implements Result<T> {
     FixedList<Issue>? issue,
   }) : super._internal(
           JsonObject({
-            if (id != null) Resource.idField.name: JsonString(id),
-            if (meta != null) Resource.metaField.name: meta.json,
+            if (id != null) Element.idField.name: JsonString(id),
+            if (meta != null) Element.metaField.name: meta.json,
             if (text != null) textField.name: text.json,
             if (issue != null)
               issueField.name: JsonArray.unmodifiable(issue.map((e) => e.json)),
@@ -3367,7 +3373,7 @@ class OperationOutcome<T> extends Resource implements Result<T> {
 
   /// All field definitions for [OperationOutcome].
   static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
+    ...Element.fieldDefinitions,
     textField,
     issueField,
   ];
@@ -3430,8 +3436,8 @@ class Organization extends Resource {
     bool? active,
   }) : super._internal(
           JsonObject({
-            if (id != null) Resource.idField.name: JsonString(id),
-            if (meta != null) Resource.metaField.name: meta.json,
+            if (id != null) Element.idField.name: JsonString(id),
+            if (meta != null) Element.metaField.name: meta.json,
             if (identifier != null)
               identifierField.name:
                   JsonArray.unmodifiable(identifier.map((e) => e.json)),
@@ -3551,7 +3557,7 @@ class Organization extends Resource {
 
   /// All field definitions for [Organization].
   static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
+    ...Element.fieldDefinitions,
     identifierField,
     typeField,
     nameField,
@@ -4324,7 +4330,7 @@ Link to another patient resource that concerns the same actual patient.''',
 
   /// R4: All field definitions for [Patient].
   static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
+    ...Element.fieldDefinitions,
     implicitRulesField,
     languageField,
     textField,
@@ -4424,8 +4430,8 @@ class Practitioner extends Resource {
     List<CodeableConcept>? communication,
   }) : super._internal(
           JsonObject({
-            if (id != null) Resource.idField.name: JsonString(id),
-            if (meta != null) Resource.metaField.name: meta.json,
+            if (id != null) Element.idField.name: JsonString(id),
+            if (meta != null) Element.metaField.name: meta.json,
             if (identifier != null)
               identifierField.name:
                   JsonArray.unmodifiable(identifier.map((e) => e.json)),
@@ -4547,7 +4553,7 @@ class Practitioner extends Resource {
 
   /// All field definitions for [Practitioner].
   static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
+    ...Element.fieldDefinitions,
     identifierField,
     activeField,
     nameField,
@@ -4687,8 +4693,8 @@ class PractitionerRole extends Resource {
     List<Reference>? endpoint,
   }) : super._internal(
           JsonObject({
-            if (id != null) Resource.idField.name: JsonString(id),
-            if (meta != null) Resource.metaField.name: meta.json,
+            if (id != null) Element.idField.name: JsonString(id),
+            if (meta != null) Element.metaField.name: meta.json,
             if (identifier != null)
               identifierField.name:
                   JsonArray.unmodifiable(identifier.map((e) => e.json)),
@@ -4858,7 +4864,7 @@ class PractitionerRole extends Resource {
 
   /// All field definitions for [PractitionerRole].
   static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
+    ...Element.fieldDefinitions,
     identifierField,
     activeField,
     periodField,
@@ -5028,8 +5034,8 @@ class Slot extends Resource {
     String? comment,
   }) : super._internal(
           JsonObject({
-            if (id != null) Resource.idField.name: JsonString(id),
-            if (meta != null) Resource.metaField.name: meta.json,
+            if (id != null) Element.idField.name: JsonString(id),
+            if (meta != null) Element.metaField.name: meta.json,
             if (identifier != null)
               identifierField.name:
                   JsonArray.unmodifiable(identifier.map((e) => e.json)),
@@ -5160,7 +5166,7 @@ class Slot extends Resource {
 
   /// All field definitions for [Slot].
   static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
+    ...Element.fieldDefinitions,
     identifierField,
     serviceCategoryField,
     serviceTypeField,
@@ -5284,8 +5290,8 @@ class Schedule extends Resource {
     String? comment,
   }) : super._internal(
           JsonObject({
-            if (id != null) Resource.idField.name: JsonString(id),
-            if (meta != null) Resource.metaField.name: meta.json,
+            if (id != null) Element.idField.name: JsonString(id),
+            if (meta != null) Element.metaField.name: meta.json,
             if (identifier != null)
               identifierField.name:
                   JsonArray.unmodifiable(identifier.map((e) => e.json)),
@@ -5386,7 +5392,7 @@ class Schedule extends Resource {
 
   /// All field definitions for [Schedule].
   static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
+    ...Element.fieldDefinitions,
     identifierField,
     activeField,
     serviceCategoryField,

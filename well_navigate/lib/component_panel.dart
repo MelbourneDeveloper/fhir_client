@@ -1,17 +1,17 @@
-import 'package:fhir_client/models/basic_types/fixed_list.dart';
-import 'package:fhir_client/models/resource.dart';
+import 'package:fhir_client/models/resource.dart' as res;
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
 
-class ComponentPanel extends StatelessWidget {
-  const ComponentPanel({
+class ElementPanel extends StatelessWidget {
+  const ElementPanel({
     required this.fields,
-    required this.component,
+    required this.element,
     super.key,
   });
 
-  final FixedList<FieldDefinition<dynamic>> fields;
-  final Resource component;
+  // ignore: strict_raw_type
+  final List<FieldDefinition> fields;
+  final res.Element element;
 
   @override
   Widget build(BuildContext context) => Wrap(
@@ -19,7 +19,7 @@ class ComponentPanel extends StatelessWidget {
       );
 
   Widget _field<T>(FieldDefinition<T> fd) {
-    final value = fd.getValue(component.json);
+    final value = fd.getValue(element.json);
     final text = value.toString();
     return SizedBox(
       width: 350,

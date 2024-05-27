@@ -19,8 +19,9 @@ import 'package:flutter/material.dart';
 import 'package:well_navigate/resource_editor.dart';
 
 // ignore: unreachable_from_main
-const fieldDefinitionsByResourceType = {
+const fieldDefinitionsByElementType = {
   Appointment: Appointment.fieldDefinitions,
+  Meta: Meta.fieldDefinitions,
 };
 
 // ignore: unreachable_from_main

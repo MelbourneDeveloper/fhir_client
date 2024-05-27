@@ -1,4 +1,5 @@
 import 'package:fhir_client/models/resource.dart';
+import 'package:fhir_client/models/resource.dart' as res;
 import 'package:flutter/material.dart';
 import 'package:well_navigate/component_panel.dart';
 import 'package:well_navigate/field_definition_list_extensions.dart';
@@ -42,10 +43,10 @@ class ResourceEditor extends StatelessWidget {
 
   ListView _listView() {
     final nonPrimitiveFields =
-        fieldDefinitionsByResourceType[resource.runtimeType]!
+        fieldDefinitionsByElementType[resource.runtimeType]!
             .nonPrimitiveFields();
     final primitiveFields =
-        fieldDefinitionsByResourceType[resource.runtimeType]!.primitiveFields();
+        fieldDefinitionsByElementType[resource.runtimeType]!.primitiveFields();
 
     return ListView.builder(
       itemCount: nonPrimitiveFields.length + 1,
@@ -54,18 +55,26 @@ class ResourceEditor extends StatelessWidget {
           return Tile(
             headerTooltip: 'Basic Details',
             headerText: 'Details',
-            body: ComponentPanel(component: resource, fields: primitiveFields),
+            body: ElementPanel(element: resource, fields: primitiveFields),
           );
         } else {
-          final nonPrimitiveField = nonPrimitiveFields[index - 1];
-          final headerTooltip =
-              nonPrimitiveField.description ?? 'No information';
-          final headerText =
-              nonPrimitiveField.display ?? nonPrimitiveField.name;
+          final field = nonPrimitiveFields[index - 1];
+          final headerTooltip = field.description ?? 'No information';
+          final headerText = field.display ?? field.name;
+
           return Tile(
             headerTooltip: headerTooltip,
             headerText: headerText,
-            body: const Text(''),
+            body: switch (field.getValue(resource.json)) {
+              (final res.Element e)
+                  when fieldDefinitionsByElementType
+                      .containsKey(e.runtimeType) =>
+                ElementPanel(
+                  element: e,
+                  fields: fieldDefinitionsByElementType[e.runtimeType]!,
+                ),
+              _ => const SizedBox.shrink()
+            },
           );
         }
       },
