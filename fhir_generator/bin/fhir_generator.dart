@@ -44,6 +44,8 @@ String getProfileJson(String filePath) => File(filePath).readAsStringSync();
 
 /// Generates the static getter body for the field.
 String staticGetterBody(Field field) => switch (field) {
+      (final Field f) when _isArray(f) && f.isValueSet =>
+        _getValueBodyArrayOfValuetSetValuesSwitch(f),
       (final Field f) when f.isValueSet => _getValueSetBodySwitch(f),
       (final Field f) when _isArray(f) => _getValueBodyArraySwitch(f),
       (final Field f) when f.types.length == 1 => _getValueBody(f),
@@ -152,6 +154,7 @@ List<Field> _getFields(JsonArray element) {
 
       fields.add(
         Field(
+          singularDartType: singularDartType,
           isValueSet: valueSet != null,
           name: fieldName,
           types: typeJsonArray.value
@@ -236,6 +239,19 @@ String _getValueBodyArraySwitch(Field field) => '''
 switch (jo[${field.name}Field.name]) {
         (final JsonArray jsonArray) => FixedList(
             jsonArray.value.map((e) => ${field.types.first}.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      }''';
+
+String _getValueBodyArrayOfValuetSetValuesSwitch(Field field) => '''
+switch (jo[${field.name}Field.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) =>
+              switch(e)
+              {
+                (final JsonString js) => ${field.singularDartType}.fromCode(js.value),
+                _ => null,
+              }
           ),
         _ => null,
       }''';
