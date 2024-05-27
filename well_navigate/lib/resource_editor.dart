@@ -19,24 +19,25 @@ class ResourceEditor extends StatelessWidget {
         children: [
           const SizedBox(height: 16),
           Center(
-            child: _headingRow(),
+            child: _headingRow(context),
           ),
           const SizedBox(height: 16),
           Expanded(child: _listView()),
         ],
       );
 
-  Row _headingRow() => const Row(
+  Row _headingRow(BuildContext context) => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.event,
-            size: 24,
-            color: Colors.blue,
+            size: 36,
+            color: Theme.of(context).colorScheme.secondary,
           ),
+          const SizedBox(width: 12),
           Text(
             'Appointment',
-            style: TextStyle(fontSize: 24),
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
         ],
       );
