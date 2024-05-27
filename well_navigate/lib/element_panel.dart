@@ -2,7 +2,6 @@ import 'package:fhir_client/models/resource.dart' as res;
 import 'package:fhir_client/models/value_sets/appointment_status.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
-import 'package:well_navigate/app_root.dart';
 import 'package:well_navigate/field.dart';
 
 class ElementPanel extends StatelessWidget {
@@ -37,20 +36,7 @@ class ElementPanel extends StatelessWidget {
             ),
           ),
         FieldDefinition<AppointmentStatus>() => InputDecorator(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: colorScheme.secondary),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: colorScheme.secondary),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: colorScheme.secondary),
-              ),
-            ),
+            decoration: const InputDecoration(),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<AppointmentStatus>(
                 items: AppointmentStatus.values
