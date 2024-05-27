@@ -109,7 +109,7 @@ class FieldDefinition<T> {
       }
     }
 
-    if (_isList(value)) {
+    if (_isList(value) && value is! Undefined) {
       if (value is! JsonArray) {
         errors.add(
           ValidationError(
