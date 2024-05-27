@@ -1,3 +1,7 @@
 
 include: package:austerity/analysis_options.yaml
 
+analyzer:
+  errors:
+    public_member_api_docs: ignore
+

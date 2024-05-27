@@ -43,6 +43,7 @@ class Meta {
   String? get versionId => versionIdField.getValue(_json);
 
   /// Identifies where the resource comes from.
+  /// TODO: should be URI?
   String? get source => sourceField.getValue(_json);
 
   //TODO: Should be URIs

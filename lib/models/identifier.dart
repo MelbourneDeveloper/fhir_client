@@ -38,6 +38,7 @@ class Identifier {
   String? get value => valueField.getValue(_json);
 
   /// A coded value that defines the purpose of the identifier.
+  /// TODO: should be a value set
   String? get use => useField.getValue(_json);
 
   /// Field definition for [type]
