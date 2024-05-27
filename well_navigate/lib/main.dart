@@ -104,13 +104,14 @@ const primitiveFieldTypes = [
   FieldDefinition<String>,
   FieldDefinition<int>,
   FieldDefinition<num>,
+  FieldDefinition<DateTime>,
 ];
 
 void main() => runApp(const MyApp());
 
-// final primitiveFields = Appointment.fieldDefinitions.where(
-//   (fd) => primitiveFieldTypes.contains(fd.runtimeType),
-// );
+final primitiveFields = Appointment.fieldDefinitions.where(
+  (fd) => primitiveFieldTypes.contains(fd.runtimeType),
+);
 
 final nonPrimitiveFields = Appointment.fieldDefinitions
     .where(
@@ -133,21 +134,8 @@ class MyApp extends StatelessWidget {
           body: Column(
             children: [
               const SizedBox(height: 16),
-              const Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.event,
-                      size: 24,
-                      color: Colors.blue,
-                    ),
-                    Text(
-                      'Appointment',
-                      style: TextStyle(fontSize: 24),
-                    ),
-                  ],
-                ),
+              Center(
+                child: _headingRow(),
               ),
               const SizedBox(height: 16),
               Expanded(child: _listView()),
@@ -156,13 +144,31 @@ class MyApp extends StatelessWidget {
         ),
       );
 
+  Row _headingRow() => const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.event,
+            size: 24,
+            color: Colors.blue,
+          ),
+          Text(
+            'Appointment',
+            style: TextStyle(fontSize: 24),
+          ),
+        ],
+      );
+
   ListView _listView() => ListView.builder(
         itemCount: nonPrimitiveFields.length + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
-            return const Tile(
+            return Tile(
               headerTooltip: 'Basic Details',
               headerText: 'Details',
+              trailing: Wrap(
+                children: primitiveFields.map(_field).toList(),
+              ),
             );
           } else {
             final nonPrimitiveField = nonPrimitiveFields[index - 1];
@@ -172,21 +178,44 @@ class MyApp extends StatelessWidget {
             return Tile(
               headerTooltip: headerTooltip,
               headerText: headerText,
+              trailing: const Text(''),
             );
           }
         },
       );
+
+  Tooltip _field<T>(FieldDefinition<T> fd) {
+    final value = fd.getValue(appointment.json);
+    final text = value.toString();
+    return Tooltip(
+      message: fd.description,
+      child: SizedBox(
+        width: 300,
+        height: 80,
+        child: Row(
+          children: [
+            Text(fd.name),
+            TextField(
+              controller: TextEditingController(text: text),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class Tile extends StatelessWidget {
   const Tile({
     required this.headerTooltip,
     required this.headerText,
+    required this.trailing,
     super.key,
   });
 
   final String headerTooltip;
   final String headerText;
+  final Widget trailing;
 
   @override
   Widget build(BuildContext context) => ListTile(
@@ -196,5 +225,6 @@ class Tile extends StatelessWidget {
             headerText,
           ),
         ),
+        subtitle: trailing,
       );
 }
