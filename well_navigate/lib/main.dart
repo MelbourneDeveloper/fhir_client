@@ -1,3 +1,5 @@
+// ignore_for_file: strict_raw_type
+
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/coding.dart';
@@ -13,8 +15,13 @@ import 'package:fhir_client/models/value_sets/cancelation_reason.dart';
 import 'package:fhir_client/models/value_sets/language.dart';
 import 'package:fhir_client/models/value_sets/service_category.dart';
 import 'package:fhir_client/models/value_sets/service_type.dart';
-import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
+import 'package:well_navigate/resource_editor.dart';
+
+// ignore: unreachable_from_main
+const fieldDefinitionsByResourceType = {
+  Appointment: Appointment.fieldDefinitions,
+};
 
 // ignore: unreachable_from_main
 final appointment = Appointment(
@@ -100,27 +107,10 @@ final appointment = Appointment(
   ]),
 );
 
-const primitiveFieldTypes = [
-  FieldDefinition<String>,
-  FieldDefinition<int>,
-  FieldDefinition<num>,
-  FieldDefinition<DateTime>,
-];
+void main() => runApp(const AppRoot());
 
-void main() => runApp(const MyApp());
-
-final primitiveFields = Appointment.fieldDefinitions.where(
-  (fd) => primitiveFieldTypes.contains(fd.runtimeType),
-);
-
-final nonPrimitiveFields = Appointment.fieldDefinitions
-    .where(
-      (fd) => !primitiveFieldTypes.contains(fd.runtimeType),
-    )
-    .toFixedList();
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class AppRoot extends StatelessWidget {
+  const AppRoot({super.key});
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -131,109 +121,9 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: Scaffold(
-          body: Column(
-            children: [
-              const SizedBox(height: 16),
-              Center(
-                child: _headingRow(),
-              ),
-              const SizedBox(height: 16),
-              Expanded(child: _listView()),
-            ],
+          body: ResourceEditor(
+            resource: appointment,
           ),
         ),
-      );
-
-  Row _headingRow() => const Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.event,
-            size: 24,
-            color: Colors.blue,
-          ),
-          Text(
-            'Appointment',
-            style: TextStyle(fontSize: 24),
-          ),
-        ],
-      );
-
-  ListView _listView() => ListView.builder(
-        itemCount: nonPrimitiveFields.length + 1,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return Tile(
-              headerTooltip: 'Basic Details',
-              headerText: 'Details',
-              trailing: Wrap(
-                children: primitiveFields.map(_field).toList(),
-              ),
-            );
-          } else {
-            final nonPrimitiveField = nonPrimitiveFields[index - 1];
-            final headerTooltip =
-                nonPrimitiveField.description ?? 'No information';
-            final headerText = nonPrimitiveField.name;
-            return Tile(
-              headerTooltip: headerTooltip,
-              headerText: headerText,
-              trailing: const Text(''),
-            );
-          }
-        },
-      );
-
-  Widget _field<T>(FieldDefinition<T> fd) {
-    final value = fd.getValue(appointment.json);
-    final text = value.toString();
-    return Tooltip(
-      message: fd.description,
-      child: SizedBox(
-        width: 350,
-        height: 80,
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: SizedBox(
-                width: 300,
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    label: Text(fd.name),
-                  ),
-                  controller: TextEditingController(text: text),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class Tile extends StatelessWidget {
-  const Tile({
-    required this.headerTooltip,
-    required this.headerText,
-    required this.trailing,
-    super.key,
-  });
-
-  final String headerTooltip;
-  final String headerText;
-  final Widget trailing;
-
-  @override
-  Widget build(BuildContext context) => ListTile(
-        title: Tooltip(
-          message: headerTooltip,
-          child: Text(
-            headerText,
-          ),
-        ),
-        subtitle: trailing,
       );
 }
