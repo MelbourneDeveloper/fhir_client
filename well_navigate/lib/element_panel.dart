@@ -1,5 +1,5 @@
 import 'package:fhir_client/models/resource.dart' as res;
-import 'package:fhir_client/models/value_sets/language.dart';
+import 'package:fhir_client/models/value_sets/appointment_status.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
 import 'package:well_navigate/field.dart';
@@ -25,27 +25,36 @@ class ElementPanel extends StatelessWidget {
         editor: _editorByType(fieldDefinition),
       );
 
-  StatefulWidget _editorByType(FieldDefinition<dynamic> fieldDefinition) {
-    if (fieldDefinition is FieldDefinition<String>) {
-      return TextField(
-        decoration: InputDecoration(
-          labelText: fieldDefinition.display ?? fieldDefinition.name,
-        ),
-        controller: TextEditingController(
-          text: fieldDefinition.getValue(element.json).toString(),
-        ),
-      );
-    } else if (fieldDefinition is FieldDefinition<Language>) {
-      return DropdownButton<Language>(
-        items: Language.values
-            .map(
-              (l) => DropdownMenuItem<Language>(child: Text(l.display)),
-            )
-            .toList(),
-        onChanged: (l) {},
-      );
-    } else {
-      throw UnimplementedError();
-    }
-  }
+  StatefulWidget _editorByType(FieldDefinition<dynamic> fieldDefinition) =>
+      switch (fieldDefinition) {
+        FieldDefinition<String>() => TextField(
+            decoration: InputDecoration(
+              labelText: fieldDefinition.display ?? fieldDefinition.name,
+            ),
+            controller: TextEditingController(
+              text: fieldDefinition.getValue(element.json).toString(),
+            ),
+          ),
+        FieldDefinition<AppointmentStatus>() =>
+          DropdownButton<AppointmentStatus>(
+            items: AppointmentStatus.values
+                .map(
+                  (l) => DropdownMenuItem<AppointmentStatus>(
+                    value: l,
+                    child: Text(l.code),
+                  ),
+                )
+                .toList(),
+            onChanged: (l) {},
+            value: AppointmentStatus.proposed,
+          ),
+        _ => TextField(
+            decoration: InputDecoration(
+              labelText: fieldDefinition.display ?? fieldDefinition.name,
+            ),
+            controller: TextEditingController(
+              text: fieldDefinition.getValue(element.json).toString(),
+            ),
+          ),
+      };
 }
