@@ -12,12 +12,12 @@ const _primitiveFieldTypes = [
 
 extension FieldDefinitionListExtensions on List<FieldDefinition> {
   // ignore: strict_raw_type
-  List<FieldDefinition> primitiveFields() => where(
+  FixedList<FieldDefinition> primitiveFields() => where(
         (fd) => _primitiveFieldTypes.contains(fd.runtimeType),
       ).toFixedList();
 
   // ignore: strict_raw_type
-  List<FieldDefinition> nonPrimitiveFields() => where(
+  FixedList<FieldDefinition> nonPrimitiveFields() => where(
         (fd) => !_primitiveFieldTypes.contains(fd.runtimeType),
       ).toFixedList();
 }

@@ -1,6 +1,6 @@
 import 'package:fhir_client/models/resource.dart';
-import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
+import 'package:well_navigate/component_panel.dart';
 import 'package:well_navigate/field_definition_list_extensions.dart';
 import 'package:well_navigate/main.dart';
 import 'package:well_navigate/tile.dart';
@@ -54,9 +54,7 @@ class ResourceEditor extends StatelessWidget {
           return Tile(
             headerTooltip: 'Basic Details',
             headerText: 'Details',
-            body: Wrap(
-              children: primitiveFields.map(_field).toList(),
-            ),
+            body: ComponentPanel(component: resource, fields: primitiveFields),
           );
         } else {
           final nonPrimitiveField = nonPrimitiveFields[index - 1];
@@ -71,35 +69,6 @@ class ResourceEditor extends StatelessWidget {
           );
         }
       },
-    );
-  }
-
-  Widget _field<T>(FieldDefinition<T> fd) {
-    final value = fd.getValue(resource.json);
-    final text = value.toString();
-    return SizedBox(
-      width: 350,
-      height: 80,
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: SizedBox(
-              width: 300,
-              child: Tooltip(
-                message: fd.description,
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    label: Text(fd.display ?? fd.name),
-                  ),
-                  controller: TextEditingController(text: text),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
