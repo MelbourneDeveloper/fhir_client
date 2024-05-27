@@ -36,7 +36,7 @@ void main() {
               validationResult.errorMessages
                   .firstWhere((element) => element.field == 'participant')
                   .message,
-              'Field participant must be an array',
+              'Field participant is required, but no value was specified',
             );
 
           case '06a86ef2-fd0a-42cb-b2a6-e1076670bc3b':
@@ -130,7 +130,7 @@ void main() {
 
       final validationResult =
           appointment.validate(Appointment.fieldDefinitions);
-          
+
       expect(validationResult.isValid, false);
       expect(
         validationResult.errorMessages

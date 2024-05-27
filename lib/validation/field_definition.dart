@@ -164,24 +164,28 @@ class FieldDefinition<T> {
     }
 
     if (allowedStringValues.isNotEmpty) {
-      if (value is! JsonString) {
-        if (value.isSome) {
-          errors.add(
-            ValidationError(
-              message: 'Field $name must be a string',
-              field: name,
-            ),
-          );
-        }
+      if (_isList(value)) {
+        //TODO: validate the list
       } else {
-        if (!allowedStringValues.contains(value.value)) {
-          errors.add(
-            ValidationError(
-              message: 'Field $name value must be one of '
-                  '[ ${allowedStringValues.join(', ')} ]',
-              field: name,
-            ),
-          );
+        if (value is! JsonString) {
+          if (value.isSome) {
+            errors.add(
+              ValidationError(
+                message: 'Field $name must be a string',
+                field: name,
+              ),
+            );
+          }
+        } else {
+          if (!allowedStringValues.contains(value.value)) {
+            errors.add(
+              ValidationError(
+                message: 'Field $name value must be one of '
+                    '[ ${allowedStringValues.join(', ')} ]',
+                field: name,
+              ),
+            );
+          }
         }
       }
     }
