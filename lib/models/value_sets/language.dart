@@ -1,9 +1,9 @@
-import 'package:jayse/jayse.dart';
+import 'package:fhir_client/models/value_sets/value_set_concept.dart';
 
 const languageUri = 'urn:ietf:bcp:47';
 
 /// A human language.
-enum Language implements Comparable<Language> {
+enum Language with ValueSetConcept<Language> {
   /// Arabic
   ar(
     code: 'ar',
@@ -157,10 +157,18 @@ enum Language implements Comparable<Language> {
   const Language({
     required this.code,
     required this.display,
+    // ignore: unused_element
+    this.definition = '',
   });
 
+  @override
   final String code;
+
+  @override
   final String display;
+
+  @override
+  final String definition;
 
   /// Returns the language based on the string code, and returns null if
   /// no match is found
@@ -192,9 +200,4 @@ enum Language implements Comparable<Language> {
         ('zh') => Language.zh,
         (_) => null,
       };
-
-  JsonValue get json => JsonString(code);
-
-  @override
-  int compareTo(Language other) => code == other.code ? 0 : 1;
 }
