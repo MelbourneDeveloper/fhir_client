@@ -1,6 +1,7 @@
 import 'package:fhir_client/models/resource.dart' as res;
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
+import 'package:well_navigate/field.dart';
 
 class ElementPanel extends StatelessWidget {
   const ElementPanel({
@@ -18,31 +19,15 @@ class ElementPanel extends StatelessWidget {
         children: fields.map(_field).toList(),
       );
 
-  Widget _field<T>(FieldDefinition<T> fd) {
-    final value = fd.getValue(element.json);
-    final text = value.toString();
-    return SizedBox(
-      width: 350,
-      height: 80,
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: SizedBox(
-              width: 300,
-              child: Tooltip(
-                message: fd.description ?? fd.name,
-                child: TextField(
-                  decoration: InputDecoration(
-                    labelText: fd.display ?? fd.name,
-                  ),
-                  controller: TextEditingController(text: text),
-                ),
-              ),
-            ),
+  Widget _field<T>(FieldDefinition<T> fieldDefinition) => Field(
+        fieldDefinition: fieldDefinition,
+        editor: TextField(
+          decoration: InputDecoration(
+            labelText: fieldDefinition.display ?? fieldDefinition.name,
           ),
-        ],
-      ),
-    );
-  }
+          controller: TextEditingController(
+            text: fieldDefinition.getValue(element.json).toString(),
+          ),
+        ),
+      );
 }
