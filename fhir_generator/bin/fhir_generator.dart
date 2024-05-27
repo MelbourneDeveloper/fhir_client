@@ -300,7 +300,7 @@ String _getters(List<Field> fields) => fields
     .whereNotInherited()
     .map(
       (field) =>
-          '/*\n${field.definition}\n*/\n ${field.dartType}? get ${field.name} => ${field.name}Field.getValue(json);',
+          '\n${splitIntoCommentRows(field.definition)}  ${field.dartType}? get ${field.name} => ${field.name}Field.getValue(json);',
     )
     .join('\n\n  ');
 
@@ -387,3 +387,21 @@ String _fhirTypeToDartType(
       'positiveInt' => 'int',
       _ => fhirType,
     };
+
+String splitIntoCommentRows(String text) => '''
+  ///${splitStringAtEveryNthChar(text.replaceAll('\n', '')).join('\n  ///')}
+''';
+
+List<String> splitStringAtEveryNthChar(String text) {
+  final result = <String>[];
+
+  for (var i = 0; i < text.length; i += 75) {
+    var endIndex = i + 75;
+    if (endIndex > text.length) {
+      endIndex = text.length;
+    }
+    result.add(text.substring(i, endIndex));
+  }
+
+  return result;
+}
