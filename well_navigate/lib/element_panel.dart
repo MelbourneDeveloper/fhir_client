@@ -1,4 +1,5 @@
 import 'package:fhir_client/models/resource.dart' as res;
+import 'package:fhir_client/models/value_sets/language.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
 import 'package:well_navigate/field.dart';
@@ -21,13 +22,30 @@ class ElementPanel extends StatelessWidget {
 
   Widget _field<T>(FieldDefinition<T> fieldDefinition) => Field(
         fieldDefinition: fieldDefinition,
-        editor: TextField(
-          decoration: InputDecoration(
-            labelText: fieldDefinition.display ?? fieldDefinition.name,
-          ),
-          controller: TextEditingController(
-            text: fieldDefinition.getValue(element.json).toString(),
-          ),
+        editor: _editorByType(fieldDefinition),
+      );
+
+  StatefulWidget _editorByType(FieldDefinition<dynamic> fieldDefinition) {
+    if (fieldDefinition is FieldDefinition<String>) {
+      return TextField(
+        decoration: InputDecoration(
+          labelText: fieldDefinition.display ?? fieldDefinition.name,
+        ),
+        controller: TextEditingController(
+          text: fieldDefinition.getValue(element.json).toString(),
         ),
       );
+    } else if (fieldDefinition is FieldDefinition<Language>) {
+      return DropdownButton<Language>(
+        items: Language.values
+            .map(
+              (l) => DropdownMenuItem<Language>(child: Text(l.display)),
+            )
+            .toList(),
+        onChanged: (l) {},
+      );
+    } else {
+      throw UnimplementedError();
+    }
+  }
 }
