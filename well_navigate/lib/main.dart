@@ -16,7 +16,7 @@ import 'package:fhir_client/models/value_sets/language.dart';
 import 'package:fhir_client/models/value_sets/service_category.dart';
 import 'package:fhir_client/models/value_sets/service_type.dart';
 import 'package:flutter/material.dart';
-import 'package:well_navigate/resource_editor.dart';
+import 'package:well_navigate/app_root.dart';
 
 // ignore: unreachable_from_main
 const fieldDefinitionsByElementType = {
@@ -109,22 +109,3 @@ final appointment = Appointment(
 );
 
 void main() => runApp(const AppRoot());
-
-class AppRoot extends StatelessWidget {
-  const AppRoot({super.key});
-
-  @override
-  Widget build(BuildContext context) => MaterialApp(
-        title: 'Well Navigator',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: Scaffold(
-          body: ResourceEditor(
-            resource: appointment,
-          ),
-        ),
-      );
-}
