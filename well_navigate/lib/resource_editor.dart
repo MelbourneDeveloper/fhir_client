@@ -62,7 +62,8 @@ class ResourceEditor extends StatelessWidget {
           final nonPrimitiveField = nonPrimitiveFields[index - 1];
           final headerTooltip =
               nonPrimitiveField.description ?? 'No information';
-          final headerText = nonPrimitiveField.name;
+          final headerText =
+              nonPrimitiveField.display ?? nonPrimitiveField.name;
           return Tile(
             headerTooltip: headerTooltip,
             headerText: headerText,
@@ -76,28 +77,28 @@ class ResourceEditor extends StatelessWidget {
   Widget _field<T>(FieldDefinition<T> fd) {
     final value = fd.getValue(resource.json);
     final text = value.toString();
-    return Tooltip(
-      message: fd.description,
-      child: SizedBox(
-        width: 350,
-        height: 80,
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: SizedBox(
-                width: 300,
+    return SizedBox(
+      width: 350,
+      height: 80,
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: SizedBox(
+              width: 300,
+              child: Tooltip(
+                message: fd.description,
                 child: TextField(
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    label: Text(fd.name),
+                    label: Text(fd.display ?? fd.name),
                   ),
                   controller: TextEditingController(text: text),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

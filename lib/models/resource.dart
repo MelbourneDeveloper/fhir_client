@@ -126,6 +126,7 @@ sealed class Resource {
   /// The id of the resource
   static const idField = FieldDefinition(
     name: 'id',
+    display: 'Id',
     getValue: _getId,
     description: 'The resource ID',
   );
@@ -133,6 +134,7 @@ sealed class Resource {
   /// The metadata of the resource
   static const metaField = FieldDefinition(
     name: 'meta',
+    display: 'Meta',
     getValue: _getMeta,
     description: 'The metadata of the resource',
   );

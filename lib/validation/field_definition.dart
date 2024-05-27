@@ -48,6 +48,7 @@ class FieldDefinition<T> {
     this.regex,
     this.description,
     this.allowedStringValues = const [],
+    this.display,
   });
 
   /// Returns the value of the field from the provided [JsonObject].
@@ -55,6 +56,9 @@ class FieldDefinition<T> {
 
   /// The name of the field.
   final String name;
+
+  /// The display for the UI
+  final String? display;
 
   /// A list of validation rules for the field.
   // ignore: strict_raw_type
