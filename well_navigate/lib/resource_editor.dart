@@ -1,7 +1,7 @@
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/resource.dart' as res;
 import 'package:flutter/material.dart';
-import 'package:well_navigate/component_panel.dart';
+import 'package:well_navigate/element_panel.dart';
 import 'package:well_navigate/field_definition_list_extensions.dart';
 import 'package:well_navigate/main.dart';
 import 'package:well_navigate/tile.dart';

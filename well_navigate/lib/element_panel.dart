@@ -31,7 +31,7 @@ class ElementPanel extends StatelessWidget {
             child: SizedBox(
               width: 300,
               child: Tooltip(
-                message: fd.description,
+                message: fd.description ?? fd.name,
                 child: TextField(
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),

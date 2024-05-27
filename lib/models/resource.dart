@@ -82,10 +82,11 @@ final class BundleEntries<T> implements Result<T> {
 }
 
 /// The basic building block for all FHIR resources
-sealed class Element {
-  Element._internal(this.json);
+class Element {
+  /// Constructs a new [Element]
+  Element(this.json);
 
-  /// The JSON representation
+  /// Converts this [Meta] instance to a JSON object.
   final JsonObject json;
 
   /// The id of the resource
@@ -141,7 +142,7 @@ sealed class Element {
 
 /// Any of the FHIR resources
 sealed class Resource extends Element {
-  Resource._internal(JsonObject json) : super._internal(json);
+  Resource._internal(JsonObject json) : super(json);
 
   factory Resource.fromJson(
     JsonObject json,
