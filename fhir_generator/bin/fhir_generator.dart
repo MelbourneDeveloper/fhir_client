@@ -245,16 +245,21 @@ switch (jo[${field.name}Field.name]) {
 
 String _getValueBodyArrayOfValuetSetValuesSwitch(Field field) => '''
 switch (jo[${field.name}Field.name]) {
-        (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) =>
-              switch(e)
-              {
-                (final JsonString js) => ${field.singularDartType}.fromCode(js.value),
-                _ => null,
-              }
-          ),
-        _ => null,
-      }''';
+  final JsonArray jsonArray => switch ([
+      for (final jv in jsonArray.value)
+        switch (jv) {
+          final JsonString s => ${field.singularDartType}.fromCode(s.value),
+          _ => null
+        },
+    ]) {
+      //All items are [${field.singularDartType}] strings
+      final List<${field.singularDartType}> items => FixedList(items),
+      //Some items are not [${field.singularDartType}] strings
+      _ => null
+    },
+  // Not a JsonArray
+  _ => null
+}''';
 
 String _getValueSetBodySwitch(Field field) => '''
 switch (jo[${field.name}Field.name]) {
