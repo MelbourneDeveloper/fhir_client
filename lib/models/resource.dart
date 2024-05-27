@@ -41,7 +41,6 @@ import 'package:fhir_client/models/value_sets/cancelation_reason.dart';
 import 'package:fhir_client/models/value_sets/encounter_status.dart';
 import 'package:fhir_client/models/value_sets/language.dart';
 import 'package:fhir_client/models/value_sets/marital_status.dart';
-import 'package:fhir_client/models/value_sets/practice_setting_code.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
 import 'package:fhir_client/models/value_sets/service_category.dart';
 import 'package:fhir_client/models/value_sets/service_type.dart';
@@ -201,7 +200,7 @@ class Appointment extends Resource {
     CancelationReason? cancelationReason,
     FixedList<ServiceCategory>? serviceCategory,
     FixedList<ServiceType>? serviceType,
-    FixedList<PracticeSettingCode>? specialty,
+    FixedList<CodeableConcept>? specialty,
     AppointmentReason? appointmentType,
     FixedList<CodeableConcept>? reasonCode,
     FixedList<Reference>? reasonReference,
@@ -380,8 +379,7 @@ class Appointment extends Resource {
 
   ///The specialty of a practitioner that would be required to perform the servi
   ///ce requested in this appointment.
-  FixedList<PracticeSettingCode>? get specialty =>
-      specialtyField.getValue(json);
+  FixedList<CodeableConcept>? get specialty => specialtyField.getValue(json);
 
   ///The style of appointment or patient that has been booked in the slot (not s
   ///ervice type).
@@ -565,22 +563,13 @@ class Appointment extends Resource {
         _ => null
       };
 
-  static FixedList<PracticeSettingCode>? _getSpecialty(JsonObject jo) =>
+  static FixedList<CodeableConcept>? _getSpecialty(JsonObject jo) =>
       switch (jo[specialtyField.name]) {
-        final JsonArray jsonArray => switch ([
-            for (final jv in jsonArray.value)
-              switch (jv) {
-                final JsonString s => PracticeSettingCode.fromCode(s.value),
-                _ => null
-              },
-          ]) {
-            //All items are [PracticeSettingCode] strings
-            final List<PracticeSettingCode> items => FixedList(items),
-            //Some items are not [PracticeSettingCode] strings
-            _ => null
-          },
-        // Not a JsonArray
-        _ => null
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => CodeableConcept.fromJson(e as JsonObject)),
+          ),
+        _ => null,
       };
 
   static AppointmentReason? _getAppointmentType(JsonObject jo) =>
@@ -1502,123 +1491,6 @@ The specific service that is to be performed during this appointment.''',
     description: '''
 The specialty of a practitioner that would be required to perform the service requested in this appointment.''',
     cardinality: Cardinality(min: 0, max: BoolChoice(true)),
-    allowedStringValues: [
-      '394539006',
-      '394576009',
-      '394577000',
-      '394578005',
-      '394579002',
-      '394580004',
-      '394581000',
-      '394582007',
-      '394583002',
-      '394584008',
-      '394585009',
-      '394586005',
-      '394587001',
-      '394588006',
-      '394589003',
-      '394590007',
-      '394591006',
-      '394592004',
-      '394593009',
-      '394594003',
-      '394597005',
-      '394598000',
-      '394599008',
-      '394600006',
-      '394601005',
-      '394602003',
-      '394604002',
-      '394605001',
-      '394606000',
-      '394607009',
-      '394608004',
-      '394609007',
-      '394610002',
-      '394611003',
-      '394612005',
-      '394649004',
-      '394732004',
-      '394733009',
-      '394801008',
-      '394802001',
-      '394803006',
-      '394804000',
-      '394806003',
-      '394807007',
-      '394808002',
-      '394809005',
-      '394810000',
-      '394811001',
-      '394812008',
-      '394813003',
-      '394814009',
-      '394821009',
-      '394882004',
-      '394913002',
-      '394914008',
-      '394915009',
-      '394916005',
-      '408440000',
-      '408441001',
-      '408443003',
-      '408444009',
-      '408446006',
-      '408447002',
-      '408448007',
-      '408449004',
-      '408450004',
-      '408454008',
-      '408455009',
-      '408459003',
-      '408460008',
-      '408461007',
-      '408462000',
-      '408463005',
-      '408464004',
-      '408465003',
-      '408466002',
-      '408467006',
-      '408468001',
-      '408469009',
-      '408470005',
-      '408471009',
-      '408472002',
-      '408474001',
-      '408475000',
-      '408476004',
-      '408477008',
-      '408478003',
-      '408480009',
-      '409967009',
-      '409968004',
-      '410001006',
-      '410005002',
-      '416304004',
-      '418002000',
-      '418018006',
-      '418058008',
-      '418112009',
-      '418535003',
-      '418652005',
-      '418862001',
-      '418960008',
-      '419043006',
-      '419170002',
-      '419192003',
-      '419321007',
-      '419365004',
-      '419472004',
-      '419610006',
-      '419772000',
-      '419815003',
-      '419983000',
-      '420112009',
-      '420208008',
-      '421661004',
-      '422191005',
-    ],
   );
 
   /// Field definition for [appointmentType].
@@ -1851,7 +1723,7 @@ The duration (usually in minutes) could also be provided to indicate the length 
     CancelationReason? cancelationReason,
     FixedList<ServiceCategory>? serviceCategory,
     FixedList<ServiceType>? serviceType,
-    FixedList<PracticeSettingCode>? specialty,
+    FixedList<CodeableConcept>? specialty,
     AppointmentReason? appointmentType,
     FixedList<CodeableConcept>? reasonCode,
     FixedList<Reference>? reasonReference,
