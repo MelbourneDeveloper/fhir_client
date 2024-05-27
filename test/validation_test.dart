@@ -3,11 +3,9 @@
 import 'dart:io';
 
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
-import 'package:fhir_client/models/participant.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
 import 'package:fhir_client/models/value_sets/appointment_status.dart';
-import 'package:fhir_client/models/value_sets/participation_status.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 import 'package:test/test.dart';
@@ -38,7 +36,7 @@ void main() {
               validationResult.errorMessages
                   .firstWhere((element) => element.field == 'participant')
                   .message,
-              'Field participant must be an array',
+              'Field participant is required, but no value was specified',
             );
 
           case '06a86ef2-fd0a-42cb-b2a6-e1076670bc3b':
@@ -105,31 +103,37 @@ void main() {
         validationResult1.errorMessages
             .firstWhere((element) => element.field == 'participant')
             .message,
-        'Field participant must be an array',
-        //'Field participant is required, but no value was specified', <- this
-        // is currently not actually required
+        'Field participant is required, but no value was specified',
       );
 
       final appointment2 = Appointment(
         id: '456',
         status: AppointmentStatus.proposed,
-        participant:
-            FixedList([Participant(status: ParticipationStatus.accepted)]),
       );
       final validationResult2 =
           appointment2.validate(Appointment.fieldDefinitions);
-      expect(validationResult2.isValid, true);
+      expect(validationResult2.isValid, false);
+      expect(
+        validationResult1.errorMessages
+            .firstWhere((element) => element.field == 'participant')
+            .message,
+        'Field participant is required, but no value was specified',
+      );
+    });
 
-      final appointment3 = Appointment(
+    test('Min Cardinality', () {
+      final appointment = Appointment(
         id: '789',
         status: AppointmentStatus.booked,
         participant: FixedList([]),
       );
-      final validationResult3 =
-          appointment3.validate(Appointment.fieldDefinitions);
-      expect(validationResult3.isValid, false);
+
+      final validationResult =
+          appointment.validate(Appointment.fieldDefinitions);
+
+      expect(validationResult.isValid, false);
       expect(
-        validationResult3.errorMessages
+        validationResult.errorMessages
             .firstWhere((element) => element.field == 'participant')
             .message,
         'Field participant must have at least 1 items',

@@ -1,81 +1,80 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-const _appointmentStatusUri = 'http://hl7.org/fhir/appointmentstatus';
+import 'package:fhir_client/models/value_sets/value_set_concept.dart';
 
 /// The free/busy status of an appointment.
-enum AppointmentStatus implements Comparable<AppointmentStatus> {
+enum AppointmentStatus with ValueSetConcept<AppointmentStatus> {
   /// Some or all of the participant(s) have not finalized their acceptance of the appointment request.
   proposed(
     code: 'proposed',
     display: 'Proposed',
-    system: _appointmentStatusUri,
+    definition: '',
   ),
 
   /// All participant(s) have been considered and the appointment is confirmed to go ahead at the date/times specified.
   booked(
     code: 'booked',
     display: 'Booked',
-    system: _appointmentStatusUri,
+    definition: '',
   ),
 
   /// Some of the patients have arrived.
   arrived(
     code: 'arrived',
     display: 'Arrived',
-    system: _appointmentStatusUri,
+    definition: '',
   ),
 
   /// This appointment has completed and may have resulted in an encounter.
   fulfilled(
     code: 'fulfilled',
     display: 'Fulfilled',
-    system: _appointmentStatusUri,
+    definition: '',
   ),
 
   /// The appointment has been cancelled.
   cancelled(
     code: 'cancelled',
     display: 'Cancelled',
-    system: _appointmentStatusUri,
+    definition: '',
   ),
 
   /// Some or all of the participant(s) have not/did not appear for the appointment (usually the patient).
   noshow(
     code: 'noshow',
     display: 'No Show',
-    system: _appointmentStatusUri,
+    definition: '',
   ),
 
   /// This instance should not have been part of this patient's medical record.
   enteredInError(
     code: 'entered-in-error',
     display: 'Entered in error',
-    system: _appointmentStatusUri,
+    definition: '',
   );
 
   const AppointmentStatus({
     required this.code,
     required this.display,
-    required this.system,
+    required this.definition,
   });
 
   /// A code representing the appointment status.
   ///
   /// The code is a required field that contains a code from the specified terminology system.
   /// It represents the free/busy status of the appointment.
+  @override
   final String code;
 
   /// A human-readable display name for the appointment status.
   ///
   /// The display is a required field that contains a short, human-readable label for the appointment status.
   /// It provides a more user-friendly representation of the code.
+  @override
   final String display;
 
-  /// The URI of the terminology system that defines the appointment status codes.
-  ///
-  /// The system is a required field that contains the URI of the terminology system or ontology
-  /// where the appointment status codes are defined. It helps to identify the specific coding system used.
-  final String system;
+  @override
+  final String definition;
 
   /// Returns the appointment status based on the string code, and returns entered-in-error if no match is found
   static AppointmentStatus? fromCode(String code) => switch (code) {

@@ -1,6 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'dart:io';
+
 import 'package:jayse/jayse.dart';
 
 import 'field.dart';
@@ -8,26 +9,14 @@ import 'field_extensions.dart';
 import 'string_extensions.dart';
 import 'value_sets.dart';
 
-// Currently generates for R4.
-// The patient.json file URL is https://hl7.org/fhir/R4/patient.profile.json
-// However, V5 will most likely be the better version to run with
+String generateFromJson(String filename) {
+  final (resourceName, resourceDefinition, fields) = processProfile(filename);
 
-void main(List<String> args) {
-  if (args.isEmpty) {
-    // ignore: parameter_assignments
-    args = ['patient.json'];
-  }
-
-  final (resourceName, resourceDefinition, fields) = processProfile(args[0]);
-
-  final dataClassCode = _generateResourceDataClass(
+  return generateResourceDataClass(
     resourceName,
     resourceDefinition,
     fields,
   );
-
-  // ignore: avoid_print
-  File('patient.dart').writeAsStringSync(dataClassCode);
 }
 
 /// Processes the profile JSON and returns the element array and fields.
@@ -55,6 +44,8 @@ String getProfileJson(String filePath) => File(filePath).readAsStringSync();
 
 /// Generates the static getter body for the field.
 String staticGetterBody(Field field) => switch (field) {
+      (final Field f) when _isArray(f) && f.isValueSet =>
+        _getValueBodyArrayOfValuetSetValuesSwitch(f),
       (final Field f) when f.isValueSet => _getValueSetBodySwitch(f),
       (final Field f) when _isArray(f) => _getValueBodyArraySwitch(f),
       (final Field f) when f.types.length == 1 => _getValueBody(f),
@@ -119,7 +110,7 @@ List<Field> _getFields(JsonArray element) {
     final path = elementItem['path'].stringValue;
     if (path == null) throw Exception('Path is null or not a string');
 
-    final typeArray = elementItem['type'] as JsonArray;
+    final typeJsonArray = elementItem['type'] as JsonArray;
 
     if (path.split('.').length == 2) {
       final fieldName = path.split('.')[1].replaceAll('[x]', '');
@@ -135,24 +126,38 @@ List<Field> _getFields(JsonArray element) {
           .firstOrNull?['valueString']
           .stringValue;
 
-      final dartType = _wrapType(
-        fieldName,
-        typeArray,
-        maxCardinality,
-        valueSetName,
-      );
+      final valueSetStrength = switch (elementItem.fromPath(
+        r'$.binding.strength',
+      )) {
+        (final JsonString js) => ValueSetStrength.fromCode(js.value),
+        _ => null,
+      };
 
-      final valueSet = valueSets[dartType];
+      final valueSet = valueSets[valueSetName];
 
-      if (valueSetName != null && valueSet == null) {
+      if (valueSetName != null &&
+          valueSet == null &&
+          valueSetStrength == ValueSetStrength.required) {
         throw Exception('Value set not found for $valueSetName');
       }
 
+      String singularDartType;
+      if (valueSetName != null && valueSet != null) {
+        singularDartType = valueSet.name;
+      } else {
+        singularDartType = _typeJsonArrayToDartType(typeJsonArray);
+      }
+
+      final dartType = _isList(maxCardinality)
+          ? 'FixedList<$singularDartType>'
+          : singularDartType;
+
       fields.add(
         Field(
-          isValueSet: valueSetName != null,
+          singularDartType: singularDartType,
+          isValueSet: valueSet != null,
           name: fieldName,
-          types: typeArray.value
+          types: typeJsonArray.value
               .map((e) => e['code'].stringValue)
               .where((t) => t != null)
               .cast<String>()
@@ -163,6 +168,7 @@ List<Field> _getFields(JsonArray element) {
           max: int.tryParse(maxCardinality.stringValue ?? ''),
           isMaxStar: maxCardinality.stringValue == '*',
           definition: elementItem['definition'].stringValue ?? '',
+          valueSetStrength: valueSetStrength,
         ),
       );
     }
@@ -172,7 +178,7 @@ List<Field> _getFields(JsonArray element) {
 
 /// Generates a data class for the resource based on the
 /// JSON definition
-String _generateResourceDataClass(
+String generateResourceDataClass(
   String resourceName,
   String resourceDefinition,
   List<Field> fields,
@@ -217,22 +223,6 @@ String _cardinalityLine(Field field) => field.min == 0 &&
     : 'cardinality: Cardinality(min: ${field.min}, '
         '${field.max != null ? 'max: IntegerChoice(${field.max}),' : field.isMaxStar ? 'max: BoolChoice(true)' : ''}),';
 
-String _wrapType(
-  String fieldName,
-  JsonArray typeArray,
-  JsonValue maxCardinality,
-  String? valueSetName,
-) {
-  final isList = _isList(maxCardinality);
-  final dartType = valueSetName ??
-      _arrayToDartType(
-        typeArray,
-        isList,
-      );
-
-  return isList ? 'FixedList<$dartType>' : dartType;
-}
-
 bool _isList(JsonValue maxCardinality) =>
     maxCardinality.stringValue == '*' || (maxCardinality.integerValue ?? 0) > 1;
 
@@ -252,6 +242,24 @@ switch (jo[${field.name}Field.name]) {
           ),
         _ => null,
       }''';
+
+String _getValueBodyArrayOfValuetSetValuesSwitch(Field field) => '''
+switch (jo[${field.name}Field.name]) {
+  final JsonArray jsonArray => switch ([
+      for (final jv in jsonArray.value)
+        switch (jv) {
+          final JsonString s => ${field.singularDartType}.fromCode(s.value),
+          _ => null
+        },
+    ]) {
+      //All items are [${field.singularDartType}] strings
+      final List<${field.singularDartType}> items => FixedList(items),
+      //Some items are not [${field.singularDartType}] strings
+      _ => null
+    },
+  // Not a JsonArray
+  _ => null
+}''';
 
 String _getValueSetBodySwitch(Field field) => '''
 switch (jo[${field.name}Field.name]) {
@@ -292,7 +300,7 @@ String _getters(List<Field> fields) => fields
     .whereNotInherited()
     .map(
       (field) =>
-          '/*\n${field.definition}\n*/\n ${field.dartType}? get ${field.name} => ${field.name}Field.getValue(json);',
+          '\n${splitIntoCommentRows(field.definition)}  ${field.dartType}? get ${field.name} => ${field.name}Field.getValue(json);',
     )
     .join('\n\n  ');
 
@@ -332,34 +340,33 @@ String _primitiveConstructorLine(Field field) => switch (field.dartType) {
       _ => throw Exception('Invalid primitive type'),
     };
 
-String _arrayToDartType(
+String _typeJsonArrayToDartType(
   JsonArray array,
-  bool isArray,
 ) =>
     switch (array) {
       (final JsonArray ja) when ja.length == 0 => throw Exception('Empty type'),
       (final JsonArray ja) when ja.length == 1 && ja[0]['code'] is JsonString =>
-        _mapFhirTypeToDartType(
+        //Single type so map from code string to Dart type
+        _fhirTypeToDartType(
           (ja[0]['code'] as JsonString).value,
-          isArray,
         ),
       (final JsonArray ja) when ja.length == 2 =>
         //Choice Type with 2 choices
-        _choiceTypeSwitch(
+        _fhirChoiceTypeToDartType(
           [ja[0]['code'].stringValue!, ja[1]['code'].stringValue!],
         ),
       _ => throw Exception('Type unknown'),
     };
 
-String _choiceTypeSwitch(List<String> types) => switch (types) {
+String _fhirChoiceTypeToDartType(List<String> types) => switch (types) {
       ['boolean', 'dateTime'] => 'BooleanOrDateTimeChoice',
       ['boolean', 'integer'] => 'BooleanOrIntegerChoice',
       _ => throw Exception('Invalid choice type'),
     };
 
-String _mapFhirTypeToDartType(
+/// Returns a Dart type from an FHIR type code string
+String _fhirTypeToDartType(
   String fhirType,
-  bool isArray,
 ) =>
     switch (fhirType) {
       'string' => 'String',
@@ -367,10 +374,34 @@ String _mapFhirTypeToDartType(
       'boolean' => 'bool',
       'http://hl7.org/fhirpath/System.Boolean' => 'bool',
       'date' => 'DateTime',
+      'instant' => 'DateTime',
       'dateTime' => 'DateTime',
       'http://hl7.org/fhirpath/System.DateTime' => 'DateTime',
       'uri' => 'Uri',
       'code' => 'String',
       'http://hl7.org/fhirpath/System.Integer' => 'int',
+      //Dart does not have datatypes to represent these FHIR types in a way
+      //that's different to integer without throwing exceptions. However,
+      //these values should get validated. TODO: validation
+      'unsignedInt' => 'int',
+      'positiveInt' => 'int',
       _ => fhirType,
     };
+
+String splitIntoCommentRows(String text) => '''
+  ///${splitStringAtEveryNthChar(text.replaceAll('\n', '')).join('\n  ///')}
+''';
+
+List<String> splitStringAtEveryNthChar(String text) {
+  final result = <String>[];
+
+  for (var i = 0; i < text.length; i += 75) {
+    var endIndex = i + 75;
+    if (endIndex > text.length) {
+      endIndex = text.length;
+    }
+    result.add(text.substring(i, endIndex));
+  }
+
+  return result;
+}

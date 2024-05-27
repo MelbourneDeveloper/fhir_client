@@ -35,11 +35,15 @@ import 'package:fhir_client/models/reference.dart';
 import 'package:fhir_client/models/sampled_data.dart';
 import 'package:fhir_client/models/timing.dart';
 import 'package:fhir_client/models/value_sets/administrative_gender.dart';
+import 'package:fhir_client/models/value_sets/appointment_reason.dart';
 import 'package:fhir_client/models/value_sets/appointment_status.dart';
+import 'package:fhir_client/models/value_sets/cancelation_reason.dart';
 import 'package:fhir_client/models/value_sets/encounter_status.dart';
 import 'package:fhir_client/models/value_sets/language.dart';
 import 'package:fhir_client/models/value_sets/marital_status.dart';
 import 'package:fhir_client/models/value_sets/resource_type.dart';
+import 'package:fhir_client/models/value_sets/service_category.dart';
+import 'package:fhir_client/models/value_sets/service_type.dart';
 import 'package:fhir_client/models/value_sets/slot_status.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
@@ -179,54 +183,620 @@ extension ResourceExtensions<T extends Resource> on T {
       );
 }
 
-//TODO: this resource is not complete. Add fields...
-/// Represents a booking of a healthcare event among patient(s), practitioner(s), related person(s) and/or device(s) for a specific date/time.
+/// A booking of a healthcare event among patient(s), practitioner(s), related person(s) and/or device(s) for a specific date/time. This may result in one or more Encounter(s).
 class Appointment extends Resource {
   /// Constructs a new [Appointment].
   Appointment({
     String? id,
     Meta? meta,
+    Uri? implicitRules,
+    Language? language,
+    Narrative? text,
+    FixedList<Resource>? contained,
+    FixedList<Extension>? extension,
+    FixedList<Extension>? modifierExtension,
+    FixedList<Identifier>? identifier,
     AppointmentStatus? status,
-    FixedList<CodeableConcept>? serviceCategory,
-    FixedList<Participant>? participant,
+    CancelationReason? cancelationReason,
+    FixedList<ServiceCategory>? serviceCategory,
+    FixedList<ServiceType>? serviceType,
+    FixedList<CodeableConcept>? specialty,
+    AppointmentReason? appointmentType,
+    FixedList<CodeableConcept>? reasonCode,
+    FixedList<Reference>? reasonReference,
+    int? priority,
     String? description,
+    FixedList<Reference>? supportingInformation,
+    DateTime? start,
+    DateTime? end,
+    int? minutesDuration,
+    FixedList<Reference>? slot,
+    DateTime? created,
+    String? comment,
+    String? patientInstruction,
+    FixedList<Reference>? basedOn,
+    FixedList<BackboneElement>? participant,
+    FixedList<Period>? requestedPeriod,
   }) : super._internal(
           JsonObject({
-            if (id != null) 'id': JsonString(id),
-            if (meta != null) 'meta': meta.json,
-            if (status != null) statusField.name: JsonString(status.code),
+            if (id != null) idField.name: JsonString(id),
+            if (meta != null) metaField.name: meta.json,
+            if (implicitRules != null)
+              implicitRulesField.name: JsonString(implicitRules.toString()),
+            if (language != null) languageField.name: language.json,
+            if (text != null) textField.name: text.json,
+            if (contained != null)
+              containedField.name: JsonArray.unmodifiable(
+                contained.map((e) => e.json),
+              ),
+            if (extension != null)
+              extensionField.name: JsonArray.unmodifiable(
+                extension.map((e) => e.json),
+              ),
+            if (modifierExtension != null)
+              modifierExtensionField.name: JsonArray.unmodifiable(
+                modifierExtension.map((e) => e.json),
+              ),
+            if (identifier != null)
+              identifierField.name: JsonArray.unmodifiable(
+                identifier.map((e) => e.json),
+              ),
+            if (status != null) statusField.name: status.json,
+            if (cancelationReason != null)
+              cancelationReasonField.name: cancelationReason.json,
             if (serviceCategory != null)
-              serviceCategoryField.name:
-                  JsonArray.unmodifiable(serviceCategory.map((e) => e.json)),
-            if (participant != null)
-              participantField.name:
-                  JsonArray.unmodifiable(participant.map((e) => e.json)),
+              serviceCategoryField.name: JsonArray.unmodifiable(
+                serviceCategory.map((e) => e.json),
+              ),
+            if (serviceType != null)
+              serviceTypeField.name: JsonArray.unmodifiable(
+                serviceType.map((e) => e.json),
+              ),
+            if (specialty != null)
+              specialtyField.name: JsonArray.unmodifiable(
+                specialty.map((e) => e.json),
+              ),
+            if (appointmentType != null)
+              appointmentTypeField.name: appointmentType.json,
+            if (reasonCode != null)
+              reasonCodeField.name: JsonArray.unmodifiable(
+                reasonCode.map((e) => e.json),
+              ),
+            if (reasonReference != null)
+              reasonReferenceField.name: JsonArray.unmodifiable(
+                reasonReference.map((e) => e.json),
+              ),
+            if (priority != null) priorityField.name: JsonNumber(priority),
             if (description != null)
               descriptionField.name: JsonString(description),
+            if (supportingInformation != null)
+              supportingInformationField.name: JsonArray.unmodifiable(
+                supportingInformation.map((e) => e.json),
+              ),
+            if (start != null)
+              startField.name: JsonString(start.toIso8601String()),
+            if (end != null) endField.name: JsonString(end.toIso8601String()),
+            if (minutesDuration != null)
+              minutesDurationField.name: JsonNumber(minutesDuration),
+            if (slot != null)
+              slotField.name: JsonArray.unmodifiable(
+                slot.map((e) => e.json),
+              ),
+            if (created != null)
+              createdField.name: JsonString(created.toIso8601String()),
+            if (comment != null) commentField.name: JsonString(comment),
+            if (patientInstruction != null)
+              patientInstructionField.name: JsonString(patientInstruction),
+            if (basedOn != null)
+              basedOnField.name: JsonArray.unmodifiable(
+                basedOn.map((e) => e.json),
+              ),
+            if (participant != null)
+              participantField.name: JsonArray.unmodifiable(
+                participant.map((e) => e.json),
+              ),
+            if (requestedPeriod != null)
+              requestedPeriodField.name: JsonArray.unmodifiable(
+                requestedPeriod.map((e) => e.json),
+              ),
           }),
         );
 
-  /// Constructs a new [Appointment] instance from the provided JSON object.
-  Appointment.fromJson(JsonObject jsonObject) : super._internal(jsonObject);
+  /// Creates a [Appointment] instance from the provided JSON object.
+  Appointment.fromJson(JsonObject json) : super._internal(json);
 
-  /// The overall status of the appointment.
+  // Getters
+
+  ///A reference to a set of rules that were followed when the resource was cons
+  ///tructed, and which must be understood when processing the content. Often, t
+  ///his is a reference to an implementation guide that defines the special rule
+  ///s along with other profiles etc.
+  Uri? get implicitRules => implicitRulesField.getValue(json);
+
+  ///The base language in which the resource is written.
+  Language? get language => languageField.getValue(json);
+
+  ///A human-readable narrative that contains a summary of the resource and can
+  ///be used to represent the content of the resource to a human. The narrative
+  ///need not encode all the structured data, but is required to contain suffici
+  ///ent detail to make it "clinically safe" for a human to just read the narrat
+  ///ive. Resource definitions may define what content should be represented in
+  ///the narrative to ensure clinical safety.
+  Narrative? get text => textField.getValue(json);
+
+  ///These resources do not have an independent existence apart from the resourc
+  ///e that contains them - they cannot be identified independently, and nor can
+  /// they have their own independent transaction scope.
+  FixedList<Resource>? get contained => containedField.getValue(json);
+
+  ///May be used to represent additional information that is not part of the bas
+  ///ic definition of the resource. To make the use of extensions safe and manag
+  ///eable, there is a strict set of governance  applied to the definition and u
+  ///se of extensions. Though any implementer can define an extension, there is
+  ///a set of requirements that SHALL be met as part of the definition of the ex
+  ///tension.
+  FixedList<Extension>? get extension => extensionField.getValue(json);
+
+  ///May be used to represent additional information that is not part of the bas
+  ///ic definition of the resource and that modifies the understanding of the el
+  ///ement that contains it and/or the understanding of the containing element's
+  /// descendants. Usually modifier elements provide negation or qualification.
+  ///To make the use of extensions safe and manageable, there is a strict set of
+  /// governance applied to the definition and use of extensions. Though any imp
+  ///lementer is allowed to define an extension, there is a set of requirements
+  ///that SHALL be met as part of the definition of the extension. Applications
+  ///processing a resource are required to check for modifier extensions.Modifie
+  ///r extensions SHALL NOT change the meaning of any elements on Resource or Do
+  ///mainResource (including cannot change the meaning of modifierExtension itse
+  ///lf).
+  FixedList<Extension>? get modifierExtension =>
+      modifierExtensionField.getValue(json);
+
+  ///This records identifiers associated with this appointment concern that are
+  ///defined by business processes and/or used to refer to it when a direct URL
+  ///reference to the resource itself is not appropriate (e.g. in CDA documents,
+  /// or in written / printed documentation).
+  FixedList<Identifier>? get identifier => identifierField.getValue(json);
+
+  ///The overall status of the Appointment. Each of the participants has their o
+  ///wn participation status which indicates their involvement in the process, h
+  ///owever this status indicates the shared status.
   AppointmentStatus? get status => statusField.getValue(json);
 
-  /// A broad categorization of the service that is to be performed during this appointment.
-  FixedList<CodeableConcept>? get serviceCategory =>
+  ///The coded reason for the appointment being cancelled. This is often used in
+  /// reporting/billing/futher processing to determine if further actions are re
+  ///quired, or specific fees apply.
+  CancelationReason? get cancelationReason =>
+      cancelationReasonField.getValue(json);
+
+  ///A broad categorization of the service that is to be performed during this a
+  ///ppointment.
+  FixedList<ServiceCategory>? get serviceCategory =>
       serviceCategoryField.getValue(json);
 
-  /// List of participants involved in the appointment.
-  FixedList<Participant>? get participant => participantField.getValue(json);
+  ///The specific service that is to be performed during this appointment.
+  FixedList<ServiceType>? get serviceType => serviceTypeField.getValue(json);
 
-  /// A description of the appointment.
+  ///The specialty of a practitioner that would be required to perform the servi
+  ///ce requested in this appointment.
+  FixedList<CodeableConcept>? get specialty => specialtyField.getValue(json);
+
+  ///The style of appointment or patient that has been booked in the slot (not s
+  ///ervice type).
+  AppointmentReason? get appointmentType => appointmentTypeField.getValue(json);
+
+  ///The coded reason that this appointment is being scheduled. This is more cli
+  ///nical than administrative.
+  FixedList<CodeableConcept>? get reasonCode => reasonCodeField.getValue(json);
+
+  ///Reason the appointment has been scheduled to take place, as specified using
+  /// information from another resource. When the patient arrives and the encoun
+  ///ter begins it may be used as the admission diagnosis. The indication will t
+  ///ypically be a Condition (with other resources referenced in the evidence.de
+  ///tail), or a Procedure.
+  FixedList<Reference>? get reasonReference =>
+      reasonReferenceField.getValue(json);
+
+  ///The priority of the appointment. Can be used to make informed decisions if
+  ///needing to re-prioritize appointments. (The iCal Standard specifies 0 as un
+  ///defined, 1 as highest, 9 as lowest priority).
+  int? get priority => priorityField.getValue(json);
+
+  ///The brief description of the appointment as would be shown on a subject lin
+  ///e in a meeting request, or appointment list. Detailed or expanded informati
+  ///on should be put in the comment field.
   String? get description => descriptionField.getValue(json);
 
-  /// Field definition for [status]
+  ///Additional information to support the appointment provided when making the
+  ///appointment.
+  FixedList<Reference>? get supportingInformation =>
+      supportingInformationField.getValue(json);
+
+  ///Date/Time that the appointment is to take place.
+  DateTime? get start => startField.getValue(json);
+
+  ///Date/Time that the appointment is to conclude.
+  DateTime? get end => endField.getValue(json);
+
+  ///Number of minutes that the appointment is to take. This can be less than th
+  ///e duration between the start and end times.  For example, where the actual
+  ///time of appointment is only an estimate or if a 30 minute appointment is be
+  ///ing requested, but any time would work.  Also, if there is, for example, a
+  ///planned 15 minute break in the middle of a long appointment, the duration m
+  ///ay be 15 minutes less than the difference between the start and end.
+  int? get minutesDuration => minutesDurationField.getValue(json);
+
+  ///The slots from the participants' schedules that will be filled by the appoi
+  ///ntment.
+  FixedList<Reference>? get slot => slotField.getValue(json);
+
+  ///The date that this appointment was initially created. This could be differe
+  ///nt to the meta.lastModified value on the initial entry, as this could have
+  ///been before the resource was created on the FHIR server, and should remain
+  ///unchanged over the lifespan of the appointment.
+  DateTime? get created => createdField.getValue(json);
+
+  ///Additional comments about the appointment.
+  String? get comment => commentField.getValue(json);
+
+  ///While Appointment.comment contains information for internal use, Appointmen
+  ///t.patientInstructions is used to capture patient facing information about t
+  ///he Appointment (e.g. please bring your referral or fast from 8pm night befo
+  ///re).
+  String? get patientInstruction => patientInstructionField.getValue(json);
+
+  ///The service request this appointment is allocated to assess (e.g. incoming
+  ///referral or procedure request).
+  FixedList<Reference>? get basedOn => basedOnField.getValue(json);
+
+  ///List of participants involved in the appointment.
+  FixedList<BackboneElement>? get participant =>
+      participantField.getValue(json);
+
+  ///A set of date ranges (potentially including times) that the appointment is
+  ///preferred to be scheduled within.The duration (usually in minutes) could al
+  ///so be provided to indicate the length of the appointment to fill and popula
+  ///te the start/end times for the actual allocated time. However, in other sit
+  ///uations the duration may be calculated by the scheduling system.
+  FixedList<Period>? get requestedPeriod => requestedPeriodField.getValue(json);
+
+  // Static Get Methods
+
+  static String? _getId(JsonObject jo) => jo[idField.name].stringValue;
+
+  static Meta? _getMeta(JsonObject jo) => switch (jo[metaField.name]) {
+        (final JsonObject jsonObject) => Meta.fromJson(jsonObject),
+        _ => null,
+      };
+
+  static Uri? _getImplicitRules(JsonObject jo) =>
+      jo[implicitRulesField.name].uriValue;
+
+  static Language? _getLanguage(JsonObject jo) =>
+      switch (jo[languageField.name]) {
+        (final JsonString js) => Language.fromCode(js.value),
+        _ => null,
+      };
+
+  static Narrative? _getText(JsonObject jo) => switch (jo[textField.name]) {
+        (final JsonObject jsonObject) => Narrative.fromJson(jsonObject),
+        _ => null,
+      };
+
+  static FixedList<Resource>? _getContained(JsonObject jo) =>
+      switch (jo[containedField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Resource.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static FixedList<Extension>? _getExtension(JsonObject jo) =>
+      switch (jo[extensionField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Extension.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static FixedList<Extension>? _getModifierExtension(JsonObject jo) =>
+      switch (jo[modifierExtensionField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Extension.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static FixedList<Identifier>? _getIdentifier(JsonObject jo) =>
+      switch (jo[identifierField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Identifier.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static AppointmentStatus? _getStatus(JsonObject jo) =>
+      switch (jo[statusField.name]) {
+        (final JsonString js) => AppointmentStatus.fromCode(js.value),
+        _ => null,
+      };
+
+  static CancelationReason? _getCancelationReason(JsonObject jo) =>
+      switch (jo[cancelationReasonField.name]) {
+        (final JsonString js) => CancelationReason.fromCode(js.value),
+        _ => null,
+      };
+
+  static FixedList<ServiceCategory>? _getServiceCategory(JsonObject jo) =>
+      switch (jo[serviceCategoryField.name]) {
+        final JsonArray jsonArray => switch ([
+            for (final jv in jsonArray.value)
+              switch (jv) {
+                final JsonString s => ServiceCategory.fromCode(s.value),
+                _ => null
+              },
+          ]) {
+            //All items are [ServiceCategory] strings
+            final List<ServiceCategory> items => FixedList(items),
+            //Some items are not [ServiceCategory] strings
+            _ => null
+          },
+        // Not a JsonArray
+        _ => null
+      };
+
+  static FixedList<ServiceType>? _getServiceType(JsonObject jo) =>
+      switch (jo[serviceTypeField.name]) {
+        final JsonArray jsonArray => switch ([
+            for (final jv in jsonArray.value)
+              switch (jv) {
+                final JsonString s => ServiceType.fromCode(s.value),
+                _ => null
+              },
+          ]) {
+            //All items are [ServiceType] strings
+            final List<ServiceType> items => FixedList(items),
+            //Some items are not [ServiceType] strings
+            _ => null
+          },
+        // Not a JsonArray
+        _ => null
+      };
+
+  static FixedList<CodeableConcept>? _getSpecialty(JsonObject jo) =>
+      switch (jo[specialtyField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => CodeableConcept.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static AppointmentReason? _getAppointmentType(JsonObject jo) =>
+      switch (jo[appointmentTypeField.name]) {
+        (final JsonString js) => AppointmentReason.fromCode(js.value),
+        _ => null,
+      };
+
+  static FixedList<CodeableConcept>? _getReasonCode(JsonObject jo) =>
+      switch (jo[reasonCodeField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => CodeableConcept.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static FixedList<Reference>? _getReasonReference(JsonObject jo) =>
+      switch (jo[reasonReferenceField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static int? _getPriority(JsonObject jo) =>
+      jo[priorityField.name].integerValue;
+
+  static String? _getDescription(JsonObject jo) =>
+      jo[descriptionField.name].stringValue;
+
+  static FixedList<Reference>? _getSupportingInformation(JsonObject jo) =>
+      switch (jo[supportingInformationField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static DateTime? _getStart(JsonObject jo) =>
+      DateTime.tryParse(jo[startField.name].stringValue ?? '');
+
+  static DateTime? _getEnd(JsonObject jo) =>
+      DateTime.tryParse(jo[endField.name].stringValue ?? '');
+
+  static int? _getMinutesDuration(JsonObject jo) =>
+      jo[minutesDurationField.name].integerValue;
+
+  static FixedList<Reference>? _getSlot(JsonObject jo) =>
+      switch (jo[slotField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static DateTime? _getCreated(JsonObject jo) =>
+      DateTime.tryParse(jo[createdField.name].stringValue ?? '');
+
+  static String? _getComment(JsonObject jo) =>
+      jo[commentField.name].stringValue;
+
+  static String? _getPatientInstruction(JsonObject jo) =>
+      jo[patientInstructionField.name].stringValue;
+
+  static FixedList<Reference>? _getBasedOn(JsonObject jo) =>
+      switch (jo[basedOnField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Reference.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static FixedList<BackboneElement>? _getParticipant(JsonObject jo) =>
+      switch (jo[participantField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value
+                .map((e) => BackboneElement.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  static FixedList<Period>? _getRequestedPeriod(JsonObject jo) =>
+      switch (jo[requestedPeriodField.name]) {
+        (final JsonArray jsonArray) => FixedList(
+            jsonArray.value.map((e) => Period.fromJson(e as JsonObject)),
+          ),
+        _ => null,
+      };
+
+  // Field Definitions
+
+  /// Field definition for [id].
+  static const idField = FieldDefinition(
+    name: 'id',
+    getValue: _getId,
+    description: '''
+The logical id of the resource, as used in the URL for the resource. Once assigned, this value never changes.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [meta].
+  static const metaField = FieldDefinition(
+    name: 'meta',
+    getValue: _getMeta,
+    description: '''
+The metadata about the resource. This is content that is maintained by the infrastructure. Changes to the content might not always be associated with version changes to the resource.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [implicitRules].
+  static const implicitRulesField = FieldDefinition(
+    name: 'implicitRules',
+    getValue: _getImplicitRules,
+    description: '''
+A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [language].
+  static const languageField = FieldDefinition(
+    name: 'language',
+    getValue: _getLanguage,
+    description: '''
+The base language in which the resource is written.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+    allowedStringValues: [
+      'ar',
+      'bn',
+      'cs',
+      'da',
+      'de',
+      'el',
+      'en',
+      'es',
+      'fi',
+      'fr',
+      'gu',
+      'hi',
+      'hr',
+      'it',
+      'ja',
+      'ko',
+      'nl',
+      'no',
+      'pa',
+      'pl',
+      'pt',
+      'ru',
+      'sv',
+      'te',
+      'zh',
+    ],
+  );
+
+  /// Field definition for [text].
+  static const textField = FieldDefinition(
+    name: 'text',
+    getValue: _getText,
+    description: '''
+A human-readable narrative that contains a summary of the resource and can be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it "clinically safe" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [contained].
+  static const containedField = FieldDefinition(
+    name: 'contained',
+    getValue: _getContained,
+    description: '''
+These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [extension].
+  static const extensionField = FieldDefinition(
+    name: 'extension',
+    getValue: _getExtension,
+    description: '''
+May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [modifierExtension].
+  static const modifierExtensionField = FieldDefinition(
+    name: 'modifierExtension',
+    getValue: _getModifierExtension,
+    description: '''
+May be used to represent additional information that is not part of the basic definition of the resource and that modifies the understanding of the element that contains it and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
+
+Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [identifier].
+  static const identifierField = FieldDefinition(
+    name: 'identifier',
+    getValue: _getIdentifier,
+    description: '''
+This records identifiers associated with this appointment concern that are defined by business processes and/or used to refer to it when a direct URL reference to the resource itself is not appropriate (e.g. in CDA documents, or in written / printed documentation).''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [status].
   static const statusField = FieldDefinition(
     name: 'status',
     getValue: _getStatus,
-    cardinality: Cardinality(min: 1),
+    description: '''
+The overall status of the Appointment. Each of the participants has their own participation status which indicates their involvement in the process, however this status indicates the shared status.''',
+    cardinality: Cardinality(
+      min: 1,
+      max: IntegerChoice(1),
+    ),
     allowedStringValues: [
       'proposed',
       'booked',
@@ -236,86 +806,973 @@ class Appointment extends Resource {
       'noshow',
       'entered-in-error',
     ],
-    description: 'The overall status of the appointment.',
   );
 
-  /// Field definition for [serviceCategory]
+  /// Field definition for [cancelationReason].
+  static const cancelationReasonField = FieldDefinition(
+    name: 'cancelationReason',
+    getValue: _getCancelationReason,
+    description: '''
+The coded reason for the appointment being cancelled. This is often used in reporting/billing/futher processing to determine if further actions are required, or specific fees apply.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+    allowedStringValues: [
+      'pat',
+      'prac',
+      'loc',
+      'org',
+      'maint',
+      'nosh',
+    ],
+  );
+
+  /// Field definition for [serviceCategory].
   static const serviceCategoryField = FieldDefinition(
     name: 'serviceCategory',
     getValue: _getServiceCategory,
-    description:
-        'A broad categorization of the service that is to be performed during this appointment.',
+    description: '''
+A broad categorization of the service that is to be performed during this appointment.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+    allowedStringValues: [
+      '1',
+      '2',
+      '34',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '36',
+      '9',
+      '10',
+      '11',
+      '12',
+      '13',
+      '14',
+      '15',
+      '16',
+      '17',
+      '35',
+      '18',
+      '19',
+      '20',
+      '21',
+      '22',
+      '38',
+      '23',
+      '24',
+      '25',
+      '26',
+      '27',
+      '28',
+      '29',
+      '30',
+      '31',
+      '32',
+      '37',
+      '33',
+    ],
   );
 
-  /// Field definition for [participant]
-  static const participantField = FieldDefinition(
-    name: 'participant',
-    getValue: _getParticipant,
-    min: 1,
-    description: 'List of participants involved in the appointment.',
+  /// Field definition for [serviceType].
+  static const serviceTypeField = FieldDefinition(
+    name: 'serviceType',
+    getValue: _getServiceType,
+    description: '''
+The specific service that is to be performed during this appointment.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+    allowedStringValues: [
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '10',
+      '11',
+      '12',
+      '13',
+      '14',
+      '15',
+      '16',
+      '17',
+      '18',
+      '19',
+      '20',
+      '21',
+      '22',
+      '23',
+      '24',
+      '25',
+      '26',
+      '27',
+      '28',
+      '29',
+      '30',
+      '31',
+      '32',
+      '33',
+      '34',
+      '35',
+      '36',
+      '37',
+      '38',
+      '39',
+      '40',
+      '41',
+      '42',
+      '43',
+      '44',
+      '45',
+      '46',
+      '47',
+      '48',
+      '49',
+      '50',
+      '51',
+      '52',
+      '53',
+      '54',
+      '55',
+      '56',
+      '57',
+      '58',
+      '59',
+      '60',
+      '61',
+      '62',
+      '63',
+      '64',
+      '65',
+      '66',
+      '67',
+      '68',
+      '69',
+      '70',
+      '71',
+      '72',
+      '73',
+      '74',
+      '75',
+      '76',
+      '77',
+      '78',
+      '79',
+      '80',
+      '81',
+      '82',
+      '83',
+      '84',
+      '85',
+      '86',
+      '87',
+      '88',
+      '89',
+      '90',
+      '91',
+      '92',
+      '93',
+      '94',
+      '95',
+      '96',
+      '97',
+      '98',
+      '99',
+      '100',
+      '101',
+      '102',
+      '103',
+      '104',
+      '105',
+      '106',
+      '107',
+      '108',
+      '109',
+      '110',
+      '111',
+      '112',
+      '113',
+      '114',
+      '115',
+      '116',
+      '117',
+      '118',
+      '119',
+      '120',
+      '121',
+      '122',
+      '123',
+      '124',
+      '125',
+      '126',
+      '127',
+      '128',
+      '129',
+      '130',
+      '131',
+      '132',
+      '133',
+      '134',
+      '135',
+      '136',
+      '137',
+      '138',
+      '139',
+      '140',
+      '141',
+      '142',
+      '143',
+      '144',
+      '145',
+      '146',
+      '147',
+      '148',
+      '149',
+      '150',
+      '151',
+      '152',
+      '153',
+      '154',
+      '155',
+      '156',
+      '157',
+      '158',
+      '159',
+      '160',
+      '161',
+      '162',
+      '163',
+      '164',
+      '165',
+      '166',
+      '167',
+      '168',
+      '169',
+      '170',
+      '171',
+      '172',
+      '173',
+      '174',
+      '175',
+      '176',
+      '177',
+      '178',
+      '179',
+      '180',
+      '181',
+      '182',
+      '183',
+      '184',
+      '185',
+      '186',
+      '187',
+      '188',
+      '189',
+      '190',
+      '191',
+      '192',
+      '193',
+      '194',
+      '195',
+      '196',
+      '197',
+      '198',
+      '199',
+      '200',
+      '201',
+      '202',
+      '203',
+      '204',
+      '205',
+      '206',
+      '207',
+      '208',
+      '209',
+      '210',
+      '211',
+      '212',
+      '213',
+      '214',
+      '215',
+      '216',
+      '217',
+      '218',
+      '219',
+      '220',
+      '221',
+      '222',
+      '223',
+      '224',
+      '225',
+      '226',
+      '227',
+      '228',
+      '229',
+      '230',
+      '231',
+      '232',
+      '233',
+      '234',
+      '235',
+      '236',
+      '237',
+      '238',
+      '239',
+      '240',
+      '241',
+      '242',
+      '243',
+      '244',
+      '245',
+      '246',
+      '247',
+      '248',
+      '249',
+      '250',
+      '251',
+      '252',
+      '253',
+      '254',
+      '255',
+      '256',
+      '257',
+      '258',
+      '259',
+      '260',
+      '261',
+      '262',
+      '263',
+      '264',
+      '265',
+      '266',
+      '267',
+      '268',
+      '269',
+      '270',
+      '271',
+      '272',
+      '273',
+      '274',
+      '275',
+      '276',
+      '277',
+      '278',
+      '279',
+      '280',
+      '281',
+      '282',
+      '283',
+      '284',
+      '285',
+      '286',
+      '287',
+      '288',
+      '289',
+      '290',
+      '291',
+      '292',
+      '293',
+      '294',
+      '295',
+      '296',
+      '297',
+      '298',
+      '299',
+      '300',
+      '301',
+      '302',
+      '303',
+      '304',
+      '305',
+      '306',
+      '307',
+      '308',
+      '309',
+      '310',
+      '311',
+      '312',
+      '313',
+      '314',
+      '315',
+      '316',
+      '317',
+      '318',
+      '319',
+      '320',
+      '321',
+      '322',
+      '323',
+      '324',
+      '325',
+      '326',
+      '327',
+      '328',
+      '330',
+      '331',
+      '332',
+      '333',
+      '334',
+      '335',
+      '336',
+      '337',
+      '338',
+      '339',
+      '340',
+      '341',
+      '342',
+      '343',
+      '344',
+      '345',
+      '346',
+      '347',
+      '348',
+      '349',
+      '350',
+      '351',
+      '352',
+      '353',
+      '354',
+      '355',
+      '356',
+      '357',
+      '358',
+      '359',
+      '360',
+      '361',
+      '362',
+      '364',
+      '365',
+      '366',
+      '367',
+      '368',
+      '369',
+      '370',
+      '371',
+      '372',
+      '373',
+      '374',
+      '375',
+      '376',
+      '377',
+      '378',
+      '379',
+      '380',
+      '381',
+      '382',
+      '383',
+      '384',
+      '385',
+      '386',
+      '387',
+      '388',
+      '389',
+      '390',
+      '391',
+      '392',
+      '393',
+      '394',
+      '395',
+      '396',
+      '397',
+      '398',
+      '399',
+      '400',
+      '401',
+      '402',
+      '403',
+      '404',
+      '405',
+      '406',
+      '407',
+      '408',
+      '409',
+      '410',
+      '411',
+      '412',
+      '413',
+      '414',
+      '415',
+      '416',
+      '417',
+      '418',
+      '419',
+      '420',
+      '421',
+      '422',
+      '423',
+      '424',
+      '425',
+      '426',
+      '427',
+      '428',
+      '429',
+      '430',
+      '431',
+      '432',
+      '433',
+      '434',
+      '435',
+      '436',
+      '437',
+      '438',
+      '439',
+      '440',
+      '441',
+      '442',
+      '443',
+      '444',
+      '445',
+      '446',
+      '447',
+      '448',
+      '449',
+      '450',
+      '451',
+      '452',
+      '453',
+      '454',
+      '455',
+      '456',
+      '457',
+      '458',
+      '459',
+      '460',
+      '461',
+      '462',
+      '463',
+      '464',
+      '465',
+      '466',
+      '467',
+      '468',
+      '469',
+      '470',
+      '471',
+      '472',
+      '473',
+      '474',
+      '475',
+      '476',
+      '477',
+      '478',
+      '479',
+      '480',
+      '481',
+      '482',
+      '483',
+      '484',
+      '485',
+      '486',
+      '488',
+      '489',
+      '490',
+      '491',
+      '492',
+      '493',
+      '494',
+      '495',
+      '496',
+      '497',
+      '498',
+      '500',
+      '501',
+      '502',
+      '503',
+      '504',
+      '505',
+      '506',
+      '507',
+      '508',
+      '509',
+      '510',
+      '513',
+      '514',
+      '530',
+      '531',
+      '532',
+      '533',
+      '534',
+      '535',
+      '536',
+      '537',
+      '538',
+      '539',
+      '540',
+      '541',
+      '542',
+      '543',
+      '544',
+      '545',
+      '546',
+      '547',
+      '548',
+      '550',
+      '551',
+      '552',
+      '553',
+      '554',
+      '555',
+      '556',
+      '557',
+      '558',
+      '559',
+      '560',
+      '561',
+      '562',
+      '563',
+      '564',
+      '565',
+      '566',
+      '567',
+      '568',
+      '569',
+      '570',
+      '571',
+      '572',
+      '573',
+      '574',
+      '575',
+      '576',
+      '577',
+      '580',
+      '581',
+      '582',
+      '583',
+      '584',
+      '585',
+      '589',
+      '590',
+      '591',
+      '593',
+      '599',
+      '600',
+      '601',
+      '602',
+      '603',
+      '604',
+      '605',
+      '606',
+      '607',
+      '608',
+      '609',
+      '610',
+      '611',
+      '612',
+      '613',
+      '614',
+      '615',
+      '616',
+      '617',
+      '618',
+      '619',
+      '620',
+      '621',
+      '622',
+      '623',
+      '624',
+      '625',
+      '626',
+      '627',
+      '628',
+      '629',
+    ],
   );
 
-  /// Field definition for [description]
+  /// Field definition for [specialty].
+  static const specialtyField = FieldDefinition(
+    name: 'specialty',
+    getValue: _getSpecialty,
+    description: '''
+The specialty of a practitioner that would be required to perform the service requested in this appointment.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [appointmentType].
+  static const appointmentTypeField = FieldDefinition(
+    name: 'appointmentType',
+    getValue: _getAppointmentType,
+    description: '''
+The style of appointment or patient that has been booked in the slot (not service type).''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+    allowedStringValues: [
+      'CHECKUP',
+      'EMERGENCY',
+      'FOLLOWUP',
+      'ROUTINE',
+      'WALKIN',
+    ],
+  );
+
+  /// Field definition for [reasonCode].
+  static const reasonCodeField = FieldDefinition(
+    name: 'reasonCode',
+    getValue: _getReasonCode,
+    description: '''
+The coded reason that this appointment is being scheduled. This is more clinical than administrative.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [reasonReference].
+  static const reasonReferenceField = FieldDefinition(
+    name: 'reasonReference',
+    getValue: _getReasonReference,
+    description: '''
+Reason the appointment has been scheduled to take place, as specified using information from another resource. When the patient arrives and the encounter begins it may be used as the admission diagnosis. The indication will typically be a Condition (with other resources referenced in the evidence.detail), or a Procedure.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [priority].
+  static const priorityField = FieldDefinition(
+    name: 'priority',
+    getValue: _getPriority,
+    description: '''
+The priority of the appointment. Can be used to make informed decisions if needing to re-prioritize appointments. (The iCal Standard specifies 0 as undefined, 1 as highest, 9 as lowest priority).''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [description].
   static const descriptionField = FieldDefinition(
     name: 'description',
     getValue: _getDescription,
-    description: 'A description of the appointment.',
+    description: '''
+The brief description of the appointment as would be shown on a subject line in a meeting request, or appointment list. Detailed or expanded information should be put in the comment field.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [supportingInformation].
+  static const supportingInformationField = FieldDefinition(
+    name: 'supportingInformation',
+    getValue: _getSupportingInformation,
+    description: '''
+Additional information to support the appointment provided when making the appointment.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [start].
+  static const startField = FieldDefinition(
+    name: 'start',
+    getValue: _getStart,
+    description: '''
+Date/Time that the appointment is to take place.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [end].
+  static const endField = FieldDefinition(
+    name: 'end',
+    getValue: _getEnd,
+    description: '''
+Date/Time that the appointment is to conclude.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [minutesDuration].
+  static const minutesDurationField = FieldDefinition(
+    name: 'minutesDuration',
+    getValue: _getMinutesDuration,
+    description: '''
+Number of minutes that the appointment is to take. This can be less than the duration between the start and end times.  For example, where the actual time of appointment is only an estimate or if a 30 minute appointment is being requested, but any time would work.  Also, if there is, for example, a planned 15 minute break in the middle of a long appointment, the duration may be 15 minutes less than the difference between the start and end.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [slot].
+  static const slotField = FieldDefinition(
+    name: 'slot',
+    getValue: _getSlot,
+    description: '''
+The slots from the participants' schedules that will be filled by the appointment.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [created].
+  static const createdField = FieldDefinition(
+    name: 'created',
+    getValue: _getCreated,
+    description: '''
+The date that this appointment was initially created. This could be different to the meta.lastModified value on the initial entry, as this could have been before the resource was created on the FHIR server, and should remain unchanged over the lifespan of the appointment.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [comment].
+  static const commentField = FieldDefinition(
+    name: 'comment',
+    getValue: _getComment,
+    description: '''
+Additional comments about the appointment.''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [patientInstruction].
+  static const patientInstructionField = FieldDefinition(
+    name: 'patientInstruction',
+    getValue: _getPatientInstruction,
+    description: '''
+While Appointment.comment contains information for internal use, Appointment.patientInstructions is used to capture patient facing information about the Appointment (e.g. please bring your referral or fast from 8pm night before).''',
+    cardinality: Cardinality(
+      min: 0,
+      max: IntegerChoice(1),
+    ),
+  );
+
+  /// Field definition for [basedOn].
+  static const basedOnField = FieldDefinition(
+    name: 'basedOn',
+    getValue: _getBasedOn,
+    description: '''
+The service request this appointment is allocated to assess (e.g. incoming referral or procedure request).''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [participant].
+  static const participantField = FieldDefinition(
+    name: 'participant',
+    getValue: _getParticipant,
+    description: '''
+List of participants involved in the appointment.''',
+    cardinality: Cardinality(min: 1, max: BoolChoice(true)),
+  );
+
+  /// Field definition for [requestedPeriod].
+  static const requestedPeriodField = FieldDefinition(
+    name: 'requestedPeriod',
+    getValue: _getRequestedPeriod,
+    description: '''
+A set of date ranges (potentially including times) that the appointment is preferred to be scheduled within.
+
+The duration (usually in minutes) could also be provided to indicate the length of the appointment to fill and populate the start/end times for the actual allocated time. However, in other situations the duration may be calculated by the scheduling system.''',
+    cardinality: Cardinality(min: 0, max: BoolChoice(true)),
   );
 
   /// R4: All field definitions for [Appointment].
   static const fieldDefinitions = [
     ...Resource.fieldDefinitions,
+    implicitRulesField,
+    languageField,
+    textField,
+    containedField,
+    extensionField,
+    modifierExtensionField,
+    identifierField,
     statusField,
+    cancelationReasonField,
     serviceCategoryField,
-    participantField,
+    serviceTypeField,
+    specialtyField,
+    appointmentTypeField,
+    reasonCodeField,
+    reasonReferenceField,
+    priorityField,
     descriptionField,
+    supportingInformationField,
+    startField,
+    endField,
+    minutesDurationField,
+    slotField,
+    createdField,
+    commentField,
+    patientInstructionField,
+    basedOnField,
+    participantField,
+    requestedPeriodField,
   ];
 
-  static AppointmentStatus? _getStatus(JsonObject jo) =>
-      switch (jo[statusField.name]) {
-        (final JsonString js) => AppointmentStatus.fromCode(js.value),
-        _ => null,
-      };
-
-  static FixedList<CodeableConcept>? _getServiceCategory(JsonObject jo) =>
-      switch (jo['serviceCategory']) {
-        (final JsonArray jsonArray) => FixedList(
-            jsonArray.value
-                .map((e) => CodeableConcept.fromJson(e as JsonObject)),
-          ),
-        _ => null,
-      };
-
-  static FixedList<Participant>? _getParticipant(JsonObject jo) =>
-      switch (jo['participant']) {
-        (final JsonArray jsonArray) => FixedList(
-            jsonArray.value.map((e) => Participant.fromJson(e as JsonObject)),
-          ),
-        _ => null,
-      };
-
-  static String? _getDescription(JsonObject jo) =>
-      switch (jo[descriptionField.name]) {
-        (final JsonString js) => js.value,
-        _ => null,
-      };
+  // Non-destructive mutation
 
   /// Creates a copy of the [Appointment] instance and allows for non-destructive mutation.
   Appointment copyWith({
     String? id,
     Meta? meta,
+    Uri? implicitRules,
+    Language? language,
+    Narrative? text,
+    FixedList<Resource>? contained,
+    FixedList<Extension>? extension,
+    FixedList<Extension>? modifierExtension,
+    FixedList<Identifier>? identifier,
     AppointmentStatus? status,
-    FixedList<CodeableConcept>? serviceCategory,
-    FixedList<Participant>? participant,
+    CancelationReason? cancelationReason,
+    FixedList<ServiceCategory>? serviceCategory,
+    FixedList<ServiceType>? serviceType,
+    FixedList<CodeableConcept>? specialty,
+    AppointmentReason? appointmentType,
+    FixedList<CodeableConcept>? reasonCode,
+    FixedList<Reference>? reasonReference,
+    int? priority,
     String? description,
+    FixedList<Reference>? supportingInformation,
+    DateTime? start,
+    DateTime? end,
+    int? minutesDuration,
+    FixedList<Reference>? slot,
+    DateTime? created,
+    String? comment,
+    String? patientInstruction,
+    FixedList<Reference>? basedOn,
+    FixedList<BackboneElement>? participant,
+    FixedList<Period>? requestedPeriod,
   }) =>
       Appointment(
         id: id ?? this.id,
         meta: meta ?? this.meta,
+        implicitRules: implicitRules ?? this.implicitRules,
+        language: language ?? this.language,
+        text: text ?? this.text,
+        contained: contained ?? this.contained,
+        extension: extension ?? this.extension,
+        modifierExtension: modifierExtension ?? this.modifierExtension,
+        identifier: identifier ?? this.identifier,
         status: status ?? this.status,
+        cancelationReason: cancelationReason ?? this.cancelationReason,
         serviceCategory: serviceCategory ?? this.serviceCategory,
-        participant: participant ?? this.participant,
+        serviceType: serviceType ?? this.serviceType,
+        specialty: specialty ?? this.specialty,
+        appointmentType: appointmentType ?? this.appointmentType,
+        reasonCode: reasonCode ?? this.reasonCode,
+        reasonReference: reasonReference ?? this.reasonReference,
+        priority: priority ?? this.priority,
         description: description ?? this.description,
+        supportingInformation:
+            supportingInformation ?? this.supportingInformation,
+        start: start ?? this.start,
+        end: end ?? this.end,
+        minutesDuration: minutesDuration ?? this.minutesDuration,
+        slot: slot ?? this.slot,
+        created: created ?? this.created,
+        comment: comment ?? this.comment,
+        patientInstruction: patientInstruction ?? this.patientInstruction,
+        basedOn: basedOn ?? this.basedOn,
+        participant: participant ?? this.participant,
+        requestedPeriod: requestedPeriod ?? this.requestedPeriod,
       );
 }
 
@@ -2282,126 +3739,110 @@ class Patient extends Resource {
 
   // Getters
 
-  /*
-A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc.
-*/
+  ///A reference to a set of rules that were followed when the resource was cons
+  ///tructed, and which must be understood when processing the content. Often, t
+  ///his is a reference to an implementation guide that defines the special rule
+  ///s along with other profiles etc.
   Uri? get implicitRules => implicitRulesField.getValue(json);
 
-  /*
-The base language in which the resource is written.
-*/
+  ///The base language in which the resource is written.
   Language? get language => languageField.getValue(json);
 
-  /*
-A human-readable narrative that contains a summary of the resource and can be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it "clinically safe" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety.
-*/
+  ///A human-readable narrative that contains a summary of the resource and can
+  ///be used to represent the content of the resource to a human. The narrative
+  ///need not encode all the structured data, but is required to contain suffici
+  ///ent detail to make it "clinically safe" for a human to just read the narrat
+  ///ive. Resource definitions may define what content should be represented in
+  ///the narrative to ensure clinical safety.
   Narrative? get text => textField.getValue(json);
 
-  /*
-These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope.
-*/
+  ///These resources do not have an independent existence apart from the resourc
+  ///e that contains them - they cannot be identified independently, and nor can
+  /// they have their own independent transaction scope.
   FixedList<Resource>? get contained => containedField.getValue(json);
 
-  /*
-May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-*/
+  ///May be used to represent additional information that is not part of the bas
+  ///ic definition of the resource. To make the use of extensions safe and manag
+  ///eable, there is a strict set of governance  applied to the definition and u
+  ///se of extensions. Though any implementer can define an extension, there is
+  ///a set of requirements that SHALL be met as part of the definition of the ex
+  ///tension.
   FixedList<Extension>? get extension => extensionField.getValue(json);
 
-  /*
-May be used to represent additional information that is not part of the basic definition of the resource and that modifies the understanding of the element that contains it and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
-
-Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-*/
+  ///May be used to represent additional information that is not part of the bas
+  ///ic definition of the resource and that modifies the understanding of the el
+  ///ement that contains it and/or the understanding of the containing element's
+  /// descendants. Usually modifier elements provide negation or qualification.
+  ///To make the use of extensions safe and manageable, there is a strict set of
+  /// governance applied to the definition and use of extensions. Though any imp
+  ///lementer is allowed to define an extension, there is a set of requirements
+  ///that SHALL be met as part of the definition of the extension. Applications
+  ///processing a resource are required to check for modifier extensions.Modifie
+  ///r extensions SHALL NOT change the meaning of any elements on Resource or Do
+  ///mainResource (including cannot change the meaning of modifierExtension itse
+  ///lf).
   FixedList<Extension>? get modifierExtension =>
       modifierExtensionField.getValue(json);
 
-  /*
-An identifier for this patient.
-*/
+  ///An identifier for this patient.
   FixedList<Identifier>? get identifier => identifierField.getValue(json);
 
-  /*
-Whether this patient record is in active use. 
-Many systems use this property to mark as non-current patients, such as those that have not been seen for a period of time based on an organization's business rules.
-
-It is often used to filter patient lists to exclude inactive patients
-
-Deceased patients may also be marked as inactive for the same reasons, but may be active for some time after death.
-*/
+  ///Whether this patient record is in active use. Many systems use this propert
+  ///y to mark as non-current patients, such as those that have not been seen fo
+  ///r a period of time based on an organization's business rules.It is often us
+  ///ed to filter patient lists to exclude inactive patientsDeceased patients ma
+  ///y also be marked as inactive for the same reasons, but may be active for so
+  ///me time after death.
   bool? get active => activeField.getValue(json);
 
-  /*
-A name associated with the individual.
-*/
+  ///A name associated with the individual.
   FixedList<HumanName>? get name => nameField.getValue(json);
 
-  /*
-A contact detail (e.g. a telephone number or an email address) by which the individual may be contacted.
-*/
+  ///A contact detail (e.g. a telephone number or an email address) by which the
+  /// individual may be contacted.
   FixedList<ContactPoint>? get telecom => telecomField.getValue(json);
 
-  /*
-Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes.
-*/
+  ///Administrative Gender - the gender that the patient is considered to have f
+  ///or administration and record keeping purposes.
   AdministrativeGender? get gender => genderField.getValue(json);
 
-  /*
-The date of birth for the individual.
-*/
+  ///The date of birth for the individual.
   DateTime? get birthDate => birthDateField.getValue(json);
 
-  /*
-Indicates if the individual is deceased or not.
-*/
+  ///Indicates if the individual is deceased or not.
   BooleanOrDateTimeChoice? get deceased => deceasedField.getValue(json);
 
-  /*
-An address for the individual.
-*/
+  ///An address for the individual.
   FixedList<Address>? get address => addressField.getValue(json);
 
-  /*
-This field contains a patient's most recent marital (civil) status.
-*/
+  ///This field contains a patient's most recent marital (civil) status.
   MaritalStatus? get maritalStatus => maritalStatusField.getValue(json);
 
-  /*
-Indicates whether the patient is part of a multiple (boolean) or indicates the actual birth order (integer).
-*/
+  ///Indicates whether the patient is part of a multiple (boolean) or indicates
+  ///the actual birth order (integer).
   BooleanOrIntegerChoice? get multipleBirth =>
       multipleBirthField.getValue(json);
 
-  /*
-Image of the patient.
-*/
+  ///Image of the patient.
   FixedList<Attachment>? get photo => photoField.getValue(json);
 
-  /*
-A contact party (e.g. guardian, partner, friend) for the patient.
-*/
+  ///A contact party (e.g. guardian, partner, friend) for the patient.
   FixedList<BackboneElement>? get contact => contactField.getValue(json);
 
-  /*
-A language which may be used to communicate with the patient about his or her health.
-*/
+  ///A language which may be used to communicate with the patient about his or h
+  ///er health.
   FixedList<BackboneElement>? get communication =>
       communicationField.getValue(json);
 
-  /*
-Patient's nominated care provider.
-*/
+  ///Patient's nominated care provider.
   FixedList<Reference>? get generalPractitioner =>
       generalPractitionerField.getValue(json);
 
-  /*
-Organization that is the custodian of the patient record.
-*/
+  ///Organization that is the custodian of the patient record.
   Reference? get managingOrganization =>
       managingOrganizationField.getValue(json);
 
-  /*
-Link to another patient resource that concerns the same actual patient.
-*/
+  ///Link to another patient resource that concerns the same actual patient.
   FixedList<BackboneElement>? get link => linkField.getValue(json);
 
   // Static Get Methods
@@ -2605,87 +4046,30 @@ The base language in which the resource is written.''',
     ),
     allowedStringValues: [
       'ar',
-      'bg',
-      'bg-BG',
       'bn',
       'cs',
-      'cs-CZ',
-      'bs',
-      'bs-BA',
       'da',
-      'da-DK',
       'de',
-      'de-AT',
-      'de-CH',
-      'de-DE',
       'el',
-      'el-GR',
       'en',
-      'en-AU',
-      'en-CA',
-      'en-GB',
-      'en-IN',
-      'en-NZ',
-      'en-SG',
-      'en-US',
       'es',
-      'es-AR',
-      'es-ES',
-      'es-UY',
-      'et',
-      'et-EE',
       'fi',
       'fr',
-      'fr-BE',
-      'fr-CH',
-      'fr-FR',
-      'fi-FI',
-      'fr-CA',
-      'fy',
-      'fy-NL',
+      'gu',
       'hi',
       'hr',
-      'hr-HR',
-      'is',
-      'is-IS',
       'it',
-      'it-CH',
-      'it-IT',
       'ja',
       'ko',
-      'lt',
-      'lt-LT',
-      'lv',
-      'lv-LV',
       'nl',
-      'nl-BE',
-      'nl-NL',
       'no',
-      'no-NO',
       'pa',
       'pl',
-      'pl-PL',
       'pt',
-      'pt-PT',
-      'pt-BR',
-      'ro',
-      'ro-RO',
       'ru',
-      'ru-RU',
-      'sk',
-      'sk-SK',
-      'sl',
-      'sl-SI',
-      'sr',
-      'sr-RS',
       'sv',
-      'sv-SE',
       'te',
       'zh',
-      'zh-CN',
-      'zh-HK',
-      'zh-SG',
-      'zh-TW',
     ],
   );
 

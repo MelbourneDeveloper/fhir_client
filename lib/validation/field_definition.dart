@@ -45,8 +45,6 @@ class FieldDefinition<T> {
     this.isSummary = false,
     this.isModifier = false,
     this.isReadOnly = false,
-    this.min,
-    this.max,
     this.regex,
     this.description,
     this.allowedStringValues = const [],
@@ -73,12 +71,6 @@ class FieldDefinition<T> {
 
   /// Indicates whether the field is read-only.
   final bool isReadOnly;
-
-  /// The minimum cardinality of the field.
-  final int? min;
-
-  /// The maximum cardinality of the field.
-  final int? max;
 
   /// A regular expression pattern to validate the field value.
   final String? regex;
@@ -117,31 +109,35 @@ class FieldDefinition<T> {
       }
     }
 
-    if ((min != null || max != null) && value is! JsonArray) {
-      errors.add(
-        ValidationError(
-          message: 'Field $name must be an array',
-          field: name,
-        ),
-      );
-    }
+    if (_isList(value) && value is! Undefined) {
+      if (value is! JsonArray) {
+        errors.add(
+          ValidationError(
+            message: 'Field $name must be an array',
+            field: name,
+          ),
+        );
+      } else {
+        if (value.length < cardinality.min) {
+          errors.add(
+            ValidationError(
+              message:
+                  'Field $name must have at least ${cardinality.min} items',
+              field: name,
+            ),
+          );
+        }
 
-    if (min != null && value is JsonArray && value.length < min!) {
-      errors.add(
-        ValidationError(
-          message: 'Field $name must have at least $min items',
-          field: name,
-        ),
-      );
-    }
-
-    if (max != null && value is JsonArray && value.length > max!) {
-      errors.add(
-        ValidationError(
-          message: 'Field $name must have at most $max items',
-          field: name,
-        ),
-      );
+        if (cardinality.max is IntegerChoice &&
+            value.length > (cardinality.max! as IntegerChoice).value) {
+          errors.add(
+            ValidationError(
+              message: 'Field $name must have at most ${cardinality.max} items',
+              field: name,
+            ),
+          );
+        }
+      }
     }
 
     if (regex != null) {
@@ -168,30 +164,40 @@ class FieldDefinition<T> {
     }
 
     if (allowedStringValues.isNotEmpty) {
-      if (value is! JsonString) {
-        if (value.isSome) {
-          errors.add(
-            ValidationError(
-              message: 'Field $name must be a string',
-              field: name,
-            ),
-          );
-        }
+      if (_isList(value)) {
+        //TODO: validate the list
       } else {
-        if (!allowedStringValues.contains(value.value)) {
-          errors.add(
-            ValidationError(
-              message: 'Field $name value must be one of '
-                  '[ ${allowedStringValues.join(', ')} ]',
-              field: name,
-            ),
-          );
+        if (value is! JsonString) {
+          if (value.isSome) {
+            errors.add(
+              ValidationError(
+                message: 'Field $name must be a string',
+                field: name,
+              ),
+            );
+          }
+        } else {
+          if (!allowedStringValues.contains(value.value)) {
+            errors.add(
+              ValidationError(
+                message: 'Field $name value must be one of '
+                    '[ ${allowedStringValues.join(', ')} ]',
+                field: name,
+              ),
+            );
+          }
         }
       }
     }
 
     return errors;
   }
+
+  bool _isList(JsonValue value) =>
+      (cardinality.max is BoolChoice &&
+          cardinality.max == const BoolChoice(true)) ||
+      (cardinality.max is IntegerChoice &&
+          (cardinality.max! as IntegerChoice).value > 1);
 }
 
 /// Represents a validation error.
