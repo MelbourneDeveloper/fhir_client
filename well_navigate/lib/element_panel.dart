@@ -34,8 +34,7 @@ class ElementPanel extends StatelessWidget {
                 message: fd.description ?? fd.name,
                 child: TextField(
                   decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    label: Text(fd.display ?? fd.name),
+                    labelText: fd.display ?? fd.name,
                   ),
                   controller: TextEditingController(text: text),
                 ),
