@@ -130,27 +130,51 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: Scaffold(
-          body: ListView.builder(
-            itemCount: nonPrimitiveFields.length + 1,
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return const Tile(
-                  headerTooltip: 'Basic Details',
-                  headerText: 'Details',
-                );
-              } else {
-                final nonPrimitiveField = nonPrimitiveFields[index - 1];
-                final headerTooltip =
-                    nonPrimitiveField.description ?? 'No information';
-                final headerText = nonPrimitiveField.name;
-                return Tile(
-                  headerTooltip: headerTooltip,
-                  headerText: headerText,
-                );
-              }
-            },
+          body: Column(
+            children: [
+              const SizedBox(height: 16),
+              const Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.event,
+                      size: 24,
+                      color: Colors.blue,
+                    ),
+                    Text(
+                      'Appointment',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              Expanded(child: _listView()),
+            ],
           ),
         ),
+      );
+
+  ListView _listView() => ListView.builder(
+        itemCount: nonPrimitiveFields.length + 1,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return const Tile(
+              headerTooltip: 'Basic Details',
+              headerText: 'Details',
+            );
+          } else {
+            final nonPrimitiveField = nonPrimitiveFields[index - 1];
+            final headerTooltip =
+                nonPrimitiveField.description ?? 'No information';
+            final headerText = nonPrimitiveField.name;
+            return Tile(
+              headerTooltip: headerTooltip,
+              headerText: headerText,
+            );
+          }
+        },
       );
 }
 
