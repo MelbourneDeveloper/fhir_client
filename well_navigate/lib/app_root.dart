@@ -4,23 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:well_navigate/main.dart';
 import 'package:well_navigate/resource_editor.dart';
 
+final colorScheme =
+    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 237, 172, 147));
+
 final themeData = ThemeData(
-  colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF81B7A1)),
+  colorScheme: colorScheme,
   fontFamily: 'Roboto',
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: BorderSide(color: const Color(0xFF81B7A1).withOpacity(0.5)),
+      borderSide: BorderSide(color: colorScheme.secondary),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: BorderSide(color: const Color(0xFF81B7A1).withOpacity(0.5)),
+      borderSide: BorderSide(color: colorScheme.secondary),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: const BorderSide(color: Color(0xFF4D8C7B)),
+      borderSide: BorderSide(color: colorScheme.secondary),
     ),
-    labelStyle: TextStyle(color: const Color(0xFF81B7A1).withOpacity(0.8)),
   ),
   useMaterial3: true,
 );
