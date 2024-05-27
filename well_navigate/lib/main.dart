@@ -184,19 +184,28 @@ class MyApp extends StatelessWidget {
         },
       );
 
-  Tooltip _field<T>(FieldDefinition<T> fd) {
+  Widget _field<T>(FieldDefinition<T> fd) {
     final value = fd.getValue(appointment.json);
     final text = value.toString();
     return Tooltip(
       message: fd.description,
       child: SizedBox(
-        width: 300,
+        width: 350,
         height: 80,
         child: Row(
           children: [
-            Text(fd.name),
-            TextField(
-              controller: TextEditingController(text: text),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: SizedBox(
+                width: 300,
+                child: TextField(
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    label: Text(fd.name),
+                  ),
+                  controller: TextEditingController(text: text),
+                ),
+              ),
             ),
           ],
         ),
