@@ -1,10 +1,9 @@
 //https://hl7.org/fhir/R4/terminologies-valuesets.html
 
+import 'package:fhir_client/models/value_sets/appointment_reason.dart';
 import 'package:fhir_client/models/value_sets/language.dart';
 import 'package:fhir_client/models/value_sets/practice_setting_code.dart';
 import 'package:fhir_client/models/value_sets/service_type.dart';
-
-import '../output/appointmentreason.dart';
 
 final valueSets = <String,
     ({
