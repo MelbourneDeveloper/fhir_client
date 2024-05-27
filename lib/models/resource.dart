@@ -123,17 +123,34 @@ sealed class Resource {
         _ => null,
       };
 
-  static const idField = FieldDefinition(name: 'id', getValue: _getId);
-  static const metaField = FieldDefinition(name: 'meta', getValue: _getMeta);
+  /// The id of the resource
+  static const idField = FieldDefinition(
+    name: 'id',
+    getValue: _getId,
+    description: 'The resource ID',
+  );
+
+  /// The metadata of the resource
+  static const metaField = FieldDefinition(
+    name: 'meta',
+    getValue: _getMeta,
+    description: 'The metadata of the resource',
+  );
 
   static const fieldDefinitions = [
     idField,
     metaField,
   ];
 
-  static JsonValue _getId(JsonObject jo) => jo.getValue(idField.name);
+  static String? _getId(JsonObject jo) => switch (jo[Resource.idField.name]) {
+        (final JsonString js) => js.value,
+        _ => null,
+      };
 
-  static JsonValue _getMeta(JsonObject jo) => jo.getValue(metaField.name);
+  static Meta? _getMeta(JsonObject jo) => switch (jo[Resource.metaField.name]) {
+        (final JsonObject jsonObject) => Meta.fromJson(jsonObject),
+        _ => null,
+      };
 
   @override
   bool operator ==(Object other) =>
