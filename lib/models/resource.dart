@@ -3867,126 +3867,110 @@ class Patient extends Resource {
 
   // Getters
 
-  /*
-A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc.
-*/
+  ///A reference to a set of rules that were followed when the resource was cons
+  ///tructed, and which must be understood when processing the content. Often, t
+  ///his is a reference to an implementation guide that defines the special rule
+  ///s along with other profiles etc.
   Uri? get implicitRules => implicitRulesField.getValue(json);
 
-  /*
-The base language in which the resource is written.
-*/
+  ///The base language in which the resource is written.
   Language? get language => languageField.getValue(json);
 
-  /*
-A human-readable narrative that contains a summary of the resource and can be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it "clinically safe" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety.
-*/
+  ///A human-readable narrative that contains a summary of the resource and can
+  ///be used to represent the content of the resource to a human. The narrative
+  ///need not encode all the structured data, but is required to contain suffici
+  ///ent detail to make it "clinically safe" for a human to just read the narrat
+  ///ive. Resource definitions may define what content should be represented in
+  ///the narrative to ensure clinical safety.
   Narrative? get text => textField.getValue(json);
 
-  /*
-These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope.
-*/
+  ///These resources do not have an independent existence apart from the resourc
+  ///e that contains them - they cannot be identified independently, and nor can
+  /// they have their own independent transaction scope.
   FixedList<Resource>? get contained => containedField.getValue(json);
 
-  /*
-May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-*/
+  ///May be used to represent additional information that is not part of the bas
+  ///ic definition of the resource. To make the use of extensions safe and manag
+  ///eable, there is a strict set of governance  applied to the definition and u
+  ///se of extensions. Though any implementer can define an extension, there is
+  ///a set of requirements that SHALL be met as part of the definition of the ex
+  ///tension.
   FixedList<Extension>? get extension => extensionField.getValue(json);
 
-  /*
-May be used to represent additional information that is not part of the basic definition of the resource and that modifies the understanding of the element that contains it and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
-
-Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-*/
+  ///May be used to represent additional information that is not part of the bas
+  ///ic definition of the resource and that modifies the understanding of the el
+  ///ement that contains it and/or the understanding of the containing element's
+  /// descendants. Usually modifier elements provide negation or qualification.
+  ///To make the use of extensions safe and manageable, there is a strict set of
+  /// governance applied to the definition and use of extensions. Though any imp
+  ///lementer is allowed to define an extension, there is a set of requirements
+  ///that SHALL be met as part of the definition of the extension. Applications
+  ///processing a resource are required to check for modifier extensions.Modifie
+  ///r extensions SHALL NOT change the meaning of any elements on Resource or Do
+  ///mainResource (including cannot change the meaning of modifierExtension itse
+  ///lf).
   FixedList<Extension>? get modifierExtension =>
       modifierExtensionField.getValue(json);
 
-  /*
-An identifier for this patient.
-*/
+  ///An identifier for this patient.
   FixedList<Identifier>? get identifier => identifierField.getValue(json);
 
-  /*
-Whether this patient record is in active use. 
-Many systems use this property to mark as non-current patients, such as those that have not been seen for a period of time based on an organization's business rules.
-
-It is often used to filter patient lists to exclude inactive patients
-
-Deceased patients may also be marked as inactive for the same reasons, but may be active for some time after death.
-*/
+  ///Whether this patient record is in active use. Many systems use this propert
+  ///y to mark as non-current patients, such as those that have not been seen fo
+  ///r a period of time based on an organization's business rules.It is often us
+  ///ed to filter patient lists to exclude inactive patientsDeceased patients ma
+  ///y also be marked as inactive for the same reasons, but may be active for so
+  ///me time after death.
   bool? get active => activeField.getValue(json);
 
-  /*
-A name associated with the individual.
-*/
+  ///A name associated with the individual.
   FixedList<HumanName>? get name => nameField.getValue(json);
 
-  /*
-A contact detail (e.g. a telephone number or an email address) by which the individual may be contacted.
-*/
+  ///A contact detail (e.g. a telephone number or an email address) by which the
+  /// individual may be contacted.
   FixedList<ContactPoint>? get telecom => telecomField.getValue(json);
 
-  /*
-Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes.
-*/
+  ///Administrative Gender - the gender that the patient is considered to have f
+  ///or administration and record keeping purposes.
   AdministrativeGender? get gender => genderField.getValue(json);
 
-  /*
-The date of birth for the individual.
-*/
+  ///The date of birth for the individual.
   DateTime? get birthDate => birthDateField.getValue(json);
 
-  /*
-Indicates if the individual is deceased or not.
-*/
+  ///Indicates if the individual is deceased or not.
   BooleanOrDateTimeChoice? get deceased => deceasedField.getValue(json);
 
-  /*
-An address for the individual.
-*/
+  ///An address for the individual.
   FixedList<Address>? get address => addressField.getValue(json);
 
-  /*
-This field contains a patient's most recent marital (civil) status.
-*/
+  ///This field contains a patient's most recent marital (civil) status.
   MaritalStatus? get maritalStatus => maritalStatusField.getValue(json);
 
-  /*
-Indicates whether the patient is part of a multiple (boolean) or indicates the actual birth order (integer).
-*/
+  ///Indicates whether the patient is part of a multiple (boolean) or indicates
+  ///the actual birth order (integer).
   BooleanOrIntegerChoice? get multipleBirth =>
       multipleBirthField.getValue(json);
 
-  /*
-Image of the patient.
-*/
+  ///Image of the patient.
   FixedList<Attachment>? get photo => photoField.getValue(json);
 
-  /*
-A contact party (e.g. guardian, partner, friend) for the patient.
-*/
+  ///A contact party (e.g. guardian, partner, friend) for the patient.
   FixedList<BackboneElement>? get contact => contactField.getValue(json);
 
-  /*
-A language which may be used to communicate with the patient about his or her health.
-*/
+  ///A language which may be used to communicate with the patient about his or h
+  ///er health.
   FixedList<BackboneElement>? get communication =>
       communicationField.getValue(json);
 
-  /*
-Patient's nominated care provider.
-*/
+  ///Patient's nominated care provider.
   FixedList<Reference>? get generalPractitioner =>
       generalPractitionerField.getValue(json);
 
-  /*
-Organization that is the custodian of the patient record.
-*/
+  ///Organization that is the custodian of the patient record.
   Reference? get managingOrganization =>
       managingOrganizationField.getValue(json);
 
-  /*
-Link to another patient resource that concerns the same actual patient.
-*/
+  ///Link to another patient resource that concerns the same actual patient.
   FixedList<BackboneElement>? get link => linkField.getValue(json);
 
   // Static Get Methods
