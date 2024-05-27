@@ -1,5 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'dart:io';
+
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import '../bin/fhir_generator.dart';
@@ -449,5 +451,18 @@ An address for the individual.''',
     managingOrganizationField,
     linkField,
   ];''');
+  });
+
+  test('Appointment R4 Golden', () {
+    final (name, definition, fields) =
+        processProfile('definitions/appointment.json');
+
+    final code = generateResourceDataClass(
+      name,
+      definition,
+      fields,
+    );
+
+    expect(code, File('test/appointment_r4_golden.txt').readAsStringSync());
   });
 }

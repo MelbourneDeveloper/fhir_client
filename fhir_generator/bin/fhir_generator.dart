@@ -12,7 +12,7 @@ import 'value_sets.dart';
 String generateFromJson(String filename) {
   final (resourceName, resourceDefinition, fields) = processProfile(filename);
 
-  return _generateResourceDataClass(
+  return generateResourceDataClass(
     resourceName,
     resourceDefinition,
     fields,
@@ -178,7 +178,7 @@ List<Field> _getFields(JsonArray element) {
 
 /// Generates a data class for the resource based on the
 /// JSON definition
-String _generateResourceDataClass(
+String generateResourceDataClass(
   String resourceName,
   String resourceDefinition,
   List<Field> fields,
