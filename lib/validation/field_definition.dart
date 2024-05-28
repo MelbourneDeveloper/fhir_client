@@ -42,9 +42,6 @@ class FieldDefinition<T> {
     this.customValidationRules = const [],
     //No min
     this.cardinality = Cardinality.singular,
-    this.isSummary = false,
-    this.isModifier = false,
-    this.isReadOnly = false,
     this.regex,
     this.description,
     this.valueSetValues,
@@ -67,21 +64,15 @@ class FieldDefinition<T> {
   /// Field Cardinality
   final Cardinality cardinality;
 
-  /// Indicates whether the field is part of the resource summary.
-  final bool isSummary;
-
-  /// Indicates whether the field modifies the behavior of the resource.
-  final bool isModifier;
-
-  /// Indicates whether the field is read-only.
-  final bool isReadOnly;
-
   /// A regular expression pattern to validate the field value.
   final String? regex;
 
   /// A description of the field.
   final String? description;
 
+  //TODO: it would be better if this could be strongly typed
+  //but it doesn's seem possible to do this while maintaining a
+  //const constructor
   /// A list of allowed string values.
   final List<dynamic>? valueSetValues;
 
@@ -181,11 +172,16 @@ class FieldDefinition<T> {
             );
           }
         } else {
-          if (!valueSetValues!.contains(value.value)) {
+          if (!valueSetValues!
+              // ignore: avoid_dynamic_calls
+              .map((vsc) => vsc.code as String)
+              .contains(value.value)) {
             errors.add(
               ValidationError(
                 message: 'Field $name value must be one of '
-                    '[ ${valueSetValues!.join(', ')} ]',
+                    // ignore: avoid_dynamic_calls
+                    '[ '
+                    '${_valueSetValueListCodeDisplay()} ]',
                 field: name,
               ),
             );
@@ -196,6 +192,10 @@ class FieldDefinition<T> {
 
     return errors;
   }
+
+  String _valueSetValueListCodeDisplay() =>
+      // ignore: avoid_dynamic_calls
+      valueSetValues!.map((vsc) => vsc.code as String).join(', ');
 
   bool _isList(JsonValue value) =>
       (cardinality.max is BoolChoice &&
