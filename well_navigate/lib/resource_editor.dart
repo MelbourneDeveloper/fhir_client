@@ -20,6 +20,10 @@ class ResourceEditor extends StatefulWidget {
 }
 
 class _ResourceEditorState extends State<ResourceEditor> {
+  Resource? res;
+
+  Resource get resource => res ?? widget.resource;
+
   @override
   Widget build(BuildContext context) => DefaultTabController(
         length: 2,
@@ -48,16 +52,16 @@ class _ResourceEditorState extends State<ResourceEditor> {
               child: TabBarView(
                 children: <Widget>[
                   EditorListView(
-                    resource: widget.resource,
-                    nonPrimitiveFields: fieldDefinitionsByElementType[
-                            widget.resource.runtimeType]!
-                        .nonPrimitiveFields(),
-                    primitiveFields: fieldDefinitionsByElementType[
-                            widget.resource.runtimeType]!
-                        .primitiveFields(),
+                    resource: resource,
+                    nonPrimitiveFields:
+                        fieldDefinitionsByElementType[resource.runtimeType]!
+                            .nonPrimitiveFields(),
+                    primitiveFields:
+                        fieldDefinitionsByElementType[resource.runtimeType]!
+                            .primitiveFields(),
                   ),
                   JsonEditor(
-                    initialJson: jsonValueEncode(widget.resource.json),
+                    initialJson: jsonValueEncode(resource.json),
                   ),
                 ],
               ),
@@ -70,14 +74,13 @@ class _ResourceEditorState extends State<ResourceEditor> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            iconsByResourceType[widget.resource.runtimeType] ??
-                Icons.medical_services,
+            iconsByResourceType[resource.runtimeType] ?? Icons.medical_services,
             size: 36,
             color: Theme.of(context).colorScheme.secondary,
           ),
           const SizedBox(width: 12),
           Text(
-            widget.resource.runtimeType.toString(),
+            resource.runtimeType.toString(),
             style: Theme.of(context).textTheme.headlineLarge,
           ),
         ],
