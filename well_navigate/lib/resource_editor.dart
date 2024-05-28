@@ -1,17 +1,27 @@
+import 'package:code_text_field/code_text_field.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:flutter/material.dart';
+import 'package:highlight/languages/json.dart';
 import 'package:well_navigate/constants.dart';
 import 'package:well_navigate/editor_list_view.dart';
 import 'package:well_navigate/field_definition_list_extensions.dart';
 import 'package:well_navigate/main.dart';
 
-class ResourceEditor extends StatelessWidget {
+class ResourceEditor extends StatefulWidget {
   const ResourceEditor({
     required this.resource,
     super.key,
   });
 
   final Resource resource;
+
+  @override
+  State<ResourceEditor> createState() => _ResourceEditorState();
+}
+
+class _ResourceEditorState extends State<ResourceEditor> {
+  final CodeController codeController =
+      CodeController(text: '{}', language: json);
 
   @override
   Widget build(BuildContext context) => DefaultTabController(
@@ -41,16 +51,18 @@ class ResourceEditor extends StatelessWidget {
               child: TabBarView(
                 children: <Widget>[
                   EditorListView(
-                    resource: resource,
-                    nonPrimitiveFields:
-                        fieldDefinitionsByElementType[resource.runtimeType]!
-                            .nonPrimitiveFields(),
-                    primitiveFields:
-                        fieldDefinitionsByElementType[resource.runtimeType]!
-                            .primitiveFields(),
+                    resource: widget.resource,
+                    nonPrimitiveFields: fieldDefinitionsByElementType[
+                            widget.resource.runtimeType]!
+                        .nonPrimitiveFields(),
+                    primitiveFields: fieldDefinitionsByElementType[
+                            widget.resource.runtimeType]!
+                        .primitiveFields(),
                   ),
-                  TextField(
-                    controller: TextEditingController(text: 'JSON'),
+                  CodeField(
+                    onChanged: (c) {},
+                    controller: codeController,
+                    textStyle: const TextStyle(fontFamily: 'Inconsolata'),
                   ),
                 ],
               ),
@@ -63,13 +75,14 @@ class ResourceEditor extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            iconsByResourceType[resource.runtimeType] ?? Icons.medical_services,
+            iconsByResourceType[widget.resource.runtimeType] ??
+                Icons.medical_services,
             size: 36,
             color: Theme.of(context).colorScheme.secondary,
           ),
           const SizedBox(width: 12),
           Text(
-            resource.runtimeType.toString(),
+            widget.resource.runtimeType.toString(),
             style: Theme.of(context).textTheme.headlineLarge,
           ),
         ],

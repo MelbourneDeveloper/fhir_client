@@ -9,11 +9,14 @@ environment:
   sdk: '>=3.4.1 <4.0.0'
 
 dependencies:
+  code_text_field: ^1.1.0
   cupertino_icons: ^1.0.6
   fhir_client: 
     path: ../
   flutter:
     sdk: flutter
+  flutter_highlight: ^0.7.0
+  flutter_markdown: ^0.6.18
 
 dev_dependencies:
   austerity: ^1.2.0
