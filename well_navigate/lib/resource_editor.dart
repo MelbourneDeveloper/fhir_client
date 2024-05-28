@@ -15,15 +15,35 @@ class ResourceEditor extends StatelessWidget {
   final Resource resource;
 
   @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          const SizedBox(height: 16),
-          Center(
-            child: _headingRow(context),
-          ),
-          const SizedBox(height: 16),
-          Expanded(child: _listView()),
-        ],
+  Widget build(BuildContext context) => DefaultTabController(
+        initialIndex: 1,
+        length: 2,
+        child: Column(
+          children: [
+            const SizedBox(height: 16),
+            Center(
+              child: _headingRow(context),
+            ),
+            const SizedBox(height: 16),
+            const TabBar(
+              dividerColor: Colors.transparent,
+              tabs: <Widget>[
+                Tab(
+                  text: 'Editor',
+                  icon: Icon(Icons.medical_services),
+                ),
+                Tab(
+                  text: 'JSON',
+                  icon: Icon(Icons.code),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: _listView(),
+            ),
+          ],
+        ),
       );
 
   Row _headingRow(BuildContext context) => Row(
