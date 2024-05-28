@@ -1,14 +1,10 @@
-import 'dart:convert';
-
-import 'package:code_text_field/code_text_field.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_highlight/themes/monokai-sublime.dart';
-import 'package:highlight/languages/json.dart';
 import 'package:jayse/jayse.dart';
 import 'package:well_navigate/constants.dart';
 import 'package:well_navigate/editor_list_view.dart';
 import 'package:well_navigate/field_definition_list_extensions.dart';
+import 'package:well_navigate/json_editor.dart';
 import 'package:well_navigate/main.dart';
 
 class ResourceEditor extends StatefulWidget {
@@ -24,22 +20,6 @@ class ResourceEditor extends StatefulWidget {
 }
 
 class _ResourceEditorState extends State<ResourceEditor> {
-  late final CodeController codeController;
-
-  @override
-  void initState() {
-    super.initState();
-
-    //TODO: Very inefficient.
-    final jsonData = jsonDecode(jsonValueEncode(widget.resource.json));
-    final formattedJson = const JsonEncoder.withIndent('  ').convert(jsonData);
-
-    codeController = CodeController(
-      text: formattedJson,
-      language: json,
-    );
-  }
-
   @override
   Widget build(BuildContext context) => DefaultTabController(
         length: 2,
@@ -76,20 +56,8 @@ class _ResourceEditorState extends State<ResourceEditor> {
                             widget.resource.runtimeType]!
                         .primitiveFields(),
                   ),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: MediaQuery.of(context).size.height,
-                    ),
-                    child: CodeTheme(
-                      data: const CodeThemeData(styles: monokaiSublimeTheme),
-                      child: SingleChildScrollView(
-                        child: CodeField(
-                          onChanged: (c) {},
-                          controller: codeController,
-                          textStyle: const TextStyle(fontFamily: 'Inconsolata'),
-                        ),
-                      ),
-                    ),
+                  JsonEditor(
+                    initialJson: jsonValueEncode(widget.resource.json),
                   ),
                 ],
               ),
