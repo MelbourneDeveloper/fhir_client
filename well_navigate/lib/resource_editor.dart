@@ -87,13 +87,14 @@ class _ResourceEditorState extends State<ResourceEditor> {
         children: [
           Icon(
             //TODO: runtime type is wrong here
-            iconsByResourceType[resource.runtimeType] ?? Icons.medical_services,
+            iconsByResourceType[widget.resourceTypeName] ??
+                Icons.medical_services,
             size: 36,
             color: Theme.of(context).colorScheme.secondary,
           ),
           const SizedBox(width: 12),
           Text(
-            resource.runtimeType.toString(),
+            widget.resourceTypeName,
             style: Theme.of(context).textTheme.headlineLarge,
           ),
         ],
