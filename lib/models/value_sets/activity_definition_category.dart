@@ -1,4 +1,5 @@
-// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars, constant_identifier_names
+
 import 'package:fhir_client/models/value_sets/value_set_concept.dart';
 
 /// High-level categorization of the type of activity.

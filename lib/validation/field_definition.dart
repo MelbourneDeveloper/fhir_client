@@ -42,12 +42,10 @@ class FieldDefinition<T> {
     this.customValidationRules = const [],
     //No min
     this.cardinality = Cardinality.singular,
-    this.isSummary = false,
-    this.isModifier = false,
-    this.isReadOnly = false,
     this.regex,
     this.description,
-    this.allowedStringValues = const [],
+    this.valueSetValues,
+    this.display,
   });
 
   /// Returns the value of the field from the provided [JsonObject].
@@ -56,6 +54,9 @@ class FieldDefinition<T> {
   /// The name of the field.
   final String name;
 
+  /// The UI display for the field
+  final String? display;
+
   /// A list of validation rules for the field.
   // ignore: strict_raw_type
   final List<ValidateResource> customValidationRules;
@@ -63,23 +64,17 @@ class FieldDefinition<T> {
   /// Field Cardinality
   final Cardinality cardinality;
 
-  /// Indicates whether the field is part of the resource summary.
-  final bool isSummary;
-
-  /// Indicates whether the field modifies the behavior of the resource.
-  final bool isModifier;
-
-  /// Indicates whether the field is read-only.
-  final bool isReadOnly;
-
   /// A regular expression pattern to validate the field value.
   final String? regex;
 
   /// A description of the field.
   final String? description;
 
+  //TODO: it would be better if this could be strongly typed
+  //but it doesn's seem possible to do this while maintaining a
+  //const constructor
   /// A list of allowed string values.
-  final List<String> allowedStringValues;
+  final List<dynamic>? valueSetValues;
 
   /// Validates the field value based on the defined validation rules.
   List<ValidationError> validate(
@@ -163,7 +158,7 @@ class FieldDefinition<T> {
       }
     }
 
-    if (allowedStringValues.isNotEmpty) {
+    if (valueSetValues != null) {
       if (_isList(value)) {
         //TODO: validate the list
       } else {
@@ -177,11 +172,16 @@ class FieldDefinition<T> {
             );
           }
         } else {
-          if (!allowedStringValues.contains(value.value)) {
+          if (!valueSetValues!
+              // ignore: avoid_dynamic_calls
+              .map((vsc) => vsc.code as String)
+              .contains(value.value)) {
             errors.add(
               ValidationError(
                 message: 'Field $name value must be one of '
-                    '[ ${allowedStringValues.join(', ')} ]',
+                    // ignore: avoid_dynamic_calls
+                    '[ '
+                    '${_valueSetValueListCodeDisplay()} ]',
                 field: name,
               ),
             );
@@ -192,6 +192,10 @@ class FieldDefinition<T> {
 
     return errors;
   }
+
+  String _valueSetValueListCodeDisplay() =>
+      // ignore: avoid_dynamic_calls
+      valueSetValues!.map((vsc) => vsc.code as String).join(', ');
 
   bool _isList(JsonValue value) =>
       (cardinality.max is BoolChoice &&

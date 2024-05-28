@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:jayse/jayse.dart';
 import 'package:path/path.dart' as path;
 
-// Example JSON: 
+// Example JSON:
 // https://hl7.org/fhir/r4/codesystem-activity-definition-category.json
 // https://hl7.org/fhir/r4/valueset-encounter-reason.json
 // List of value sets: https://fhir-ru.github.io/terminologies-valuesets.html
@@ -89,10 +89,11 @@ String generateValueSetEnum(
 
   return '''
 // ignore_for_file: lines_longer_than_80_chars, constant_identifier_names
-import 'package:jayse/jayse.dart';
+
+import 'package:fhir_client/models/value_sets/value_set_concept.dart';
 
 /// $description
-enum $name implements Comparable<$name> {
+enum $name with ValueSetConcept<$name> {
 
 ${concepts.map(_generateEnumCase).join(',\n\n')};
 
@@ -104,12 +105,15 @@ const $name({
 
 /// The property that represents the unique identifier 
 /// for a specific concept within the value set.
+@override
 final String code;
 
 /// A human-readable string to display to the user.
+@override
 final String display;
 
 /// Provides a more detailed explanation or description of the concept
+@override
 final String definition;
 
 /// Returns the enum value based on the string code, and returns null if
@@ -122,12 +126,6 @@ static $name? fromCode(String code) => switch (code) {
   (_) => null,
 };
 
-/// Converts the code to a JsonString for the purpose of JSON
-/// serialization
-JsonValue get json => JsonString(code);
-
-@override
-int compareTo($name other) => code == other.code ? 0 : 1;
 }
 ''';
 }

@@ -27,7 +27,7 @@ class Field {
     required this.singularDartType,
     this.valueSetStrength,
     this.isValueSet = false,
-    this.allowedStringValues,
+    this.valueSetName,
   });
 
   final String name;
@@ -37,7 +37,7 @@ class Field {
   final int min;
   final int? max;
   final bool isMaxStar;
-  final List<String>? allowedStringValues;
+  final String? valueSetName;
   final String definition;
   final bool isValueSet;
   final ValueSetStrength? valueSetStrength;
