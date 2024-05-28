@@ -1,10 +1,8 @@
 import 'package:fhir_client/models/resource.dart';
-import 'package:fhir_client/models/resource.dart' as res;
 import 'package:flutter/material.dart';
-import 'package:well_navigate/element_panel.dart';
+import 'package:well_navigate/editor_list_view.dart';
 import 'package:well_navigate/field_definition_list_extensions.dart';
 import 'package:well_navigate/main.dart';
-import 'package:well_navigate/tile.dart';
 
 class ResourceEditor extends StatelessWidget {
   const ResourceEditor({
@@ -42,7 +40,15 @@ class ResourceEditor extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: <Widget>[
-                  _listView(),
+                  EditorListView(
+                    resource: resource,
+                    nonPrimitiveFields:
+                        fieldDefinitionsByElementType[resource.runtimeType]!
+                            .nonPrimitiveFields(),
+                    primitiveFields:
+                        fieldDefinitionsByElementType[resource.runtimeType]!
+                            .primitiveFields(),
+                  ),
                   TextField(
                     controller: TextEditingController(text: 'JSON'),
                   ),
@@ -68,44 +74,4 @@ class ResourceEditor extends StatelessWidget {
           ),
         ],
       );
-
-  ListView _listView() {
-    final nonPrimitiveFields =
-        fieldDefinitionsByElementType[resource.runtimeType]!
-            .nonPrimitiveFields();
-    final primitiveFields =
-        fieldDefinitionsByElementType[resource.runtimeType]!.primitiveFields();
-
-    return ListView.builder(
-      itemCount: nonPrimitiveFields.length + 1,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return Tile(
-            headerTooltip: 'Basic Details',
-            headerText: 'Details',
-            body: ElementPanel(element: resource, fields: primitiveFields),
-          );
-        } else {
-          final field = nonPrimitiveFields[index - 1];
-          final headerTooltip = field.description ?? 'No information';
-          final headerText = field.display ?? field.name;
-
-          return Tile(
-            headerTooltip: headerTooltip,
-            headerText: headerText,
-            body: switch (field.getValue(resource.json)) {
-              (final res.Element e)
-                  when fieldDefinitionsByElementType
-                      .containsKey(e.runtimeType) =>
-                ElementPanel(
-                  element: e,
-                  fields: fieldDefinitionsByElementType[e.runtimeType]!,
-                ),
-              _ => const SizedBox.shrink()
-            },
-          );
-        }
-      },
-    );
-  }
 }
