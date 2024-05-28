@@ -3,6 +3,7 @@ import 'package:fhir_client/models/value_sets/appointment_status.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
 import 'package:well_navigate/field.dart';
+import 'package:well_navigate/string_editor.dart';
 
 class ElementPanel extends StatelessWidget {
   const ElementPanel({
@@ -25,7 +26,7 @@ class ElementPanel extends StatelessWidget {
         editor: _editorByType(fieldDefinition),
       );
 
-  StatefulWidget _editorByType(FieldDefinition<dynamic> fieldDefinition) =>
+  Widget _editorByType(FieldDefinition<dynamic> fieldDefinition) =>
       switch (fieldDefinition) {
         FieldDefinition<String>() => TextField(
             decoration: InputDecoration(
@@ -52,13 +53,9 @@ class ElementPanel extends StatelessWidget {
               ),
             ),
           ),
-        _ => TextField(
-            decoration: InputDecoration(
-              labelText: fieldDefinition.display ?? fieldDefinition.name,
-            ),
-            controller: TextEditingController(
-              text: fieldDefinition.getValue(element.json).toString(),
-            ),
+        _ => StringEditor(
+            fieldDefinition: fieldDefinition,
+            element: element,
           ),
       };
 }
