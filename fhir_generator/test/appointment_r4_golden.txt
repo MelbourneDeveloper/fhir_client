@@ -63,7 +63,8 @@ class Appointment extends Resource {
             if (patientInstruction != null) patientInstructionField.name: JsonString(patientInstruction),
             if (basedOn != null) basedOnField.name: JsonArray.unmodifiable(basedOn.map((e) => e.json),),
             if (participant != null) participantField.name: JsonArray.unmodifiable(participant.map((e) => e.json),),
-            if (requestedPeriod != null) requestedPeriodField.name: JsonArray.unmodifiable(requestedPeriod.map((e) => e.json),),  
+            if (requestedPeriod != null) requestedPeriodField.name: JsonArray.unmodifiable(requestedPeriod.map((e) => e.json),),
+           _resourceTypeFieldName: const JsonString('Appointment'),  
           }),
         );
 
@@ -741,7 +742,7 @@ The duration (usually in minutes) could also be provided to indicate the length 
 
   /// R4: All field definitions for [Appointment].
   static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
+    ...Element.fieldDefinitions,
     implicitRulesField,
     languageField,
     textField,
