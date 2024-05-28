@@ -2,6 +2,7 @@
 
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/value_sets/appointment_status.dart';
+import 'package:fhir_client/models/value_sets/language.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 
 const _primitiveFieldTypes = [
@@ -10,6 +11,7 @@ const _primitiveFieldTypes = [
   FieldDefinition<num>,
   FieldDefinition<DateTime>,
   FieldDefinition<AppointmentStatus>,
+  FieldDefinition<Language>,
 ];
 
 extension FieldDefinitionListExtensions on List<FieldDefinition> {
