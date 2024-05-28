@@ -20,9 +20,9 @@ import 'package:well_navigate/app_root.dart';
 
 // ignore: unreachable_from_main
 const fieldDefinitionsByElementType = {
-  Appointment: Appointment.fieldDefinitions,
-  Meta: Meta.fieldDefinitions,
-  OperationOutcome<String>: OperationOutcome.fieldDefinitions,
+  'Appointment': Appointment.fieldDefinitions,
+  'Meta': Meta.fieldDefinitions,
+  'OperationOutcome': OperationOutcome.fieldDefinitions,
 };
 
 // ignore: unreachable_from_main

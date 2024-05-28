@@ -1,6 +1,6 @@
-import 'package:fhir_client/models/resource.dart' as res;
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
+import 'package:jayse/jayse.dart';
 
 class StringEditor<T> extends StatelessWidget {
   const StringEditor({
@@ -9,7 +9,7 @@ class StringEditor<T> extends StatelessWidget {
     super.key,
   });
 
-  final res.Element element;
+  final JsonObject element;
   final FieldDefinition<T> fieldDefinition;
 
   @override
@@ -18,7 +18,7 @@ class StringEditor<T> extends StatelessWidget {
           labelText: fieldDefinition.display ?? fieldDefinition.name,
         ),
         controller: TextEditingController(
-          text: fieldDefinition.getValue(element.json).toString(),
+          text: fieldDefinition.getValue(element).toString(),
         ),
       );
 }

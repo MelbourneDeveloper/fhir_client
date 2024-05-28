@@ -1,8 +1,8 @@
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
-import 'package:fhir_client/models/resource.dart' as res;
 import 'package:fhir_client/models/value_sets/value_set_concept.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
+import 'package:jayse/jayse.dart';
 import 'package:well_navigate/editors/string_editor.dart';
 import 'package:well_navigate/editors/value_set_editor.dart';
 import 'package:well_navigate/field.dart';
@@ -11,13 +11,14 @@ class ElementPanel extends StatelessWidget {
   const ElementPanel({
     required this.fields,
     required this.element,
+    required this.onElementChanged,
     super.key,
   });
 
   // ignore: strict_raw_type
   final List<FieldDefinition> fields;
-  final res.Element element;
-  final void Function(res.Element) onElementChanged;
+  final JsonObject element;
+  final void Function(JsonObject) onElementChanged;
 
   @override
   Widget build(BuildContext context) => Wrap(
@@ -36,12 +37,13 @@ class ElementPanel extends StatelessWidget {
               labelText: fieldDefinition.display ?? fieldDefinition.name,
             ),
             controller: TextEditingController(
-              text: fieldDefinition.getValue(element.json).toString(),
+              text: fieldDefinition.getValue(element).toString(),
             ),
             onChanged: (value) {
               onElementChanged(
-                element.copyWith(
-                  json: fieldDefinition.setValue(element.json, value),
+                element.withUpdate(
+                  fieldDefinition.name,
+                  JsonString(value),
                 ),
               );
             },
@@ -50,7 +52,7 @@ class ElementPanel extends StatelessWidget {
             items: fieldDefinition.valueSetValues!
                 .cast<ValueSetConcept>()
                 .toFixedList(),
-            selectedValue: fieldDefinition.getValue(element.json),
+            selectedValue: fieldDefinition.getValue(element),
           ),
         _ => StringEditor(
             fieldDefinition: fieldDefinition,

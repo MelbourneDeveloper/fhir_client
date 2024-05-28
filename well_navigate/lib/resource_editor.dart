@@ -1,4 +1,3 @@
-import 'package:fhir_client/models/resource.dart';
 import 'package:flutter/material.dart';
 import 'package:jayse/jayse.dart';
 import 'package:well_navigate/constants.dart';
@@ -10,18 +9,20 @@ import 'package:well_navigate/main.dart';
 class ResourceEditor extends StatefulWidget {
   const ResourceEditor({
     required this.resource,
+    required this.resourceTypeName,
     super.key,
   });
 
-  final Resource resource;
+  final JsonObject resource;
+  final String resourceTypeName;
 
   @override
   State<ResourceEditor> createState() => _ResourceEditorState();
 }
 
 class _ResourceEditorState extends State<ResourceEditor> {
-  Resource? _resource;
-  Resource get resource => _resource ?? widget.resource;
+  JsonObject? _resource;
+  JsonObject get resource => _resource ?? widget.resource;
 
   @override
   void initState() {
@@ -59,19 +60,17 @@ class _ResourceEditorState extends State<ResourceEditor> {
                   EditorListView(
                     resource: resource,
                     nonPrimitiveFields:
-                        fieldDefinitionsByElementType[resource.runtimeType]!
+                        fieldDefinitionsByElementType[widget.resourceTypeName]!
                             .nonPrimitiveFields(),
                     primitiveFields:
-                        fieldDefinitionsByElementType[resource.runtimeType]!
+                        fieldDefinitionsByElementType[widget.resourceTypeName]!
                             .primitiveFields(),
                   ),
                   JsonEditor(
-                    initialJson: jsonValueEncode(resource.json),
+                    initialJson: jsonValueEncode(resource),
                     onChanged: (json) => setState(
                       //TODO: error handling
-                      () => _resource = Resource.fromJson(
-                        jsonValueDecode(json) as JsonObject,
-                      ),
+                      () => _resource = jsonValueDecode(json) as JsonObject,
                     ),
                   ),
                 ],
