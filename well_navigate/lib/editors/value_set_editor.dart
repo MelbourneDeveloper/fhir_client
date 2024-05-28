@@ -1,34 +1,27 @@
-import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/value_sets/value_set_concept.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
+import 'package:well_navigate/iterable_extensions.dart';
 
-extension IterableExtensions<T> on Iterable<T> {
-  List<T> toSortedList([
-    int Function(T a, T b)? compare,
-  ]) {
-    final newList = toList();
-    // ignore: cascade_invocations
-    newList.sort(compare);
-    return newList;
-  }
-}
-
-class ValueSetEditor extends StatelessWidget {
+class ValueSetEditor<T> extends StatelessWidget {
   const ValueSetEditor({
-    required this.items,
+    required this.fieldDefinition,
     super.key,
     this.selectedValue,
   });
 
-  final FixedList<ValueSetConcept> items;
   final ValueSetConcept? selectedValue;
+  final FieldDefinition<T> fieldDefinition;
 
   @override
   Widget build(BuildContext context) => InputDecorator(
-        decoration: const InputDecoration(),
+        decoration: InputDecoration(
+          label: Text(fieldDefinition.display ?? fieldDefinition.name),
+        ),
         child: DropdownButtonHideUnderline(
           child: DropdownButton<ValueSetConcept>(
-            items: items
+            items: fieldDefinition.valueSetValues!
+                .cast<ValueSetConcept>()
                 .toSortedList((a, b) => a.compareTo(b))
                 .map(
                   (l) => DropdownMenuItem<ValueSetConcept>(
