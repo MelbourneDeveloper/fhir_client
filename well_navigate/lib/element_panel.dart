@@ -1,6 +1,7 @@
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/resource.dart' as res;
 import 'package:fhir_client/models/value_sets/appointment_status.dart';
+import 'package:fhir_client/models/value_sets/value_set_concept.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
 import 'package:well_navigate/editors/string_editor.dart';
@@ -38,8 +39,8 @@ class ElementPanel extends StatelessWidget {
               text: fieldDefinition.getValue(element.json).toString(),
             ),
           ),
-        FieldDefinition<AppointmentStatus>() => ValueSetEditor(
-            items: AppointmentStatus.values.toFixedList(),
+        FieldDefinition<ValueSetConcept>() => ValueSetEditor(
+            items: fieldDefinition.allowedStringValues,
             selectedValue: fieldDefinition.getValue(element.json),
           ),
         _ => StringEditor(

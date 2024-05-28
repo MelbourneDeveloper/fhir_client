@@ -1,4 +1,5 @@
 import 'package:fhir_client/models/basic_types/choice_types.dart';
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:jayse/jayse.dart';
 
@@ -47,7 +48,7 @@ class FieldDefinition<T> {
     this.isReadOnly = false,
     this.regex,
     this.description,
-    this.allowedStringValues = const [],
+    this.allowedStringValues,
     this.display,
   });
 
@@ -83,7 +84,7 @@ class FieldDefinition<T> {
   final String? description;
 
   /// A list of allowed string values.
-  final List<String> allowedStringValues;
+  final FixedList<T>? allowedStringValues;
 
   /// Validates the field value based on the defined validation rules.
   List<ValidationError> validate(
@@ -167,7 +168,7 @@ class FieldDefinition<T> {
       }
     }
 
-    if (allowedStringValues.isNotEmpty) {
+    if (allowedStringValues != null) {
       if (_isList(value)) {
         //TODO: validate the list
       } else {
@@ -181,11 +182,11 @@ class FieldDefinition<T> {
             );
           }
         } else {
-          if (!allowedStringValues.contains(value.value)) {
+          if (!allowedStringValues!.contains(value.value)) {
             errors.add(
               ValidationError(
                 message: 'Field $name value must be one of '
-                    '[ ${allowedStringValues.join(', ')} ]',
+                    '[ ${allowedStringValues!.join(', ')} ]',
                 field: name,
               ),
             );
