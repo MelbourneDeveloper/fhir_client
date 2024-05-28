@@ -22,6 +22,7 @@ import 'package:well_navigate/app_root.dart';
 const fieldDefinitionsByElementType = {
   Appointment: Appointment.fieldDefinitions,
   Meta: Meta.fieldDefinitions,
+  OperationOutcome<String>: OperationOutcome.fieldDefinitions,
 };
 
 // ignore: unreachable_from_main

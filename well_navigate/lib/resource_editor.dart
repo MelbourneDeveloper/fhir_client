@@ -20,9 +20,14 @@ class ResourceEditor extends StatefulWidget {
 }
 
 class _ResourceEditorState extends State<ResourceEditor> {
-  Resource? res;
+  Resource? _resource;
+  Resource get resource => _resource ?? widget.resource;
 
-  Resource get resource => res ?? widget.resource;
+  @override
+  void initState() {
+    super.initState();
+    _resource = widget.resource;
+  }
 
   @override
   Widget build(BuildContext context) => DefaultTabController(
@@ -62,6 +67,12 @@ class _ResourceEditorState extends State<ResourceEditor> {
                   ),
                   JsonEditor(
                     initialJson: jsonValueEncode(resource.json),
+                    onChanged: (json) => setState(
+                      //TODO: error handling
+                      () => _resource = Resource.fromJson(
+                        jsonValueDecode(json) as JsonObject,
+                      ),
+                    ),
                   ),
                 ],
               ),

@@ -8,10 +8,12 @@ import 'package:highlight/languages/json.dart';
 class JsonEditor extends StatefulWidget {
   const JsonEditor({
     required this.initialJson,
+    required this.onChanged,
     super.key,
   });
 
   final String initialJson;
+  final void Function(String) onChanged;
 
   @override
   State<JsonEditor> createState() => _JsonEditorState();
@@ -43,7 +45,7 @@ class _JsonEditorState extends State<JsonEditor> {
           data: const CodeThemeData(styles: monokaiSublimeTheme),
           child: SingleChildScrollView(
             child: CodeField(
-              onChanged: (c) {},
+              onChanged: widget.onChanged,
               controller: codeController,
               textStyle: const TextStyle(fontFamily: 'Inconsolata'),
             ),
