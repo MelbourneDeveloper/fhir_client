@@ -67,7 +67,7 @@ String fieldDefinition(Field field) => '''
     getValue: _get${field.name.capitalize()},
     description: ${_wrapDefinitionString(field.definition)},
     ${_cardinalityLine(field)}
-${field.valueSetName != null ? '   valueSetValues: ${field.valueSetName}.values,\n' : ''}  );''';
+${field.valueSetName != null ? '    valueSetValues: ${field.valueSetName}.values,\n' : ''}  );''';
 
 String classAndConstructor(
   String resourceName,
