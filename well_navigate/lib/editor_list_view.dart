@@ -57,16 +57,19 @@ class EditorListView extends StatelessWidget {
               (FieldDefinition<FixedList<Period>>),
             ].contains(field.runtimeType)
                 ? const SizedBox.shrink()
-                : Tile(
-                    headerTooltip: headerTooltip,
-                    headerText: headerText,
-                    body: ElementPanel(
-                      element: resource,
-                      onElementChanged: (e) {},
-                      fields: fieldDefinitionsByElementType[
-                          field.runtimeType.toString()]!,
-                    ),
-                  );
+                : switch (resource[field.name]) {
+                    (final JsonObject jo) => Tile(
+                        headerTooltip: headerTooltip,
+                        headerText: headerText,
+                        body: ElementPanel(
+                          element: jo,
+                          onElementChanged: (e) {},
+                          fields: fieldDefinitionsByElementType[
+                              field.runtimeType.toString()]!,
+                        ),
+                      ),
+                    _ => Text('${field.name}: not an object')
+                  };
           }
         },
       );
