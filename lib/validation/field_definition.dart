@@ -83,7 +83,7 @@ class FieldDefinition<T> {
   final String? description;
 
   /// A list of allowed string values.
-  final List<T>? valueSetValues;
+  final List<dynamic>? valueSetValues;
 
   /// Validates the field value based on the defined validation rules.
   List<ValidationError> validate(
