@@ -708,33 +708,7 @@ The base language in which the resource is written.''',
       min: 0,
       max: IntegerChoice(1),
     ),
-    allowedStringValues: [
-      'ar',
-      'bn',
-      'cs',
-      'da',
-      'de',
-      'el',
-      'en',
-      'es',
-      'fi',
-      'fr',
-      'gu',
-      'hi',
-      'hr',
-      'it',
-      'ja',
-      'ko',
-      'nl',
-      'no',
-      'pa',
-      'pl',
-      'pt',
-      'ru',
-      'sv',
-      'te',
-      'zh',
-    ],
+    valueSetValues: Language.values,
   );
 
   /// Field definition for [text].
@@ -797,15 +771,7 @@ The overall status of the Appointment. Each of the participants has their own pa
       min: 1,
       max: IntegerChoice(1),
     ),
-    allowedStringValues: [
-      'proposed',
-      'booked',
-      'arrived',
-      'fulfilled',
-      'cancelled',
-      'noshow',
-      'entered-in-error',
-    ],
+    valueSetValues: AppointmentStatus.values,
   );
 
   /// Field definition for [cancelationReason].
@@ -818,7 +784,7 @@ The coded reason for the appointment being cancelled. This is often used in repo
       min: 0,
       max: IntegerChoice(1),
     ),
-    allowedStringValues: [
+    valueSetValues: [
       'pat',
       'prac',
       'loc',
@@ -835,7 +801,7 @@ The coded reason for the appointment being cancelled. This is often used in repo
     description: '''
 A broad categorization of the service that is to be performed during this appointment.''',
     cardinality: Cardinality(min: 0, max: BoolChoice(true)),
-    allowedStringValues: [
+    valueSetValues: [
       '1',
       '2',
       '34',
@@ -884,7 +850,7 @@ A broad categorization of the service that is to be performed during this appoin
     description: '''
 The specific service that is to be performed during this appointment.''',
     cardinality: Cardinality(min: 0, max: BoolChoice(true)),
-    allowedStringValues: [
+    valueSetValues: [
       '1',
       '2',
       '3',
@@ -1503,7 +1469,7 @@ The style of appointment or patient that has been booked in the slot (not servic
       min: 0,
       max: IntegerChoice(1),
     ),
-    allowedStringValues: [
+    valueSetValues: [
       'CHECKUP',
       'EMERGENCY',
       'FOLLOWUP',
@@ -4044,7 +4010,7 @@ The base language in which the resource is written.''',
       min: 0,
       max: IntegerChoice(1),
     ),
-    allowedStringValues: [
+    valueSetValues: [
       'ar',
       'bn',
       'cs',
@@ -4168,7 +4134,7 @@ Administrative Gender - the gender that the patient is considered to have for ad
       min: 0,
       max: IntegerChoice(1),
     ),
-    allowedStringValues: [
+    valueSetValues: [
       'male',
       'female',
       'other',
@@ -4219,7 +4185,7 @@ This field contains a patient's most recent marital (civil) status.''',
       min: 0,
       max: IntegerChoice(1),
     ),
-    allowedStringValues: [
+    valueSetValues: [
       'A',
       'D',
       'I',

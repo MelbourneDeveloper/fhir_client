@@ -47,7 +47,8 @@ class FieldDefinition<T> {
     this.isReadOnly = false,
     this.regex,
     this.description,
-    this.allowedStringValues = const [],
+    this.valueSetValues,
+    this.display,
   });
 
   /// Returns the value of the field from the provided [JsonObject].
@@ -55,6 +56,9 @@ class FieldDefinition<T> {
 
   /// The name of the field.
   final String name;
+
+  /// The UI display for the field
+  final String? display;
 
   /// A list of validation rules for the field.
   // ignore: strict_raw_type
@@ -79,7 +83,7 @@ class FieldDefinition<T> {
   final String? description;
 
   /// A list of allowed string values.
-  final List<String> allowedStringValues;
+  final List<T>? valueSetValues;
 
   /// Validates the field value based on the defined validation rules.
   List<ValidationError> validate(
@@ -163,7 +167,7 @@ class FieldDefinition<T> {
       }
     }
 
-    if (allowedStringValues.isNotEmpty) {
+    if (valueSetValues != null) {
       if (_isList(value)) {
         //TODO: validate the list
       } else {
@@ -177,11 +181,11 @@ class FieldDefinition<T> {
             );
           }
         } else {
-          if (!allowedStringValues.contains(value.value)) {
+          if (!valueSetValues!.contains(value.value)) {
             errors.add(
               ValidationError(
                 message: 'Field $name value must be one of '
-                    '[ ${allowedStringValues.join(', ')} ]',
+                    '[ ${valueSetValues!.join(', ')} ]',
                 field: name,
               ),
             );
