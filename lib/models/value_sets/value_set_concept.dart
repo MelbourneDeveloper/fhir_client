@@ -16,7 +16,6 @@ mixin ValueSetConcept<T extends ValueSetConcept<T>> implements Comparable<T> {
   /// serialization
   JsonValue get json => JsonString(code);
 
-  ///TODO: this is for ordering, but won't currently work
   @override
-  int compareTo(T other) => code == other.code ? 0 : 1;
+  int compareTo(T other) => code.compareTo(other.code);
 }

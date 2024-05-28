@@ -8,7 +8,7 @@ extension IterableExtensions<T> on Iterable<T> {
   ]) {
     final newList = toList();
     // ignore: cascade_invocations
-    //newList.sort(compare);
+    newList.sort(compare);
     return newList;
   }
 }
@@ -29,13 +29,14 @@ class ValueSetEditor extends StatelessWidget {
         child: DropdownButtonHideUnderline(
           child: DropdownButton<ValueSetConcept>(
             items: items
+                .toSortedList((a, b) => a.compareTo(b))
                 .map(
                   (l) => DropdownMenuItem<ValueSetConcept>(
                     value: l,
                     child: Text('${l.code} - ${l.display}'),
                   ),
                 )
-                .toSortedList(),
+                .toList(),
             onChanged: (l) {},
             value: selectedValue,
           ),
