@@ -8,12 +8,12 @@ import 'package:well_navigate/resource_editor_list_view.dart';
 
 class ResourceEditor extends StatefulWidget {
   const ResourceEditor({
-    required this.resource,
+    required this.resourceRoot,
     required this.resourceTypeName,
     super.key,
   });
 
-  final JsonObject resource;
+  final JsonObject resourceRoot;
   final String resourceTypeName;
 
   @override
@@ -22,12 +22,12 @@ class ResourceEditor extends StatefulWidget {
 
 class _ResourceEditorState extends State<ResourceEditor> {
   JsonObject? _resource;
-  JsonObject get resource => _resource ?? widget.resource;
+  JsonObject get resource => _resource ?? widget.resourceRoot;
 
   @override
   void initState() {
     super.initState();
-    _resource = widget.resource;
+    _resource = widget.resourceRoot;
   }
 
   @override
@@ -58,7 +58,7 @@ class _ResourceEditorState extends State<ResourceEditor> {
               child: TabBarView(
                 children: <Widget>[
                   ResourceEditorListView(
-                    resource: resource,
+                    resourceRoot: resource,
                     nonPrimitiveFields:
                         fieldDefinitionsByElementType[widget.resourceTypeName]!
                             .nonPrimitiveFields(),

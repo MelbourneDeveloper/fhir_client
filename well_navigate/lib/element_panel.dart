@@ -35,22 +35,11 @@ class ElementPanel extends StatelessWidget {
 
   Widget _editorByType(FieldDefinition<dynamic> fieldDefinition) =>
       switch (fieldDefinition) {
-        FieldDefinition<String>() => TextField(
-            decoration: InputDecoration(
-              labelText: fieldDefinition.display ?? fieldDefinition.name,
-            ),
-            controller: TextEditingController(
-              text: fieldDefinition.getValue(element).toString(),
-            ),
-            onChanged: (value) {
-              onFieldChanged(
-                fieldDefinition.name,
-                element.withUpdate(
-                  fieldDefinition.name,
-                  JsonString(value),
-                ),
-              );
-            },
+        FieldDefinition<String>() => StringEditor(
+            fieldDefinition: fieldDefinition,
+            element: element,
+            onChanged: (v) =>
+                onFieldChanged(fieldDefinition.name, JsonString(v)),
           ),
         FieldDefinition<ValueSetConcept>() => ValueSetEditor(
             items: fieldDefinition.valueSetValues!
@@ -61,6 +50,8 @@ class ElementPanel extends StatelessWidget {
         _ => StringEditor(
             fieldDefinition: fieldDefinition,
             element: element,
+            onChanged: (v) =>
+                onFieldChanged(fieldDefinition.name, JsonString(v)),
           ),
       };
 }

@@ -18,14 +18,14 @@ class ResourceEditorListView extends StatelessWidget {
   const ResourceEditorListView({
     required this.nonPrimitiveFields,
     required this.primitiveFields,
-    required this.resource,
+    required this.resourceRoot,
     required this.onFieldChanged,
     super.key,
   });
 
   final FixedList<FieldDefinition<dynamic>> nonPrimitiveFields;
   final FixedList<FieldDefinition<dynamic>> primitiveFields;
-  final JsonObject resource;
+  final JsonObject resourceRoot;
 
   /// Fires when the field for the resource changes. It might an individual
   /// primitive value like a string or number or an entire element
@@ -40,7 +40,7 @@ class ResourceEditorListView extends StatelessWidget {
               headerTooltip: 'Basic Details',
               headerText: 'Details',
               body: ElementPanel(
-                element: resource,
+                element: resourceRoot,
                 fields: primitiveFields,
                 onFieldChanged: onFieldChanged,
               ),
@@ -62,7 +62,7 @@ class ResourceEditorListView extends StatelessWidget {
               (FieldDefinition<FixedList<Period>>),
             ].contains(field.runtimeType)
                 ? const SizedBox.shrink()
-                : switch (resource[field.name]) {
+                : switch (resourceRoot[field.name]) {
                     (final JsonObject jo) => Tile(
                         headerTooltip: headerTooltip,
                         headerText: headerText,
@@ -71,7 +71,7 @@ class ResourceEditorListView extends StatelessWidget {
                           //One of the editors on the panel fired a change
                           onFieldChanged: (f, e) => onFieldChanged(
                             field.name,
-                            resource.withUpdate(f, e),
+                            resourceRoot.withUpdate(f, e),
                           ),
                           fields: fieldDefinitionsByElementType[
                               field.runtimeType.toString()]!,

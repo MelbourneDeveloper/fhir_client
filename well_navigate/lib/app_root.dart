@@ -37,7 +37,7 @@ class AppRoot extends StatelessWidget {
         theme: themeData,
         home: Scaffold(
           body: ResourceEditor(
-            resource: appointment.json,
+            resourceRoot: appointment.json,
             resourceTypeName: 'Appointment',
           ),
         ),
