@@ -1,5 +1,4 @@
 import 'package:fhir_client/models/basic_types/choice_types.dart';
-import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:jayse/jayse.dart';
 

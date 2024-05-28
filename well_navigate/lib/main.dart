@@ -57,7 +57,7 @@ final appointment = Appointment(
   status: AppointmentStatus.booked,
   cancelationReason: CancelationReason.patientCancel,
   serviceCategory: FixedList([ServiceCategory.agedCare]),
-  serviceType: FixedList([ServiceType.chiropractic]),
+  serviceType: FixedList([ServiceType.n543]),
   specialty: FixedList([
     CodeableConcept(
       coding: FixedList([

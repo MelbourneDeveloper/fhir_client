@@ -1,6 +1,5 @@
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/resource.dart' as res;
-import 'package:fhir_client/models/value_sets/appointment_status.dart';
 import 'package:fhir_client/models/value_sets/value_set_concept.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +39,9 @@ class ElementPanel extends StatelessWidget {
             ),
           ),
         FieldDefinition<ValueSetConcept>() => ValueSetEditor(
-            items: fieldDefinition.allowedStringValues,
+            items: fieldDefinition.valueSetValues!
+                .cast<ValueSetConcept>()
+                .toFixedList(),
             selectedValue: fieldDefinition.getValue(element.json),
           ),
         _ => StringEditor(
