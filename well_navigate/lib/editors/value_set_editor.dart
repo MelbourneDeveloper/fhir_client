@@ -2,6 +2,17 @@ import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/value_sets/value_set_concept.dart';
 import 'package:flutter/material.dart';
 
+extension IterableExtensions<T> on Iterable<T> {
+  List<T> toSortedList([
+    int Function(T a, T b)? compare,
+  ]) {
+    final newList = toList();
+    // ignore: cascade_invocations
+    //newList.sort(compare);
+    return newList;
+  }
+}
+
 class ValueSetEditor extends StatelessWidget {
   const ValueSetEditor({
     required this.items,
@@ -21,10 +32,10 @@ class ValueSetEditor extends StatelessWidget {
                 .map(
                   (l) => DropdownMenuItem<ValueSetConcept>(
                     value: l,
-                    child: Text(l.display),
+                    child: Text('${l.code} - ${l.display}'),
                   ),
                 )
-                .toList(),
+                .toSortedList(),
             onChanged: (l) {},
             value: selectedValue,
           ),
