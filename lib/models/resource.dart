@@ -48,6 +48,8 @@ import 'package:fhir_client/models/value_sets/slot_status.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
+const _resourceTypeFieldName = 'resourceType';
+
 /// The result of an update operation
 sealed class UpdateResult<T extends Resource> {
   const UpdateResult();
@@ -147,7 +149,7 @@ sealed class Resource extends Element {
   factory Resource.fromJson(
     JsonObject json,
   ) {
-    final resourceTypeString = json['resourceType'].stringValue;
+    final resourceTypeString = json[_resourceTypeFieldName].stringValue;
 
     if (resourceTypeString == null) {
       return OperationOutcome<String>(
@@ -325,6 +327,7 @@ class Appointment extends Resource {
               requestedPeriodField.name: JsonArray.unmodifiable(
                 requestedPeriod.map((e) => e.json),
               ),
+            _resourceTypeFieldName: const JsonString('Appointment'),
           }),
         );
 
