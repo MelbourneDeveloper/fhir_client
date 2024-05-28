@@ -40,7 +40,7 @@ class ResourceEditorListView extends StatelessWidget {
               headerTooltip: 'Basic Details',
               headerText: 'Details',
               body: ElementPanel(
-                element: resourceRoot,
+                panelElement: resourceRoot,
                 fields: primitiveFields,
                 onFieldChanged: onFieldChanged,
               ),
@@ -63,15 +63,15 @@ class ResourceEditorListView extends StatelessWidget {
             ].contains(field.runtimeType)
                 ? const SizedBox.shrink()
                 : switch (resourceRoot[field.name]) {
-                    (final JsonObject jo) => Tile(
+                    (final JsonObject panelElement) => Tile(
                         headerTooltip: headerTooltip,
                         headerText: headerText,
                         body: ElementPanel(
-                          element: jo,
+                          panelElement: panelElement,
                           //One of the editors on the panel fired a change
                           onFieldChanged: (f, e) => onFieldChanged(
                             field.name,
-                            resourceRoot.withUpdate(f, e),
+                            panelElement.withUpdate(f, e),
                           ),
                           fields: fieldDefinitionsByElementType[
                               field.runtimeType.toString()]!,

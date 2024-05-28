@@ -11,14 +11,14 @@ import 'package:well_navigate/field.dart';
 class ElementPanel extends StatelessWidget {
   const ElementPanel({
     required this.fields,
-    required this.element,
+    required this.panelElement,
     required this.onFieldChanged,
     super.key,
   });
 
   // ignore: strict_raw_type
   final List<FieldDefinition> fields;
-  final JsonObject element;
+  final JsonObject panelElement;
 
   /// One of the fields on the panel changed
   final void Function(String field, JsonValue jsonValue) onFieldChanged;
@@ -37,7 +37,7 @@ class ElementPanel extends StatelessWidget {
       switch (fieldDefinition) {
         FieldDefinition<String>() => StringEditor(
             fieldDefinition: fieldDefinition,
-            element: element,
+            element: panelElement,
             onChanged: (v) =>
                 onFieldChanged(fieldDefinition.name, JsonString(v)),
           ),
@@ -45,11 +45,11 @@ class ElementPanel extends StatelessWidget {
             items: fieldDefinition.valueSetValues!
                 .cast<ValueSetConcept>()
                 .toFixedList(),
-            selectedValue: fieldDefinition.getValue(element),
+            selectedValue: fieldDefinition.getValue(panelElement),
           ),
         _ => StringEditor(
             fieldDefinition: fieldDefinition,
-            element: element,
+            element: panelElement,
             onChanged: (v) =>
                 onFieldChanged(fieldDefinition.name, JsonString(v)),
           ),
