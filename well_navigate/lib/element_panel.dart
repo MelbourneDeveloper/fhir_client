@@ -17,6 +17,7 @@ class ElementPanel extends StatelessWidget {
   // ignore: strict_raw_type
   final List<FieldDefinition> fields;
   final res.Element element;
+  final void Function(res.Element) onElementChanged;
 
   @override
   Widget build(BuildContext context) => Wrap(
@@ -37,6 +38,13 @@ class ElementPanel extends StatelessWidget {
             controller: TextEditingController(
               text: fieldDefinition.getValue(element.json).toString(),
             ),
+            onChanged: (value) {
+              onElementChanged(
+                element.copyWith(
+                  json: fieldDefinition.setValue(element.json, value),
+                ),
+              );
+            },
           ),
         FieldDefinition<ValueSetConcept>() => ValueSetEditor(
             items: fieldDefinition.valueSetValues!
