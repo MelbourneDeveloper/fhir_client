@@ -386,7 +386,7 @@ An address for the individual.''',
     expect(fieldDefinitions, '''
 /// R4: All field definitions for [Patient].
   static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
+    ...Element.fieldDefinitions,
     implicitRulesField,
     languageField,
     textField,
