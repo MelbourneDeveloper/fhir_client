@@ -56,7 +56,7 @@ String staticGetterBody(Field field) => switch (field) {
 String fieldDefinitionList(String resourceName, List<Field> fields) => '''
 /// R4: All field definitions for [$resourceName].
   static const fieldDefinitions = [
-    ...Resource.fieldDefinitions,
+    ...Element.fieldDefinitions,
     ${fields.whereNotInherited().map((field) => '${field.name}Field').join(',\n    ')},
   ];''';
 
@@ -82,7 +82,8 @@ class $resourceName extends Resource {
     ${fields.map((f) => f.typeAndName()).join(',\n    ')},
   }) : super._internal(
           JsonObject({
-            ${_constructorMapInitializations(fields, resourceName)}  
+            ${_constructorMapInitializations(fields, resourceName)}
+           _resourceTypeFieldName: const JsonString('$resourceName'),  
           }),
         );
 ''';

@@ -3077,6 +3077,7 @@ class Patient extends Resource {
               linkField.name: JsonArray.unmodifiable(
                 link.map((e) => e.json),
               ),
+            _resourceTypeFieldName: const JsonString('Patient'),
           }),
         );
 
