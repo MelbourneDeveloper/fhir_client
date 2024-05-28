@@ -84,6 +84,7 @@ class _ResourceEditorState extends State<ResourceEditor> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
+            //TODO: runtime type is wrong here
             iconsByResourceType[resource.runtimeType] ?? Icons.medical_services,
             size: 36,
             color: Theme.of(context).colorScheme.secondary,

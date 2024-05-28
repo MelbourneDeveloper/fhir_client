@@ -1,17 +1,22 @@
 // ignore_for_file: strict_raw_type
 
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/value_sets/appointment_reason.dart';
 import 'package:fhir_client/models/value_sets/appointment_status.dart';
+import 'package:fhir_client/models/value_sets/cancelation_reason.dart';
 import 'package:fhir_client/models/value_sets/language.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 
 const _primitiveFieldTypes = [
+  FieldDefinition<Uri>,
   FieldDefinition<String>,
   FieldDefinition<int>,
   FieldDefinition<num>,
   FieldDefinition<DateTime>,
   FieldDefinition<AppointmentStatus>,
   FieldDefinition<Language>,
+  FieldDefinition<CancelationReason>,
+  FieldDefinition<AppointmentReason>,
 ];
 
 extension FieldDefinitionListExtensions on List<FieldDefinition> {

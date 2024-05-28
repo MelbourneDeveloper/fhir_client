@@ -3,6 +3,7 @@
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
 import 'package:fhir_client/models/coding.dart';
+import 'package:fhir_client/models/extension.dart';
 import 'package:fhir_client/models/identifier.dart';
 import 'package:fhir_client/models/meta.dart';
 import 'package:fhir_client/models/narrative.dart';
@@ -23,6 +24,9 @@ const fieldDefinitionsByElementType = {
   'Appointment': Appointment.fieldDefinitions,
   'Meta': Meta.fieldDefinitions,
   'OperationOutcome': OperationOutcome.fieldDefinitions,
+  'FieldDefinition<FixedList<Extension>>': Extension.fieldDefinitions,
+  'FieldDefinition<Meta>': Meta.fieldDefinitions,
+  'FieldDefinition<Narrative>': Narrative.fieldDefinitions,
 };
 
 // ignore: unreachable_from_main

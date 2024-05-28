@@ -1,4 +1,12 @@
+import 'package:fhir_client/models/backbone_element.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/codeable_concept.dart';
+import 'package:fhir_client/models/identifier.dart';
+import 'package:fhir_client/models/period.dart';
+import 'package:fhir_client/models/reference.dart';
+import 'package:fhir_client/models/resource.dart';
+import 'package:fhir_client/models/value_sets/service_category.dart';
+import 'package:fhir_client/models/value_sets/service_type.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
 import 'package:jayse/jayse.dart';
@@ -37,15 +45,28 @@ class EditorListView extends StatelessWidget {
             final headerTooltip = field.description ?? 'No information';
             final headerText = field.display ?? field.name;
 
-            return Tile(
-              headerTooltip: headerTooltip,
-              headerText: headerText,
-              body: ElementPanel(
-                element: resource,
-                onElementChanged: (e) {},
-                fields: fieldDefinitionsByElementType[Howdowegetelementname]!,
-              ),
-            );
+            //TODO: remove this stuff
+            return [
+              (FieldDefinition<FixedList<Resource>>),
+              (FieldDefinition<FixedList<Identifier>>),
+              (FieldDefinition<FixedList<ServiceCategory>>),
+              (FieldDefinition<FixedList<ServiceType>>),
+              (FieldDefinition<FixedList<CodeableConcept>>),
+              (FieldDefinition<FixedList<Reference>>),
+              (FieldDefinition<FixedList<BackboneElement>>),
+              (FieldDefinition<FixedList<Period>>),
+            ].contains(field.runtimeType)
+                ? const SizedBox.shrink()
+                : Tile(
+                    headerTooltip: headerTooltip,
+                    headerText: headerText,
+                    body: ElementPanel(
+                      element: resource,
+                      onElementChanged: (e) {},
+                      fields: fieldDefinitionsByElementType[
+                          field.runtimeType.toString()]!,
+                    ),
+                  );
           }
         },
       );
