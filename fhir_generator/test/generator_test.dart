@@ -63,33 +63,7 @@ const expectedFields = [
     max: 1,
     isMaxStar: false,
     definition: 'The base language in which the resource is written.',
-    allowedStringValues: [
-      'ar',
-      'bn',
-      'cs',
-      'da',
-      'de',
-      'el',
-      'en',
-      'es',
-      'fi',
-      'fr',
-      'gu',
-      'hi',
-      'hr',
-      'it',
-      'ja',
-      'ko',
-      'nl',
-      'no',
-      'pa',
-      'pl',
-      'pt',
-      'ru',
-      'sv',
-      'te',
-      'zh',
-    ],
+    valueSetName: 'Language',
   ),
   Field(
     name: 'text',
@@ -189,7 +163,7 @@ const expectedFields = [
     valueSetStrength: ValueSetStrength.required,
     definition:
         'Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes.',
-    allowedStringValues: ['male', 'female', 'other', 'unknown'],
+    valueSetName: 'AdministrativeGender',
   ),
   Field(
     name: 'birthDate',
@@ -222,19 +196,7 @@ const expectedFields = [
     max: 1,
     isValueSet: true,
     isMaxStar: false,
-    allowedStringValues: [
-      'A',
-      'D',
-      'I',
-      'L',
-      'M',
-      'P',
-      'S',
-      'T',
-      'U',
-      'W',
-      'UNK',
-    ],
+    valueSetName: 'MaritalStatus',
     definition:
         "This field contains a patient's most recent marital (civil) status.",
   ),
@@ -332,15 +294,12 @@ void main() {
       expect(field.isMaxStar, expectedField.isMaxStar);
       expect(field.definition.contains(expectedField.definition), true);
 
-      if (expectedField.allowedStringValues == null) {
-        expect(field.allowedStringValues, null);
+      if (expectedField.valueSetName == null) {
+        expect(field.valueSetName, null);
         continue;
       }
 
-      expect(
-        field.allowedStringValues,
-        containsAll(expectedField.allowedStringValues!),
-      );
+      expect(field.valueSetName, expectedField.valueSetName);
     }
   });
 

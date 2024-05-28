@@ -1,16 +1,16 @@
+import 'package:fhir_client/models/value_sets/value_set_concept.dart';
 import 'package:jayse/jayse.dart';
 
 const serviceCategoryUri =
     'http://terminology.hl7.org/CodeSystem/service-category';
 
 /// The category of a service.
-enum ServiceCategory implements Comparable<ServiceCategory> {
+enum ServiceCategory with ValueSetConcept<ServiceCategory> {
   /// Adoption services.
   adoption(
     code: '1',
     display: 'Adoption',
     definition: 'Adoption services.',
-    system: serviceCategoryUri,
   ),
 
   /// Aged care services.
@@ -18,7 +18,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '2',
     display: 'Aged Care',
     definition: 'Aged care services.',
-    system: serviceCategoryUri,
   ),
 
   /// Allied health services.
@@ -26,7 +25,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '34',
     display: 'Allied Health',
     definition: 'Allied health services.',
-    system: serviceCategoryUri,
   ),
 
   /// Alternative and complementary therapies.
@@ -34,7 +32,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '3',
     display: 'Alternative/Complementary Therapies',
     definition: 'Alternative and complementary therapies.',
-    system: serviceCategoryUri,
   ),
 
   /// Child care and kindergarten services.
@@ -42,7 +39,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '4',
     display: 'Child Care/Kindergarten',
     definition: 'Child care and kindergarten services.',
-    system: serviceCategoryUri,
   ),
 
   /// Child development services.
@@ -50,7 +46,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '5',
     display: 'Child Development',
     definition: 'Child development services.',
-    system: serviceCategoryUri,
   ),
 
   /// Child protection and family services.
@@ -58,7 +53,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '6',
     display: 'Child Protection & Family Services',
     definition: 'Child protection and family services.',
-    system: serviceCategoryUri,
   ),
 
   /// Community health care services.
@@ -66,7 +60,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '7',
     display: 'Community Health Care',
     definition: 'Community health care services.',
-    system: serviceCategoryUri,
   ),
 
   /// Counselling services.
@@ -74,7 +67,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '8',
     display: 'Counselling',
     definition: 'Counselling services.',
-    system: serviceCategoryUri,
   ),
 
   /// Crisis line services (GPAH use only).
@@ -82,7 +74,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '36',
     display: 'Crisis Line (GPAH use only)',
     definition: 'Crisis line services (GPAH use only).',
-    system: serviceCategoryUri,
   ),
 
   /// Death services.
@@ -90,7 +81,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '9',
     display: 'Death Services',
     definition: 'Death services.',
-    system: serviceCategoryUri,
   ),
 
   /// Dental services.
@@ -98,7 +88,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '10',
     display: 'Dental',
     definition: 'Dental services.',
-    system: serviceCategoryUri,
   ),
 
   /// Disability support services.
@@ -106,7 +95,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '11',
     display: 'Disability Support',
     definition: 'Disability support services.',
-    system: serviceCategoryUri,
   ),
 
   /// Drug and alcohol services.
@@ -114,7 +102,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '12',
     display: 'Drug/Alcohol',
     definition: 'Drug and alcohol services.',
-    system: serviceCategoryUri,
   ),
 
   /// Education and learning services.
@@ -122,7 +109,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '13',
     display: 'Education & Learning',
     definition: 'Education and learning services.',
-    system: serviceCategoryUri,
   ),
 
   /// Emergency department services.
@@ -130,7 +116,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '14',
     display: 'Emergency Department',
     definition: 'Emergency department services.',
-    system: serviceCategoryUri,
   ),
 
   /// Employment services.
@@ -138,7 +123,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '15',
     display: 'Employment',
     definition: 'Employment services.',
-    system: serviceCategoryUri,
   ),
 
   /// Financial and material aid services.
@@ -146,7 +130,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '16',
     display: 'Financial & Material aid',
     definition: 'Financial and material aid services.',
-    system: serviceCategoryUri,
   ),
 
   /// General practice and GP (doctor) services.
@@ -154,7 +137,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '17',
     display: 'General Practice/GP (doctor)',
     definition: 'General practice and GP (doctor) services.',
-    system: serviceCategoryUri,
   ),
 
   /// Hospital services.
@@ -162,7 +144,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '35',
     display: 'Hospital',
     definition: 'Hospital services.',
-    system: serviceCategoryUri,
   ),
 
   /// Housing and homelessness services.
@@ -170,7 +151,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '18',
     display: 'Housing/Homelessness',
     definition: 'Housing and homelessness services.',
-    system: serviceCategoryUri,
   ),
 
   /// Interpreting services.
@@ -178,7 +158,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '19',
     display: 'Interpreting',
     definition: 'Interpreting services.',
-    system: serviceCategoryUri,
   ),
 
   /// Justice services.
@@ -186,7 +165,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '20',
     display: 'Justice',
     definition: 'Justice services.',
-    system: serviceCategoryUri,
   ),
 
   /// Legal services.
@@ -194,7 +172,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '21',
     display: 'Legal',
     definition: 'Legal services.',
-    system: serviceCategoryUri,
   ),
 
   /// Mental health services.
@@ -202,7 +179,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '22',
     display: 'Mental Health',
     definition: 'Mental health services.',
-    system: serviceCategoryUri,
   ),
 
   /// National Disability Insurance Agency services.
@@ -210,7 +186,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '38',
     display: 'NDIA',
     definition: 'National Disability Insurance Agency services.',
-    system: serviceCategoryUri,
   ),
 
   /// Physical activity and recreation services.
@@ -218,7 +193,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '23',
     display: 'Physical Activity & Recreation',
     definition: 'Physical activity and recreation services.',
-    system: serviceCategoryUri,
   ),
 
   /// Regulation services.
@@ -226,7 +200,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '24',
     display: 'Regulation',
     definition: 'Regulation services.',
-    system: serviceCategoryUri,
   ),
 
   /// Respite and carer support services.
@@ -234,7 +207,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '25',
     display: 'Respite/Carer Support',
     definition: 'Respite and carer support services.',
-    system: serviceCategoryUri,
   ),
 
   /// Specialist clinical pathology services.
@@ -242,7 +214,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '26',
     display: 'Specialist Clinical Pathology',
     definition: 'Specialist clinical pathology services.',
-    system: serviceCategoryUri,
   ),
 
   /// Specialist medical services.
@@ -250,7 +221,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '27',
     display: 'Specialist Medical',
     definition: 'Specialist medical services.',
-    system: serviceCategoryUri,
   ),
 
   /// Specialist obstetrics and gynecology services.
@@ -258,7 +228,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '28',
     display: 'Specialist Obstetrics & Gynecology',
     definition: 'Specialist obstetrics and gynecology services.',
-    system: serviceCategoryUri,
   ),
 
   /// Specialist paediatric services.
@@ -266,7 +235,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '29',
     display: 'Specialist Paediatric',
     definition: 'Specialist paediatric services.',
-    system: serviceCategoryUri,
   ),
 
   /// Specialist radiology and imaging services.
@@ -274,7 +242,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '30',
     display: 'Specialist Radiology/Imaging',
     definition: 'Specialist radiology and imaging services.',
-    system: serviceCategoryUri,
   ),
 
   /// Specialist surgical services.
@@ -282,7 +249,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '31',
     display: 'Specialist Surgical',
     definition: 'Specialist surgical services.',
-    system: serviceCategoryUri,
   ),
 
   /// Support group services.
@@ -290,7 +256,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '32',
     display: 'Support group/s',
     definition: 'Support group services.',
-    system: serviceCategoryUri,
   ),
 
   /// Test message services (HSD admin use only).
@@ -298,7 +263,6 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '37',
     display: 'Test Message (HSD admin use only)',
     definition: 'Test message services (HSD admin use only).',
-    system: serviceCategoryUri,
   ),
 
   /// Transport services.
@@ -306,20 +270,22 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
     code: '33',
     display: 'Transport',
     definition: 'Transport services.',
-    system: serviceCategoryUri,
   );
 
   const ServiceCategory({
     required this.code,
     required this.display,
     required this.definition,
-    required this.system,
   });
 
+  @override
   final String code;
+
+  @override
   final String display;
+
+  @override
   final String definition;
-  final String system;
 
   /// Returns the service category based on the string code, and returns null if
   /// no match is found
@@ -365,6 +331,7 @@ enum ServiceCategory implements Comparable<ServiceCategory> {
         (_) => null,
       };
 
+  @override
   JsonValue get json => JsonString(code);
 
   @override

@@ -1,8 +1,9 @@
 // ignore_for_file: lines_longer_than_80_chars, constant_identifier_names
-import 'package:jayse/jayse.dart';
+
+import 'package:fhir_client/models/value_sets/value_set_concept.dart';
 
 /// Code system of concepts used to describe the kind of appointment or the reason why an appointment has been scheduled.  Used in HL7 Version 2.x messaging in the ARQ segment.
-enum AppointmentReason implements Comparable<AppointmentReason> {
+enum AppointmentReason with ValueSetConcept<AppointmentReason> {
   /// A routine check-up, such as an annual physical
   CHECKUP(
     code: 'CHECKUP',
@@ -46,12 +47,15 @@ enum AppointmentReason implements Comparable<AppointmentReason> {
 
   /// The property that represents the unique identifier
   /// for a specific concept within the value set.
+  @override
   final String code;
 
   /// A human-readable string to display to the user.
+  @override
   final String display;
 
   /// Provides a more detailed explanation or description of the concept
+  @override
   final String definition;
 
   /// Returns the enum value based on the string code, and returns null if
@@ -64,11 +68,4 @@ enum AppointmentReason implements Comparable<AppointmentReason> {
         ('WALKIN') => AppointmentReason.WALKIN,
         (_) => null,
       };
-
-  /// Converts the code to a JsonString for the purpose of JSON
-  /// serialization
-  JsonValue get json => JsonString(code);
-
-  @override
-  int compareTo(AppointmentReason other) => code == other.code ? 0 : 1;
 }

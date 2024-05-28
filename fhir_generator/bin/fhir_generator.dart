@@ -67,7 +67,7 @@ String fieldDefinition(Field field) => '''
     getValue: _get${field.name.capitalize()},
     description: ${_wrapDefinitionString(field.definition)},
     ${_cardinalityLine(field)}
-${field.allowedStringValues != null ? '   allowedStringValues: [${field.allowedStringValues!.map((e) => "'$e'").join(',\n')},],\n' : ''}  );''';
+${field.valueSetName != null ? '    valueSetValues: ${field.valueSetName}.values,\n' : ''}  );''';
 
 String classAndConstructor(
   String resourceName,
@@ -163,7 +163,7 @@ List<Field> _getFields(JsonArray element) {
               .cast<String>()
               .toList(),
           dartType: dartType,
-          allowedStringValues: valueSet?.values,
+          valueSetName: valueSet?.name,
           min: minCardinality,
           max: int.tryParse(maxCardinality.stringValue ?? ''),
           isMaxStar: maxCardinality.stringValue == '*',
