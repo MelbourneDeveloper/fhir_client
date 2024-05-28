@@ -1,9 +1,11 @@
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/resource.dart' as res;
 import 'package:fhir_client/models/value_sets/appointment_status.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
+import 'package:well_navigate/editors/string_editor.dart';
+import 'package:well_navigate/editors/value_set_editor.dart';
 import 'package:well_navigate/field.dart';
-import 'package:well_navigate/string_editor.dart';
 
 class ElementPanel extends StatelessWidget {
   const ElementPanel({
@@ -36,22 +38,9 @@ class ElementPanel extends StatelessWidget {
               text: fieldDefinition.getValue(element.json).toString(),
             ),
           ),
-        FieldDefinition<AppointmentStatus>() => InputDecorator(
-            decoration: const InputDecoration(),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<AppointmentStatus>(
-                items: AppointmentStatus.values
-                    .map(
-                      (l) => DropdownMenuItem<AppointmentStatus>(
-                        value: l,
-                        child: Text(l.display),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (l) {},
-                value: AppointmentStatus.proposed,
-              ),
-            ),
+        FieldDefinition<AppointmentStatus>() => ValueSetEditor(
+            items: AppointmentStatus.values.toFixedList(),
+            selectedValue: fieldDefinition.getValue(element.json),
           ),
         _ => StringEditor(
             fieldDefinition: fieldDefinition,
