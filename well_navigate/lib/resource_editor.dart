@@ -40,7 +40,14 @@ class ResourceEditor extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: _listView(),
+              child: TabBarView(
+                children: <Widget>[
+                  _listView(),
+                  TextField(
+                    controller: TextEditingController(text: 'JSON'),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
