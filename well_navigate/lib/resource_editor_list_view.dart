@@ -14,17 +14,22 @@ import 'package:well_navigate/element_panel.dart';
 import 'package:well_navigate/main.dart';
 import 'package:well_navigate/tile.dart';
 
-class EditorListView extends StatelessWidget {
-  const EditorListView({
+class ResourceEditorListView extends StatelessWidget {
+  const ResourceEditorListView({
     required this.nonPrimitiveFields,
     required this.primitiveFields,
     required this.resource,
+    required this.onFieldChanged,
     super.key,
   });
 
   final FixedList<FieldDefinition<dynamic>> nonPrimitiveFields;
   final FixedList<FieldDefinition<dynamic>> primitiveFields;
   final JsonObject resource;
+
+  /// Fires when the field for the resource changes. It might an individual
+  /// primitive value like a string or number or an entire element
+  final void Function(String field, JsonValue jsonValue) onFieldChanged;
 
   @override
   Widget build(BuildContext context) => ListView.builder(
@@ -37,7 +42,7 @@ class EditorListView extends StatelessWidget {
               body: ElementPanel(
                 element: resource,
                 fields: primitiveFields,
-                onElementChanged: (k) {},
+                onFieldChanged: onFieldChanged,
               ),
             );
           } else {
@@ -63,7 +68,11 @@ class EditorListView extends StatelessWidget {
                         headerText: headerText,
                         body: ElementPanel(
                           element: jo,
-                          onElementChanged: (e) {},
+                          //One of the editors on the panel fired a change
+                          onFieldChanged: (f, e) => onFieldChanged(
+                            field.name,
+                            resource.withUpdate(f, e),
+                          ),
                           fields: fieldDefinitionsByElementType[
                               field.runtimeType.toString()]!,
                         ),

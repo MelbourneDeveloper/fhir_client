@@ -7,18 +7,21 @@ import 'package:well_navigate/editors/string_editor.dart';
 import 'package:well_navigate/editors/value_set_editor.dart';
 import 'package:well_navigate/field.dart';
 
+/// The body of a panel, which has one or more field editors
 class ElementPanel extends StatelessWidget {
   const ElementPanel({
     required this.fields,
     required this.element,
-    required this.onElementChanged,
+    required this.onFieldChanged,
     super.key,
   });
 
   // ignore: strict_raw_type
   final List<FieldDefinition> fields;
   final JsonObject element;
-  final void Function(JsonObject) onElementChanged;
+
+  /// One of the fields on the panel changed
+  final void Function(String field, JsonValue jsonValue) onFieldChanged;
 
   @override
   Widget build(BuildContext context) => Wrap(
@@ -40,7 +43,8 @@ class ElementPanel extends StatelessWidget {
               text: fieldDefinition.getValue(element).toString(),
             ),
             onChanged: (value) {
-              onElementChanged(
+              onFieldChanged(
+                fieldDefinition.name,
                 element.withUpdate(
                   fieldDefinition.name,
                   JsonString(value),

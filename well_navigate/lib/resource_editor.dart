@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jayse/jayse.dart';
 import 'package:well_navigate/constants.dart';
-import 'package:well_navigate/editor_list_view.dart';
 import 'package:well_navigate/field_definition_list_extensions.dart';
 import 'package:well_navigate/json_editor.dart';
 import 'package:well_navigate/main.dart';
+import 'package:well_navigate/resource_editor_list_view.dart';
 
 class ResourceEditor extends StatefulWidget {
   const ResourceEditor({
@@ -57,7 +57,7 @@ class _ResourceEditorState extends State<ResourceEditor> {
             Expanded(
               child: TabBarView(
                 children: <Widget>[
-                  EditorListView(
+                  ResourceEditorListView(
                     resource: resource,
                     nonPrimitiveFields:
                         fieldDefinitionsByElementType[widget.resourceTypeName]!
@@ -65,6 +65,8 @@ class _ResourceEditorState extends State<ResourceEditor> {
                     primitiveFields:
                         fieldDefinitionsByElementType[widget.resourceTypeName]!
                             .primitiveFields(),
+                    onFieldChanged: (f, e) =>
+                        setState(() => _resource = _resource?.withUpdate(f, e)),
                   ),
                   JsonEditor(
                     initialJson: jsonValueEncode(resource),
