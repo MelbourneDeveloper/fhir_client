@@ -1,5 +1,6 @@
 import 'package:fhir_client/models/resource.dart';
 import 'package:flutter/material.dart';
+import 'package:well_navigate/constants.dart';
 import 'package:well_navigate/editor_list_view.dart';
 import 'package:well_navigate/field_definition_list_extensions.dart';
 import 'package:well_navigate/main.dart';
@@ -14,7 +15,6 @@ class ResourceEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DefaultTabController(
-        initialIndex: 1,
         length: 2,
         child: Column(
           children: [
@@ -63,13 +63,13 @@ class ResourceEditor extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.event,
+            iconsByResourceType[resource.runtimeType] ?? Icons.medical_services,
             size: 36,
             color: Theme.of(context).colorScheme.secondary,
           ),
           const SizedBox(width: 12),
           Text(
-            'Appointment',
+            resource.runtimeType.toString(),
             style: Theme.of(context).textTheme.headlineLarge,
           ),
         ],
