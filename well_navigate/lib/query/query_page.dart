@@ -10,11 +10,15 @@ class QueryPage extends StatefulWidget {
 
 class _QueryPageState extends State<QueryPage> {
   final TextEditingController _urlController = TextEditingController();
-  final TextEditingController _headerController = TextEditingController();
+  final List<MapEntryController> _headerControllers = [];
   final List<MapEntryController> _paramControllers = [];
   String _response = '';
 
   Future<void> _makeRequest() async {
+    final headers = <String, String>{
+      for (final entry in _headerControllers)
+        entry.keyController.text: entry.valueController.text,
+    };
     final params = <String, String>{
       for (final entry in _paramControllers)
         entry.keyController.text: entry.valueController.text,
@@ -22,13 +26,22 @@ class _QueryPageState extends State<QueryPage> {
     final url = Uri.parse(_urlController.text).replace(queryParameters: params);
     final response = await http.get(
       url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': _headerController.text,
-      },
+      headers: headers,
     );
     setState(() {
       _response = response.body;
+    });
+  }
+
+  void _addHeader() {
+    setState(() {
+      _headerControllers.add(MapEntryController());
+    });
+  }
+
+  void _removeHeader(int index) {
+    setState(() {
+      _headerControllers.removeAt(index);
     });
   }
 
@@ -60,48 +73,81 @@ class _QueryPageState extends State<QueryPage> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _headerController,
-                decoration: const InputDecoration(
-                  labelText: 'Authorization Header',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 8),
-              ..._paramControllers.map((controller) {
-                final index = _paramControllers.indexOf(controller);
-                return Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: controller.keyController,
-                        decoration: const InputDecoration(
-                          labelText: 'Key',
-                          border: OutlineInputBorder(),
+              const SizedBox(height: 16),
+              ..._headerControllers.map((controller) {
+                final index = _headerControllers.indexOf(controller);
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: controller.keyController,
+                          decoration: const InputDecoration(
+                            labelText: 'Header Key',
+                            border: OutlineInputBorder(),
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        controller: controller.valueController,
-                        decoration: const InputDecoration(
-                          labelText: 'Value',
-                          border: OutlineInputBorder(),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          controller: controller.valueController,
+                          decoration: const InputDecoration(
+                            labelText: 'Header Value',
+                            border: OutlineInputBorder(),
+                          ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.remove_circle_outline),
-                      onPressed: () => _removeParam(index),
-                    ),
-                  ],
+                      IconButton(
+                        icon: const Icon(Icons.remove_circle_outline),
+                        onPressed: () => _removeHeader(index),
+                      ),
+                    ],
+                  ),
                 );
               }),
-              IconButton(
-                icon: const Icon(Icons.add_circle_outline),
+              ElevatedButton(
+                onPressed: _addHeader,
+                child: const Text('Add Header'),
+              ),
+              const SizedBox(height: 16),
+              ..._paramControllers.map((controller) {
+                final index = _paramControllers.indexOf(controller);
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: controller.keyController,
+                          decoration: const InputDecoration(
+                            labelText: 'Parameter Key',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          controller: controller.valueController,
+                          decoration: const InputDecoration(
+                            labelText: 'Parameter Value',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.remove_circle_outline),
+                        onPressed: () => _removeParam(index),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+              ElevatedButton(
                 onPressed: _addParam,
+                child: const Text('Add Parameter'),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
