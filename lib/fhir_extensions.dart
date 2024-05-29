@@ -37,8 +37,7 @@ extension FhirExtensions on Client {
         // ignore: avoid_catches_without_on_clauses
       } catch (e) {
         return OperationOutcome<T>.error(
-          status:
-              NarrativeStatus.empty,
+          status: NarrativeStatus.empty,
           details: e.toString(),
         );
       }

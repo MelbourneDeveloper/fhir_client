@@ -2,7 +2,7 @@ import 'package:fhir_client/models/reference.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
-/// A text note which also contains information about who made the statement 
+/// A text note which also contains information about who made the statement
 /// and when.
 class Annotation {
   /// Constructs a new [Annotation].

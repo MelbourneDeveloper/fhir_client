@@ -3,8 +3,8 @@ import 'package:jayse/jayse.dart';
 
 /// A coding that represents a tag on a resource.
 ///
-/// Tags are used to relate resources to process and workflow. Applications are 
-/// not required to consider the tags when interpreting the meaning of a 
+/// Tags are used to relate resources to process and workflow. Applications are
+/// not required to consider the tags when interpreting the meaning of a
 /// resource.
 class Tag {
   /// Constructs a new [Tag]

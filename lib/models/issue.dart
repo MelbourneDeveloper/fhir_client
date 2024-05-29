@@ -3,7 +3,6 @@ import 'package:jayse/jayse.dart';
 
 /// A single issue associated with the action.
 class Issue {
-
   /// Constructs a new [Issue] with an optional severity, code, and diagnostics.
   Issue({
     String? severity,
@@ -23,13 +22,13 @@ class Issue {
 
   final JsonObject _json;
 
-  /// Indicates whether the issue indicates a variation from successful 
+  /// Indicates whether the issue indicates a variation from successful
   /// processing.
   String? get severity => severityField.getValue(_json);
 
-  /// Describes the type of the issue. The system that creates an 
-  /// OperationOutcome SHALL choose the most applicable code from the 
-  /// IssueType value set, and may additional provide its own code for the 
+  /// Describes the type of the issue. The system that creates an
+  /// OperationOutcome SHALL choose the most applicable code from the
+  /// IssueType value set, and may additional provide its own code for the
   /// error in the details element.
   String? get code => codeField.getValue(_json);
 

@@ -5,7 +5,7 @@ import 'package:jayse/jayse.dart';
 /// Represents an extension that may modify the interpretation of the
 /// resource or element that contains it.
 class Extension {
-  /// Constructs a new [Extension] with an optional URL, nested extensions, 
+  /// Constructs a new [Extension] with an optional URL, nested extensions,
   /// and a boolean value.
   Extension({
     Uri? url,

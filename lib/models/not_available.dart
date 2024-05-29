@@ -2,7 +2,7 @@ import 'package:fhir_client/models/period.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
-/// The practitioner is not available or performing this role during this 
+/// The practitioner is not available or performing this role during this
 /// period of time due to the provided reason.
 class NotAvailable {
   /// Creates an instance of [NotAvailable].
@@ -25,11 +25,11 @@ class NotAvailable {
   /// Converts the [NotAvailable] instance to a JSON object.
   JsonObject get json => _json;
 
-  /// The reason that can be presented to the user as to why this time is not 
+  /// The reason that can be presented to the user as to why this time is not
   /// available.
   String? get description => descriptionField.getValue(_json);
 
-  /// Service is not available (seasonally or for a public holiday) from 
+  /// Service is not available (seasonally or for a public holiday) from
   /// this date.
   Period? get during => duringField.getValue(_json);
 

@@ -6,7 +6,6 @@ import 'package:fhir_client/models/coding.dart';
 /// interface that [CodeableReference] and [CodeableConcept]
 /// share
 abstract interface class CodingList {
-
   /// A reference to a code defined by a terminology system.
   List<Coding>? get coding;
 

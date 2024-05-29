@@ -3,7 +3,6 @@ import 'package:jayse/jayse.dart';
 
 /// A reference to a code defined by a terminology system.
 class Coding {
-
   /// Creates a new [Coding] instance.
   Coding({
     Uri? system,

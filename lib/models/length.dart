@@ -32,7 +32,7 @@ class Length {
   /// The system that defines the coded unit form.
   Uri? get system => systemField.getValue(_json);
 
-  /// A computer processable form of the unit in some unit representation 
+  /// A computer processable form of the unit in some unit representation
   /// system.
   String? get code => codeField.getValue(_json);
 
@@ -98,7 +98,7 @@ class Length {
   int get hashCode =>
       value.hashCode ^ unit.hashCode ^ system.hashCode ^ code.hashCode;
 
-  /// Creates a copy of the [Length] instance and allows for 
+  /// Creates a copy of the [Length] instance and allows for
   /// non-destructive mutation.
   Length copyWith({
     num? value,

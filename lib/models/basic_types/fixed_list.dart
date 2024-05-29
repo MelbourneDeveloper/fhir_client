@@ -30,7 +30,7 @@ class FixedList<E> extends ListBase<E> {
             true,
             (acc, val) => acc && val == other[_innerList.indexOf(val)],
           ));
-          
+
   @override
   int get hashCode => _innerList.fold(
         0,

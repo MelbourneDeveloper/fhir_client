@@ -1,10 +1,9 @@
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
-/// Information about the search process that lead to the creation of this 
+/// Information about the search process that lead to the creation of this
 /// entry.
 class Search {
-
   /// Creates an instance of [Search].
   Search({
     String? mode,
@@ -19,8 +18,8 @@ class Search {
 
   final JsonObject _json;
 
-  /// Why this entry is in the result set - whether it's included as a match 
-  /// or because of an _include requirement, or to convey information or 
+  /// Why this entry is in the result set - whether it's included as a match
+  /// or because of an _include requirement, or to convey information or
   /// warning information about the search process.
   String? get mode => modeField.getValue(_json);
 

@@ -6,7 +6,6 @@ import 'package:jayse/jayse.dart';
 /// quantified, including amounts involving arbitrary units and floating
 /// currencies.
 class Quantity {
-
   /// Constructs a new [Quantity]
   Quantity({
     num? value,

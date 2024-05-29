@@ -5,7 +5,6 @@ import 'package:jayse/jayse.dart';
 
 /// A place holder that means any kind of data type
 class Type {
-
   /// Constructs a new [Type] with an optional text and coding.
   Type({
     String? text,

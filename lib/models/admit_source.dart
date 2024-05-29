@@ -20,6 +20,7 @@ class AdmitSource {
   AdmitSource.fromJson(this._json);
 
   final JsonObject _json;
+
   /// Converts the [AdmitSource] instance to a JSON object.
   JsonObject get json => _json;
 

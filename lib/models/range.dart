@@ -4,7 +4,6 @@ import 'package:jayse/jayse.dart';
 
 /// A set of ordered Quantities defined by a low and high limit.
 class Range {
-
   /// Constructs a new [Range] with an optional low and high limit.
   Range({
     Quantity? low,

@@ -1,4 +1,3 @@
-// ignore_for_file: strict_raw_type
 
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/codeable_concept.dart';

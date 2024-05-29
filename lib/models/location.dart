@@ -1,11 +1,10 @@
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:jayse/jayse.dart';
 
-/// Details and position information for a physical place where services are 
-/// provided and resources and participants may be stored, found, contained, 
+/// Details and position information for a physical place where services are
+/// provided and resources and participants may be stored, found, contained,
 /// or accommodated.
 class Location {
-
   /// Constructs a new [Location] with an optional reference.
   Location({
     String? reference,

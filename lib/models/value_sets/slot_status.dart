@@ -45,7 +45,7 @@ enum SlotStatus implements Comparable<SlotStatus> {
     required this.system,
   });
 
-/// A code representing the slot status.
+  /// A code representing the slot status.
   ///
   /// The code is a required field that contains a code from the specified terminology system.
   /// It represents the free/busy status of the slot.

@@ -7,7 +7,6 @@ const _displayField = 'display';
 
 /// Participant involved in the resource.
 class Actor {
-
   /// Creates a new [Actor] instance.
   Actor({
     String? reference,
@@ -23,7 +22,7 @@ class Actor {
   Actor.fromJson(this._json);
 
   final JsonObject _json;
-  
+
   /// The underlying JSON object for this instance.
   JsonObject get json => _json;
 
