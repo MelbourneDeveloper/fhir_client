@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:well_navigate/constants.dart';
 
 class Tile extends StatelessWidget {
   const Tile({
@@ -31,16 +32,16 @@ class Tile extends StatelessWidget {
           children: [
             Tooltip(
               message: headerTooltip,
-              child: Text(
-                headerText,
-                style: Theme.of(context).textTheme.titleMedium,
+              child: Padding(
+                padding: standardHorizontalPadding,
+                child: Text(
+                  headerText,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               ),
             ),
             const SizedBox(height: 8),
-            DefaultTextStyle(
-              style: Theme.of(context).textTheme.bodyMedium!,
-              child: body,
-            ),
+            body,
           ],
         ),
       );

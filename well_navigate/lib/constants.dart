@@ -39,3 +39,14 @@ const fieldDefinitionsByElementType = {
   'FieldDefinition<Meta>': Meta.fieldDefinitions,
   'FieldDefinition<Narrative>': Narrative.fieldDefinitions,
 };
+
+const standardHorizontalPaddingValue = 16.0;
+
+const standardHorizontalSpacer = SizedBox(
+  width: standardHorizontalPaddingValue,
+);
+
+const standardHorizontalPadding = EdgeInsets.only(
+  left: standardHorizontalPaddingValue,
+  right: standardHorizontalPaddingValue,
+);
