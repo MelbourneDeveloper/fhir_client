@@ -33,7 +33,24 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text(appTitle)),
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                //TODO: runtime type is wrong here
+                iconsByResourceType['Appointment'] ?? Icons.medical_services,
+                size: 32,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Appointment',
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+            ],
+          ),
+        ),
         body: ResourceEditor(
           resourceRoot: appointment.json,
           resourceTypeName: 'Appointment',

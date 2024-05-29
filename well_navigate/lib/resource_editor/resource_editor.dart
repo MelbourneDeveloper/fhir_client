@@ -35,10 +35,6 @@ class _ResourceEditorState extends State<ResourceEditor> {
         child: Column(
           children: [
             const SizedBox(height: 16),
-            Center(
-              child: _headingRow(context),
-            ),
-            const SizedBox(height: 16),
             const TabBar(
               dividerColor: Colors.transparent,
               tabs: <Widget>[
@@ -79,23 +75,5 @@ class _ResourceEditorState extends State<ResourceEditor> {
             ),
           ],
         ),
-      );
-
-  Row _headingRow(BuildContext context) => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            //TODO: runtime type is wrong here
-            iconsByResourceType[widget.resourceTypeName] ??
-                Icons.medical_services,
-            size: 36,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          const SizedBox(width: 12),
-          Text(
-            widget.resourceTypeName,
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
-        ],
       );
 }

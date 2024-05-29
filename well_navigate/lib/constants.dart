@@ -4,7 +4,7 @@ import 'package:fhir_client/models/narrative.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:flutter/material.dart';
 
-const appTitle = 'Well Navigator';
+const appTitle = 'Well Navigate';
 
 final colorScheme =
     ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 237, 172, 147));
