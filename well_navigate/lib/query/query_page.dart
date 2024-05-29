@@ -11,11 +11,15 @@ class QueryPage extends StatefulWidget {
 class _QueryPageState extends State<QueryPage> {
   final TextEditingController _urlController = TextEditingController();
   final TextEditingController _headerController = TextEditingController();
-  final TextEditingController _paramsController = TextEditingController();
+  final List<MapEntryController> _paramControllers = [];
   String _response = '';
 
   Future<void> _makeRequest() async {
-    final url = Uri.parse('${_urlController.text}?${_paramsController.text}');
+    final params = <String, String>{
+      for (final entry in _paramControllers)
+        entry.keyController.text: entry.valueController.text,
+    };
+    final url = Uri.parse(_urlController.text).replace(queryParameters: params);
     final response = await http.get(
       url,
       headers: {
@@ -25,6 +29,18 @@ class _QueryPageState extends State<QueryPage> {
     );
     setState(() {
       _response = response.body;
+    });
+  }
+
+  void _addParam() {
+    setState(() {
+      _paramControllers.add(MapEntryController());
+    });
+  }
+
+  void _removeParam(int index) {
+    setState(() {
+      _paramControllers.removeAt(index);
     });
   }
 
@@ -53,12 +69,39 @@ class _QueryPageState extends State<QueryPage> {
                 ),
               ),
               const SizedBox(height: 8),
-              TextField(
-                controller: _paramsController,
-                decoration: const InputDecoration(
-                  labelText: 'Query Parameters',
-                  border: OutlineInputBorder(),
-                ),
+              ..._paramControllers.map((controller) {
+                final index = _paramControllers.indexOf(controller);
+                return Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: controller.keyController,
+                        decoration: const InputDecoration(
+                          labelText: 'Key',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: controller.valueController,
+                        decoration: const InputDecoration(
+                          labelText: 'Value',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.remove_circle_outline),
+                      onPressed: () => _removeParam(index),
+                    ),
+                  ],
+                );
+              }),
+              IconButton(
+                icon: const Icon(Icons.add_circle_outline),
+                onPressed: _addParam,
               ),
               const SizedBox(height: 20),
               ElevatedButton(
@@ -74,4 +117,9 @@ class _QueryPageState extends State<QueryPage> {
           ),
         ),
       );
+}
+
+class MapEntryController {
+  TextEditingController keyController = TextEditingController();
+  TextEditingController valueController = TextEditingController();
 }
