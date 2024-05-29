@@ -14,28 +14,48 @@ class ValueSetEditor<T> extends StatelessWidget {
   final FieldDefinition<T> fieldDefinition;
 
   @override
-  Widget build(BuildContext context) => InputDecorator(
-        decoration: InputDecoration(
-          label: Text(fieldDefinition.display ?? fieldDefinition.name),
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<ValueSetConcept>(
-            items: fieldDefinition.valueSetValues!
-                .cast<ValueSetConcept>()
-                .toSortedList((a, b) => a.compareTo(b))
-                .map(
-                  (l) => DropdownMenuItem<ValueSetConcept>(
-                    value: l,
-                    child: Tooltip(
-                      message: l.definition,
-                      child: Text('${l.code} - ${l.display}'),
+  Widget build(BuildContext context) => DropdownButtonHideUnderline(
+        child: DropdownButtonFormField<ValueSetConcept>(
+          decoration: InputDecoration(
+            labelText: fieldDefinition.display ?? fieldDefinition.name,
+            border: const OutlineInputBorder(),
+          ),
+          selectedItemBuilder: (context) => fieldDefinition.valueSetValues!
+              .cast<ValueSetConcept>()
+              .toSortedList((a, b) => a.compareTo(b))
+              .map(
+                (l) => Tooltip(
+                  message: l.definition,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: 200,
+                    ), // Adjust the maxWidth value
+                    child: Text(
+                      '${l.code} - ${l.display}',
+                      overflow: TextOverflow.fade,
                     ),
                   ),
-                )
-                .toList(),
-            onChanged: (l) {},
-            value: selectedValue,
-          ),
+                ),
+              )
+              .toList(),
+          items: fieldDefinition.valueSetValues!
+              .cast<ValueSetConcept>()
+              .toSortedList((a, b) => a.compareTo(b))
+              .map(
+                (l) => DropdownMenuItem<ValueSetConcept>(
+                  value: l,
+                  child: Tooltip(
+                    message: l.definition,
+                    child: Text(
+                      '${l.code} - ${l.display}',
+                      overflow: TextOverflow.fade,
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
+          onChanged: (l) {},
+          value: selectedValue,
         ),
       );
 }
