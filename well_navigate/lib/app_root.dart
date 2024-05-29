@@ -1,8 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:well_navigate/about_screen.dart';
 import 'package:well_navigate/constants.dart';
-import 'package:well_navigate/main.dart';
+import 'package:well_navigate/mock_data.dart';
 import 'package:well_navigate/query/query_page.dart';
 import 'package:well_navigate/resource_editor/resource_editor.dart';
 import 'package:well_navigate/settings_screen.dart';

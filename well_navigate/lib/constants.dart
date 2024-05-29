@@ -1,3 +1,7 @@
+import 'package:fhir_client/models/extension.dart';
+import 'package:fhir_client/models/meta.dart';
+import 'package:fhir_client/models/narrative.dart';
+import 'package:fhir_client/models/resource.dart';
 import 'package:flutter/material.dart';
 
 const appTitle = 'Well Navigator';
@@ -26,3 +30,12 @@ final themeData = ThemeData(
 );
 
 final iconsByResourceType = {'Appointment': Icons.event};
+
+const fieldDefinitionsByElementType = {
+  'Appointment': Appointment.fieldDefinitions,
+  'Meta': Meta.fieldDefinitions,
+  'OperationOutcome': OperationOutcome.fieldDefinitions,
+  'FieldDefinition<FixedList<Extension>>': Extension.fieldDefinitions,
+  'FieldDefinition<Meta>': Meta.fieldDefinitions,
+  'FieldDefinition<Narrative>': Narrative.fieldDefinitions,
+};
