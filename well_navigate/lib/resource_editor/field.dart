@@ -1,5 +1,6 @@
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
+import 'package:well_navigate/constants.dart';
 
 class Field<T> extends StatelessWidget {
   const Field({
@@ -18,7 +19,7 @@ class Field<T> extends StatelessWidget {
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(standardHorizontalPaddingValue),
               child: SizedBox(
                 width: 300,
                 child: Tooltip(

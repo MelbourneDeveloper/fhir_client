@@ -34,21 +34,25 @@ class _ResourceEditorState extends State<ResourceEditor> {
         length: 2,
         child: Column(
           children: [
-            const SizedBox(height: 16),
             const TabBar(
+              indicatorSize: TabBarIndicatorSize.label,
+              labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              unselectedLabelStyle: TextStyle(fontSize: 14),
               dividerColor: Colors.transparent,
               tabs: <Widget>[
                 Tab(
                   text: 'Editor',
                   icon: Icon(Icons.medical_services),
+                  iconMargin: EdgeInsets.only(bottom: 4),
                 ),
                 Tab(
                   text: 'JSON',
                   icon: Icon(Icons.code),
+                  iconMargin: EdgeInsets.only(bottom: 4),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             Expanded(
               child: TabBarView(
                 children: <Widget>[
