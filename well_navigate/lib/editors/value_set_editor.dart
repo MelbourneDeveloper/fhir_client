@@ -1,7 +1,7 @@
 import 'package:fhir_client/models/value_sets/value_set_concept.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
-import 'package:well_navigate/iterable_extensions.dart';
+import 'package:well_navigate/helpers/iterable_extensions.dart';
 
 class ValueSetEditor<T> extends StatelessWidget {
   const ValueSetEditor({

@@ -10,12 +10,12 @@ class AppRoot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: 'Well Navigator',
+        title: appTitle,
         debugShowCheckedModeBanner: false,
         theme: themeData,
         home: Scaffold(
           appBar: AppBar(
-            title: const Text('Well Navigator'),
+            title: const Text(appTitle),
           ),
           body: ResourceEditor(
             resourceRoot: appointment.json,

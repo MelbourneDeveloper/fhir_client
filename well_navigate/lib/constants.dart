@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const appTitle = 'Well Navigator';
+
 final colorScheme =
     ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 237, 172, 147));
 
