@@ -3,6 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:well_navigate/query/query_page.dart';
 
 class QueryNotifier extends ChangeNotifier {
+  QueryNotifier({required this.client});
+
+  final http.Client client;
   final TextEditingController urlController = TextEditingController();
   final List<MapEntryController> headerControllers = [];
   final List<MapEntryController> paramControllers = [];
@@ -18,7 +21,7 @@ class QueryNotifier extends ChangeNotifier {
         entry.keyController.text: entry.valueController.text,
     };
     final url = Uri.parse(urlController.text).replace(queryParameters: params);
-    final apiResponse = await http.get(
+    final apiResponse = await client.get(
       url,
       headers: headers,
     );
