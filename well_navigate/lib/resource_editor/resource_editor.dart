@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jayse/jayse.dart';
 import 'package:well_navigate/constants.dart';
-import 'package:well_navigate/field_definition_list_extensions.dart';
-import 'package:well_navigate/json_editor.dart';
 import 'package:well_navigate/main.dart';
-import 'package:well_navigate/resource_editor_list_view.dart';
+import 'package:well_navigate/resource_editor/field_definition_list_extensions.dart';
+import 'package:well_navigate/resource_editor/json_editor.dart';
+import 'package:well_navigate/resource_editor/resource_editor_list_view.dart';
 
 class ResourceEditor extends StatefulWidget {
   const ResourceEditor({

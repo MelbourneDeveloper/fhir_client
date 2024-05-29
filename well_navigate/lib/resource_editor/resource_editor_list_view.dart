@@ -10,9 +10,9 @@ import 'package:fhir_client/models/value_sets/service_type.dart';
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
 import 'package:jayse/jayse.dart';
-import 'package:well_navigate/element_panel.dart';
 import 'package:well_navigate/main.dart';
-import 'package:well_navigate/tile.dart';
+import 'package:well_navigate/resource_editor/element_panel.dart';
+import 'package:well_navigate/resource_editor/tile.dart';
 
 class ResourceEditorListView extends StatelessWidget {
   const ResourceEditorListView({

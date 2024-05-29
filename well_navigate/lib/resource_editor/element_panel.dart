@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:jayse/jayse.dart';
 import 'package:well_navigate/editors/string_editor.dart';
 import 'package:well_navigate/editors/value_set_editor.dart';
-import 'package:well_navigate/field.dart';
+import 'package:well_navigate/resource_editor/field.dart';
 
 /// The body of a panel, which has one or more field editors
 class ElementPanel extends StatelessWidget {

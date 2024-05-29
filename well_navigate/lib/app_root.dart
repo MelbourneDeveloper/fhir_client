@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:well_navigate/constants.dart';
 import 'package:well_navigate/main.dart';
-import 'package:well_navigate/resource_editor.dart';
+import 'package:well_navigate/resource_editor/resource_editor.dart';
 
 class AppRoot extends StatelessWidget {
   const AppRoot({super.key});
