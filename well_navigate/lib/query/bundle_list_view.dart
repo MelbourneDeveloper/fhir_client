@@ -40,9 +40,11 @@ class BundleListView extends StatelessWidget {
               ),
               trailing: IconButton(
                 icon: const Icon(Icons.open_in_new),
-                onPressed: () {
-                  // TODO: Implement opening the resource in a new screen
-                },
+                onPressed: () async => Navigator.pushNamed(
+                  context,
+                  '/resource',
+                  arguments: resource.json.toString(),
+                ),
               ),
               children: [
                 SizedBox(

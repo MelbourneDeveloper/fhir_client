@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:jayse/jayse.dart';
 import 'package:well_navigate/about_screen.dart';
 import 'package:well_navigate/constants.dart';
-import 'package:well_navigate/home_screen.dart';
 import 'package:well_navigate/query/query_page.dart';
+import 'package:well_navigate/resource_editor/resource_editor.dart';
 import 'package:well_navigate/settings_screen.dart';
 
 void main() {
@@ -17,9 +18,14 @@ class AppRoot extends StatelessWidget {
         title: appTitle,
         debugShowCheckedModeBanner: false,
         theme: themeData,
-        initialRoute: '/',
+        initialRoute: '/query',
         routes: {
-          '/': (context) => const HomeScreen(),
+          '/resource': (context) => ResourceEditor(
+                resourceRoot: jsonValueDecode(
+                  ModalRoute.of(context)!.settings.arguments! as String,
+                ) as JsonObject,
+                resourceTypeName: 'Appointment',
+              ),
           '/settings': (context) => const SettingsScreen(),
           '/about': (context) => const AboutScreen(),
           '/query': (context) => const QueryPage(),
