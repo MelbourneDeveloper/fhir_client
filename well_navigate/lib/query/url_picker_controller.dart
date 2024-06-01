@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:well_navigate/query/map_entry_controller.dart';
 
+//TODO: not currently working properly
+
 class UrlPickerController extends ChangeNotifier {
   final TextEditingController urlController =
       TextEditingController(text: 'https://hapi.fhir.org/baseR4/Appointment');

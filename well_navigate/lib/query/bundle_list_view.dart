@@ -1,19 +1,20 @@
-import 'package:fhir_client/models/resource.dart';
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
+import 'package:fhir_client/models/entry.dart';
 import 'package:flutter/material.dart';
 
 class BundleListView extends StatelessWidget {
   const BundleListView({
-    required this.bundle,
+    required this.entries,
     super.key,
   });
 
-  final Bundle bundle;
+  final FixedList<Entry> entries;
 
   @override
   Widget build(BuildContext context) => ListView.builder(
-        itemCount: bundle.entry!.length,
+        itemCount: entries.length,
         itemBuilder: (context, index) => Text(
-          bundle.entry![index].resource?.resourceType ?? '',
+          entries[index].resource?.resourceType ?? '',
         ),
       );
 }

@@ -1,3 +1,4 @@
+import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/resource.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ioc_container/flutter_ioc_container.dart';
@@ -39,7 +40,7 @@ class QueryPage extends StatelessWidget {
                           Text(oo.text?.div ?? ''),
                         (final Bundle bundle)
                             when bundle.entry?.isNotEmpty ?? false =>
-                          BundleListView(bundle: bundle),
+                          BundleListView(entries: bundle.entry!.toFixedList()),
                         _ => const Text('No results'),
                       }
                   },
