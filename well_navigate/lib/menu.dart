@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:well_navigate/constants.dart';
 
 class Menu extends StatelessWidget {
   const Menu({
@@ -10,7 +11,7 @@ class Menu extends StatelessWidget {
         onDestinationSelected: (index) async {
           switch (index) {
             case 0:
-              await Navigator.pushNamed(context, '/');
+              break;
             case 1:
               await Navigator.pushNamed(context, '/settings');
             case 2:
@@ -19,8 +20,8 @@ class Menu extends StatelessWidget {
               await Navigator.pushNamed(context, '/query');
           }
         },
-        children: const <Widget>[
-          Padding(
+        children: <Widget>[
+          const Padding(
             padding: EdgeInsets.fromLTRB(28, 16, 16, 10),
             child: Text(
               'Menu',
@@ -31,18 +32,18 @@ class Menu extends StatelessWidget {
             ),
           ),
           NavigationDrawerDestination(
-            icon: Icon(Icons.home),
-            label: Text('Home'),
+            icon: Icon(iconsByResourceType['Appointment']),
+            label: const Text('Appointment'),
           ),
-          NavigationDrawerDestination(
+          const NavigationDrawerDestination(
             icon: Icon(Icons.settings),
             label: Text('Settings'),
           ),
-          NavigationDrawerDestination(
+          const NavigationDrawerDestination(
             icon: Icon(Icons.info),
             label: Text('About'),
           ),
-          NavigationDrawerDestination(
+          const NavigationDrawerDestination(
             icon: Icon(Icons.api),
             label: Text('API Query'),
           ),
