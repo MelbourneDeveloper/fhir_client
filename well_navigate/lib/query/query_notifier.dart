@@ -36,7 +36,11 @@ class QueryNotifier extends ChangeNotifier {
           )
       };
       // ignore: avoid_catches_without_on_clauses, empty_catches
-    } catch (e) {}
+    } catch (e) {
+      queryResult = OperationOutcome<String>(
+        text: Narrative(div: '<div>Error: $e</div>'),
+      );
+    }
 
     isLoading = false;
     notifyListeners();
