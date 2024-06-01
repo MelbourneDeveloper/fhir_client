@@ -13,18 +13,24 @@ class Menu extends StatelessWidget {
             case 0:
               break;
             case 1:
-              await Navigator.pushNamed(context, '/settings');
+              await Navigator.pushNamed(context, '/patient');
             case 2:
-              await Navigator.pushNamed(context, '/about');
+              await Navigator.pushNamed(context, '/observation');
             case 3:
+              await Navigator.pushNamed(context, '/medication');
+            case 4:
               await Navigator.pushNamed(context, '/query');
+            case 5:
+              await Navigator.pushNamed(context, '/settings');
+            case 6:
+              await Navigator.pushNamed(context, '/about');
           }
         },
         children: <Widget>[
           const Padding(
             padding: EdgeInsets.fromLTRB(28, 16, 16, 10),
             child: Text(
-              'Menu',
+              'FHIR Resources',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -32,8 +38,46 @@ class Menu extends StatelessWidget {
             ),
           ),
           NavigationDrawerDestination(
+            icon: Icon(iconsByResourceType['Patient']),
+            label: const Text('Patient'),
+          ),
+          NavigationDrawerDestination(
             icon: Icon(iconsByResourceType['Appointment']),
             label: const Text('Appointment'),
+          ),
+          NavigationDrawerDestination(
+            icon: Icon(iconsByResourceType['Observation']),
+            label: const Text('Observation'),
+          ),
+          NavigationDrawerDestination(
+            icon: Icon(iconsByResourceType['Medication']),
+            label: const Text('Medication'),
+          ),
+          const Divider(),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(28, 16, 16, 10),
+            child: Text(
+              'Tools',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const NavigationDrawerDestination(
+            icon: Icon(Icons.search),
+            label: Text('Query'),
+          ),
+          const Divider(),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(28, 16, 16, 10),
+            child: Text(
+              'App',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
           const NavigationDrawerDestination(
             icon: Icon(Icons.settings),
@@ -42,10 +86,6 @@ class Menu extends StatelessWidget {
           const NavigationDrawerDestination(
             icon: Icon(Icons.info),
             label: Text('About'),
-          ),
-          const NavigationDrawerDestination(
-            icon: Icon(Icons.search),
-            label: Text('Query'),
           ),
         ],
       );
