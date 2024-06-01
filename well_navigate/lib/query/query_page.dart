@@ -1,3 +1,4 @@
+import 'package:fhir_client/models/resource.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ioc_container/flutter_ioc_container.dart';
 import 'package:well_navigate/query/query_notifier.dart';
@@ -112,17 +113,33 @@ class QueryPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 const Text('Response:'),
-                SingleChildScrollView(
-                  child: Text(context<QueryNotifier>().response),
+                SizedBox(
+                  height: 500,
+                  child: switch (context<QueryNotifier>()) {
+                    QueryNotifier(isLoading: true) =>
+                      const CircularProgressIndicator(),
+                    _ => switch (context<QueryNotifier>().queryResult) {
+                        (final OperationOutcome<dynamic> oo) =>
+                          Text(oo.text?.div ?? ''),
+                        (final Bundle bundle)
+                            when bundle.entry?.isNotEmpty ?? false =>
+                          ListView.builder(
+                            itemBuilder: (context, index) => Text(
+                              context<QueryNotifier>()
+                                      .bundle
+                                      ?.entry
+                                      ?.length
+                                      .toString() ??
+                                  'No Entries',
+                            ),
+                          ),
+                        _ => const Text('No results'),
+                      }
+                  },
                 ),
               ],
             ),
           ),
         ),
       );
-}
-
-class MapEntryController {
-  TextEditingController keyController = TextEditingController();
-  TextEditingController valueController = TextEditingController();
 }

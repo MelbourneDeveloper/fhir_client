@@ -27,7 +27,7 @@ const baseUri = 'http://hapi.fhir.org/';
 void main() {
   group('Deserialization Tests', () {
     test('Appointment Search', () async {
-      //curl -X GET "https://hapi.fhir.org/baseR4/Appointment?_count=10"
+      //curl -X GET "https://hapi.fhir.org/baseR4/Appointment?_count=10" -H "Content-Type: application/json"
 
       final json =
           await File('test/responses/appointmentsearch.json').readAsString();
