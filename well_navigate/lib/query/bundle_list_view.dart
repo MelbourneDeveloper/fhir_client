@@ -1,6 +1,7 @@
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/entry.dart';
 import 'package:fhir_client/models/resource.dart';
+import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
 import 'package:well_navigate/constants.dart';
 
@@ -25,12 +26,14 @@ class BundleListView extends StatelessWidget {
                 spacing: 8,
                 runSpacing: 4,
                 children: [
-                  // Text(
-                  //   'Status: ${resource.status}',
-                  //   style: Theme.of(context).textTheme.bodySmall,
-                  // ),
+                  if (resource.json.value<String>('status') != null)
+                    //Is this valid for all resource? Probably not
+                    Text(
+                      'Status: ${resource.json.value<String>('status')}',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   Text(
-                    'Last Updated: ${resource.meta?.lastUpdated}',
+                    'Created: ${resource.meta?.lastUpdated}',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -41,32 +44,57 @@ class BundleListView extends StatelessWidget {
                   // TODO: Implement opening the resource in a new screen
                 },
               ),
-              children: fieldDefinitionsByElementType[resource.resourceType]!
-                  .map(
-                    (fieldDefinition) => Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      child: Wrap(
-                        spacing: 8,
-                        runSpacing: 4,
-                        children: [
-                          Text(
-                            '${fieldDefinition.name}:',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                          Text(
-                            fieldDefinition.getValue(resource.json).toString(),
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Wrap(
+                      spacing: 32,
+                      runSpacing: 16,
+                      children:
+                          fieldDefinitionsByElementType[resource.resourceType]!
+                              .map(
+                                (fieldDefinition) => _valueRow(
+                                  fieldDefinition,
+                                  context,
+                                  resource,
+                                ),
+                              )
+                              .toList(),
                     ),
-                  )
-                  .toList(),
+                  ),
+                ),
+              ],
             ),
           _ => const Text('Not a resource'),
         },
+      );
+
+  Row _valueRow(
+    FieldDefinition<Object> fieldDefinition,
+    BuildContext context,
+    Resource resource,
+  ) =>
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 150,
+            child: Text(
+              '${fieldDefinition.name}:',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
+          const SizedBox(width: 8),
+          SizedBox(
+            width: 250,
+            child: Text(
+              fieldDefinition.getValue(resource.json).toString(),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+        ],
       );
 }

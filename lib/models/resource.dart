@@ -132,6 +132,10 @@ class Element {
       };
 
   @override
+  // ignore: no_runtimetype_tostring
+  String toString() => '$runtimeType($id)';
+
+  @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       ((other is Resource) &&
