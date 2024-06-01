@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ioc_container/flutter_ioc_container.dart';
 import 'package:well_navigate/query/query_notifier.dart';
 
 class UrlPicker extends StatelessWidget {
