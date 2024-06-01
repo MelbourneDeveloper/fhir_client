@@ -12,30 +12,19 @@ class QueryNotifier extends ChangeNotifier {
   });
 
   final http.Client client;
-  final UrlPickerController urlPickerController = UrlPickerController();
 
   Bundle? bundle;
   bool isLoading = false;
   Resource? queryResult;
 
-  Future<void> makeRequest() async {
+  Future<void> makeRequest(UriState uriState) async {
     isLoading = true;
     notifyListeners();
 
     try {
-      final headers = <String, String>{
-        for (final entry in urlPickerController.headerControllers)
-          entry.keyController.text: entry.valueController.text,
-      };
-      final params = <String, String>{
-        for (final entry in urlPickerController.paramControllers)
-          entry.keyController.text: entry.valueController.text,
-      };
-      final url = Uri.parse(urlPickerController.urlController.text)
-          .replace(queryParameters: params);
       final apiResponse = await client.get(
-        url,
-        headers: headers,
+        uriState.uri,
+        headers: uriState.headers,
       );
       final jsonValueDecode2 = jsonValueDecode(apiResponse.body);
       queryResult = switch (jsonValueDecode2) {

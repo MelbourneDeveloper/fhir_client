@@ -5,9 +5,20 @@ import 'package:flutter_ioc_container/flutter_ioc_container.dart';
 import 'package:well_navigate/query/bundle_list_view.dart';
 import 'package:well_navigate/query/query_notifier.dart';
 import 'package:well_navigate/query/url_picker.dart';
+import 'package:well_navigate/query/url_picker_controller.dart';
 
-class QueryPage extends StatelessWidget {
+class QueryPage extends StatefulWidget {
   const QueryPage({super.key});
+
+  @override
+  State<QueryPage> createState() => _QueryPageState();
+}
+
+class _QueryPageState extends State<QueryPage> {
+  UriState uriState = UriState(
+    Uri.parse('https://hapi.fhir.org/baseR4/Appointment'),
+    {'Content-Type': 'application/json'},
+  );
 
   @override
   Widget build(BuildContext context) => ListenableBuilder(
@@ -21,11 +32,13 @@ class QueryPage extends StatelessWidget {
   Column _mainColumn(BuildContext context) => Column(
         children: <Widget>[
           UrlPicker(
-            controller: context<QueryNotifier>().urlPickerController,
+            uriState: uriState,
+            onChanged: (u) => setState(() => uriState = u),
           ),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: context<QueryNotifier>().makeRequest,
+            onPressed: () async =>
+                context<QueryNotifier>().makeRequest(uriState),
             child: const Text('Send Request'),
           ),
           const SizedBox(height: 20),
