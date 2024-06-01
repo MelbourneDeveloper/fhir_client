@@ -12,7 +12,9 @@ void main() {
 
     setUp(() {
       mockClient = MockClient((request) async {
-        if (request.url.toString() == 'https://hapi.fhir.org/baseR4/Patient') {
+        if (request.url
+            .toString()
+            .startsWith('https://hapi.fhir.org/baseR4/Patient')) {
           return http.Response('{"resourceType": "Bundle"}', 200);
         }
         return http.Response('Not Found', 404);
@@ -40,18 +42,19 @@ void main() {
     });
 
     testWidgets(
-        'sends request and displays bundle list when response is successful',
-        (tester) async {
+        "sends request and displays 'No results' "
+        'list when successful result is empty', (tester) async {
       await tester.pumpWidget(_queryPageWithMockClient(mockClient));
 
       await tester.enterText(
         find.byType(TextField).first,
         'https://hapi.fhir.org/baseR4/Patient',
       );
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Send Request'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Bundle'), findsOneWidget);
+      expect(find.text('No results'), findsOneWidget);
     });
 
     testWidgets(

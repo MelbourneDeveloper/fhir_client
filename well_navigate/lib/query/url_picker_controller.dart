@@ -12,11 +12,14 @@ class UriState {
 
 class UrlPickerController extends ValueNotifier<UriState> {
   // ignore: use_super_parameters
-  UrlPickerController(UriState value) : super(value);
+  UrlPickerController(UriState value) : super(value) {
+    urlController = TextEditingController(text: value.uri.toString());
+
+    urlController.addListener(_setValue);
+  }
 
   //These are wrong. They should get the value from the UriState
-  final TextEditingController urlController =
-      TextEditingController(text: 'https://hapi.fhir.org/baseR4/Appointment');
+  late final TextEditingController urlController;
   final List<MapEntryController> headerControllers = [
     MapEntryController(key: 'Content-Type', value: 'application/json'),
   ];

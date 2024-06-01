@@ -26,6 +26,8 @@ class QueryNotifier extends ChangeNotifier {
         uriState.uri,
         headers: uriState.headers,
       );
+      //TODO: error handling. What happens when the status code is bad?
+      //We need to use the actual extension methods make the calls...
       final jsonValueDecode2 = jsonValueDecode(apiResponse.body);
       queryResult = switch (jsonValueDecode2) {
         (final JsonObject json) => Resource.fromJson(json),
