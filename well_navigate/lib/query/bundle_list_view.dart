@@ -22,21 +22,19 @@ class BundleListView extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               children: fieldDefinitionsByElementType[resource.resourceType]!
-                  .map((fieldDefinition) {
-                final fieldName = fieldDefinition.name;
-                final fieldValue = fieldDefinition.getValue(resource.json);
-
-                return ListTile(
-                  title: Text(
-                    fieldName,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  subtitle: Text(
-                    fieldValue.toString(),
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                );
-              }).toList(),
+                  .map(
+                    (fieldDefinition) => ListTile(
+                      title: Text(
+                        fieldDefinition.name,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      subtitle: Text(
+                        fieldDefinition.getValue(resource.json).toString(),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                  )
+                  .toList(),
             ),
           _ => const Text('Not a resource')
         },
