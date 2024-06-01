@@ -21,22 +21,52 @@ class BundleListView extends StatelessWidget {
                 '${resource.resourceType} - ${resource.id}',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
+              subtitle: Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  // Text(
+                  //   'Status: ${resource.status}',
+                  //   style: Theme.of(context).textTheme.bodySmall,
+                  // ),
+                  Text(
+                    'Last Updated: ${resource.meta?.lastUpdated}',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+              trailing: IconButton(
+                icon: const Icon(Icons.open_in_new),
+                onPressed: () {
+                  // TODO: Implement opening the resource in a new screen
+                },
+              ),
               children: fieldDefinitionsByElementType[resource.resourceType]!
                   .map(
-                    (fieldDefinition) => ListTile(
-                      title: Text(
-                        fieldDefinition.name,
-                        style: Theme.of(context).textTheme.bodyMedium,
+                    (fieldDefinition) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
                       ),
-                      subtitle: Text(
-                        fieldDefinition.getValue(resource.json).toString(),
-                        style: Theme.of(context).textTheme.bodySmall,
+                      child: Wrap(
+                        spacing: 8,
+                        runSpacing: 4,
+                        children: [
+                          Text(
+                            '${fieldDefinition.name}:',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          Text(
+                            fieldDefinition.getValue(resource.json).toString(),
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
                       ),
                     ),
                   )
                   .toList(),
             ),
-          _ => const Text('Not a resource')
+          _ => const Text('Not a resource'),
         },
       );
 }
