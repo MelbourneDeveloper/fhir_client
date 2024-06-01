@@ -12,6 +12,8 @@ void main() {
 
     setUp(() {
       mockClient = MockClient((request) async {
+        await Future<void>.delayed(const Duration(seconds: 1));
+
         if (request.url
             .toString()
             .startsWith('https://hapi.fhir.org/baseR4/Patient')) {
@@ -86,10 +88,18 @@ Not Found
         (tester) async {
       await tester.pumpWidget(_queryPageWithMockClient(mockClient));
 
+      await tester.enterText(
+        find.byType(TextField).first,
+        'https://hapi.fhir.org/baseR4/Patient',
+      );
+      await tester.pumpAndSettle();
+
       await tester.tap(find.text('Send Request'));
       await tester.pump();
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      await tester.pumpAndSettle();
     });
 
     testWidgets('adds and removes headers', (tester) async {
