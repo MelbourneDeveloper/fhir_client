@@ -19,7 +19,9 @@ class QueryPage extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: <Widget>[
-                const UrlPicker(),
+                UrlPicker(
+                  controller: context<QueryNotifier>().urlPickerController,
+                ),
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: context<QueryNotifier>().makeRequest,

@@ -1,33 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ioc_container/flutter_ioc_container.dart';
-import 'package:well_navigate/query/query_notifier.dart';
+import 'package:well_navigate/query/url_picker_controller.dart';
 
-class UrlPicker extends StatelessWidget {
+class UrlPicker extends StatefulWidget {
   const UrlPicker({
+    required this.controller,
     super.key,
   });
+
+  final UrlPickerController controller;
+
+  @override
+  State<UrlPicker> createState() => _UrlPickerState();
+}
+
+class _UrlPickerState extends State<UrlPicker> {
+  UrlPickerController get controller => widget.controller;
 
   @override
   Widget build(BuildContext context) => Column(
         children: <Widget>[
           TextField(
-            controller: context<QueryNotifier>().urlController,
+            controller: controller.urlController,
             decoration: const InputDecoration(
               labelText: 'URL',
               border: OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 16),
-          ...context<QueryNotifier>().headerControllers.map((controller) {
+          ...controller.headerControllers.map((mapEntryController) {
             final index =
-                context<QueryNotifier>().headerControllers.indexOf(controller);
+                controller.headerControllers.indexOf(mapEntryController);
             return Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Row(
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: controller.keyController,
+                      controller: mapEntryController.keyController,
                       decoration: const InputDecoration(
                         labelText: 'Header Key',
                         border: OutlineInputBorder(),
@@ -37,7 +46,7 @@ class UrlPicker extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: TextField(
-                      controller: controller.valueController,
+                      controller: mapEntryController.valueController,
                       decoration: const InputDecoration(
                         labelText: 'Header Value',
                         border: OutlineInputBorder(),
@@ -46,28 +55,27 @@ class UrlPicker extends StatelessWidget {
                   ),
                   IconButton(
                     icon: const Icon(Icons.remove_circle_outline),
-                    onPressed: () =>
-                        context<QueryNotifier>().removeHeader(index),
+                    onPressed: () => controller.removeHeader(index),
                   ),
                 ],
               ),
             );
           }),
           ElevatedButton(
-            onPressed: context<QueryNotifier>().addHeader,
+            onPressed: controller.addHeader,
             child: const Text('Add Header'),
           ),
           const SizedBox(height: 16),
-          ...context<QueryNotifier>().paramControllers.map((controller) {
+          ...controller.paramControllers.map((mapEntryController) {
             final index =
-                context<QueryNotifier>().paramControllers.indexOf(controller);
+                controller.paramControllers.indexOf(mapEntryController);
             return Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Row(
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: controller.keyController,
+                      controller: mapEntryController.keyController,
                       decoration: const InputDecoration(
                         labelText: 'Parameter Key',
                         border: OutlineInputBorder(),
@@ -77,7 +85,7 @@ class UrlPicker extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: TextField(
-                      controller: controller.valueController,
+                      controller: mapEntryController.valueController,
                       decoration: const InputDecoration(
                         labelText: 'Parameter Value',
                         border: OutlineInputBorder(),
@@ -86,15 +94,14 @@ class UrlPicker extends StatelessWidget {
                   ),
                   IconButton(
                     icon: const Icon(Icons.remove_circle_outline),
-                    onPressed: () =>
-                        context<QueryNotifier>().removeParam(index),
+                    onPressed: () => controller.removeParam(index),
                   ),
                 ],
               ),
             );
           }),
           ElevatedButton(
-            onPressed: context<QueryNotifier>().addParam,
+            onPressed: controller.addParam,
             child: const Text('Add Parameter'),
           ),
         ],
