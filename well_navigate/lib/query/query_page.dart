@@ -116,21 +116,18 @@ class QueryPage extends StatelessWidget {
                 SizedBox(
                   height: 500,
                   child: switch (context<QueryNotifier>()) {
-                    QueryNotifier(isLoading: true) =>
-                      const CircularProgressIndicator(),
+                    QueryNotifier(isLoading: true) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     _ => switch (context<QueryNotifier>().queryResult) {
                         (final OperationOutcome<dynamic> oo) =>
                           Text(oo.text?.div ?? ''),
                         (final Bundle bundle)
                             when bundle.entry?.isNotEmpty ?? false =>
                           ListView.builder(
+                            itemCount: bundle.entry!.length,
                             itemBuilder: (context, index) => Text(
-                              context<QueryNotifier>()
-                                      .bundle
-                                      ?.entry
-                                      ?.length
-                                      .toString() ??
-                                  'No Entries',
+                              bundle.entry![index].resource?.resourceType ?? '',
                             ),
                           ),
                         _ => const Text('No results'),

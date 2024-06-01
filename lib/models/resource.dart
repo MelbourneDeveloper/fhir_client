@@ -172,6 +172,9 @@ sealed class Resource extends Element {
       (ResourceType.slot) => Slot.fromJson(json),
     };
   }
+
+  /// The FHIR resource type name
+  String get resourceType => json[_resourceTypeFieldName].stringValue ?? '';
 }
 
 extension ResourceExtensions<T extends Resource> on T {

@@ -27,7 +27,7 @@ class QueryNotifier extends ChangeNotifier {
 
   Future<void> makeRequest() async {
     isLoading = true;
-
+    notifyListeners();
     try {
       final headers = <String, String>{
         for (final entry in headerControllers)
