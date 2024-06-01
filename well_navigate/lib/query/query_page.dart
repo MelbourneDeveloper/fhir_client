@@ -18,36 +18,38 @@ class QueryPage extends StatelessWidget {
           ),
           body: Padding(
             padding: const EdgeInsets.all(16),
-            child: Column(
-              children: <Widget>[
-                UrlPicker(
-                  controller: context<QueryNotifier>().urlPickerController,
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: context<QueryNotifier>().makeRequest,
-                  child: const Text('Send Request'),
-                ),
-                const SizedBox(height: 20),
-                const Text('Response:'),
-                Expanded(
-                  child: switch (context<QueryNotifier>()) {
-                    QueryNotifier(isLoading: true) => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    _ => switch (context<QueryNotifier>().queryResult) {
-                        (final OperationOutcome<dynamic> oo) =>
-                          Text(oo.text?.div ?? ''),
-                        (final Bundle bundle)
-                            when bundle.entry?.isNotEmpty ?? false =>
-                          BundleListView(entries: bundle.entry!.toFixedList()),
-                        _ => const Text('No results'),
-                      }
-                  },
-                ),
-              ],
-            ),
+            child: _mainColumn(context),
           ),
         ),
+      );
+
+  Column _mainColumn(BuildContext context) => Column(
+        children: <Widget>[
+          UrlPicker(
+            controller: context<QueryNotifier>().urlPickerController,
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: context<QueryNotifier>().makeRequest,
+            child: const Text('Send Request'),
+          ),
+          const SizedBox(height: 20),
+          const Text('Response:'),
+          Expanded(
+            child: switch (context<QueryNotifier>()) {
+              QueryNotifier(isLoading: true) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              _ => switch (context<QueryNotifier>().queryResult) {
+                  (final OperationOutcome<dynamic> oo) =>
+                    Text(oo.text?.div ?? ''),
+                  (final Bundle bundle)
+                      when bundle.entry?.isNotEmpty ?? false =>
+                    BundleListView(entries: bundle.entry!.toFixedList()),
+                  _ => const Text('No results'),
+                }
+            },
+          ),
+        ],
       );
 }

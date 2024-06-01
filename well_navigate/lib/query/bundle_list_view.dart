@@ -13,8 +13,15 @@ class BundleListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ListView.builder(
         itemCount: entries.length,
-        itemBuilder: (context, index) => Text(
-          entries[index].resource?.resourceType ?? '',
+        itemBuilder: (context, index) => ListTile(
+          title: Text(
+            entries[index].resource?.resourceType ?? '',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          subtitle: Text(
+            'Id: ${entries[index].resource?.id ?? ''}',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
         ),
       );
 }
