@@ -14,6 +14,7 @@ class UrlPickerController extends ValueNotifier<UriState> {
   // ignore: use_super_parameters
   UrlPickerController(UriState value) : super(value);
 
+  //These are wrong. They should get the value from the UriState
   final TextEditingController urlController =
       TextEditingController(text: 'https://hapi.fhir.org/baseR4/Appointment');
   final List<MapEntryController> headerControllers = [

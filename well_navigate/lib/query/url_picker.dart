@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:well_navigate/query/url_picker_controller.dart';
 
-//TODO: not currently working properly
 
 class UrlPicker extends StatefulWidget {
   const UrlPicker({
