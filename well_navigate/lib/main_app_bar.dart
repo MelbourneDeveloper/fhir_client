@@ -16,7 +16,7 @@ AppBar mainAppBar(
           ),
           const SizedBox(width: 8),
           Text(
-            'Appointment',
+            title,
             style: Theme.of(context).textTheme.headlineLarge,
           ),
         ],

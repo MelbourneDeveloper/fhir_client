@@ -12,14 +12,9 @@ class QueryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ListenableBuilder(
         listenable: context<QueryNotifier>(),
-        builder: (context, child) => Scaffold(
-          appBar: AppBar(
-            title: const Text('FHIR Server Query Tool'),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(16),
-            child: _mainColumn(context),
-          ),
+        builder: (context, child) => Padding(
+          padding: const EdgeInsets.all(16),
+          child: _mainColumn(context),
         ),
       );
 

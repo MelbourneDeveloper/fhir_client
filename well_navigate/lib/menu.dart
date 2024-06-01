@@ -44,8 +44,8 @@ class Menu extends StatelessWidget {
             label: Text('About'),
           ),
           const NavigationDrawerDestination(
-            icon: Icon(Icons.api),
-            label: Text('API Query'),
+            icon: Icon(Icons.search),
+            label: Text('Query'),
           ),
         ],
       );

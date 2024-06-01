@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jayse/jayse.dart';
 import 'package:well_navigate/constants.dart';
-import 'package:well_navigate/main_app_bar.dart';
-import 'package:well_navigate/menu.dart';
 import 'package:well_navigate/resource_editor/field_definition_list_extensions.dart';
 import 'package:well_navigate/resource_editor/json_editor.dart';
 import 'package:well_navigate/resource_editor/resource_editor_list_view.dart';
@@ -32,64 +30,55 @@ class _ResourceEditorState extends State<ResourceEditor> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: mainAppBar(
-          'Appointment',
-          iconsByResourceType['Appointment'] ?? Icons.medical_services,
-          context,
-        ),
-        body: DefaultTabController(
-          length: 2,
-          child: Column(
-            children: [
-              const TabBar(
-                indicatorSize: TabBarIndicatorSize.label,
-                labelStyle:
-                    TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                unselectedLabelStyle: TextStyle(fontSize: 14),
-                dividerColor: Colors.transparent,
-                tabs: <Widget>[
-                  Tab(
-                    text: 'Editor',
-                    icon: Icon(Icons.medical_services),
-                    iconMargin: EdgeInsets.only(bottom: 4),
+  Widget build(BuildContext context) => DefaultTabController(
+        length: 2,
+        child: Column(
+          children: [
+            const TabBar(
+              indicatorSize: TabBarIndicatorSize.label,
+              labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              unselectedLabelStyle: TextStyle(fontSize: 14),
+              dividerColor: Colors.transparent,
+              tabs: <Widget>[
+                Tab(
+                  text: 'Editor',
+                  icon: Icon(Icons.medical_services),
+                  iconMargin: EdgeInsets.only(bottom: 4),
+                ),
+                Tab(
+                  text: 'JSON',
+                  icon: Icon(Icons.code),
+                  iconMargin: EdgeInsets.only(bottom: 4),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: TabBarView(
+                children: <Widget>[
+                  ResourceEditorListView(
+                    resourceRoot: resource,
+                    nonPrimitiveFields:
+                        fieldDefinitionsByElementType[widget.resourceTypeName]!
+                            .nonPrimitiveFields(),
+                    primitiveFields:
+                        fieldDefinitionsByElementType[widget.resourceTypeName]!
+                            .primitiveFields(),
+                    onFieldChanged: (f, e) => setState(
+                      () => _resource = _resource?.withUpdate(f, e),
+                    ),
                   ),
-                  Tab(
-                    text: 'JSON',
-                    icon: Icon(Icons.code),
-                    iconMargin: EdgeInsets.only(bottom: 4),
+                  JsonEditor(
+                    initialJson: jsonValueEncode(resource),
+                    onChanged: (json) => setState(
+                      //TODO: error handling
+                      () => _resource = jsonValueDecode(json) as JsonObject,
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              Expanded(
-                child: TabBarView(
-                  children: <Widget>[
-                    ResourceEditorListView(
-                      resourceRoot: resource,
-                      nonPrimitiveFields: fieldDefinitionsByElementType[
-                              widget.resourceTypeName]!
-                          .nonPrimitiveFields(),
-                      primitiveFields: fieldDefinitionsByElementType[
-                              widget.resourceTypeName]!
-                          .primitiveFields(),
-                      onFieldChanged: (f, e) => setState(
-                        () => _resource = _resource?.withUpdate(f, e),
-                      ),
-                    ),
-                    JsonEditor(
-                      initialJson: jsonValueEncode(resource),
-                      onChanged: (json) => setState(
-                        //TODO: error handling
-                        () => _resource = jsonValueDecode(json) as JsonObject,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-        drawer: const Menu(),
       );
 }
