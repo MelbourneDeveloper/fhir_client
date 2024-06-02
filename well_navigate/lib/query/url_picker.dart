@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:well_navigate/query/url_picker_controller.dart';
-
+import 'package:well_navigate/text_field_formatted.dart';
 
 class UrlPicker extends StatefulWidget {
   const UrlPicker({
@@ -57,12 +57,9 @@ class _UrlPickerState extends State<UrlPicker> {
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: TextField(
+                      child: TextFieldFormatted(
+                        labelText: 'Header Value',
                         controller: mapEntryController.valueController,
-                        decoration: const InputDecoration(
-                          labelText: 'Header Value',
-                          border: OutlineInputBorder(),
-                        ),
                       ),
                     ),
                     IconButton(

@@ -12,12 +12,10 @@ class SettingsController extends ValueNotifier<Settings?> {
 
     unawaited(_loadSettings());
   }
-  
+
   TextEditingController baseUriController = TextEditingController();
 
   void _onUrlChanged() {
-    //ignore: avoid_print
-    print('sdf');
     final newUri = Uri.tryParse(baseUriController.text);
     if (newUri != null) {
       unawaited(updateBaseUri(newUri));

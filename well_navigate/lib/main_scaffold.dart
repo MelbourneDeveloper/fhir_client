@@ -16,6 +16,7 @@ class MainScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: mainAppBar(
           title,
           icon,
