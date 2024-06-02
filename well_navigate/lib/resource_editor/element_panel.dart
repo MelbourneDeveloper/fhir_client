@@ -35,6 +35,7 @@ class ElementPanel extends StatelessWidget {
 
   Widget _editorByType(FieldDefinition<dynamic> fieldDefinition) =>
       switch (fieldDefinition) {
+        //Why doesn't this show up as HTML?
         FieldDefinition<String>(name: 'div') => HtmlWidget(
             fieldDefinition.getValue(panelElement) ?? '<div></div>',
           ),

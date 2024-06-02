@@ -21,17 +21,6 @@ class AppRoot extends StatelessWidget {
         theme: themeData,
         initialRoute: '/query',
         routes: {
-          '/resource': (context) => MainScaffold(
-                title: 'Appointment',
-                icon: iconsByResourceType['Appointment'] ??
-                    Icons.medical_services,
-                body: ResourceEditor(
-                  resourceRoot: jsonValueDecode(
-                    ModalRoute.of(context)!.settings.arguments! as String,
-                  ) as JsonObject,
-                  resourceTypeName: 'Appointment',
-                ),
-              ),
           '/settings': (context) => const MainScaffold(
                 title: 'Settings',
                 icon: Icons.settings,
@@ -47,6 +36,23 @@ class AppRoot extends StatelessWidget {
                 icon: Icons.search,
                 body: QueryPage(),
               ),
+        },
+        onGenerateRoute: (settings) {
+          if (settings.name == '/resource') {
+            final resourceJson = settings.arguments! as String;
+            return MaterialPageRoute(
+              builder: (context) => MainScaffold(
+                title: 'Appointment',
+                icon: iconsByResourceType['Appointment'] ??
+                    Icons.medical_services,
+                body: ResourceEditor(
+                  resourceRoot: jsonValueDecode(resourceJson) as JsonObject,
+                  resourceTypeName: 'Appointment',
+                ),
+              ),
+            );
+          }
+          return null;
         },
       );
 }

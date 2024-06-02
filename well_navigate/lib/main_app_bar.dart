@@ -6,18 +6,26 @@ AppBar mainAppBar(
   BuildContext context,
 ) =>
     AppBar(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      title: Stack(
         children: [
-          Icon(
-            icon,
-            size: 32,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.headlineLarge,
+          if (Navigator.of(context).canPop())
+            BackButton(
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 32,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+            ],
           ),
         ],
       ),
