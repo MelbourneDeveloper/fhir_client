@@ -8,7 +8,18 @@ import 'package:well_navigate/settings/settings.dart';
 class SettingsController extends ValueNotifier<Settings?> {
   // ignore: use_super_parameters
   SettingsController() : super(null) {
+    baseUriController.addListener(_onUrlChanged);
+
     unawaited(_loadSettings());
+  }
+
+  void _onUrlChanged() {
+    //ignore: avoid_print
+    print('sdf');
+    final newUri = Uri.tryParse(baseUriController.text);
+    if (newUri != null) {
+      unawaited(updateBaseUri(newUri));
+    }
   }
 
   Future<void> _loadSettings() async {
@@ -21,7 +32,11 @@ class SettingsController extends ValueNotifier<Settings?> {
       (final JsonObject jo) => Settings.fromJson(jo),
       _ => Settings(),
     };
+
+    baseUriController.text = value?.baseUri.toString() ?? '';
   }
+
+  TextEditingController baseUriController = TextEditingController();
 
   Future<void> updateBaseUri(Uri newUri) async {
     value = value?.copyWith(baseUri: newUri);
