@@ -43,15 +43,22 @@ class AppRoot extends StatelessWidget {
           },
           onGenerateRoute: (settings) {
             if (settings.name == '/resource') {
-              final resourceJson = settings.arguments! as String;
+              final json = settings.arguments! as String;
+
+              //TODO: handle not an object
+              final jsonValue = jsonValueDecode(json) as JsonObject;
+
+              //TODO: handle no resourceType
+              final resourceType = jsonValue['resourceType'].stringValue!;
+
               return MaterialPageRoute(
                 builder: (context) => MainScaffold(
-                  title: 'Appointment',
-                  icon: iconsByResourceType['Appointment'] ??
+                  title: resourceType,
+                  icon: iconsByResourceType[resourceType] ??
                       Icons.medical_services,
                   body: ResourceEditor(
-                    resourceRoot: jsonValueDecode(resourceJson) as JsonObject,
-                    resourceTypeName: 'Appointment',
+                    resourceRoot: jsonValue,
+                    resourceTypeName: resourceType,
                   ),
                 ),
               );
