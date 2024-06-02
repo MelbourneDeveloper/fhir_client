@@ -4,30 +4,57 @@ import 'package:well_navigate/constants.dart';
 import 'package:well_navigate/query/query_page.dart';
 import 'package:well_navigate/settings/settings_screen.dart';
 
+const destinations = <String,
+    ({
+  String routeName,
+  Object? arguments,
+})>{
+  'patient': (
+    routeName: QueryPage.routeName,
+    arguments: '/Patient',
+  ),
+  'appointment': (
+    routeName: QueryPage.routeName,
+    arguments: '/Appointment',
+  ),
+  'query': (
+    routeName: QueryPage.routeName,
+    arguments: null,
+  ),
+  'settings': (
+    routeName: SettingsScreen.routeName,
+    arguments: null,
+  ),
+
+  'about': (
+    routeName: AboutScreen.routeName,
+    arguments: null,
+  ),
+  // 'observation': '/observation',
+  // 'medication': '/medication',
+};
+
 class Menu extends StatelessWidget {
-  const Menu({
-    super.key,
-  });
+  const Menu({super.key});
 
   @override
   Widget build(BuildContext context) => NavigationDrawer(
         onDestinationSelected: (index) async {
-          await switch (index) {
-            0 => Navigator.pushNamed(
+          final key = destinations.keys.elementAt(index);
+          final destination = destinations[key]!;
+
+          await switch (key) {
+            'patient' || 'appointment' => Navigator.pushNamed(
                 context,
-                QueryPage.routeName,
-                arguments: '/Patient',
+                destination.routeName,
+                arguments: destination.arguments,
               ),
-            1 => Navigator.pushNamed(
-                context,
-                QueryPage.routeName,
-                arguments: '/Appointment',
-              ),
-            2 => Navigator.pushNamed(context, '/observation'),
-            3 => Navigator.pushNamed(context, '/medication'),
-            4 => Navigator.pushNamed(context, QueryPage.routeName),
-            5 => Navigator.pushNamed(context, SettingsScreen.routeName),
-            6 => Navigator.pushNamed(context, AboutScreen.routeName),
+            'observation' ||
+            'medication' ||
+            'query' ||
+            'settings' ||
+            'about' =>
+              Navigator.pushNamed(context, destination.routeName),
             _ => null,
           };
         },
@@ -50,14 +77,14 @@ class Menu extends StatelessWidget {
             icon: Icon(iconsByResourceType['Appointment']),
             label: const Text('Appointments'),
           ),
-          NavigationDrawerDestination(
-            icon: Icon(iconsByResourceType['Observations']),
-            label: const Text('Observation'),
-          ),
-          NavigationDrawerDestination(
-            icon: Icon(iconsByResourceType['Medications']),
-            label: const Text('Medication'),
-          ),
+          // NavigationDrawerDestination(
+          //   icon: Icon(iconsByResourceType['Observations']),
+          //   label: const Text('Observation'),
+          // ),
+          // NavigationDrawerDestination(
+          //   icon: Icon(iconsByResourceType['Medications']),
+          //   label: const Text('Medication'),
+          // ),
           const Divider(),
           const Padding(
             padding: EdgeInsets.fromLTRB(28, 16, 16, 10),
