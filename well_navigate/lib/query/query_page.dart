@@ -12,6 +12,8 @@ import 'package:well_navigate/settings/settings_controller.dart';
 class QueryPage extends StatefulWidget {
   const QueryPage({super.key});
 
+  static const String routeName = '/query';
+
   @override
   State<QueryPage> createState() => _QueryPageState();
 }

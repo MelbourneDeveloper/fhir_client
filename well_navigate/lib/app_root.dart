@@ -31,28 +31,21 @@ class AppRoot extends StatelessWidget {
 
 Route<dynamic>? onGenerateRoute(RouteSettings settings) =>
     switch (settings.name) {
-      '/settings' => MaterialPageRoute(
+      SettingsScreen.routeName => MaterialPageRoute(
           builder: (context) => const MainScaffold(
             title: 'Settings',
             icon: Icons.settings,
             body: SettingsScreen(),
           ),
         ),
-      '/about' => MaterialPageRoute(
-          builder: (context) => const MainScaffold(
-            title: 'About',
-            icon: Icons.info,
-            body: AboutScreen(),
-          ),
-        ),
-      '/query' => MaterialPageRoute(
+      QueryPage.routeName => MaterialPageRoute(
           builder: (context) => const MainScaffold(
             title: 'Query',
             icon: Icons.search,
             body: QueryPage(),
           ),
         ),
-      '/resource' => MaterialPageRoute(
+      ResourceEditor.routeName => MaterialPageRoute(
           builder: (context) {
             final json = settings.arguments! as String;
             //TODO: handle not an object
@@ -69,5 +62,12 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) =>
             );
           },
         ),
-      _ => null,
+      //Default to About
+      _ => MaterialPageRoute(
+          builder: (context) => const MainScaffold(
+            title: 'About',
+            icon: Icons.info,
+            body: AboutScreen(),
+          ),
+        ),
     };

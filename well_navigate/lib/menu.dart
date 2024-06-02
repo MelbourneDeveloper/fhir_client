@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:well_navigate/about_screen.dart';
 import 'package:well_navigate/constants.dart';
+import 'package:well_navigate/query/query_page.dart';
+import 'package:well_navigate/settings/settings_screen.dart';
 
 class Menu extends StatelessWidget {
   const Menu({
@@ -9,22 +12,16 @@ class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) => NavigationDrawer(
         onDestinationSelected: (index) async {
-          switch (index) {
-            case 0:
-              break;
-            case 1:
-              await Navigator.pushNamed(context, '/patient');
-            case 2:
-              await Navigator.pushNamed(context, '/observation');
-            case 3:
-              await Navigator.pushNamed(context, '/medication');
-            case 4:
-              await Navigator.pushNamed(context, '/query');
-            case 5:
-              await Navigator.pushNamed(context, '/settings');
-            case 6:
-              await Navigator.pushNamed(context, '/about');
-          }
+          await switch (index) {
+            0 => null,
+            1 => Navigator.pushNamed(context, '/patient'),
+            2 => Navigator.pushNamed(context, '/observation'),
+            3 => Navigator.pushNamed(context, '/medication'),
+            4 => Navigator.pushNamed(context, QueryPage.routeName),
+            5 => Navigator.pushNamed(context, SettingsScreen.routeName),
+            6 => Navigator.pushNamed(context, AboutScreen.routeName),
+            _ => null,
+          };
         },
         children: <Widget>[
           const Padding(

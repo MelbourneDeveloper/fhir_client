@@ -8,6 +8,8 @@ class SettingsScreen extends StatefulWidget {
     super.key,
   });
 
+  static const String routeName = '/settings';
+
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
 }

@@ -12,6 +12,8 @@ class ResourceEditor extends StatefulWidget {
     super.key,
   });
 
+  static const String routeName = '/resource';
+
   final JsonObject resourceRoot;
   final String resourceTypeName;
 
