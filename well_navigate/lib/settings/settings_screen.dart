@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ioc_container/flutter_ioc_container.dart';
 import 'package:well_navigate/settings/settings_controller.dart';
+import 'package:well_navigate/text_field_formatted.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
@@ -30,7 +31,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 ListTile(
                   title: const Text('Base Url'),
-                  subtitle: TextField(
+                  subtitle: TextFieldFormatted(
                     controller: context<SettingsController>().baseUriController,
                   ),
                 ),

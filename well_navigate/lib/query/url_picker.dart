@@ -31,12 +31,9 @@ class _UrlPickerState extends State<UrlPicker> {
         listenable: controller,
         builder: (context, child) => Column(
           children: <Widget>[
-            TextField(
+            TextFieldFormatted(
               controller: controller.urlController,
-              decoration: const InputDecoration(
-                labelText: 'URL',
-                border: OutlineInputBorder(),
-              ),
+              labelText: 'URL',
             ),
             const SizedBox(height: 16),
             ...controller.headerControllers.map((mapEntryController) {
@@ -47,12 +44,9 @@ class _UrlPickerState extends State<UrlPicker> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: TextField(
+                      child: TextFieldFormatted(
                         controller: mapEntryController.keyController,
-                        decoration: const InputDecoration(
-                          labelText: 'Header Key',
-                          border: OutlineInputBorder(),
-                        ),
+                        labelText: 'Header Key',
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -83,22 +77,16 @@ class _UrlPickerState extends State<UrlPicker> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: TextField(
+                      child: TextFieldFormatted(
                         controller: mapEntryController.keyController,
-                        decoration: const InputDecoration(
-                          labelText: 'Parameter Key',
-                          border: OutlineInputBorder(),
-                        ),
+                        labelText: 'Parameter Key',
                       ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: TextField(
+                      child: TextFieldFormatted(
                         controller: mapEntryController.valueController,
-                        decoration: const InputDecoration(
-                          labelText: 'Parameter Value',
-                          border: OutlineInputBorder(),
-                        ),
+                        labelText: 'Parameter Value',
                       ),
                     ),
                     IconButton(

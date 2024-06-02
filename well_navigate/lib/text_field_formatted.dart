@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class TextFieldFormatted extends StatelessWidget {
   const TextFieldFormatted({
-    required this.labelText,
+    this.labelText,
     this.controller,
     this.onChanged,
     super.key,
@@ -10,7 +10,7 @@ class TextFieldFormatted extends StatelessWidget {
 
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
-  final String labelText;
+  final String? labelText;
 
   @override
   Widget build(BuildContext context) => TextField(
