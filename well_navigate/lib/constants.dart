@@ -18,6 +18,7 @@ final themeData = ThemeData(
   colorScheme: colorScheme,
   fontFamily: 'Roboto',
   inputDecorationTheme: InputDecorationTheme(
+    labelStyle: TextStyle(color: colorScheme.primary),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
       borderSide: BorderSide(color: colorScheme.secondary),
