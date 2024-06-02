@@ -9,6 +9,11 @@ const appTitle = 'Well Navigate';
 final colorScheme =
     ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 237, 172, 147));
 
+final darkColorScheme = ColorScheme.fromSeed(
+  seedColor: const Color.fromARGB(255, 237, 172, 147),
+  brightness: Brightness.dark,
+);
+
 final themeData = ThemeData(
   colorScheme: colorScheme,
   fontFamily: 'Roboto',
@@ -27,6 +32,11 @@ final themeData = ThemeData(
     ),
   ),
   useMaterial3: true,
+);
+
+final darkThemeData = themeData.copyWith(
+  colorScheme: darkColorScheme,
+  brightness: Brightness.dark,
 );
 
 final iconsByResourceType = {'Appointment': Icons.event};

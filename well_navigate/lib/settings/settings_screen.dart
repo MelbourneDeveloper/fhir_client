@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ioc_container/flutter_ioc_container.dart';
 import 'package:well_navigate/settings/settings_controller.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -11,11 +12,9 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final _controller = SettingsController();
-
   @override
   Widget build(BuildContext context) => ValueListenableBuilder(
-        valueListenable: _controller,
+        valueListenable: context<SettingsController>(),
         builder: (context, settings, child) => Scaffold(
           body: Center(
             child: ConstrainedBox(
@@ -27,12 +26,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   SwitchListTile(
                     title: const Text('Dark Mode'),
                     value: settings?.isDarkMode ?? false,
-                    onChanged: (_) async => _controller.toggleDarkMode(),
+                    onChanged: (_) async =>
+                        context<SettingsController>().toggleDarkMode(),
                   ),
                   ListTile(
                     title: const Text('Base Url'),
-                    subtitle:
-                        TextField(controller: _controller.baseUriController),
+                    subtitle: TextField(
+                      controller:
+                          context<SettingsController>().baseUriController,
+                    ),
                   ),
                 ],
               ),
