@@ -1,6 +1,7 @@
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
 import 'package:jayse/jayse.dart';
+import 'package:well_navigate/text_field_formatted.dart';
 
 class StringEditor<T> extends StatelessWidget {
   const StringEditor({
@@ -15,10 +16,8 @@ class StringEditor<T> extends StatelessWidget {
   final ValueChanged<String> onChanged;
 
   @override
-  Widget build(BuildContext context) => TextField(
-        decoration: InputDecoration(
-          labelText: fieldDefinition.display ?? fieldDefinition.name,
-        ),
+  Widget build(BuildContext context) => TextFieldFormatted(
+        labelText: fieldDefinition.description ?? fieldDefinition.name,
         controller: TextEditingController(
           text: fieldDefinition.getValue(element).toString(),
         ),

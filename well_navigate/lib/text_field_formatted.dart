@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class TextFieldFormatted extends StatelessWidget {
   const TextFieldFormatted({
-    required this.controller,
     required this.labelText,
+    this.controller,
+    this.onChanged,
     super.key,
   });
 
-  final TextEditingController controller;
+  final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
   final String labelText;
 
   @override
@@ -15,6 +17,7 @@ class TextFieldFormatted extends StatelessWidget {
         style: const TextStyle().copyWith(
           color: Theme.of(context).colorScheme.primary,
         ),
+        onChanged: onChanged,
         controller: controller,
         decoration: InputDecoration(
           labelText: labelText,
