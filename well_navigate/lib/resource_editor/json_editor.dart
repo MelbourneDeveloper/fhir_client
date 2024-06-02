@@ -44,10 +44,17 @@ class _JsonEditorState extends State<JsonEditor> {
         child: CodeTheme(
           data: const CodeThemeData(styles: monokaiSublimeTheme),
           child: SingleChildScrollView(
-            child: CodeField(
-              onChanged: widget.onChanged,
-              controller: codeController,
-              textStyle: const TextStyle(fontFamily: 'Inconsolata'),
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                inputDecorationTheme: const InputDecorationTheme(
+                  border: InputBorder.none,
+                ),
+              ),
+              child: CodeField(
+                onChanged: widget.onChanged,
+                controller: codeController,
+                textStyle: const TextStyle(fontFamily: 'Inconsolata'),
+              ),
             ),
           ),
         ),
