@@ -5,7 +5,7 @@ import 'package:well_navigate/constants.dart';
 import 'package:well_navigate/main_scaffold.dart';
 import 'package:well_navigate/query/query_page.dart';
 import 'package:well_navigate/resource_editor/resource_editor.dart';
-import 'package:well_navigate/settings_screen.dart';
+import 'package:well_navigate/settings/settings_screen.dart';
 
 void main() {
   runApp(const AppRoot());
