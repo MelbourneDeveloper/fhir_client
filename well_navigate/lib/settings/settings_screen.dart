@@ -16,18 +16,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) => ValueListenableBuilder(
         valueListenable: _controller,
-        builder: (context, settings, child) => ListView(
-          children: [
-            SwitchListTile(
-              title: const Text('Dark Mode'),
-              value: settings?.isDarkMode ?? false,
-              onChanged: (_) async => _controller.toggleDarkMode(),
+        builder: (context, settings, child) => Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
+            child: ListView(
+              children: [
+                SwitchListTile(
+                  title: const Text('Dark Mode'),
+                  value: settings?.isDarkMode ?? false,
+                  onChanged: (_) async => _controller.toggleDarkMode(),
+                ),
+                ListTile(
+                  title: const Text('Base Url'),
+                  subtitle:
+                      TextField(controller: _controller.baseUriController),
+                ),
+              ],
             ),
-            ListTile(
-              title: const Text('Base Url'),
-              subtitle: TextField(controller: _controller.baseUriController),
-            ),
-          ],
+          ),
         ),
       );
 }

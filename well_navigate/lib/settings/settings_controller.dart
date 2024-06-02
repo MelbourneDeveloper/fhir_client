@@ -12,6 +12,8 @@ class SettingsController extends ValueNotifier<Settings?> {
 
     unawaited(_loadSettings());
   }
+  
+  TextEditingController baseUriController = TextEditingController();
 
   void _onUrlChanged() {
     //ignore: avoid_print
@@ -35,8 +37,6 @@ class SettingsController extends ValueNotifier<Settings?> {
 
     baseUriController.text = value?.baseUri.toString() ?? '';
   }
-
-  TextEditingController baseUriController = TextEditingController();
 
   Future<void> updateBaseUri(Uri newUri) async {
     value = value?.copyWith(baseUri: newUri);
