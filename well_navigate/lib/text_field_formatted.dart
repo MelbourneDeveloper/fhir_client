@@ -14,9 +14,9 @@ class TextFieldFormatted extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => TextField(
-        style: const TextStyle().copyWith(
-          color: Theme.of(context).colorScheme.onSurface,
-        ),
+        // style: const TextStyle().copyWith(
+        //   color: Theme.of(context).colorScheme.onSurface,
+        // ),
         onChanged: onChanged,
         controller: controller,
         decoration: InputDecoration(

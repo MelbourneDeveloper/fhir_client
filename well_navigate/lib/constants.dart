@@ -37,6 +37,11 @@ final themeData = ThemeData(
 
 final darkThemeData = themeData.copyWith(
   colorScheme: darkColorScheme,
+  textTheme: TextTheme(
+    bodyMedium: TextStyle(color: darkColorScheme.onSurface),
+    bodySmall: TextStyle(color: darkColorScheme.onSurface),
+    titleMedium: TextStyle(color: darkColorScheme.primary),
+  ),
   brightness: Brightness.dark,
 );
 
