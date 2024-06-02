@@ -45,7 +45,10 @@ final darkThemeData = themeData.copyWith(
   brightness: Brightness.dark,
 );
 
-final iconsByResourceType = {'Appointment': Icons.event};
+final iconsByResourceType = {
+  'Appointment': Icons.event,
+  'Patient': Icons.person,
+};
 
 const fieldDefinitionsByElementType = {
   'Appointment': Appointment.fieldDefinitions,

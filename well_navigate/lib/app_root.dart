@@ -24,47 +24,50 @@ class AppRoot extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: settings?.isDarkMode ?? false ? darkThemeData : themeData,
           initialRoute: '/query',
-          routes: {
-            '/settings': (context) => const MainScaffold(
-                  title: 'Settings',
-                  icon: Icons.settings,
-                  body: SettingsScreen(),
-                ),
-            '/about': (context) => const MainScaffold(
-                  title: 'About',
-                  icon: Icons.info,
-                  body: AboutScreen(),
-                ),
-            '/query': (context) => const MainScaffold(
-                  title: 'Query',
-                  icon: Icons.search,
-                  body: QueryPage(),
-                ),
-          },
-          onGenerateRoute: (settings) {
-            if (settings.name == '/resource') {
-              final json = settings.arguments! as String;
-
-              //TODO: handle not an object
-              final jsonValue = jsonValueDecode(json) as JsonObject;
-
-              //TODO: handle no resourceType
-              final resourceType = jsonValue['resourceType'].stringValue!;
-
-              return MaterialPageRoute(
-                builder: (context) => MainScaffold(
-                  title: resourceType,
-                  icon: iconsByResourceType[resourceType] ??
-                      Icons.medical_services,
-                  body: ResourceEditor(
-                    resourceRoot: jsonValue,
-                    resourceTypeName: resourceType,
-                  ),
-                ),
-              );
-            }
-            return null;
-          },
+          onGenerateRoute: onGenerateRoute,
         ),
       );
 }
+
+Route<dynamic>? onGenerateRoute(RouteSettings settings) =>
+    switch (settings.name) {
+      '/settings' => MaterialPageRoute(
+          builder: (context) => const MainScaffold(
+            title: 'Settings',
+            icon: Icons.settings,
+            body: SettingsScreen(),
+          ),
+        ),
+      '/about' => MaterialPageRoute(
+          builder: (context) => const MainScaffold(
+            title: 'About',
+            icon: Icons.info,
+            body: AboutScreen(),
+          ),
+        ),
+      '/query' => MaterialPageRoute(
+          builder: (context) => const MainScaffold(
+            title: 'Query',
+            icon: Icons.search,
+            body: QueryPage(),
+          ),
+        ),
+      '/resource' => MaterialPageRoute(
+          builder: (context) {
+            final json = settings.arguments! as String;
+            //TODO: handle not an object
+            final jsonValue = jsonValueDecode(json) as JsonObject;
+            //TODO: handle no resourceType
+            final resourceType = jsonValue['resourceType'].stringValue!;
+            return MainScaffold(
+              title: resourceType,
+              icon: iconsByResourceType[resourceType] ?? Icons.medical_services,
+              body: ResourceEditor(
+                resourceRoot: jsonValue,
+                resourceTypeName: resourceType,
+              ),
+            );
+          },
+        ),
+      _ => null,
+    };
