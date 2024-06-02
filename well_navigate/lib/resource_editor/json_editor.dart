@@ -28,7 +28,6 @@ Map<String, TextStyle> getSyntaxTheme({
     'bullet': defaultTextStyle.copyWith(color: colorScheme?.primary),
     'quote': defaultTextStyle.copyWith(color: colorScheme?.primary),
     'number': defaultTextStyle.copyWith(color: colorScheme?.primary),
-    'number': defaultTextStyle.copyWith(color: colorScheme?.onSurface),
     'regexp': defaultTextStyle.copyWith(color: colorScheme?.primary),
     'literal': defaultTextStyle.copyWith(color: colorScheme?.onSurfaceVariant),
     'link': defaultTextStyle.copyWith(color: colorScheme?.primary),

@@ -7,6 +7,7 @@ import 'package:well_navigate/query/bundle_list_view.dart';
 import 'package:well_navigate/query/query_notifier.dart';
 import 'package:well_navigate/query/url_picker.dart';
 import 'package:well_navigate/query/url_picker_controller.dart';
+import 'package:well_navigate/settings/settings_controller.dart';
 
 class QueryPage extends StatefulWidget {
   const QueryPage({super.key});
@@ -16,10 +17,17 @@ class QueryPage extends StatefulWidget {
 }
 
 class _QueryPageState extends State<QueryPage> {
-  UriState uriState = UriState(
-    Uri.parse('https://hapi.fhir.org/baseR4/Appointment'),
-    {'Content-Type': 'application/json'},
-  );
+  late UriState uriState;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    uriState = UriState(
+      context<SettingsController>().value?.baseUri ??
+          Uri.parse('https://hapi.fhir.org/baseR4'),
+      {'Content-Type': 'application/json'},
+    );
+  }
 
   @override
   Widget build(BuildContext context) => ListenableBuilder(

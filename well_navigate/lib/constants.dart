@@ -49,6 +49,7 @@ final iconsByResourceType = {'Appointment': Icons.event};
 
 const fieldDefinitionsByElementType = {
   'Appointment': Appointment.fieldDefinitions,
+  'Patient': Patient.fieldDefinitions,
   'Meta': Meta.fieldDefinitions,
   'OperationOutcome': OperationOutcome.fieldDefinitions,
   'FieldDefinition<FixedList<Extension>>': Extension.fieldDefinitions,
