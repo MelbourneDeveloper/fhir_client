@@ -10,9 +10,11 @@ import 'package:well_navigate/query/url_picker_controller.dart';
 import 'package:well_navigate/settings/settings_controller.dart';
 
 class QueryPage extends StatefulWidget {
-  const QueryPage({super.key});
+  const QueryPage({super.key, this.initialSlug});
 
   static const String routeName = '/query';
+
+  final String? initialSlug;
 
   @override
   State<QueryPage> createState() => _QueryPageState();
@@ -24,9 +26,12 @@ class _QueryPageState extends State<QueryPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    final uri = context<SettingsController>().value?.baseUri ??
+        Uri.parse('https://hapi.fhir.org/baseR4');
+
     uriState = UriState(
-      context<SettingsController>().value?.baseUri ??
-          Uri.parse('https://hapi.fhir.org/baseR4'),
+      '$uri${widget.initialSlug ?? ''}',
       {'Content-Type': 'application/json'},
     );
   }

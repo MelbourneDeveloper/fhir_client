@@ -38,13 +38,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) =>
             body: SettingsScreen(),
           ),
         ),
-      QueryPage.routeName => MaterialPageRoute(
-          builder: (context) => const MainScaffold(
-            title: 'Query',
-            icon: Icons.search,
-            body: QueryPage(),
-          ),
-        ),
+      QueryPage.routeName => _queryPage(settings),
       ResourceEditor.routeName => MaterialPageRoute(
           builder: (context) {
             final json = settings.arguments! as String;
@@ -71,3 +65,14 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) =>
           ),
         ),
     };
+
+MaterialPageRoute<dynamic> _queryPage(RouteSettings settings) =>
+    MaterialPageRoute(
+      builder: (context) => MainScaffold(
+        title: 'Query',
+        icon: Icons.search,
+        body: QueryPage(
+          initialSlug: settings.arguments as String?,
+        ),
+      ),
+    );

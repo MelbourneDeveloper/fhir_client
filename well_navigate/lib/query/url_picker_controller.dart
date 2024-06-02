@@ -4,7 +4,7 @@ import 'package:well_navigate/query/map_entry_controller.dart';
 class UriState {
   UriState(this.uri, this.headers);
 
-  final Uri uri;
+  final String uri;
   final Map<String, String> headers;
 }
 
@@ -13,7 +13,7 @@ class UriState {
 class UrlPickerController extends ValueNotifier<UriState> {
   // ignore: use_super_parameters
   UrlPickerController(UriState value) : super(value) {
-    urlController = TextEditingController(text: value.uri.toString());
+    urlController = TextEditingController(text: value.uri);
 
     urlController.addListener(_setValue);
   }
@@ -56,7 +56,9 @@ class UrlPickerController extends ValueNotifier<UriState> {
       for (final entry in paramControllers)
         entry.keyController.text: entry.valueController.text,
     };
-    final url = Uri.parse(urlController.text).replace(queryParameters: params);
+    final url = Uri.parse(urlController.text)
+        .replace(queryParameters: params)
+        .toString();
 
     value = UriState(url, headers);
   }

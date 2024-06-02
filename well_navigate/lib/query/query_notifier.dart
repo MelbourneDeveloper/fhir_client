@@ -23,7 +23,8 @@ class QueryNotifier extends ChangeNotifier {
 
     try {
       final apiResponse = await client.get(
-        uriState.uri,
+        //TODO: error handling
+        Uri.parse(uriState.uri),
         headers: uriState.headers,
       );
       //TODO: error handling. What happens when the status code is bad?

@@ -13,8 +13,16 @@ class Menu extends StatelessWidget {
   Widget build(BuildContext context) => NavigationDrawer(
         onDestinationSelected: (index) async {
           await switch (index) {
-            0 => null,
-            1 => Navigator.pushNamed(context, '/patient'),
+            0 => Navigator.pushNamed(
+                context,
+                QueryPage.routeName,
+                arguments: '/Patient',
+              ),
+            1 => Navigator.pushNamed(
+                context,
+                QueryPage.routeName,
+                arguments: '/Appointment',
+              ),
             2 => Navigator.pushNamed(context, '/observation'),
             3 => Navigator.pushNamed(context, '/medication'),
             4 => Navigator.pushNamed(context, QueryPage.routeName),
@@ -36,18 +44,18 @@ class Menu extends StatelessWidget {
           ),
           NavigationDrawerDestination(
             icon: Icon(iconsByResourceType['Patient']),
-            label: const Text('Patient'),
+            label: const Text('Patients'),
           ),
           NavigationDrawerDestination(
             icon: Icon(iconsByResourceType['Appointment']),
-            label: const Text('Appointment'),
+            label: const Text('Appointments'),
           ),
           NavigationDrawerDestination(
-            icon: Icon(iconsByResourceType['Observation']),
+            icon: Icon(iconsByResourceType['Observations']),
             label: const Text('Observation'),
           ),
           NavigationDrawerDestination(
-            icon: Icon(iconsByResourceType['Medication']),
+            icon: Icon(iconsByResourceType['Medications']),
             label: const Text('Medication'),
           ),
           const Divider(),
