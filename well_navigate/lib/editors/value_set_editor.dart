@@ -44,12 +44,9 @@ class ValueSetEditor<T> extends StatelessWidget {
               .map(
                 (l) => DropdownMenuItem<ValueSetConcept>(
                   value: l,
-                  child: Tooltip(
-                    message: l.definition,
-                    child: Text(
-                      '${l.code} - ${l.display}',
-                      overflow: TextOverflow.fade,
-                    ),
+                  child: Text(
+                    '${l.code} - ${l.display}',
+                    overflow: TextOverflow.fade,
                   ),
                 ),
               )
