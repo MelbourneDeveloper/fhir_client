@@ -15,7 +15,6 @@ class Field<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SizedBox(
         width: 350,
-        height: 80,
         child: Padding(
           padding: const EdgeInsets.only(
             left: standardHorizontalPaddingValue,

@@ -61,6 +61,7 @@ const fieldDefinitionsByElementType = {
 };
 
 const standardHorizontalPaddingValue = 16.0;
+const standardVerticalPaddingValue = 16.0;
 
 const standardHorizontalSpacer = SizedBox(
   width: standardHorizontalPaddingValue,

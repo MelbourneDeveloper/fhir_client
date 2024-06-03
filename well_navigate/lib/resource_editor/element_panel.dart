@@ -3,6 +3,7 @@ import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:jayse/jayse.dart';
+import 'package:well_navigate/constants.dart';
 import 'package:well_navigate/editors/string_editor.dart';
 import 'package:well_navigate/editors/value_set_editor.dart';
 import 'package:well_navigate/resource_editor/field.dart';
@@ -25,6 +26,8 @@ class ElementPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Wrap(
+        runSpacing: standardHorizontalPaddingValue,
+        spacing: standardVerticalPaddingValue,
         children: fields.map(_field).toList(),
       );
 
