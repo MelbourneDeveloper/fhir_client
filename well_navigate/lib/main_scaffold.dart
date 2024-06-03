@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:well_navigate/main_app_bar.dart';
-import 'package:well_navigate/menu.dart';
+import 'package:well_navigate/menu/menu.dart';
 
 class MainScaffold extends StatelessWidget {
   const MainScaffold({
