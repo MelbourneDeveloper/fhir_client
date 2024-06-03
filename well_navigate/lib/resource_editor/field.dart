@@ -17,8 +17,9 @@ class Field<T> extends StatelessWidget {
         width: 350,
         height: 80,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: standardHorizontalPaddingValue,
+          padding: const EdgeInsets.only(
+            left: standardHorizontalPaddingValue,
+            right: standardHorizontalPaddingValue,
           ),
           child: SizedBox(
             width: 300,
