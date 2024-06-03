@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:jayse/jayse.dart';
 import 'package:well_navigate/constants.dart';
 import 'package:well_navigate/resource_editor/element_panel.dart';
-import 'package:well_navigate/resource_editor/tile.dart';
+import 'package:well_navigate/resource_editor/element_panel_tile.dart';
 
 class ResourceEditorListView extends StatelessWidget {
   const ResourceEditorListView({
@@ -36,7 +36,7 @@ class ResourceEditorListView extends StatelessWidget {
         itemCount: nonPrimitiveFields.length + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
-            return Tile(
+            return ElementPanelTile(
               headerTooltip: 'Basic Details',
               headerText: 'Details',
               body: ElementPanel(
@@ -63,7 +63,7 @@ class ResourceEditorListView extends StatelessWidget {
             ].contains(field.runtimeType)
                 ? const SizedBox.shrink()
                 : switch (resourceRoot[field.name]) {
-                    (final JsonObject panelElement) => Tile(
+                    (final JsonObject panelElement) => ElementPanelTile(
                         headerTooltip: headerTooltip,
                         headerText: headerText,
                         body: ElementPanel(

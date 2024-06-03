@@ -8,7 +8,7 @@ import 'package:well_navigate/editors/string_editor.dart';
 import 'package:well_navigate/editors/value_set_editor.dart';
 import 'package:well_navigate/resource_editor/field.dart';
 
-/// The body of a panel, which has one or more field editors
+/// The body of the element panel, which has one or more field editors
 class ElementPanel extends StatelessWidget {
   const ElementPanel({
     required this.fields,
@@ -26,8 +26,8 @@ class ElementPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Wrap(
-        runSpacing: standardHorizontalPaddingValue,
-        spacing: standardVerticalPaddingValue,
+        runSpacing: standardPaddingValue,
+        spacing: standardPaddingValue,
         children: fields.map(_field).toList(),
       );
 

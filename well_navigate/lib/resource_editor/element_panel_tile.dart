@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:well_navigate/constants.dart';
 
-class Tile extends StatelessWidget {
-  const Tile({
+/// A tile that displays a header and content for a given
+/// element on a resource, or details of the resource
+class ElementPanelTile extends StatelessWidget {
+  const ElementPanelTile({
     required this.headerTooltip,
     required this.headerText,
     required this.body,
@@ -15,7 +17,7 @@ class Tile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.all(16),
+        padding: standardPadding,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(8),
@@ -30,17 +32,17 @@ class Tile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 32),
             Tooltip(
               message: headerTooltip,
-              child: Padding(
-                padding: standardHorizontalPadding,
-                child: Text(
-                  headerText,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+              child: Text(
+                headerText,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             ),
-            const SizedBox(height: 8),
+            standardVerticalSpacer,
             body,
           ],
         ),

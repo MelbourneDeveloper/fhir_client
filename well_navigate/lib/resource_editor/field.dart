@@ -1,6 +1,5 @@
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
-import 'package:well_navigate/constants.dart';
 
 class Field<T> extends StatelessWidget {
   const Field({
@@ -15,15 +14,9 @@ class Field<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SizedBox(
         width: 350,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: standardHorizontalPaddingValue,
-            right: standardHorizontalPaddingValue,
-          ),
-          child: Tooltip(
-            message: fieldDefinition.display ?? fieldDefinition.name,
-            child: editor,
-          ),
+        child: Tooltip(
+          message: fieldDefinition.display ?? fieldDefinition.name,
+          child: editor,
         ),
       );
 }

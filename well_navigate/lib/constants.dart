@@ -60,14 +60,17 @@ const fieldDefinitionsByElementType = {
   'FieldDefinition<Narrative>': Narrative.fieldDefinitions,
 };
 
-const standardHorizontalPaddingValue = 16.0;
-const standardVerticalPaddingValue = 16.0;
+const standardPaddingValue = 16.0;
 
 const standardHorizontalSpacer = SizedBox(
-  width: standardHorizontalPaddingValue,
+  width: standardPaddingValue,
 );
 
 const standardHorizontalPadding = EdgeInsets.only(
-  left: standardHorizontalPaddingValue,
-  right: standardHorizontalPaddingValue,
+  left: standardPaddingValue,
+  right: standardPaddingValue,
 );
+
+const standardPadding = EdgeInsets.all(standardPaddingValue);
+
+const standardVerticalSpacer = SizedBox(height: standardPaddingValue);
