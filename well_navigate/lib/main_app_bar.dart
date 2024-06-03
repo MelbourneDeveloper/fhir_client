@@ -8,11 +8,6 @@ AppBar mainAppBar(
     AppBar(
       title: Stack(
         children: [
-          //Probly move this to the menu...
-          if (Navigator.of(context).canPop())
-            BackButton(
-              onPressed: () => Navigator.of(context).pop(),
-            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

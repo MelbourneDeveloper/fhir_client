@@ -83,7 +83,24 @@ class _MenuState extends State<Menu> {
               arguments: menuItems[index].arguments,
             );
           },
-          children: _menuElementWidgets,
+          children: [
+            if (Navigator.of(context).canPop())
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: BackButton(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    onPressed: () {
+                      //TODO: make the drawer close properly and then pop
+                      Scaffold.of(context).closeDrawer();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+              ),
+            ..._menuElementWidgets,
+          ],
         ),
       );
 }
