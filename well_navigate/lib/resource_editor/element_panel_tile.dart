@@ -20,7 +20,7 @@ class ElementPanelTile extends StatelessWidget {
         padding: standardPadding,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: standardCircularBorderRadius,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -29,8 +29,10 @@ class ElementPanelTile extends StatelessWidget {
             ),
           ],
         ),
+        // This centers the panel heading and the contents
+        // Consider a breakpoint for desktop so fields align
+        // to the left
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 32),
             Tooltip(

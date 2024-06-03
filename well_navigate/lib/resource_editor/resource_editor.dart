@@ -54,7 +54,7 @@ class _ResourceEditorState extends State<ResourceEditor> {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            halfSizedVerticalSpacer,
             Expanded(
               child: TabBarView(
                 children: <Widget>[

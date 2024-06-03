@@ -20,15 +20,15 @@ final themeData = ThemeData(
   inputDecorationTheme: InputDecorationTheme(
     labelStyle: TextStyle(color: colorScheme.primary),
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: standardCircularBorderRadius,
       borderSide: BorderSide(color: colorScheme.secondary),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: standardCircularBorderRadius,
       borderSide: BorderSide(color: colorScheme.secondary),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: standardCircularBorderRadius,
       borderSide: BorderSide(color: colorScheme.secondary),
     ),
   ),
@@ -74,3 +74,6 @@ const standardHorizontalPadding = EdgeInsets.only(
 const standardPadding = EdgeInsets.all(standardPaddingValue);
 
 const standardVerticalSpacer = SizedBox(height: standardPaddingValue);
+const halfSizedVerticalSpacer = SizedBox(height: 8);
+
+final standardCircularBorderRadius = BorderRadius.circular(8);
