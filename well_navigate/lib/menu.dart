@@ -76,10 +76,10 @@ const menuElements = <MenuElement>[
   ),
 ];
 
-List<MenuItem> flattenMenuElements(List<MenuElement> elements) =>
+List<MenuItem> _flattenMenuElements(List<MenuElement> elements) =>
     elements.expand<MenuItem>((element) {
       if (element is MenuGroup) {
-        return flattenMenuElements(element.children);
+        return _flattenMenuElements(element.children);
       } else if (element is MenuItem) {
         return [element];
       } else {
@@ -87,7 +87,45 @@ List<MenuItem> flattenMenuElements(List<MenuElement> elements) =>
       }
     }).toList();
 
-final menuItems = flattenMenuElements(menuElements);
+final menuItems = _flattenMenuElements(menuElements);
+
+/// Currently just a list of widgets, but this might become a function
+/// later if the menu needs to be built dynamically
+final _menuElementWidgets = _elementsToWidgets(menuElements);
+
+List<Widget> _elementsToWidgets(List<MenuElement> elements) =>
+    elements.map(_elementToWidgets).expand((e) => e).toList();
+
+List<Widget> _group(String name, List<MenuElement> children) => [
+      _groupHeader(name),
+      ..._elementsToWidgets(children),
+    ];
+
+Padding _groupHeader(String name) => Padding(
+      padding: const EdgeInsets.fromLTRB(28, 16, 16, 10),
+      child: Text(
+        name,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+
+List<Widget> _elementToWidgets(MenuElement child) => switch (child) {
+      final MenuItem mi => [
+          NavigationDrawerDestination(
+            icon: Icon(
+              mi.icon,
+            ),
+            label: Text(
+              mi.name,
+            ),
+          ),
+        ],
+      MenuDivider() => [const Divider()],
+      MenuGroup(:final name, :final children) => _group(name, children),
+    };
 
 class Menu extends StatefulWidget {
   const Menu({super.key});
@@ -111,52 +149,6 @@ class _MenuState extends State<Menu> {
             arguments: menuItems[index].arguments,
           );
         },
-        children: _menuElementWidgets(),
-      );
-
-  List<Widget> _menuElementWidgets() => menuElements.expand<Widget>((element) {
-        if (element is MenuGroup) {
-          return [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(28, 16, 16, 10),
-              child: Text(
-                element.name,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            ...element.children.expand<Widget>((child) {
-              if (child is MenuItem) {
-                return [
-                  _navigationDestination(child),
-                ];
-              } else if (child is MenuDivider) {
-                return [const Divider()];
-              } else {
-                return [];
-              }
-            }),
-          ];
-        } else if (element is MenuItem) {
-          return [
-            _navigationDestination(element),
-          ];
-        } else if (element is MenuDivider) {
-          return [const Divider()];
-        } else {
-          return [];
-        }
-      }).toList();
-
-  NavigationDrawerDestination _navigationDestination(MenuItem child) =>
-      NavigationDrawerDestination(
-        icon: Icon(
-          child.icon,
-        ),
-        label: Text(
-          child.name,
-        ),
+        children: _menuElementWidgets,
       );
 }
