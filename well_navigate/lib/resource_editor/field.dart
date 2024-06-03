@@ -16,19 +16,18 @@ class Field<T> extends StatelessWidget {
   Widget build(BuildContext context) => SizedBox(
         width: 350,
         height: 80,
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(standardHorizontalPaddingValue),
-              child: SizedBox(
-                width: 300,
-                child: Tooltip(
-                  message: fieldDefinition.description ?? fieldDefinition.name,
-                  child: editor,
-                ),
-              ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: standardHorizontalPaddingValue,
+          ),
+          child: SizedBox(
+            width: 300,
+            height: double.infinity,
+            child: Tooltip(
+              message: fieldDefinition.description ?? fieldDefinition.name,
+              child: editor,
             ),
-          ],
+          ),
         ),
       );
 }
