@@ -17,7 +17,7 @@ class StringEditor<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => TextFieldFormatted(
-        labelText: fieldDefinition.description ?? fieldDefinition.name,
+        labelText: fieldDefinition.display ?? fieldDefinition.name,
         controller: TextEditingController(
           text: fieldDefinition.getValue(element).toString(),
         ),

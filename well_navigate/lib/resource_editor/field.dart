@@ -21,13 +21,9 @@ class Field<T> extends StatelessWidget {
             left: standardHorizontalPaddingValue,
             right: standardHorizontalPaddingValue,
           ),
-          child: SizedBox(
-            width: 300,
-            height: double.infinity,
-            child: Tooltip(
-              message: fieldDefinition.description ?? fieldDefinition.name,
-              child: editor,
-            ),
+          child: Tooltip(
+            message: fieldDefinition.display ?? fieldDefinition.name,
+            child: editor,
           ),
         ),
       );
