@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ioc_container/flutter_ioc_container.dart';
 import 'package:well_navigate/menu/menu_definition.dart';
 import 'package:well_navigate/menu/menu_element.dart';
+import 'package:well_navigate/menu/menu_state.dart';
 
 /// Currently just a list of widgets, but this might become a function
 /// later if the menu needs to be built dynamically
@@ -53,20 +55,21 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
-  int? _selectedIndex;
-
   @override
-  Widget build(BuildContext context) => NavigationDrawer(
-        selectedIndex: _selectedIndex,
-        tilePadding: const EdgeInsets.all(4),
-        onDestinationSelected: (index) async {
-          setState(() => _selectedIndex = index);
-          await Navigator.pushNamed(
-            context,
-            menuItems[index].routeName,
-            arguments: menuItems[index].arguments,
-          );
-        },
-        children: _menuElementWidgets,
+  Widget build(BuildContext context) => ValueListenableBuilder(
+        valueListenable: context<MenuState>().selectedIndex,
+        builder: (context, selectedIndexNotifier, child) => NavigationDrawer(
+          selectedIndex: selectedIndexNotifier,
+          tilePadding: const EdgeInsets.all(4),
+          onDestinationSelected: (index) async {
+            setState(() => context<MenuState>().selectedIndex.value = index);
+            await Navigator.pushNamed(
+              context,
+              menuItems[index].routeName,
+              arguments: menuItems[index].arguments,
+            );
+          },
+          children: _menuElementWidgets,
+        ),
       );
 }
