@@ -1,7 +1,9 @@
 import 'package:fhir_client/models/backbone_element.dart';
 import 'package:fhir_client/models/basic_types/fixed_list.dart';
 import 'package:fhir_client/models/codeable_concept.dart';
+import 'package:fhir_client/models/contact_point.dart';
 import 'package:fhir_client/models/identifier.dart';
+import 'package:fhir_client/models/name.dart';
 import 'package:fhir_client/models/period.dart';
 import 'package:fhir_client/models/reference.dart';
 import 'package:fhir_client/models/resource.dart';
@@ -50,6 +52,12 @@ class ResourceEditorListView extends StatelessWidget {
             final headerTooltip = field.description ?? 'No information';
             final headerText = field.display ?? field.name;
 
+            //Create a blank object to put here so the fields can be filled in
+            // final panelElement = switch (resourceRoot[field.name]) {
+            //   (final JsonObject pe) => pe,
+            //   _ => const JsonObject({})
+            // };
+
             //TODO: remove this stuff
             return [
               (FieldDefinition<FixedList<Resource>>),
@@ -60,6 +68,8 @@ class ResourceEditorListView extends StatelessWidget {
               (FieldDefinition<FixedList<Reference>>),
               (FieldDefinition<FixedList<BackboneElement>>),
               (FieldDefinition<FixedList<Period>>),
+              (FieldDefinition<FixedList<HumanName>>),
+              (FieldDefinition<FixedList<ContactPoint>>),
             ].contains(field.runtimeType)
                 ? const SizedBox.shrink()
                 : switch (resourceRoot[field.name]) {
@@ -77,6 +87,7 @@ class ResourceEditorListView extends StatelessWidget {
                               field.runtimeType.toString()]!,
                         ),
                       ),
+                    //TODO: edit the object here
                     _ => Text('${field.name}: not an object')
                   };
           }

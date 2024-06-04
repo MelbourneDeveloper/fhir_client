@@ -12,6 +12,7 @@ const _primitiveFieldTypes = [
   FieldDefinition<String>,
   FieldDefinition<int>,
   FieldDefinition<num>,
+  FieldDefinition<bool>,
   FieldDefinition<DateTime>,
   FieldDefinition<AppointmentStatus>,
   FieldDefinition<Language>,
