@@ -5,3 +5,6 @@
 
 build/
 coverage/
+
+
+.vscodecounter/

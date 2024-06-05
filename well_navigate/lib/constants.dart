@@ -15,6 +15,7 @@ final darkColorScheme = ColorScheme.fromSeed(
 );
 
 final themeData = ThemeData(
+  iconTheme: IconThemeData(color: colorScheme.onSurface),
   colorScheme: colorScheme,
   fontFamily: 'Roboto',
   inputDecorationTheme: InputDecorationTheme(
@@ -36,6 +37,7 @@ final themeData = ThemeData(
 );
 
 final darkThemeData = themeData.copyWith(
+  iconTheme: IconThemeData(color: darkColorScheme.onSurface),
   colorScheme: darkColorScheme,
   textTheme: TextTheme(
     bodyMedium: TextStyle(color: darkColorScheme.onSurface),

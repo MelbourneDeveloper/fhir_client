@@ -19,7 +19,11 @@ class StringEditor<T> extends StatelessWidget {
   Widget build(BuildContext context) => TextFieldFormatted(
         labelText: fieldDefinition.display ?? fieldDefinition.name,
         controller: TextEditingController(
-          text: fieldDefinition.getValue(element).toString(),
+          text: switch (fieldDefinition.getValue(element)) {
+            final String s => s,
+            final num s => s.toString(),
+            _ => '',
+          },
         ),
         onChanged: onChanged,
       );

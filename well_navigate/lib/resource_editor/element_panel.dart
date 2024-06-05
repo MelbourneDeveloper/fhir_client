@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:jayse/jayse.dart';
 import 'package:well_navigate/constants.dart';
+import 'package:well_navigate/editors/boolean_editor.dart';
+import 'package:well_navigate/editors/date_editor.dart';
 import 'package:well_navigate/editors/string_editor.dart';
 import 'package:well_navigate/editors/value_set_editor.dart';
 import 'package:well_navigate/resource_editor/field.dart';
@@ -43,6 +45,18 @@ class ElementPanel extends StatelessWidget {
             fieldDefinition.getValue(panelElement) ?? '<div></div>',
           ),
         FieldDefinition<String>() => StringEditor(
+            fieldDefinition: fieldDefinition,
+            element: panelElement,
+            onChanged: (v) =>
+                onFieldChanged(fieldDefinition.name, JsonString(v)),
+          ),
+        FieldDefinition<bool>() => BooleanEditor(
+            fieldDefinition: fieldDefinition,
+            element: panelElement,
+            onChanged: (v) =>
+                onFieldChanged(fieldDefinition.name, JsonString(v)),
+          ),
+        FieldDefinition<DateTime>() => DateEditor(
             fieldDefinition: fieldDefinition,
             element: panelElement,
             onChanged: (v) =>
