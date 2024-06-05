@@ -16,18 +16,39 @@ class BooleanEditor<T> extends StatelessWidget {
   final ValueChanged<String> onChanged;
 
   @override
-  Widget build(BuildContext context) => Row(
-        children: [
-          Text(fieldDefinition.display ?? fieldDefinition.name),
-          standardHorizontalSpacer,
-          Checkbox(
-            tristate: true,
-            value: switch (fieldDefinition.getValue(element)) {
-              final bool d => d,
-              _ => null,
-            },
-            onChanged: (value) => onChanged(value.toString()),
+  Widget build(BuildContext context) => Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Theme.of(context).colorScheme.outline,
           ),
-        ],
+          borderRadius: standardCircularBorderRadius,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                fieldDefinition.display ?? fieldDefinition.name,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+              ),
+            ),
+            standardHorizontalSpacer,
+            Checkbox(
+              tristate: true,
+              value: switch (fieldDefinition.getValue(element)) {
+                final bool d => d,
+                _ => null,
+              },
+              onChanged: (value) => onChanged(value.toString()),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              fieldDefinition.getValue(element) == true ? 'Yes' : 'No',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
+        ),
       );
 }
