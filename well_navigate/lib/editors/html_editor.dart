@@ -1,5 +1,6 @@
 import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:jayse/jayse.dart';
 import 'package:well_navigate/resource_editor/field_input_decorator.dart';
 import 'package:well_navigate/text_field_formatted.dart';
@@ -58,6 +59,13 @@ class _HtmlEditorState<T> extends State<HtmlEditor<T>> {
                 controller: _controller,
                 onChanged: widget.onChanged,
               )
-            : FieldInputDecorator(widget: widget),
+            : FieldInputDecorator(
+                labelText: widget.fieldDefinition.display ??
+                    widget.fieldDefinition.name,
+                child: HtmlWidget(
+                  widget.fieldDefinition.getValue(widget.element) as String? ??
+                      '<div></div>',
+                ),
+              ),
       );
 }
