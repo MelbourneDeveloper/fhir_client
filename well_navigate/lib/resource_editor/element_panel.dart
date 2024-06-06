@@ -56,9 +56,9 @@ class ElementPanel extends StatelessWidget {
         FieldDefinition<bool>() => BooleanEditor(
             fieldDefinition: fieldDefinition,
             element: panelElement,
-            onChanged: (v) => onFieldChanged(
+            onChanged: (b) => onFieldChanged(
               fieldDefinition.name,
-              v != null ? JsonBoolean(v) : const JsonNull(),
+              b != null ? JsonBoolean(b) : const JsonNull(),
             ),
           ),
         FieldDefinition<DateTime>() => DateEditor(

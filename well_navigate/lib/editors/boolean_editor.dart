@@ -24,13 +24,17 @@ class BooleanEditor<T> extends StatelessWidget {
               tristate: true,
               value: switch (fieldDefinition.getValue(element)) {
                 final bool d => d,
-                _ => false,
+                _ => null,
               },
               onChanged: onChanged,
             ),
             const SizedBox(width: 8),
             Text(
-              fieldDefinition.getValue(element) == true ? 'Yes' : 'No',
+              switch (fieldDefinition.getValue(element)) {
+                true => 'Yes',
+                false => 'No',
+                _ => 'Not Specified',
+              },
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
