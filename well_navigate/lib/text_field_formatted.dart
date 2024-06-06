@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:well_navigate/ui_functions.dart';
 
 class TextFieldFormatted extends StatelessWidget {
   const TextFieldFormatted({
@@ -16,9 +17,6 @@ class TextFieldFormatted extends StatelessWidget {
   Widget build(BuildContext context) => TextField(
         onChanged: onChanged,
         controller: controller,
-        decoration: InputDecoration(
-          labelText: labelText,
-          border: const OutlineInputBorder(),
-        ),
+        decoration: standardInputDecoration(labelText),
       );
 }

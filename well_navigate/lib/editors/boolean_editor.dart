@@ -2,6 +2,7 @@ import 'package:fhir_client/validation/field_definition.dart';
 import 'package:flutter/material.dart';
 import 'package:jayse/jayse.dart';
 import 'package:well_navigate/constants.dart';
+import 'package:well_navigate/ui_functions.dart';
 
 class BooleanEditor<T> extends StatelessWidget {
   const BooleanEditor({
@@ -17,12 +18,7 @@ class BooleanEditor<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Theme.of(context).colorScheme.outline,
-          ),
-          borderRadius: standardCircularBorderRadius,
-        ),
+        decoration: standardFieldBoxDecoration(context),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Row(
           children: [
