@@ -13,7 +13,7 @@ class BooleanEditor<T> extends StatelessWidget {
 
   final JsonObject element;
   final FieldDefinition<T> fieldDefinition;
-  final ValueChanged<String> onChanged;
+  final ValueChanged<bool?> onChanged;
 
   @override
   Widget build(BuildContext context) => FieldInputDecorator(
@@ -24,9 +24,9 @@ class BooleanEditor<T> extends StatelessWidget {
               tristate: true,
               value: switch (fieldDefinition.getValue(element)) {
                 final bool d => d,
-                _ => null,
+                _ => false,
               },
-              onChanged: (value) => onChanged(value.toString()),
+              onChanged: onChanged,
             ),
             const SizedBox(width: 8),
             Text(
